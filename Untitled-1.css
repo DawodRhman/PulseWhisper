@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KWSC - Complaint Form</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Google reCAPTCHA Script -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <style>
+    :root{
+      --blue-900:#03045E;
+      --blue-800:#023E8A;
+      --blue-600:#007786;
+      --blue-300:#48CAE4;
+      --text:#03045E;
+      --bg:#f9fcfd;
+      --radius:12px;
+    }
+    *{ box-sizing:border-box }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #48CAE4, #023E8A);
+      margin: 0;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    .form-container {
+      background: #fff;
+      border-radius: var(--radius);
+      width: 95%;
+      max-width: 900px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(0,0,0,.06);
+      overflow:hidden; /* keeps banners perfectly aligned edge-to-edge */
+    }
+
+    /* Top Gradient Banner — updated with logos */
+    .kwsc-banner {
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, #03045E, #023E8A);
+      color: #fff;
+    }
+    .kwsc-banner img {
+      height: 50px;
+      width: auto;
+    }
+    .kwsc-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+      text-align: center;
+      flex: 1;
+    }
+
+    /* Image Strip Banner — same height behavior as before */
+    .kwsc-strip-banner {
+      width: 100%;
+      margin: 0; /* remove extra margins to align with blue banner */
+      overflow: hidden;
+      /* shadow kept subtle; alignment remains correct due to overflow:hidden on container */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+    }
+    .kwsc-strip-banner img {
+      display: block;
+      width: 100%;
+      height: 180px;      /* same as your previous code */
+      object-fit: cover;  /* crisp crop without distortion */
+    }
+
+    /* Card body */
+    .card-body {
+      padding: 28px;
+      border-top: 6px solid var(--blue-800);
+    }
+
+    h2 {
+      text-align: center;
+      margin: 10px 0 24px 0;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--blue-900);
+    }
+
+    /* Section box / grid containers */
+    .section-box{
+      background:#fff;
+      border:1px solid var(--blue-300);
+      border-radius:10px;
+      padding:16px;
+      margin-bottom:18px;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+    }
+    .section-header{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:0 0 12px 0;
+      font-weight:700;
+      color:var(--blue-800);
+      font-size:1.05rem;
+    }
+
+    .section-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    .full{ grid-column:1 / -1; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .form-group label {
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      color: var(--blue-800);
+      font-weight: 600;
+    }
+    .form-group i {
+      position: absolute;
+      right: 12px;
+      top: 42px;
+      color: var(--blue-600);
+      font-size: 1.2rem;
+      transition: 0.3s;
+      pointer-events:none;
+    }
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+      padding: 12px 40px 12px 14px;
+      border: 1px solid var(--blue-300);
+      border-radius: 8px;
+      outline: none;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.25s ease;
+      width:100%;
+    }
+    .form-group input:focus, 
+    .form-group select:focus, 
+    .form-group textarea:focus {
+      border-color: var(--blue-600);
+      box-shadow: 0 0 8px rgba(0, 119, 134, 0.35);
+    }
+    .form-group input:focus ~ i,
+    .form-group textarea:focus ~ i,
+    .form-group select:focus ~ i {
+      color: var(--blue-900);
+    }
+    .helper {
+      font-size: .82rem;
+      color: #5f6b7a;
+      margin-top: 6px;
+    }
+
+    /* reCAPTCHA box styled */
+    .captcha-wrap{
+      display:flex;
+      justify-content:center;
+      padding:10px;
+      border:1px dashed var(--blue-300);
+      border-radius:8px;
+      background:#f0f9ff;
+    }
+
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:6px;
+    }
+    .submit-btn {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: var(--blue-800);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .submit-btn:hover {
+      background: var(--blue-900);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+      .kwsc-banner {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .kwsc-title {
+        font-size: 1.4rem;
+      }
+      .kwsc-banner img {
+        height: 40px;
+      }
+      .section-grid { grid-template-columns: 1fr; }
+      .kwsc-strip-banner img { height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+
+    <!-- Gradient Banner (updated with logos) -->
+    <header class="kwsc-banner">
+      <img src="logo1.png" alt="Logo 1">
+      <h1 class="kwsc-title">KWSC - Complaint Redressal Portal</h1>
+      <img src="logo2.png" alt="Logo 2">
+    </header>
+
+    <!-- Image Strip Banner (kept same size/behavior) -->
+    <div class="kwsc-strip-banner">
+      <img src="KWSC Strip.JPG" alt="KWSC Operations Banner">
+    </div>

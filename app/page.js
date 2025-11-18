@@ -6,6 +6,7 @@ import Services from "@/components/Services";
 import Counter from "@/components/Counter";
 // import Slider from "@/components/Slider";
 import Subscribe from "@/components/Subscribe";
+import KWSCMap from "@/components/KWSCMap";
 export default function Home() {
  
 
@@ -18,6 +19,7 @@ export default function Home() {
       <WorkFlow />
       <Counter />
       <Subscribe />
+      <KWSCMap />
     </>
   );
 }

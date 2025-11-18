@@ -9,6 +9,10 @@ import { FaTint, FaWater, FaTools, FaShieldAlt, FaChartLine, FaCogs, FaDatabase,
 import { FcClapperboard } from "react-icons/fc";
 import gsap from "gsap";
 import Loader from "@/components/Loader";
+import HeroSection from '@/components/HeroSection.jsx';
+
+
+
 
 export default function Services() {
   const [loading, setLoading] = useState(true);
@@ -298,6 +302,8 @@ export default function Services() {
             </div>
           </div>
 
+          
+
           {/* Revenue Resource Generation */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-8 text-blue-900">Revenue Resource Generation</h2>
@@ -335,6 +341,8 @@ export default function Services() {
               </div>
             </div>
           </div>
+<HeroSection />
+
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             slidesPerView={3}

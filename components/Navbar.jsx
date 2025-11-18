@@ -51,38 +51,55 @@ const Navbar = () => {
 
   const NavLinks = [
     { href: "/", text: "Home" },
-    { 
-      href: "/aboutus", 
-      text: "About Us",
-      submenu: [
-        { href: "/aboutus", text: "Our Story" },
-        { href: "/achievements", text: "Achievements" },
-        { href: "/careers", text: "Careers" },
-      ]
-    },
+   
     { 
       href: "/ourservices", 
       text: "What We Do",
       submenu: [
         { href: "/ourservices", text: "Our Services" },
         { href: "/portfolio", text: "Our Projects" },
+        { href: "/news", text: "News & Updates" },
         { href: "/right-to-information", text: "Right to Information" },
       ]
     },
-    { 
-      href: "/portfolio", 
-      text: "Our Projects",
+     { 
+      href: "/aboutus", 
+      text: "About Us",
       submenu: [
-        { href: "/portfolio", text: "All Projects" },
-        { href: "/news", text: "News & Updates" },
+        { href: "/aboutus", text: "Our Heritage" },
+        { href: "/careers", text: "Water Today" },
+        { href: "/achievements", text: "Achievements" },
+        { href: "/careers", text: "Our Leadership" },
+        { href: "/careers", text: "Careers" },
+        { href: "/faqs", text: "FAQs" },
       ]
     },
+    //{ 
+    //  href: "/portfolio", 
+    //  text: "Our Projects",
+    //  submenu: [
+      //  { href: "/portfolio", text: "All Projects" },
+   
+    //  ]
+  //  },
+
+  { 
+      href: "/tenders", 
+      text: "Tenders",
+      
+    },
+  { 
+      href: "/education", 
+      text: "Education",
+      
+    },
+
     { 
       href: "/contact", 
       text: "Contact",
       submenu: [
         { href: "/contact", text: "Contact Us" },
-        { href: "/faqs", text: "FAQs" },
+        
       ]
     },
   ];
