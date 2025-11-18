@@ -3,7 +3,7 @@ import React from "react";
 import { Fade } from "react-awesome-reveal";
 import { MapPin, Phone, Mail } from "lucide-react";
 
-export default function KWSCMap() {
+export default function Kwscmap() {
   return (
     <Fade direction="up" triggerOnce duration={1000}>
       <div className="mt-20 relative rounded-3xl overflow-hidden shadow-2xl">
