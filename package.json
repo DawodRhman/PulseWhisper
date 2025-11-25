@@ -12,7 +12,8 @@
     "export": "next export",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
