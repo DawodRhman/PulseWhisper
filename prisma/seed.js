@@ -639,6 +639,59 @@ async function seedSnapshots() {
   }
 }
 
+async function seedEducation() {
+  const resources = [
+    {
+      title: "Water Conservation Tips",
+      summary: "Guide on how to save water at home.",
+      content: { body: "Turn off the tap while brushing teeth. Fix leaks immediately." },
+    },
+    {
+      title: "Understanding Your Bill",
+      summary: "Explaining the charges on your monthly water bill.",
+      content: { body: "Breakdown of tariff rates and surcharges." },
+    },
+  ];
+
+  for (const resource of resources) {
+    await prisma.educationResource.create({
+      data: {
+        title: resource.title,
+        summary: resource.summary,
+        content: resource.content,
+      },
+    });
+  }
+}
+
+async function seedWaterToday() {
+  const updates = [
+    {
+      title: "Normal Supply to District East",
+      summary: "Water supply is proceeding as per schedule.",
+      status: "Normal",
+      publishedAt: new Date(),
+    },
+    {
+      title: "Maintenance at Hub Pumping Station",
+      summary: "Reduced pressure expected in West District due to maintenance.",
+      status: "Alert",
+      publishedAt: new Date(),
+    },
+  ];
+
+  for (const update of updates) {
+    await prisma.waterTodayUpdate.create({
+      data: {
+        title: update.title,
+        summary: update.summary,
+        status: update.status,
+        publishedAt: update.publishedAt,
+      },
+    });
+  }
+}
+
 async function main() {
   console.log("🧹 Resetting tables...");
   await resetTables();
@@ -666,6 +719,12 @@ async function main() {
 
   console.log("📄 Seeding Right to Information...");
   await seedRtiDocuments();
+
+  console.log("🎓 Seeding Education...");
+  await seedEducation();
+
+  console.log("💧 Seeding Water Today...");
+  await seedWaterToday();
 
   console.log("🧑‍💼 Seeding leadership & achievements...");
   await seedLeadership();
