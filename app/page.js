@@ -3,7 +3,7 @@ import Main from "@/components/Main";
 import WorkFlow from "@/components/Workflow";
 import Services from "@/components/Services";
 import Counter from "@/components/Counter";
-import KWSCMap from "@/components/Kwscmap";
+import KWSCMap from "@/components/KWSCMAP";
 import NewsUpdate from "@/components/NewsUpdate";
 import Projects from "@/components/Projects";
 import MediaGallery from "@/components/MediaGallery";

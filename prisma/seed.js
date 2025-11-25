@@ -57,8 +57,14 @@ async function inferLocalMetadata(url) {
 
 async function createMediaAssetRecord({ url, label, category, altText }) {
   const metadata = await inferLocalMetadata(url);
-  return prisma.mediaAsset.create({
-    data: {
+  return prisma.mediaAsset.upsert({
+    where: { url },
+    update: {
+      label,
+      category,
+      altText: altText ?? null,
+    },
+    create: {
       url,
       label,
       category,
