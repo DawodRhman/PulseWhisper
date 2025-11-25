@@ -11,6 +11,9 @@ const createSchema = z.object({
   docType: z.string().optional(),
   externalUrl: z.string().url().optional(),
   order: z.coerce.number().int().default(0),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  seoKeywords: z.string().optional(),
 });
 
 const updateSchema = createSchema.partial().extend({
@@ -22,7 +25,10 @@ const deleteSchema = z.object({
 });
 
 async function fetchRti() {
-  return await prisma.rtiDocument.findMany({ orderBy: { order: "asc" } });
+  return await prisma.rtiDocument.findMany({
+    orderBy: { order: "asc" },
+    include: { seo: true },
+  });
 }
 
 export async function GET() {
@@ -39,9 +45,20 @@ export async function POST(request) {
   try {
     const session = await ensureAdminSession("settings:write");
     const body = await request.json();
-    const data = createSchema.parse(body);
+    const { seoTitle, seoDescription, seoKeywords, ...data } = createSchema.parse(body);
 
-    const record = await prisma.rtiDocument.create({ data });
+    const record = await prisma.rtiDocument.create({
+      data: {
+        ...data,
+        seo: {
+          create: {
+            title: seoTitle || data.title,
+            description: seoDescription || data.summary,
+            keywords: seoKeywords,
+          },
+        },
+      },
+    });
     
     await purgeSnapshot(SnapshotModule.RIGHT_TO_INFORMATION).catch(() => null);
     
@@ -66,9 +83,28 @@ export async function PATCH(request) {
   try {
     const session = await ensureAdminSession("settings:write");
     const body = await request.json();
-    const { id, ...updates } = updateSchema.parse(body);
+    const { id, seoTitle, seoDescription, seoKeywords, ...updates } = updateSchema.parse(body);
 
-    const record = await prisma.rtiDocument.update({ where: { id }, data: updates });
+    const record = await prisma.rtiDocument.update({
+      where: { id },
+      data: {
+        ...updates,
+        seo: {
+          upsert: {
+            create: {
+              title: seoTitle || updates.title || "Untitled",
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+            update: {
+              title: seoTitle,
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+          },
+        },
+      },
+    });
 
     await purgeSnapshot(SnapshotModule.RIGHT_TO_INFORMATION).catch(() => null);
 

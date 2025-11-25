@@ -13,6 +13,9 @@ const createSchema = z.object({
   phone: z.string().optional(),
   email: z.string().email().optional(),
   hours: z.string().optional(),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  seoKeywords: z.string().optional(),
 });
 
 const updateSchema = createSchema.partial().extend({
@@ -24,7 +27,10 @@ const deleteSchema = z.object({
 });
 
 async function fetchLocations() {
-  return await prisma.officeLocation.findMany({ orderBy: { label: "asc" } });
+  return await prisma.officeLocation.findMany({
+    orderBy: { label: "asc" },
+    include: { seo: true },
+  });
 }
 
 export async function GET() {
@@ -41,9 +47,20 @@ export async function POST(request) {
   try {
     const session = await ensureAdminSession("settings:write");
     const body = await request.json();
-    const data = createSchema.parse(body);
+    const { seoTitle, seoDescription, seoKeywords, ...data } = createSchema.parse(body);
 
-    const record = await prisma.officeLocation.create({ data });
+    const record = await prisma.officeLocation.create({
+      data: {
+        ...data,
+        seo: {
+          create: {
+            title: seoTitle || data.label,
+            description: seoDescription || data.address,
+            keywords: seoKeywords,
+          },
+        },
+      },
+    });
     
     await purgeSnapshot(SnapshotModule.CONTACT).catch(() => null);
     
@@ -68,9 +85,28 @@ export async function PATCH(request) {
   try {
     const session = await ensureAdminSession("settings:write");
     const body = await request.json();
-    const { id, ...updates } = updateSchema.parse(body);
+    const { id, seoTitle, seoDescription, seoKeywords, ...updates } = updateSchema.parse(body);
 
-    const record = await prisma.officeLocation.update({ where: { id }, data: updates });
+    const record = await prisma.officeLocation.update({
+      where: { id },
+      data: {
+        ...updates,
+        seo: {
+          upsert: {
+            create: {
+              title: seoTitle || updates.label || "Untitled",
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+            update: {
+              title: seoTitle,
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+          },
+        },
+      },
+    });
 
     await purgeSnapshot(SnapshotModule.CONTACT).catch(() => null);
 

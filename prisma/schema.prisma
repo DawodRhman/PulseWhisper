@@ -207,6 +207,7 @@ model SeoMeta {
   educationResources EducationResource[]
   waterTodayUpdates  WaterTodayUpdate[]
   projectHighlights  ProjectHighlight[]
+  officeLocations    OfficeLocation[]
 }
 
 model MediaAsset {
@@ -605,8 +606,11 @@ model OfficeLocation {
   phone     String?
   email     String?
   hours     String?
+  seoId     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  seo SeoMeta? @relation(fields: [seoId], references: [id], onDelete: SetNull)
 }
 
 model RtiDocument {

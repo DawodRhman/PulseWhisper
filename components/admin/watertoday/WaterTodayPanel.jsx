@@ -17,6 +17,9 @@ export default function WaterTodayPanel() {
     summary: "",
     status: "",
     publishedAt: "",
+    seoTitle: "",
+    seoDescription: "",
+    seoKeywords: "",
   });
 
   useEffect(() => {
@@ -42,6 +45,9 @@ export default function WaterTodayPanel() {
       summary: "",
       status: "PUBLISHED",
       publishedAt: new Date().toISOString().slice(0, 16),
+      seoTitle: "",
+      seoDescription: "",
+      seoKeywords: "",
     });
     setIsModalOpen(true);
   };
@@ -53,6 +59,9 @@ export default function WaterTodayPanel() {
       summary: item.summary || "",
       status: item.status || "PUBLISHED",
       publishedAt: item.publishedAt ? new Date(item.publishedAt).toISOString().slice(0, 16) : "",
+      seoTitle: item.seo?.title || "",
+      seoDescription: item.seo?.description || "",
+      seoKeywords: item.seo?.keywords || "",
     });
     setIsModalOpen(true);
   };
@@ -83,6 +92,9 @@ export default function WaterTodayPanel() {
       const payload = {
         ...formData,
         publishedAt: formData.publishedAt ? new Date(formData.publishedAt).toISOString() : null,
+        seoTitle: formData.seoTitle,
+        seoDescription: formData.seoDescription,
+        seoKeywords: formData.seoKeywords,
       };
 
       if (editingItem) {
@@ -172,6 +184,31 @@ export default function WaterTodayPanel() {
                 type="datetime-local"
                 value={formData.publishedAt}
                 onChange={(e) => setFormData({ ...formData, publishedAt: e.target.value })}
+              />
+            </FormField>
+          </div>
+
+          <div className="mt-6 border-t border-slate-100 pt-4">
+            <h4 className="mb-4 text-sm font-bold text-slate-900">SEO Metadata</h4>
+            <FormField label="SEO Title">
+              <Input
+                value={formData.seoTitle}
+                onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
+                placeholder="Meta title..."
+              />
+            </FormField>
+            <FormField label="SEO Description">
+              <TextArea
+                value={formData.seoDescription}
+                onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })}
+                placeholder="Meta description..."
+              />
+            </FormField>
+            <FormField label="Keywords">
+              <Input
+                value={formData.seoKeywords}
+                onChange={(e) => setFormData({ ...formData, seoKeywords: e.target.value })}
+                placeholder="Comma-separated keywords..."
               />
             </FormField>
           </div>

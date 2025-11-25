@@ -434,6 +434,13 @@ async function seedContactData() {
         phone: office.phone || null,
         email: office.email || null,
         hours: office.hours || null,
+        seo: {
+          create: {
+            title: `${office.label} | KW&SC Office`,
+            description: `Visit the KW&SC ${office.label} at ${office.address}.`,
+            keywords: `kwsc, office, ${office.label}, karachi water`,
+          },
+        },
       },
     });
   }
@@ -645,11 +652,21 @@ async function seedEducation() {
       title: "Water Conservation Tips",
       summary: "Guide on how to save water at home.",
       content: { body: "Turn off the tap while brushing teeth. Fix leaks immediately." },
+      seo: {
+        title: "Water Conservation Tips | KW&SC",
+        description: "Learn how to save water at home with these simple tips.",
+        keywords: "water conservation, save water, kwsc",
+      },
     },
     {
       title: "Understanding Your Bill",
       summary: "Explaining the charges on your monthly water bill.",
       content: { body: "Breakdown of tariff rates and surcharges." },
+      seo: {
+        title: "Understanding Your Bill | KW&SC",
+        description: "A guide to understanding your monthly water bill charges.",
+        keywords: "water bill, tariff, kwsc billing",
+      },
     },
   ];
 
@@ -659,6 +676,9 @@ async function seedEducation() {
         title: resource.title,
         summary: resource.summary,
         content: resource.content,
+        seo: {
+          create: resource.seo,
+        },
       },
     });
   }

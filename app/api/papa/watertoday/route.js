@@ -10,6 +10,9 @@ const createSchema = z.object({
   summary: z.string().optional(),
   status: z.string().optional(),
   publishedAt: z.coerce.date().optional(),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  seoKeywords: z.string().optional(),
 });
 
 const updateSchema = createSchema.partial().extend({
@@ -21,7 +24,10 @@ const deleteSchema = z.object({
 });
 
 async function fetchWaterToday() {
-  return await prisma.waterTodayUpdate.findMany({ orderBy: { publishedAt: "desc" } });
+  return await prisma.waterTodayUpdate.findMany({
+    orderBy: { publishedAt: "desc" },
+    include: { seo: true },
+  });
 }
 
 export async function GET() {
@@ -38,9 +44,20 @@ export async function POST(request) {
   try {
     const session = await ensureAdminSession("watertoday:write");
     const body = await request.json();
-    const data = createSchema.parse(body);
+    const { seoTitle, seoDescription, seoKeywords, ...data } = createSchema.parse(body);
 
-    const record = await prisma.waterTodayUpdate.create({ data });
+    const record = await prisma.waterTodayUpdate.create({
+      data: {
+        ...data,
+        seo: {
+          create: {
+            title: seoTitle || data.title,
+            description: seoDescription || data.summary,
+            keywords: seoKeywords,
+          },
+        },
+      },
+    });
     
     await purgeSnapshot(SnapshotModule.WATER_TODAY).catch(() => null);
     
@@ -65,9 +82,28 @@ export async function PATCH(request) {
   try {
     const session = await ensureAdminSession("watertoday:write");
     const body = await request.json();
-    const { id, ...updates } = updateSchema.parse(body);
+    const { id, seoTitle, seoDescription, seoKeywords, ...updates } = updateSchema.parse(body);
 
-    const record = await prisma.waterTodayUpdate.update({ where: { id }, data: updates });
+    const record = await prisma.waterTodayUpdate.update({
+      where: { id },
+      data: {
+        ...updates,
+        seo: {
+          upsert: {
+            create: {
+              title: seoTitle || updates.title || "Untitled",
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+            update: {
+              title: seoTitle,
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+          },
+        },
+      },
+    });
 
     await purgeSnapshot(SnapshotModule.WATER_TODAY).catch(() => null);
 

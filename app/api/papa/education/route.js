@@ -9,6 +9,9 @@ const createSchema = z.object({
   title: z.string().min(1),
   summary: z.string().optional(),
   content: z.any().optional(), // JSON content
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  seoKeywords: z.string().optional(),
 });
 
 const updateSchema = createSchema.partial().extend({
@@ -20,7 +23,10 @@ const deleteSchema = z.object({
 });
 
 async function fetchEducation() {
-  return await prisma.educationResource.findMany({ orderBy: { createdAt: "desc" } });
+  return await prisma.educationResource.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { seo: true },
+  });
 }
 
 export async function GET() {
@@ -37,9 +43,20 @@ export async function POST(request) {
   try {
     const session = await ensureAdminSession("education:write");
     const body = await request.json();
-    const data = createSchema.parse(body);
+    const { seoTitle, seoDescription, seoKeywords, ...data } = createSchema.parse(body);
 
-    const record = await prisma.educationResource.create({ data });
+    const record = await prisma.educationResource.create({
+      data: {
+        ...data,
+        seo: {
+          create: {
+            title: seoTitle || data.title,
+            description: seoDescription || data.summary,
+            keywords: seoKeywords,
+          },
+        },
+      },
+    });
     
     await purgeSnapshot(SnapshotModule.EDUCATION).catch(() => null);
     
@@ -64,9 +81,28 @@ export async function PATCH(request) {
   try {
     const session = await ensureAdminSession("education:write");
     const body = await request.json();
-    const { id, ...updates } = updateSchema.parse(body);
+    const { id, seoTitle, seoDescription, seoKeywords, ...updates } = updateSchema.parse(body);
 
-    const record = await prisma.educationResource.update({ where: { id }, data: updates });
+    const record = await prisma.educationResource.update({
+      where: { id },
+      data: {
+        ...updates,
+        seo: {
+          upsert: {
+            create: {
+              title: seoTitle || updates.title || "Untitled",
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+            update: {
+              title: seoTitle,
+              description: seoDescription,
+              keywords: seoKeywords,
+            },
+          },
+        },
+      },
+    });
 
     await purgeSnapshot(SnapshotModule.EDUCATION).catch(() => null);
 

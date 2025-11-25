@@ -18,6 +18,9 @@ export default function RtiPanel() {
     docType: "",
     externalUrl: "",
     order: "0",
+    seoTitle: "",
+    seoDescription: "",
+    seoKeywords: "",
   });
 
   useEffect(() => {
@@ -38,7 +41,16 @@ export default function RtiPanel() {
 
   const handleAdd = () => {
     setEditingItem(null);
-    setFormData({ title: "", summary: "", docType: "", externalUrl: "", order: "0" });
+    setFormData({
+      title: "",
+      summary: "",
+      docType: "",
+      externalUrl: "",
+      order: "0",
+      seoTitle: "",
+      seoDescription: "",
+      seoKeywords: "",
+    });
     setIsModalOpen(true);
   };
 
@@ -50,6 +62,9 @@ export default function RtiPanel() {
       docType: item.docType || "",
       externalUrl: item.externalUrl || "",
       order: item.order.toString(),
+      seoTitle: item.seo?.title || "",
+      seoDescription: item.seo?.description || "",
+      seoKeywords: item.seo?.keywords || "",
     });
     setIsModalOpen(true);
   };
@@ -80,6 +95,9 @@ export default function RtiPanel() {
       const payload = {
         ...formData,
         order: parseInt(formData.order),
+        seoTitle: formData.seoTitle,
+        seoDescription: formData.seoDescription,
+        seoKeywords: formData.seoKeywords,
       };
 
       if (editingItem) {
@@ -173,6 +191,31 @@ export default function RtiPanel() {
               placeholder="0"
             />
           </FormField>
+
+          <div className="mt-6 border-t border-slate-100 pt-4">
+            <h4 className="mb-4 text-sm font-bold text-slate-900">SEO Metadata</h4>
+            <FormField label="SEO Title">
+              <Input
+                value={formData.seoTitle}
+                onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
+                placeholder="Meta title..."
+              />
+            </FormField>
+            <FormField label="SEO Description">
+              <TextArea
+                value={formData.seoDescription}
+                onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })}
+                placeholder="Meta description..."
+              />
+            </FormField>
+            <FormField label="Keywords">
+              <Input
+                value={formData.seoKeywords}
+                onChange={(e) => setFormData({ ...formData, seoKeywords: e.target.value })}
+                placeholder="Comma-separated keywords..."
+              />
+            </FormField>
+          </div>
 
           <div className="mt-6">
             <SubmitButton isSubmitting={isSubmitting}>
