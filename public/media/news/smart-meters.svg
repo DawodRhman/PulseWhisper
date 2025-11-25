@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" role="img" aria-label="Smart meters news thumbnail">
+  <defs>
+    <linearGradient id="news2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="40" fill="#020617" />
+  <rect x="50" y="50" width="1100" height="575" rx="32" fill="url(#news2)" opacity="0.8" />
+  <text x="50%" y="48%" fill="#f8fafc" font-family="'Segoe UI',Arial,sans-serif" font-size="66" font-weight="600" text-anchor="middle">CONNECTED METERS</text>
+  <text x="50%" y="62%" fill="#e0f2fe" font-family="'Segoe UI',Arial,sans-serif" font-size="34" text-anchor="middle">12,000 households onboarded</text>
+</svg>

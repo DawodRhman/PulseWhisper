@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" role="img" aria-label="Leader portrait">
+  <rect width="320" height="320" rx="48" fill="#111827" />
+  <circle cx="160" cy="120" r="66" fill="#a5b4fc" opacity="0.35" />
+  <circle cx="160" cy="120" r="58" fill="#e0e7ff" />
+  <rect x="70" y="200" width="180" height="110" rx="36" fill="#4338ca" />
+  <path d="M160 142c-20 0-36 16-36 38v14h72v-14c0-22-16-38-36-38z" fill="#312e81" opacity="0.45" />
+  <text x="160" y="300" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="28" fill="#f8fafc">HASAN</text>
+</svg>

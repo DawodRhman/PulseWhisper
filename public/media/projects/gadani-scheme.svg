@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Gadani Bulk Water Supply Scheme">
+  <defs>
+    <linearGradient id="gadaniGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fee2e2" />
+      <stop offset="100%" stop-color="#f87171" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="48" fill="url(#gadaniGradient)" />
+  <text x="50%" y="45%" fill="#7f1d1d" font-family="'Segoe UI',Arial,sans-serif" font-weight="700" font-size="60" text-anchor="middle">GADANI SUPPLY SCHEME</text>
+  <text x="50%" y="57%" fill="#b91c1c" font-family="'Segoe UI',Arial,sans-serif" font-size="30" text-anchor="middle">Paused pending route re-alignment</text>
+</svg>

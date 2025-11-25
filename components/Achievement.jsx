@@ -1,47 +1,62 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { Fade } from "react-awesome-reveal";
 import Image from "next/image";
 
-export default function AchievementComponent() {
-  const achievements = [
-    {
-      title: "Hydrant Management Cell",
-      description: "Established comprehensive hydrant management system to combat illegal water connections.",
-      icon: "/icon/airdrop.png",
-      year: "2024",
-    },
-    {
-      title: "Global Water Summit 2024",
-      description: "Represented Pakistan at the prestigious Global Water Summit in London.",
-      icon: "/icon/people.png",
-      year: "2024",
-    },
-    {
-      title: "Rangers Partnership",
-      description: "Joined forces with Pakistan Rangers to combat illegal hydrants and water theft.",
-      icon: "/icon/microphone.png",
-      year: "2024",
-    },
-    {
-      title: "Fareeda Salam Center",
-      description: "Established community development center to engage with local communities.",
-      icon: "/icon/user-icon.png",
-      year: "2024",
-    },
-    {
-      title: "Grievance Redressal",
-      description: "Introduced comprehensive GRM cell to address customer complaints.",
-      icon: "/icon/clipboar02.svg",
-      year: "2024",
-    },
-    {
-      title: "Digital Transformation",
-      description: "Implemented online billing, mobile apps, and automated systems.",
-      icon: "/icon/medal-star.svg",
-      year: "2024",
-    },
-  ];
+const FALLBACK_ACHIEVEMENTS = [
+  {
+    title: "Hydrant Management Cell",
+    description: "Established comprehensive hydrant management system to combat illegal water connections.",
+    icon: "/icon/airdrop.png",
+    year: "2024",
+  },
+  {
+    title: "Global Water Summit 2024",
+    description: "Represented Pakistan at the prestigious Global Water Summit in London.",
+    icon: "/icon/people.png",
+    year: "2024",
+  },
+  {
+    title: "Rangers Partnership",
+    description: "Joined forces with Pakistan Rangers to combat illegal hydrants and water theft.",
+    icon: "/icon/microphone.png",
+    year: "2024",
+  },
+  {
+    title: "Fareeda Salam Center",
+    description: "Established community development center to engage with local communities.",
+    icon: "/icon/user-icon.png",
+    year: "2024",
+  },
+  {
+    title: "Grievance Redressal",
+    description: "Introduced comprehensive GRM cell to address customer complaints.",
+    icon: "/icon/clipboar02.svg",
+    year: "2024",
+  },
+  {
+    title: "Digital Transformation",
+    description: "Implemented online billing, mobile apps, and automated systems.",
+    icon: "/icon/medal-star.svg",
+    year: "2024",
+  },
+];
+
+const DEFAULT_ICON = "/icon/medal-star.svg";
+
+function normalizeAchievements(items) {
+  const source = Array.isArray(items) && items.length ? items : FALLBACK_ACHIEVEMENTS;
+  return source.map((achievement, index) => ({
+    id: achievement.id || achievement.title || `achievement-${index}`,
+    title: achievement.title,
+    description: achievement.description || achievement.summary || "",
+    icon: achievement.icon || FALLBACK_ACHIEVEMENTS[index % FALLBACK_ACHIEVEMENTS.length]?.icon || DEFAULT_ICON,
+    year: achievement.year || achievement.metric || "",
+  }));
+}
+
+export default function AchievementComponent({ items }) {
+  const achievements = useMemo(() => normalizeAchievements(items), [items]);
 
   return (
     <div className="w-full z-20 relative px-4 md:px-0">
@@ -59,11 +74,14 @@ export default function AchievementComponent() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {achievements.map((achievement, index) => (
           <Fade
-            key={index}
+            key={achievement.id || index}
             direction="up"
             triggerOnce
             duration={600}
             delay={index * 100}
+                    onError={(event) => {
+                      event.currentTarget.src = DEFAULT_ICON;
+                    }}
           >
             <div
               className="group relative bg-gray-900/60 backdrop-blur-md rounded-xl p-6 border border-gray-700/50 

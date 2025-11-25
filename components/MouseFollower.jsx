@@ -1,12 +1,18 @@
 "use client";
 import React, { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 
 const MouseFollower = () => {
   const outerRef = useRef(null);
   const innerRef = useRef(null);
+  const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname?.startsWith("/admin")) {
+      return undefined;
+    }
+
     const moveCursor = (e) => {
       const { clientX: x, clientY: y } = e;
 
@@ -31,7 +37,11 @@ const MouseFollower = () => {
 
     window.addEventListener("mousemove", moveCursor);
     return () => window.removeEventListener("mousemove", moveCursor);
-  }, []);
+  }, [pathname]);
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <>

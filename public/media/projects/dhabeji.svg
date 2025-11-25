@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Dhabeji Pumping Station Rehabilitation">
+  <defs>
+    <linearGradient id="dhabejiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="48" fill="url(#dhabejiGradient)" />
+  <circle cx="350" cy="320" r="140" fill="rgba(255,255,255,0.25)" />
+  <circle cx="850" cy="360" r="180" fill="rgba(255,255,255,0.2)" />
+  <text x="50%" y="45%" fill="#7c2d12" font-family="'Segoe UI',Arial,sans-serif" font-weight="700" font-size="68" text-anchor="middle">DHABEJI UPGRADE</text>
+  <text x="50%" y="57%" fill="#78350f" font-family="'Segoe UI',Arial,sans-serif" font-size="30" text-anchor="middle">High-lift pumping replacement</text>
+</svg>

@@ -13,6 +13,11 @@ const Navbar = () => {
   const linksRef = useRef([]);
   const submenuRefs = useRef([]);
   const pathname = usePathname(); 
+  const isAdminView = pathname?.startsWith("/admin");
+
+  if (isAdminView) {
+    return null;
+  }
 
  
   useEffect(() => {

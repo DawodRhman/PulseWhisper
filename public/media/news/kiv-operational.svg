@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" role="img" aria-label="K-IV news thumbnail">
+  <defs>
+    <linearGradient id="news1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#0ea5e9" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="40" fill="url(#news1)" />
+  <text x="50%" y="50%" fill="#f0f9ff" font-family="'Segoe UI',Arial,sans-serif" font-size="72" font-weight="700" text-anchor="middle">K-IV ONLINE</text>
+  <text x="50%" y="60%" fill="#bae6fd" font-family="'Segoe UI',Arial,sans-serif" font-size="32" text-anchor="middle">260 MGD dispatched</text>
+</svg>

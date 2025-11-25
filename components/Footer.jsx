@@ -1,16 +1,8 @@
+"use client";
 import React from "react";
-// FIX: Using standard 'a' tags for links as 'next/link' is unresolved
-// FIX: Using standard 'img' tag as 'next/image' is unresolved
-import { Mail, MapPin, Phone, Facebook, Twitter, Linkedin, Youtube, ExternalLink } from "lucide-react";
-
-// Social media data for KW&SC
-const social_links = [
-  // Adjusted colors for contrast on a light background
-  { name: "Facebook", icon: Facebook, href: "https://www.facebook.com/kwscofficial", color: "text-blue-700 hover:text-blue-500" },
-  { name: "Twitter", icon: Twitter, href: "https://twitter.com/kwscofficial", color: "text-sky-600 hover:text-sky-400" },
-  { name: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/company/kwsc", color: "text-blue-800 hover:text-blue-600" },
-  { name: "YouTube", icon: Youtube, href: "https://www.youtube.com/@kwscofficial", color: "text-red-700 hover:text-red-500" },
-];
+import { usePathname } from "next/navigation";
+import { Mail, MapPin, Phone, ExternalLink } from "lucide-react";
+import { SocialLinks, CopyRight } from "@/components/SocialLinks";
 
 const footer_data = {
   email: "info@kwsc.gos.pk",
@@ -20,14 +12,12 @@ const footer_data = {
     "Karachi Water and Sewerage Corporation (KW&SC) is committed to providing reliable water and sewerage services to Karachi, ensuring clean water and efficient sewerage management for all residents.",
 };
 
-// Placeholder for the CopyRight component as it wasn't provided
-const CopyRight = () => (
-    <p className="text-gray-500 text-sm">
-        &copy; {new Date().getFullYear()} KW&SC. All Rights Reserved.
-    </p>
-);
-
 const Footer = () => {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     // Switched to a light background color and dark text color
     <footer className="bg-gray-50 text-gray-700 pt-20 font-sans relative overflow-hidden shadow-lg">
@@ -107,20 +97,7 @@ const Footer = () => {
             <h3 className="text-xl font-extrabold text-blue-600 mb-6 border-l-4 border-cyan-500 pl-3">Stay Connected</h3>
             
             {/* Social Icons Section - Adjusted background/border for light theme */}
-            <div className="flex space-x-4 mb-8">
-              {social_links.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={link.name}
-                  className={`p-3 rounded-full bg-white transition-all duration-300 border border-gray-300 hover:bg-gray-100 ${link.color}`}
-                >
-                  <link.icon size={24} />
-                </a>
-              ))}
-            </div>
+            <SocialLinks variant="icons" className="mb-8" />
 
             {/* External Links */}
             <h4 className="text-lg font-bold text-gray-600 mb-4">Official Portals</h4>

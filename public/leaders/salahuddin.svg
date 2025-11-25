@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-label="Portrait placeholder for Ahmed Ali Siddiqui">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0f2fe" />
+      <stop offset="100%" stop-color="#bae6fd" />
+    </linearGradient>
+  </defs>
+  <rect width="480" height="640" rx="32" fill="url(#bg)" />
+  <circle cx="240" cy="240" r="120" fill="#0ea5e9" opacity="0.12" />
+  <text x="50%" y="55%" font-family="'Segoe UI', Arial, sans-serif" font-size="120" font-weight="700" text-anchor="middle" fill="#0369a1">AS</text>
+  <text x="50%" y="75%" font-family="'Segoe UI', Arial, sans-serif" font-size="26" font-weight="500" text-anchor="middle" fill="#0f172a">Ahmed Ali Siddiqui</text>
+</svg>

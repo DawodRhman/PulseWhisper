@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="K-IV Water Supply Project illustration">
+  <defs>
+    <linearGradient id="kivGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="48" fill="url(#kivGradient)" />
+  <path d="M0 540 C200 480 400 600 600 540 C800 480 1000 600 1200 540 L1200 675 L0 675 Z" fill="rgba(255,255,255,0.12)" />
+  <text x="50%" y="45%" fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif" font-weight="700" font-size="72" text-anchor="middle">K-IV WATER GRID</text>
+  <text x="50%" y="57%" fill="#e0f2fe" font-family="'Segoe UI',Arial,sans-serif" font-size="32" text-anchor="middle">260 MGD bulk conveyance</text>
+</svg>

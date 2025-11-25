@@ -1,0 +1,672 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+
+  
+  url      = env("DATABASE_URL")
+}
+
+enum RoleType {
+  ADMIN
+  EDITOR
+  MEDIA_MANAGER
+  PROCUREMENT
+  HR
+  AUDITOR
+}
+
+enum TenderStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+  UPCOMING
+}
+
+enum PublicationStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum RequirementType {
+  QUALIFICATION
+  RESPONSIBILITY
+}
+
+enum AuditModule {
+  AUTH
+  ADMIN_DASHBOARD
+  SERVICES
+  TENDERS
+  CAREERS
+  NEWS
+  MEDIA
+  LEADERSHIP
+  FAQ
+  PORTFOLIO
+  WATER_TODAY
+  EDUCATION
+  SUBSCRIPTIONS
+  SETTINGS
+}
+
+enum SnapshotModule {
+  HOME
+  SERVICES
+  TENDERS
+  CAREERS
+  NEWS
+  MEDIA
+  FAQ
+  WATER_TODAY
+  EDUCATION
+  SETTINGS
+  SOCIAL_LINKS
+  RIGHT_TO_INFORMATION
+  CONTACT
+}
+
+model User {
+  id              String            @id @default(uuid())
+  name            String?
+  email           String            @unique
+  phone           String?
+  hashedPassword  String
+  status          String            @default("ACTIVE")
+  lastLoginAt     DateTime?
+  adminNotes      String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  roles           UserRole[]
+  sessions        Session[]
+  adminSessions   AdminSession[]
+  totpSecrets     TotpSecret[]
+  passwordHistory PasswordHistory[]
+  auditLogs       AuditLog[]
+}
+
+model Role {
+  id        String     @id @default(uuid())
+  type      RoleType   @unique
+  label     String
+  createdAt DateTime   @default(now())
+  users     UserRole[]
+}
+
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String
+  roleId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expiresAt    DateTime
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AdminSession {
+  id              String   @id @default(uuid())
+  tokenHash       String   @unique
+  userId          String
+  ipAddress       String?
+  userAgent       String?
+  expiresAt       DateTime
+  rememberUntil   DateTime?
+  revokedAt       DateTime?
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+}
+
+model TotpSecret {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  encryptedSecret String
+  verifiedAt      DateTime?
+  createdAt       DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  hash      String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String      @id @default(uuid())
+  module    AuditModule
+  action    String
+  recordId  String?
+  diff      Json?
+  actorId   String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime    @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([module, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model SeoMeta {
+  id                 String              @id @default(uuid())
+  title              String
+  description        String?
+  keywords           String?
+  canonicalUrl       String?
+  ogTitle            String?
+  ogDescription      String?
+  ogImageUrl         String?
+  twitterCard        String?             @default("summary_large_image")
+  structuredData     Json?
+  allowIndexing      Boolean             @default(true)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  serviceCategories  ServiceCategory[]
+  serviceCards       ServiceCard[]
+  tenders            Tender[]
+  careerPrograms     CareerProgram[]
+  careerOpenings     CareerOpening[]
+  newsArticles       NewsArticle[]
+  mediaAlbums        MediaAlbum[]
+  leadershipMembers  LeadershipMember[]
+  rtiDocuments       RtiDocument[]
+  educationResources EducationResource[]
+  waterTodayUpdates  WaterTodayUpdate[]
+  projectHighlights  ProjectHighlight[]
+}
+
+model MediaAsset {
+  id                 String              @id @default(uuid())
+  url                String              @unique
+  label              String?
+  mimeType           String?
+  fileSize           Int?
+  width              Int?
+  height             Int?
+  checksum           String?
+  category           String?
+  altText            String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  downloads          DownloadResource[]
+  tenderFiles        TenderAttachment[]
+  heroCards          ServiceCard[]
+  mediaItems         MediaItem[]
+  leadership         LeadershipMember[]
+  projects           ProjectHighlight[]
+  newsArticles       NewsArticle[]
+  rtiDocuments       RtiDocument[]
+  educationResources EducationResource[]
+  waterTodayUpdates  WaterTodayUpdate[]
+}
+
+model CachedSnapshot {
+  id        String         @id @default(uuid())
+  module    SnapshotModule
+  payload   Json
+  checksum  String?
+  fetchedAt DateTime       @default(now())
+  expiresAt DateTime?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@unique([module])
+}
+
+model ServiceCategory {
+  id        String             @id @default(uuid())
+  title     String
+  slug      String             @unique
+  summary   String?
+  heroCopy  String?
+  order     Int                @default(0)
+  seoId     String?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  cards     ServiceCard[]
+  resources DownloadResource[]
+
+  seo SeoMeta? @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model ServiceCard {
+  id            String          @id @default(uuid())
+  categoryId    String
+  title         String
+  summary       String?
+  description   String?
+  iconKey       String?
+  gradientClass String?
+  order         Int             @default(0)
+  mediaId       String?
+  seoId         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  details       ServiceDetail[]
+
+  category ServiceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  media    MediaAsset?     @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+  seo      SeoMeta?        @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model ServiceDetail {
+  id            String   @id @default(uuid())
+  serviceCardId String
+  heading       String
+  body          String?
+  bulletPoints  Json?
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  serviceCard ServiceCard @relation(fields: [serviceCardId], references: [id], onDelete: Cascade)
+}
+
+model DownloadResource {
+  id                String   @id @default(uuid())
+  serviceCategoryId String?
+  title             String
+  description       String?
+  mediaId           String
+  externalUrl       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  category ServiceCategory? @relation(fields: [serviceCategoryId], references: [id], onDelete: SetNull)
+  media    MediaAsset       @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+}
+
+model TenderCategory {
+  id          String   @id @default(uuid())
+  label       String
+  slug        String   @unique
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tenders     Tender[]
+}
+
+model Tender {
+  id           String             @id @default(uuid())
+  tenderNumber String             @unique
+  title        String
+  summary      String?
+  status       TenderStatus
+  publishedAt  DateTime?
+  closingAt    DateTime?
+  contactEmail String?
+  contactPhone String?
+  categoryId   String?
+  seoId        String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  attachments  TenderAttachment[]
+
+  category TenderCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  seo      SeoMeta?        @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model TenderAttachment {
+  id        String   @id @default(uuid())
+  tenderId  String
+  mediaId   String
+  label     String?
+  createdAt DateTime @default(now())
+
+  tender Tender     @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+  media  MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@unique([tenderId, mediaId])
+}
+
+model CareerProgram {
+  id          String          @id @default(uuid())
+  title       String
+  slug        String          @unique
+  heroTitle   String?
+  heroBody    String?
+  eligibility Json?
+  seoId       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  openings    CareerOpening[]
+
+  seo SeoMeta? @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model CareerOpening {
+  id           String              @id @default(uuid())
+  programId    String?
+  title        String
+  slug         String              @unique
+  department   String?
+  location     String?
+  jobType      String?
+  compensation String?
+  status       PublicationStatus   @default(DRAFT)
+  publishAt    DateTime?
+  expireAt     DateTime?
+  applyUrl     String?
+  applyEmail   String?
+  summary      String?
+  description  String?
+  seoId        String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  requirements CareerRequirement[]
+
+  program CareerProgram? @relation(fields: [programId], references: [id], onDelete: SetNull)
+  seo     SeoMeta?       @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model CareerRequirement {
+  id              String          @id @default(uuid())
+  careerOpeningId String
+  type            RequirementType
+  content         String
+  order           Int             @default(0)
+
+  opening CareerOpening @relation(fields: [careerOpeningId], references: [id], onDelete: Cascade)
+}
+
+model CareerBenefit {
+  id        String   @id @default(uuid())
+  title     String
+  summary   String?
+  iconKey   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactChannel {
+  id           String   @id @default(uuid())
+  label        String
+  email        String?
+  phone        String?
+  description  String?
+  availability String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model NewsCategory {
+  id        String        @id @default(uuid())
+  title     String
+  slug      String        @unique
+  order     Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  articles  NewsArticle[]
+}
+
+model NewsTag {
+  id        String       @id @default(uuid())
+  title     String
+  slug      String       @unique
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now())
+  articles  NewsTagMap[]
+}
+
+model NewsArticle {
+  id          String            @id @default(uuid())
+  categoryId  String?
+  title       String
+  slug        String            @unique
+  subtitle    String?
+  summary     String?
+  content     Json
+  status      PublicationStatus @default(DRAFT)
+  publishedAt DateTime?
+  heroMediaId String?
+  seoId       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  tags        NewsTagMap[]
+
+  category  NewsCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  heroMedia MediaAsset?   @relation(fields: [heroMediaId], references: [id], onDelete: SetNull)
+  seo       SeoMeta?      @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model NewsTagMap {
+  articleId String
+  tagId     String
+
+  article NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag     NewsTag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+}
+
+model MediaAlbum {
+  id          String      @id @default(uuid())
+  title       String
+  slug        String      @unique
+  description String?
+  seoId       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  items       MediaItem[]
+
+  seo SeoMeta? @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model MediaItem {
+  id        String   @id @default(uuid())
+  albumId   String?
+  mediaId   String
+  caption   String?
+  credit    String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  album MediaAlbum? @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  media MediaAsset  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+}
+
+model LeadershipMember {
+  id          String   @id @default(uuid())
+  name        String
+  designation String
+  bio         String?
+  priority    Int      @default(0)
+  mediaId     String?
+  seoId       String?
+  socials     Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  portrait MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+  seo      SeoMeta?    @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model Achievement {
+  id        String   @id @default(uuid())
+  title     String
+  summary   String?
+  metric    String?
+  iconKey   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FaqCategory {
+  id        String   @id @default(uuid())
+  title     String
+  order     Int      @default(0)
+  faqs      Faq[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faq {
+  id         String   @id @default(uuid())
+  categoryId String?
+  question   String
+  answer     String
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  category FaqCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+}
+
+model WorkflowStep {
+  id        String   @id @default(uuid())
+  title     String
+  summary   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CounterStat {
+  id        String   @id @default(uuid())
+  label     String
+  value     Int
+  suffix    String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProjectHighlight {
+  id        String   @id @default(uuid())
+  title     String
+  summary   String?
+  status    String?
+  order     Int      @default(0)
+  mediaId   String?
+  linkUrl   String?
+  seoId     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  media MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+  seo   SeoMeta?    @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model SocialLink {
+  id        String   @id @default(uuid())
+  title     String
+  platform  String?
+  url       String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OfficeLocation {
+  id        String   @id @default(uuid())
+  label     String
+  address   String
+  latitude  Float?
+  longitude Float?
+  phone     String?
+  email     String?
+  hours     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RtiDocument {
+  id          String   @id @default(uuid())
+  title       String
+  summary     String?
+  docType     String?
+  order       Int      @default(0)
+  mediaId     String?
+  externalUrl String?
+  seoId       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  media MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+  seo   SeoMeta?    @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model EducationResource {
+  id        String   @id @default(uuid())
+  title     String
+  summary   String?
+  content   Json?
+  mediaId   String?
+  seoId     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  media MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+  seo   SeoMeta?    @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model WaterTodayUpdate {
+  id          String    @id @default(uuid())
+  title       String
+  summary     String?
+  status      String?
+  publishedAt DateTime?
+  mediaId     String?
+  seoId       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  media MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+  seo   SeoMeta?    @relation(fields: [seoId], references: [id], onDelete: SetNull)
+}
+
+model NewsletterSubscriber {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  fullName       String?
+  source         String?
+  subscribedAt   DateTime  @default(now())
+  unsubscribedAt DateTime?
+}
+
+model FeedbackSubmission {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String?
+  subject   String?
+  message   String
+  source    String?
+  createdAt DateTime @default(now())
+}

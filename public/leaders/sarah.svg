@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="640" viewBox="0 0 480 640" role="img" aria-label="Portrait placeholder for Muhammad Ali Sheikh">
+  <defs>
+    <linearGradient id="bgSarah" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ede9fe" />
+      <stop offset="100%" stop-color="#ddd6fe" />
+    </linearGradient>
+  </defs>
+  <rect width="480" height="640" rx="32" fill="url(#bgSarah)" />
+  <circle cx="240" cy="230" r="120" fill="#8b5cf6" opacity="0.12" />
+  <text x="50%" y="55%" font-family="'Segoe UI', Arial, sans-serif" font-size="120" font-weight="700" text-anchor="middle" fill="#6d28d9">MS</text>
+  <text x="50%" y="75%" font-family="'Segoe UI', Arial, sans-serif" font-size="26" font-weight="500" text-anchor="middle" fill="#4c1d95">Muhammad Ali Sheikh</text>
+</svg>

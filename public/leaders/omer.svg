@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" role="img" aria-label="Leader portrait">
+  <rect width="320" height="320" rx="48" fill="#082f49" />
+  <circle cx="160" cy="120" r="64" fill="#38bdf8" opacity="0.35" />
+  <circle cx="160" cy="120" r="56" fill="#e0f2fe" />
+  <rect x="70" y="200" width="180" height="110" rx="36" fill="#134e4a" />
+  <path d="M160 140c-18 0-32 16-32 36v12h64v-12c0-20-14-36-32-36z" fill="#0f172a" opacity="0.4" />
+  <text x="160" y="300" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="28" fill="#f8fafc">OMER</text>
+</svg>

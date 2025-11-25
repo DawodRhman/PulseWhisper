@@ -9,19 +9,19 @@ export default function Leadership() {
       name: "Engr. Syed Najib Ahmed",
       role: "Former Managing Director",
       period: "2022 - 2023",
-      img: "/leaders/najib.jpg",
+      img: "/leaders/najib.svg",
     },
     {
       name: "Asadullah Khan",
       role: "Former Managing Director",
       period: "2020 - 2022",
-      img: "/leaders/asadullah.jpg",
+      img: "/leaders/asadullah.svg",
     },
     {
       name: "Hashim Raza Zaidi",
       role: "Former Managing Director",
       period: "2018 - 2020",
-      img: "/leaders/hashim.jpg",
+      img: "/leaders/hashim.svg",
     },
   ];
 
@@ -29,22 +29,22 @@ export default function Leadership() {
     {
       name: "Ahmed Ali Siddiqui",
       role: "Managing Director",
-      img: "/leaders/salahuddin.jpg",
+      img: "/leaders/salahuddin.svg",
     },
     {
       name: "Asadullah Khan",
       role: "Chief Operating Officer",
-      img: "/leaders/imran.jpg",
+      img: "/leaders/imran.svg",
     },
     {
       name: "Muhammad Ali Sheikh",
       role: "Chief Engineer Water Supply",
-      img: "/leaders/sarah.jpg",
+      img: "/leaders/sarah.svg",
     },
     {
       name: "Aftab Alam Chandio",
       role: "Chief Engineer Sewerage",
-      img: "/leaders/bilal.jpg",
+      img: "/leaders/bilal.svg",
     },
   ];
 

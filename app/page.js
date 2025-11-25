@@ -1,34 +1,33 @@
 import React from "react";
-import Whoarewe from "@/components/Whoarewe";
 import Main from "@/components/Main";
 import WorkFlow from "@/components/Workflow";
 import Services from "@/components/Services";
 import Counter from "@/components/Counter";
-// import Slider from "@/components/Slider";
-import Subscribe from "@/components/Subscribe";
 import KWSCMap from "@/components/Kwscmap";
 import NewsUpdate from "@/components/NewsUpdate";
 import Projects from "@/components/Projects";
 import MediaGallery from "@/components/MediaGallery";
+import AchievementComponent from "@/components/Achievement";
+import OurLeadership from "@/components/OurLeadership";
+import { resolveWithSnapshot } from "@/lib/cache";
+import { SnapshotModule } from "@prisma/client";
+import { buildHomePayload } from "@/lib/home/payload";
 
-export default function Home() {
- 
+export default async function Home() {
+  const { data: homeData } = await resolveWithSnapshot(SnapshotModule.HOME, buildHomePayload);
 
   return (
     <>
-      <Main/>
-      {/* <Slider /> */}
-     
+      <Main hero={homeData.hero} />
       <Services />
       <NewsUpdate />
-      <Projects />
-      
+      <Projects projects={homeData.projects} />
+      <OurLeadership team={homeData.leadership} insights={homeData.leadershipInsights} />
+      <AchievementComponent items={homeData.achievements} />
       <KWSCMap />
-      <WorkFlow />
-      <Counter />
-      <MediaGallery />
-      
-     
+      <WorkFlow steps={homeData.workflow} />
+      <Counter stats={homeData.counters} />
+      <MediaGallery leaders={homeData.mediaCarousel} />
     </>
   );
 }

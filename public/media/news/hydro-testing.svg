@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" role="img" aria-label="Hydro testing news thumbnail">
+  <defs>
+    <linearGradient id="news4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#312e81" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="26" fill="#020617" />
+  <rect x="80" y="80" width="1040" height="515" rx="26" fill="url(#news4)" />
+  <text x="50%" y="50%" fill="#eef2ff" font-family="'Segoe UI',Arial,sans-serif" font-size="70" font-weight="600" text-anchor="middle">HYDRO TESTS</text>
+  <text x="50%" y="62%" fill="#c7d2fe" font-family="'Segoe UI',Arial,sans-serif" font-size="34" text-anchor="middle">Leak detection campaign</text>
+</svg>

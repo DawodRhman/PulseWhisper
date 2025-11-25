@@ -1,74 +1,77 @@
-'use client'; // Required for components using hooks like useState and useEffect
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import { 
-    CheckCircle, 
-    DollarSign,
-    Droplets, 
-    Pipette, 
-    MapPin
-} from "lucide-react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { CheckCircle, DollarSign, Droplets, Pipette, MapPin } from "lucide-react";
 
-// --- Process Data using Lucide Icons ---
-const ProcessSteps = [
+const ICON_SET = [Droplets, Pipette, MapPin, DollarSign];
+const THEME_CLASSES = {
+    cyan: { text: "text-cyan-700", bg: "bg-cyan-700", border: "border-cyan-700", shadow: "shadow-cyan-700" },
+    indigo: { text: "text-indigo-700", bg: "bg-indigo-700", border: "border-indigo-700", shadow: "shadow-indigo-700" },
+    emerald: { text: "text-emerald-700", bg: "bg-emerald-700", border: "border-emerald-700", shadow: "shadow-emerald-700" },
+    red: { text: "text-red-700", bg: "bg-red-700", border: "border-red-700", shadow: "shadow-red-700" },
+    blue: { text: "text-blue-700", bg: "bg-blue-700", border: "border-blue-700", shadow: "shadow-blue-700" },
+};
+
+const FALLBACK_STEPS = [
     {
         id: "01",
         title: "Bulk Water Supply & Treatment",
-        subTitle:
+        summary:
             "Managing the abstraction of raw water from primary sources (Indus River, Hub Dam), operating massive pumping systems, and treating water to potable standards for the entire metropolitan area.",
-        icon: Droplets,
-        color: "text-cyan-700", // Deep Cyan for Purity/Water Source
+        theme: "cyan",
     },
     {
         id: "02",
         title: "Sewerage Infrastructure Management",
-        subTitle:
+        summary:
             "Planning, operating, and maintaining the vast network of sewerage collectors, trunk mains, lifting/pumping stations, and ensuring proper disposal and treatment of wastewater and industrial effluent.",
-        icon: Pipette, 
-        color: "text-indigo-700", // Deep Indigo for Sewerage
+        theme: "indigo",
     },
     {
         id: "03",
         title: "Distribution & Network Integrity",
-        subTitle:
+        summary:
             "Managing the final distribution network, pipelines, and bulk transfer mains; focusing on reducing Non-Revenue Water (NRW) through leak detection, asset rehabilitation, and minimizing illegal connections.",
-        icon: MapPin, 
-        color: "text-emerald-700", // Rich Emerald for Efficiency/Integrity
+        theme: "emerald",
     },
     {
         id: "04",
         title: "Revenue, Customer & Governance",
-        subTitle:
-            "Ensuring financial sustainability through accurate metering, billing, and revenue collection. This role also includes effective customer grievance redressal and upholding institutional governance standards.",
-        icon: DollarSign, 
-        color: "text-red-700", // Corporate Red for Governance/Finance
+        summary:
+            "Ensuring financial sustainability through accurate metering, billing, and revenue collection along with strong grievance redressal and governance standards.",
+        theme: "red",
     },
 ];
 
-const WorkFlow = () => {
-    const [activeStep, setActiveStep] = useState(ProcessSteps[0].id);
+function normalizeSteps(steps) {
+    const base = Array.isArray(steps) && steps.length ? steps : FALLBACK_STEPS;
+    return base.map((step, index) => {
+        const Icon = ICON_SET[index % ICON_SET.length];
+        const themeKey = step.theme && THEME_CLASSES[step.theme] ? step.theme : FALLBACK_STEPS[index % FALLBACK_STEPS.length]?.theme || "blue";
+        return {
+            id: step.id || String(index + 1).padStart(2, "0"),
+            title: step.title,
+            subTitle: step.summary || step.description || "",
+            Icon,
+            theme: THEME_CLASSES[themeKey] || THEME_CLASSES.blue,
+        };
+    });
+}
+
+const WorkFlow = ({ steps }) => {
+    const processSteps = useMemo(() => normalizeSteps(steps), [steps]);
+    const [activeStep, setActiveStep] = useState(processSteps[0].id);
     const stepRefs = useRef([]);
     const observerRef = useRef(null);
 
-    // Find the currently active step's data
-    const activeStepData = ProcessSteps.find(step => step.id === activeStep) || ProcessSteps[0];
-    const activeColor = activeStepData.color;
+    useEffect(() => {
+        if (processSteps.length) {
+            setActiveStep(processSteps[0].id);
+        }
+    }, [processSteps]);
 
-    // Note: Tailwind doesn't allow dynamic string concatenation for colors. We must ensure these classes are fully defined in the output.
-    const activeBgClass = activeColor === 'text-cyan-700' ? 'bg-cyan-700' :
-                        activeColor === 'text-indigo-700' ? 'bg-indigo-700' :
-                        activeColor === 'text-emerald-700' ? 'bg-emerald-700' :
-                        activeColor === 'text-red-700' ? 'bg-red-700' : 'bg-blue-700';
-
-    const activeBorderClass = activeColor === 'text-cyan-700' ? 'border-cyan-700' :
-                              activeColor === 'text-indigo-700' ? 'border-indigo-700' :
-                              activeColor === 'text-emerald-700' ? 'border-emerald-700' :
-                              activeColor === 'text-red-700' ? 'border-red-700' : 'border-blue-700';
-    
-    const activeShadowClass = activeColor === 'text-cyan-700' ? 'shadow-cyan-700' :
-                              activeColor === 'text-indigo-700' ? 'shadow-indigo-700' :
-                              activeColor === 'text-emerald-700' ? 'shadow-emerald-700' :
-                              activeColor === 'text-red-700' ? 'shadow-red-700' : 'shadow-blue-700';
+        const activeStepData = processSteps.find(step => step.id === activeStep) || processSteps[0];
+        const activeTheme = activeStepData.theme || THEME_CLASSES.blue;
 
 
     useEffect(() => {
@@ -91,7 +94,7 @@ const WorkFlow = () => {
         observerRef.current = observer;
 
         // Attach observer to each step's reference element
-        stepRefs.current.forEach(ref => {
+            stepRefs.current.forEach(ref => {
             if (ref) {
                 observer.observe(ref);
             }
@@ -149,16 +152,16 @@ const WorkFlow = () => {
                         <div className="absolute left-7 top-0 bottom-0 w-1 bg-gray-300 rounded-full">
                             {/* Dynamic Active Line Highlight */}
                             <div 
-                                className={`absolute top-0 left-0 w-full rounded-full transition-all duration-1000 ${activeBgClass}`}
+                                className={`absolute top-0 left-0 w-full rounded-full transition-all duration-1000 ${activeTheme.bg}`}
                                 style={{ 
-                                    height: `${(ProcessSteps.findIndex(step => step.id === activeStep) + 1) / ProcessSteps.length * 100}%` 
+                                    height: `${(processSteps.findIndex(step => step.id === activeStep) + 1) / processSteps.length * 100}%` 
                                 }}
                             ></div>
                         </div>
 
                         {/* Process Step List */}
                         <div className="space-y-12">
-                            {ProcessSteps.map((process, index) => {
+                            {processSteps.map((process, index) => {
                                 const isActive = process.id === activeStep;
                                 
                                 return (
@@ -170,17 +173,17 @@ const WorkFlow = () => {
                                     >
                                         {/* Step Marker/Dot */}
                                         <div className={`absolute -left-1 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 transform ${isActive 
-                                            ? activeBgClass + ' border-4 border-white/50 scale-110 shadow-xl ' + activeShadowClass 
+                                            ? `${activeTheme.bg} border-4 border-white/50 scale-110 shadow-xl ${activeTheme.shadow}` 
                                             : 'bg-gray-300 border border-gray-400 group-hover:bg-gray-400'}`}
                                         >
-                                            <process.icon className={`w-8 h-8 transition-colors duration-500 ${isActive ? 'text-white' : 'text-gray-600 group-hover:text-gray-900'}`} /> 
+                                            <process.Icon className={`w-8 h-8 transition-colors duration-500 ${isActive ? 'text-white' : 'text-gray-600 group-hover:text-gray-900'}`} /> 
                                         </div>
 
                                         {/* Content Card */}
                                         <div 
                                             className={`ml-16 p-8 rounded-xl transition-all duration-500 cursor-pointer shadow-lg 
                                                 ${isActive 
-                                                    ? `bg-white border-2 ${activeBorderClass}/50 shadow-xl ${activeShadowClass}/20 scale-[1.01] opacity-100` 
+                                                    ? `bg-white border-2 ${activeTheme.border}/50 shadow-xl ${activeTheme.shadow}/20 scale-[1.01] opacity-100` 
                                                     : 'bg-white border border-gray-200 hover:bg-gray-100 opacity-90 hover:opacity-100'
                                                 }`}
                                             onClick={() => {
@@ -190,9 +193,9 @@ const WorkFlow = () => {
                                         >
                                             <div className="flex justify-between items-start mb-3">
                                                 {/* Title Text */}
-                                                <h4 className={`text-2xl font-bold transition-colors duration-500 ${isActive ? process.color : 'text-gray-900'}`}>{process.title}</h4> 
+                                                <h4 className={`text-2xl font-bold transition-colors duration-500 ${isActive ? process.theme.text : 'text-gray-900'}`}>{process.title}</h4> 
                                                 {/* Number */}
-                                                <span className={`text-4xl font-extrabold transition-colors duration-500 ${isActive ? process.color : 'text-gray-400'}`}>{process.id}</span> 
+                                                <span className={`text-4xl font-extrabold transition-colors duration-500 ${isActive ? process.theme.text : 'text-gray-400'}`}>{process.id}</span> 
                                             </div>
                                             {/* Subtitle Text */}
                                             <p className={`mt-2 text-base transition-colors duration-500 ${isActive ? 'text-gray-600' : 'text-gray-700'}`}>{process.subTitle}</p> 

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Water Tanker Service Digitization">
+  <defs>
+    <linearGradient id="tankerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ede9fe" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="48" fill="url(#tankerGradient)" />
+  <text x="50%" y="45%" fill="#581c87" font-family="'Segoe UI',Arial,sans-serif" font-weight="700" font-size="60" text-anchor="middle">TANKER DIGITIZATION</text>
+  <text x="50%" y="57%" fill="#6b21a8" font-family="'Segoe UI',Arial,sans-serif" font-size="30" text-anchor="middle">Unified dispatch + billing platform</text>
+</svg>

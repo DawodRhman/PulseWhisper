@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" role="img" aria-label="Control room illustration">
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#0a2e5d" />
+    </linearGradient>
+    <linearGradient id="scan" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0" />
+      <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#heroBg)" />
+  <g opacity="0.2">
+    <path d="M0 1010h1920v70H0z" fill="#020617" />
+    <path d="M0 960h1920v10H0z" fill="#1e293b" />
+    <path d="M0 900h1920v5H0z" fill="#1e293b" />
+  </g>
+  <g fill="none" stroke="#1d4ed8" stroke-opacity="0.35" stroke-width="1">
+    <path d="M0 940h1920" />
+    <path d="M0 880h1920" />
+    <path d="M0 820h1920" />
+    <path d="M0 760h1920" />
+    <path d="M0 700h1920" />
+  </g>
+  <g fill="#0ea5e9" opacity="0.15">
+    <circle cx="520" cy="420" r="260" />
+    <circle cx="1320" cy="360" r="280" />
+  </g>
+  <g fill="#38bdf8" opacity="0.55">
+    <path d="M280 760h520l-160 160H120z" />
+    <path d="M1120 720h520l-100 200h-640z" />
+  </g>
+  <rect x="200" y="520" width="480" height="240" rx="28" fill="#0b1d3d" stroke="#1d4ed8" stroke-opacity="0.5" />
+  <rect x="1240" y="500" width="480" height="260" rx="28" fill="#0b1d3d" stroke="#1d4ed8" stroke-opacity="0.5" />
+  <rect x="740" y="400" width="440" height="320" rx="32" fill="#020b18" stroke="#38bdf8" stroke-opacity="0.6" />
+  <rect x="780" y="440" width="360" height="200" rx="18" fill="#0f172a" stroke="#1d4ed8" stroke-opacity="0.4" />
+  <rect x="820" y="480" width="280" height="60" rx="12" fill="#0ea5e9" opacity="0.15" />
+  <rect x="820" y="560" width="280" height="80" rx="12" fill="#0ea5e9" opacity="0.1" />
+  <rect x="840" y="680" width="240" height="20" rx="10" fill="#38bdf8" opacity="0.5" />
+  <rect x="260" y="560" width="360" height="40" rx="12" fill="#22d3ee" opacity="0.1" />
+  <rect x="260" y="620" width="360" height="80" rx="12" fill="#22d3ee" opacity="0.15" />
+  <rect x="1310" y="540" width="360" height="40" rx="12" fill="#22d3ee" opacity="0.1" />
+  <rect x="1310" y="600" width="360" height="120" rx="12" fill="#22d3ee" opacity="0.12" />
+  <g transform="translate(560 360)">
+    <rect x="-200" y="-80" width="400" height="160" rx="36" fill="#020b18" stroke="#38bdf8" stroke-opacity="0.5" />
+    <rect x="-160" y="-40" width="320" height="80" rx="20" fill="#38bdf8" opacity="0.15" />
+  </g>
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#scan)" opacity="0.2" />
+  <text x="50%" y="180" fill="#e0f2fe" font-family="'Segoe UI', Arial, sans-serif" font-size="68" font-weight="700" text-anchor="middle" opacity="0.8">
+    Operations Report Hub
+  </text>
+  <text x="50%" y="250" fill="#bae6fd" font-family="'Segoe UI', Arial, sans-serif" font-size="28" text-anchor="middle" opacity="0.8">
+    Newsroom telemetry rendered locally for admin dashboards
+  </text>
+</svg>

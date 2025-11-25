@@ -9,20 +9,29 @@
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
     "build:prod": "NODE_ENV=production next build",
-    "export": "next export"
+    "export": "next export",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@gsap/react": "^2.1.2",
+    "@node-rs/argon2": "^2.0.2",
+    "@prisma/client": "^6.19.0",
     "@radix-ui/react-slot": "^1.1.1",
     "@react-three/drei": "^10.0.4",
     "@react-three/fiber": "^9.0.4",
     "class-variance-authority": "^0.7.1",
+    "dotenv": "^17.2.3",
     "framer-motion": "^12.23.24",
     "gsap": "^3.13.0",
+    "image-size": "^1.2.1",
     "imagesloaded": "^5.0.0",
     "lucide-react": "^0.474.0",
     "next": "15.1.6",
+    "otplib": "^12.0.1",
+    "prisma": "^6.19.0",
     "react": "^19.0.0",
     "react-awesome-reveal": "^4.3.1",
     "react-countup": "^6.5.3",
@@ -33,7 +42,8 @@
     "react-type-animation": "^3.2.0",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
-    "three": "^0.174.0"
+    "three": "^0.174.0",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "critters": "^0.0.23",

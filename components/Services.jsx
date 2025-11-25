@@ -8,28 +8,44 @@ import "swiper/css/pagination";
 import { FaTint, FaWater, FaTools, FaShieldAlt, FaChartLine, FaCogs, FaDatabase, FaPhone } from "react-icons/fa";
 import Loader from "@/components/Loader";
 import gsap from "gsap";
+import { useServicesData } from "@/hooks/useServicesData";
 
 export default function Services() {
-  const [loading, setLoading] = useState(true);
+  const [animationDone, setAnimationDone] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const { data, cards, loading: dataLoading, error, stale } = useServicesData();
+  const loading = !animationDone || dataLoading;
 
   useEffect(() => {
-    const loaderTimeline = gsap.timeline({ onComplete: () => setLoading(false) });
+    const loaderTimeline = gsap.timeline({ onComplete: () => setAnimationDone(true) });
     loaderTimeline
       .fromTo(".loader", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.5, ease: "power2.inOut" })
       .to(".loader", { scaleY: 0, transformOrigin: "0% -100%", duration: 0.5, ease: "power2.inOut" })
       .to(".wrapper", { y: "-100%", ease: "power4.inOut", duration: 1 }, "-=0.8");
   }, []);
 
-  const services = [
-    { title: "Water Supply Services", description: "Reliable clean water distribution across Karachi.", icon: <FaTint />, gradient: "from-blue-100 to-blue-300" },
-    { title: "Sewerage Management", description: "Efficient wastewater collection and treatment systems.", icon: <FaWater />, gradient: "from-cyan-100 to-blue-200" },
-    { title: "Infrastructure Maintenance", description: "Regular maintenance and upgrade of water infrastructure.", icon: <FaTools />, gradient: "from-indigo-100 to-purple-200" },
-    { title: "Water Quality Testing", description: "Comprehensive water quality monitoring and testing.", icon: <FaShieldAlt />, gradient: "from-green-100 to-teal-200" },
-    { title: "Emergency Services", description: "24/7 emergency water and sewerage services.", icon: <FaPhone />, gradient: "from-red-100 to-orange-200" },
-    { title: "Customer Support", description: "Dedicated customer service and complaint resolution.", icon: <FaCogs />, gradient: "from-purple-100 to-pink-200" },
-    { title: "Water Treatment", description: "Advanced water treatment and purification processes.", icon: <FaChartLine />, gradient: "from-teal-100 to-green-200" },
-    { title: "Billing Services", description: "Convenient online billing and payment systems.", icon: <FaDatabase />, gradient: "from-yellow-100 to-orange-200" },
-  ];
+  const iconMap = {
+    FaTint,
+    FaWater,
+    FaTools,
+    FaShieldAlt,
+    FaChartLine,
+    FaCogs,
+    FaDatabase,
+    FaPhone,
+  };
+
+  const heroTitle = data.hero?.title || "Our Services";
+  const heroSubtitle =
+    data.hero?.subtitle ||
+    "We provide a full range of water supply, sewerage, and infrastructure services to keep Karachi safe, clean, and sustainable.";
+
+  const handleCardSelect = (card) => {
+    setSelectedCard(card);
+  };
+
+  const closeOverlay = () => setSelectedCard(null);
+  const SelectedIcon = selectedCard ? iconMap[selectedCard.iconKey] || FaTint : null;
 
   return (
     <>
@@ -38,88 +54,68 @@ export default function Services() {
       {/* Corporate Section Header */}
       <section className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">Our Services</h1>
-          <p className="text-gray-600 text-lg md:text-xl">
-            We provide a full range of water supply, sewerage, and infrastructure services to keep Karachi safe, clean, and sustainable.
-          </p>
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">{heroTitle}</h1>
+          <p className="text-gray-600 text-lg md:text-xl">{heroSubtitle}</p>
+          {error && (
+            <p className="mt-4 text-sm text-red-500">Showing cached content due to a network issue. ({error.message})</p>
+          )}
+          {!error && stale && <p className="mt-4 text-sm text-amber-500">Content shown from cache while live data refreshes.</p>}
         </div>
       </section>
 
       {/* Detailed Sections */}
       <section className="bg-gray-50 py-12">
         <div className="max-w-6xl mx-auto px-6 space-y-16">
+          {data.categories?.length ? (
+            data.categories.map((category) => (
+              <div key={category.id} className="space-y-8">
+                <div className="text-center">
+                  <h2 className="text-3xl font-semibold text-gray-800">{category.title}</h2>
+                  {category.summary && <p className="text-gray-600 mt-3">{category.summary}</p>}
+                </div>
 
-          {/* Water Supply */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-4">
-              <h2 className="text-3xl font-semibold text-gray-800">Water Supply Services</h2>
-              <p className="text-gray-600">KW&SC sources water from multiple locations including Hub Dam, Keenjhar Lake, and other strategic water sources to ensure adequate supply for Karachi's growing population.</p>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Hub Dam - Primary water source</li>
-                <li>Keenjhar Lake - Secondary source</li>
-                <li>Groundwater extraction</li>
-                <li>Desalination plants</li>
-              </ul>
-            </div>
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Water Filtration Process</h3>
-              <p className="text-gray-600 mb-2">Our state-of-the-art filtration plants ensure that water meets international quality standards before distribution to consumers.</p>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Multi-stage filtration process</li>
-                <li>Chlorination for disinfection</li>
-                <li>Quality testing laboratories</li>
-                <li>Continuous monitoring systems</li>
-              </ul>
-            </div>
-          </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {(category.cards || []).slice(0, 2).map((card) => (
+                    <div key={card.id} className="bg-white rounded-xl shadow-md p-6">
+                      <h3 className="text-xl font-semibold text-gray-800 mb-3">{card.title}</h3>
+                      <p className="text-gray-600 mb-3">{card.summary}</p>
+                      {card.details?.[0]?.bulletPoints && (
+                        <ul className="list-disc list-inside text-gray-600 space-y-1">
+                          {card.details[0].bulletPoints.map((point, idx) => (
+                            <li key={idx}>{point}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
 
-          {/* Sewerage */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Sewerage Infrastructure</h3>
-              <p className="text-gray-600 mb-2">Comprehensive sewerage network covering residential, commercial, and industrial areas across Karachi.</p>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Extensive sewerage network</li>
-                <li>Pumping stations</li>
-                <li>Treatment facilities</li>
-                <li>Maintenance services</li>
-              </ul>
-            </div>
-            <div className="space-y-4">
-              <h2 className="text-3xl font-semibold text-gray-800">Sewerage Treatment</h2>
-              <p className="text-gray-600">Advanced treatment plants ensure proper processing of wastewater before disposal, protecting the environment.</p>
-              <ul className="list-disc list-inside text-gray-600 space-y-1">
-                <li>Primary treatment processes</li>
-                <li>Secondary treatment systems</li>
-                <li>Tertiary treatment facilities</li>
-                <li>Environmental compliance</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Revenue Resource */}
-          <div className="space-y-4">
-            <h2 className="text-3xl font-semibold text-gray-800 text-center">Revenue Resource Generation</h2>
-            <div className="bg-white rounded-xl shadow-md p-6 grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Billing & Collection</h3>
-                <p className="text-gray-600 mb-2">Efficient billing system ensuring accurate charges and timely collection of water and sewerage fees.</p>
-                <ul className="list-disc list-inside text-gray-600 space-y-1">
-                  <li>Online billing system</li>
-                  <li>Multiple payment options</li>
-                  <li>Automated meter reading</li>
-                  <li>Customer service support</li>
-                </ul>
+                {category.resources?.length ? (
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {category.resources.map((resource) => (
+                      <div key={resource.id} className="bg-white rounded-xl shadow-md p-6">
+                        <h4 className="text-lg font-semibold text-blue-800 mb-2">{resource.title}</h4>
+                        {resource.description && <p className="text-gray-600 mb-3">{resource.description}</p>}
+                        <a
+                          href={resource.externalUrl || resource.media?.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold"
+                        >
+                          View Resource
+                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Connection Services</h3>
-                <p className="text-gray-600 mb-2">Streamlined process for new connections and service modifications.</p>
-                <a href="https://www.kwsc.gos.pk/assets/documents/Connection-Guideline-RRG.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 font-semibold">
-                  View Connection Guidelines
-                </a>
-              </div>
-            </div>
-          </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">Service data will appear here once available.</p>
+          )}
         </div>
       </section>
 
@@ -137,20 +133,77 @@ export default function Services() {
             pagination={{ clickable: true }}
             className="pb-12"
           >
-            {services.map((service, index) => (
-              <SwiperSlide key={index}>
-                <div className={`h-[400px] p-6 rounded-xl shadow-lg transition-transform transform hover:scale-105 border border-gray-200 bg-gradient-to-br ${service.gradient}`}>
-                  <div className="flex flex-col items-center text-center justify-center h-full">
-                    <div className="text-5xl mb-4 text-gray-800">{service.icon}</div>
-                    <h2 className="text-xl font-semibold mb-2 text-gray-900">{service.title}</h2>
-                    <p className="text-gray-700">{service.description}</p>
+            {cards.map((service) => {
+              const Icon = iconMap[service.iconKey] || FaTint;
+              const key = service.id || service.title;
+              const description = service.summary || service.description || "Details coming soon.";
+              const gradientClass = service.gradientClass || "from-blue-100 to-blue-300";
+
+              return (
+                <SwiperSlide key={key}>
+                  <div
+                    className={`card h-[400px] p-6 rounded-xl shadow-lg transition-transform transform hover:scale-105 border border-gray-200 bg-gradient-to-br cursor-pointer ${gradientClass}`}
+                    onClick={() => handleCardSelect(service)}
+                    onKeyDown={(evt) => evt.key === "Enter" && handleCardSelect(service)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`View details for ${service.title}`}
+                  >
+                    <div className="flex flex-col items-center text-center justify-center h-full">
+                      <div className="text-5xl mb-4 text-gray-800">
+                        <Icon />
+                      </div>
+                      <h2 className="text-xl font-semibold mb-2 text-gray-900">{service.title}</h2>
+                      <p className="text-gray-700">{description}</p>
+                    </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </section>
+
+      {selectedCard && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className={`relative w-full max-w-3xl rounded-2xl p-8 text-white shadow-2xl bg-gradient-to-br ${selectedCard.gradientClass || "from-blue-600 to-indigo-700"}`}>
+            <button
+              type="button"
+              onClick={closeOverlay}
+              className="absolute right-4 top-4 rounded-full bg-white/15 p-2 text-white transition hover:bg-white/25"
+              aria-label="Close service details"
+            >
+              ✕
+            </button>
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="text-5xl">
+                {SelectedIcon ? <SelectedIcon /> : <FaTint />}
+              </div>
+              <h3 className="text-3xl font-semibold">{selectedCard.title}</h3>
+              <p className="text-lg text-white/90 max-w-2xl">
+                {selectedCard.description || selectedCard.summary || "Detailed information will be published soon."}
+              </p>
+            </div>
+            {selectedCard.details?.length ? (
+              <div className="mt-6 space-y-4">
+                {selectedCard.details.map((detail) => (
+                  <div key={detail.id || detail.heading} className="rounded-xl bg-white/10 p-4">
+                    <h4 className="text-xl font-semibold mb-2">{detail.heading}</h4>
+                    {detail.body && <p className="text-sm text-white/80">{detail.body}</p>}
+                    {Array.isArray(detail.bulletPoints) && detail.bulletPoints.length ? (
+                      <ul className="mt-3 list-disc list-inside text-sm text-white/80">
+                        {detail.bulletPoints.map((point, idx) => (
+                          <li key={`${detail.heading}-${idx}`}>{point}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
     </>
   );
 }

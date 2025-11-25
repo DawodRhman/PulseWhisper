@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, User, Tag, MessageSquare } from "lucide-react";
+import { Mail, Phone, MapPin, User, Tag, MessageSquare, Clock } from "lucide-react";
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -14,6 +14,9 @@ export default function ContactUs() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState(null);
+  const [contactData, setContactData] = useState(null);
+  const [dataLoading, setDataLoading] = useState(true);
+  const [dataError, setDataError] = useState(null);
 
   const inquiryCategories = [
     "Select Inquiry Category",
@@ -56,6 +59,60 @@ export default function ContactUs() {
     }, 2000);
   };
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchContactData = async () => {
+      try {
+        const response = await fetch("/api/contact");
+        if (!response.ok) {
+          throw new Error("Unable to load contact data");
+        }
+        const payload = await response.json();
+        if (isMounted) {
+          setContactData(payload?.data || null);
+        }
+      } catch (error) {
+        console.error("contact-page:fetch", error);
+        if (isMounted) {
+          setDataError("Live contact information is temporarily unavailable. Showing default details.");
+        }
+      } finally {
+        if (isMounted) {
+          setDataLoading(false);
+        }
+      }
+    };
+
+    fetchContactData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const defaultHero = {
+    title: "Contact KW&SC",
+    subtitle: "Reach out to us for inquiries, complaints, or service requests. We are here to help.",
+    backgroundImage: "/teentalwarkarachi.gif",
+  };
+  const hero = contactData?.hero || defaultHero;
+  const channels = contactData?.channels || [];
+  const offices = contactData?.offices || [];
+  const helplineChannel = channels.find((channel) => channel.phone);
+  const emailChannel = channels.find((channel) => channel.email);
+  const primaryOffice = offices[0];
+  const fallbackPhone = "(+92) 021 111 597 200";
+  const fallbackEmail = "info@kwsc.gos.pk";
+  const fallbackAddress = "Karachi Water & Sewerage Corporation, Karachi, Pakistan.";
+  const sanitizeTel = (value) => {
+    if (!value) return null;
+    const digits = value.replace(/[^+\d]/g, "");
+    return digits.length ? digits : null;
+  };
+  const helplineDisplayPhone = helplineChannel?.phone || fallbackPhone;
+  const helplineTel = sanitizeTel(helplineDisplayPhone);
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -81,7 +138,10 @@ export default function ContactUs() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Header (Integrated, smaller version) */}
-      <section className="bg-blue-900 text-white py-20 md:py-32">
+      <section
+        className="bg-blue-900 text-white py-20 md:py-32 bg-cover bg-center"
+        style={{ backgroundImage: `url(${hero.backgroundImage || defaultHero.backgroundImage})` }}
+      >
         <motion.div
           className="max-w-6xl mx-auto px-6 text-center"
           initial="hidden"
@@ -89,10 +149,10 @@ export default function ContactUs() {
           variants={containerVariants}
         >
           <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-extrabold mb-4">
-            Contact KW&SC
+            {hero.title || "Contact KW&SC"}
           </motion.h1>
           <motion.p variants={itemVariants} className="text-lg md:text-xl text-blue-200">
-            Reach out to us for inquiries, complaints, or service requests. We are here to help.
+            {hero.subtitle || defaultHero.subtitle}
           </motion.p>
         </motion.div>
       </section>
@@ -105,6 +165,11 @@ export default function ContactUs() {
         viewport={{ once: true, amount: 0.3 }}
         variants={containerVariants}
       >
+        {dataError && (
+          <div className="mb-6 rounded-2xl border border-yellow-400 bg-yellow-100/60 text-yellow-900 px-6 py-4 text-sm font-medium">
+            {dataError}
+          </div>
+        )}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           
           {/* Contact Information Panel */}
@@ -123,10 +188,16 @@ export default function ContactUs() {
                     <div>
                       <h3 className="font-semibold text-xl">Helpline</h3>
                       <p className="text-lg text-blue-100">
-                        <a href="tel:+92021111597200" className="hover:underline hover:text-white transition-colors">
-                          (+92) 021 111 597 200
+                        <a
+                          href={helplineTel ? `tel:${helplineTel}` : undefined}
+                          className="hover:underline hover:text-white transition-colors"
+                        >
+                          {helplineDisplayPhone}
                         </a>
                       </p>
+                      {helplineChannel?.availability && (
+                        <p className="text-sm text-blue-200">{helplineChannel.availability}</p>
+                      )}
                     </div>
                   </div>
 
@@ -136,10 +207,18 @@ export default function ContactUs() {
                     <div>
                       <h3 className="font-semibold text-xl">Email Us</h3>
                       <p className="text-lg text-blue-100">
-                        <a href="mailto:info@kwsc.gos.pk" className="hover:underline hover:text-white transition-colors">
-                          info@kwsc.gos.pk
-                        </a>
+                          <a
+                            href={`mailto:${emailChannel?.email || fallbackEmail}`}
+                            className="hover:underline hover:text-white transition-colors"
+                          >
+                            {emailChannel?.email || fallbackEmail}
+                          </a>
                       </p>
+                      {(emailChannel?.availability || helplineChannel?.availability) && (
+                        <p className="text-sm text-blue-200">
+                          {emailChannel?.availability || helplineChannel?.availability}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -149,15 +228,21 @@ export default function ContactUs() {
                     <div>
                       <h3 className="font-semibold text-xl">Head Office</h3>
                       <p className="text-lg text-blue-100">
-                        <a
-                          href="https://www.google.com/maps/search/?api=1&query=Karachi+Water+and+Sewerage+Corporation+Head+Office"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:underline hover:text-white transition-colors"
-                        >
-                          Karachi Water & Sewerage Corporation, Karachi, Pakistan.
-                        </a>
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(primaryOffice?.address || fallbackAddress)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline hover:text-white transition-colors"
+                          >
+                            {primaryOffice?.address || fallbackAddress}
+                          </a>
                       </p>
+                      {primaryOffice?.hours && (
+                        <p className="text-sm text-blue-200 flex items-center gap-2">
+                          <Clock className="w-4 h-4" />
+                          {primaryOffice.hours}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -297,6 +382,77 @@ export default function ContactUs() {
             </div>
           </motion.div>
         </div>
+
+        {offices.length > 0 && (
+          <div className="mt-12">
+            <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">Regional Offices & Service Hubs</h3>
+                <p className="text-gray-500">Operational locations with on-ground teams and customer facilitation desks.</p>
+              </div>
+              {dataLoading && (
+                <span className="text-sm text-gray-500">Refreshing locations…</span>
+              )}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {offices.map((office) => {
+                const mapLink =
+                  office.mapEmbedUrl ||
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(office.address || office.label)}`;
+                const officeTel = sanitizeTel(office.phone);
+
+                return (
+                  <div key={office.id} className="border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow bg-white">
+                    <h4 className="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                      <MapPin className="w-5 h-5 text-blue-600" />
+                      {office.label}
+                    </h4>
+                    <p className="text-gray-600 mb-4">{office.address}</p>
+                    <div className="space-y-2 text-sm text-gray-600">
+                      {office.hours && (
+                        <p className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-blue-500" />
+                          {office.hours}
+                        </p>
+                      )}
+                      {office.phone && (
+                        <p className="flex items-center gap-2">
+                          <Phone className="w-4 h-4 text-blue-500" />
+                          {officeTel ? (
+                            <a href={`tel:${officeTel}`} className="hover:text-blue-600">
+                              {office.phone}
+                            </a>
+                          ) : (
+                            <span>{office.phone}</span>
+                          )}
+                        </p>
+                      )}
+                      {office.email && (
+                        <p className="flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-blue-500" />
+                          <a href={`mailto:${office.email}`} className="hover:text-blue-600">
+                            {office.email}
+                          </a>
+                        </p>
+                      )}
+                      {mapLink && (
+                        <a
+                          href={mapLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 font-medium inline-flex items-center gap-2 mt-2"
+                        >
+                          View Map
+                          <ChevronDown className="w-4 h-4 rotate-[-90deg]" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </motion.section>
     </div>
   );

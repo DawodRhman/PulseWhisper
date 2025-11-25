@@ -14,7 +14,7 @@ const leadersData = [
     { name: "Muhammad Sohail", title: "Chief Engineer (M&E)", imageUrl: "https://placehold.co/150x150/0f172a/94a3b8?text=Leader+8" },
 ];
 
-export default function MediaGallery() {
+export default function MediaGallery({ leaders }) {
     const [isDarkTheme, setIsDarkTheme] = useState(true);
 
     const toggleTheme = () => setIsDarkTheme(prev => !prev);
@@ -65,8 +65,9 @@ export default function MediaGallery() {
         return () => document.head.removeChild(style);
     }, []);
 
-    // Duplicate leadersData to create an infinite loop effect
-    const extendedLeadersData = [...leadersData, ...leadersData];
+    const sourceLeaders = Array.isArray(leaders) && leaders.length ? leaders : leadersData;
+    // Duplicate leaders to create an infinite loop effect
+    const extendedLeadersData = [...sourceLeaders, ...sourceLeaders];
 
     return (
         <section className={`${t.mainBg} py-20 md:py-32 relative overflow-hidden transition-colors duration-500`}>
@@ -104,14 +105,15 @@ export default function MediaGallery() {
                 <div className={`absolute inset-y-0 right-0 w-32 ${t.carouselBg} z-20 rotate-180`}></div>
 
                 <div className="carousel-track flex items-center gap-8 px-8 md:px-16" style={{ width: `${extendedLeadersData.length * 200}px` }}>
-                    {extendedLeadersData.map((leader, index) => (
+                        {extendedLeadersData.map((leader, index) => (
                         <div
                             key={index} // Using index here is fine since data is duplicated for animation
-                            className={`flex-shrink-0 w-40 p-4 rounded-xl border ${t.cardBg} shadow-lg transition-all duration-300 transform hover:-translate-y-2 ${t.hoverShadow}`}
+                                className={`flex-shrink-0 w-40 p-4 rounded-xl border ${t.cardBg} shadow-lg transition-all duration-300 transform hover:-translate-y-2 ${t.hoverShadow}`}
                         >
                             <img
-                                src={leader.imageUrl}
+                                src={leader.imageUrl || leader.image || leader.url}
                                 alt={leader.name}
+                                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://placehold.co/150x150/0f172a/94a3b8?text=Leader" }}
                                 className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-2 border-cyan-500/50 group-hover:border-cyan-400 transition-colors duration-300"
                             />
                             <h3 className={`text-lg font-bold text-center mb-1 ${t.cardText} transition-colors duration-300`}>

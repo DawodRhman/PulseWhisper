@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Sewerage System Overhaul District East">
+  <defs>
+    <linearGradient id="sewerageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c7d2fe" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="48" fill="url(#sewerageGradient)" />
+  <rect x="160" y="200" width="880" height="260" rx="36" fill="rgba(15,23,42,0.15)" />
+  <text x="50%" y="50%" fill="#1e1b4b" font-family="'Segoe UI',Arial,sans-serif" font-weight="700" font-size="62" text-anchor="middle">DISTRICT EAST OVERHAUL</text>
+  <text x="50%" y="62%" fill="#312e81" font-family="'Segoe UI',Arial,sans-serif" font-size="28" text-anchor="middle">55% completion • trunk mains relaid</text>
+</svg>

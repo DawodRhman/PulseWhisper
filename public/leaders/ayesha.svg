@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" role="img" aria-label="Leader portrait">
+  <rect width="320" height="320" rx="48" fill="#0f172a" />
+  <circle cx="160" cy="120" r="64" fill="#38bdf8" opacity="0.25" />
+  <circle cx="160" cy="120" r="56" fill="#bae6fd" />
+  <rect x="70" y="200" width="180" height="110" rx="36" fill="#1e293b" />
+  <path d="M160 136c-20 0-36 18-36 40v16h72v-16c0-22-16-40-36-40z" fill="#0f172a" opacity="0.35" />
+  <text x="160" y="300" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="28" fill="#f8fafc">AYESHA</text>
+</svg>

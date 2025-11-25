@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" role="img" aria-label="Digital billing news thumbnail">
+  <defs>
+    <linearGradient id="news3" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#14b8a6" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="30" fill="#082f49" />
+  <rect x="70" y="70" width="1060" height="535" rx="28" fill="url(#news3)" />
+  <text x="50%" y="50%" fill="#ecfeff" font-family="'Segoe UI',Arial,sans-serif" font-size="72" font-weight="700" text-anchor="middle">E-BILLING</text>
+  <text x="50%" y="62%" fill="#cffafe" font-family="'Segoe UI',Arial,sans-serif" font-size="36" text-anchor="middle">SMS + WhatsApp rollout</text>
+</svg>

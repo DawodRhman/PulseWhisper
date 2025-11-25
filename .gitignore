@@ -41,3 +41,23 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+/lib/generated/prisma
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# keys and secrets
+*.key
+*.cert
+*.pem
+id_rsa
+id_rsa.pub
+_netrc
+
+# editor local history
+.history
+.vscode/settings.json
