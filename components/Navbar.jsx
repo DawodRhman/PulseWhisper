@@ -44,8 +44,10 @@ const Navbar = () => {
     }
   }, [isOpen]);
 
-  // ✅ Track scroll position for background switch
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    setIsMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 80); // Change background after 50px scroll
     };
@@ -53,6 +55,18 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Prevent hydration mismatch for scroll/path dependent styles
+  const getLinkClass = (href) => {
+    if (!isMounted) return "text-white hover:text-blue-300"; // Default server state
+    
+    const isActive = pathname === href;
+    
+    if (isScrolled) {
+      return isActive ? "text-blue-300" : "text-black hover:text-blue-300";
+    }
+    return isActive ? "text-blue-300" : "text-white hover:text-blue-300";
+  };
 
   const NavLinks = [
     { href: "/", text: "Home" },
@@ -170,15 +184,7 @@ const Navbar = () => {
                 >
                   <Link
                     href={loop.href}
-                    className={`transition-colors flex items-center gap-1 ${
-                      isScrolled
-                        ? pathname === loop.href
-                          ? "text-blue-300"
-                          : "text-black hover:text-blue-300"
-                        : pathname === loop.href
-                        ? "text-blue-300"
-                        : "text-white hover:text-blue-300"
-                    }`}
+                    className={`transition-colors flex items-center gap-1 ${getLinkClass(loop.href)}`}
                     onClick={() => setIsOpen(false)}
                   >
                     {loop.text}
