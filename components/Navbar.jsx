@@ -12,14 +12,13 @@ const Navbar = () => {
   const menuRef = useRef(null);
   const linksRef = useRef([]);
   const submenuRefs = useRef([]);
-  const pathname = usePathname(); 
+  const pathname = usePathname();
   const isAdminView = pathname?.startsWith("/papa");
 
   if (isAdminView) {
     return null;
   }
 
- 
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -44,10 +43,8 @@ const Navbar = () => {
     }
   }, [isOpen]);
 
-  const [isMounted, setIsMounted] = useState(false);
-
+  // ✅ Track scroll position for background switch
   useEffect(() => {
-    setIsMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 80); // Change background after 50px scroll
     };
@@ -56,23 +53,11 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent hydration mismatch for scroll/path dependent styles
-  const getLinkClass = (href) => {
-    if (!isMounted) return "text-white hover:text-blue-300"; // Default server state
-    
-    const isActive = pathname === href;
-    
-    if (isScrolled) {
-      return isActive ? "text-blue-300" : "text-black hover:text-blue-300";
-    }
-    return isActive ? "text-blue-300" : "text-white hover:text-blue-300";
-  };
-
   const NavLinks = [
     { href: "/", text: "Home" },
-   
-    { 
-      href: "/whatwedo", 
+
+    {
+      href: "/whatwedo",
       text: "What We Do",
       submenu: [
         { href: "/ourservices", text: "Our Services" },
@@ -82,8 +67,8 @@ const Navbar = () => {
         { href: "/right-to-information", text: "Right to Information" },
       ]
     },
-     { 
-      href: "/aboutus", 
+    {
+      href: "/aboutus",
       text: "About Us",
       submenu: [
         { href: "/aboutus", text: "Our Heritage" },
@@ -98,29 +83,26 @@ const Navbar = () => {
     //  href: "/portfolio", 
     //  text: "Our Projects",
     //  submenu: [
-      //  { href: "/portfolio", text: "All Projects" },
-   
+    //  { href: "/portfolio", text: "All Projects" },
+
     //  ]
-  //  },
+    //  },
 
-  { 
-      href: "/tenders", 
+    {
+      href: "/tenders",
       text: "Tenders",
-      
+
     },
-  { 
-      href: "/education", 
+    {
+      href: "/education",
       text: "Education",
-      
+
     },
 
-    { 
-      href: "/contact", 
+    {
+      href: "/contact",
       text: "Contact",
-      submenu: [
-        { href: "/contact", text: "Contact Us" },
-        
-      ]
+
     },
   ];
 
@@ -165,18 +147,17 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${
-          isScrolled ? "bg-white shadow-lg" : "bg-transparent"
-        }`}
+        className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${isScrolled ? "bg-white shadow-lg" : "bg-transparent"
+          }`}
       >
-        <div className="max-w-[90%] mx-auto flex justify-between items-center py-4 transition-colors">
-          <div>
-            <img src="/kwsc logo.png" alt="KW&SC Logo" width={90} height={110} />
+        <div className="w-full mx-auto flex justify-between items-center py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 lg:px-8 transition-colors">
+          <div className="flex-shrink-0">
+            <img src="/kwsc logo.png" alt="KW&SC Logo" width={60} height={70} className="sm:w-20 sm:h-24 md:w-24 md:h-28 lg:w-28 lg:h-32" />
           </div>
-          <nav>
-            <ul className="flex gap-10 text-xl font-bold uppercase">
+          <nav className="hidden md:block">
+            <ul className="flex gap-4 lg:gap-8 xl:gap-10 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold uppercase">
               {NavLinks.map((loop, index) => (
-                <li 
+                <li
                   key={loop.href}
                   className="relative group"
                   onMouseEnter={() => loop.submenu && setHoveredIndex(index)}
@@ -184,39 +165,43 @@ const Navbar = () => {
                 >
                   <Link
                     href={loop.href}
-                    className={`transition-colors flex items-center gap-1 ${getLinkClass(loop.href)}`}
+                    className={`transition-colors flex items-center gap-0.5 md:gap-1 text-xs md:text-sm lg:text-base ${isScrolled
+                      ? pathname === loop.href
+                        ? "text-blue-300"
+                        : "text-black hover:text-blue-300"
+                      : pathname === loop.href
+                        ? "text-blue-300"
+                        : "text-white hover:text-blue-300"
+                      }`}
                     onClick={() => setIsOpen(false)}
                   >
                     {loop.text}
                     {loop.submenu && (
-                      <ChevronDown 
-                        size={16} 
-                        className={`transition-transform duration-300 ${
-                          hoveredIndex === index ? 'rotate-180' : ''
-                        }`}
+                      <ChevronDown
+                        size={14}
+                        className={`transition-transform duration-300 md:w-4 md:h-4 ${hoveredIndex === index ? 'rotate-180' : ''
+                          }`}
                       />
                     )}
                   </Link>
                   {loop.submenu && (
                     <div
                       ref={(el) => (submenuRefs.current[index] = el)}
-                      className={`absolute top-full left-0 mt-2 min-w-[220px] shadow-xl rounded-lg overflow-hidden z-[120] backdrop-blur-sm ${
-                        isScrolled ? "bg-white" : "bg-white/95"
-                      }`}
+                      className={`absolute top-full left-0 mt-1 md:mt-2 min-w-max md:min-w-[200px] lg:min-w-[240px] shadow-xl rounded-lg overflow-hidden z-[120] backdrop-blur-sm ${isScrolled ? "bg-white" : "bg-white/95"
+                        }`}
                       style={{ display: "none", opacity: 0 }}
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
-                      <ul className="py-2">
+                      <ul className="py-1 md:py-2">
                         {loop.submenu.map((subItem) => (
                           <li key={subItem.href}>
                             <Link
                               href={subItem.href}
-                              className={`block px-6 py-3 text-sm font-semibold uppercase transition-all duration-200 ${
-                                pathname === subItem.href
-                                  ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600"
-                                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 hover:border-l-4 hover:border-blue-400"
-                              }`}
+                              className={`block px-3 md:px-4 lg:px-6 py-2 md:py-3 text-xs md:text-xs lg:text-sm font-semibold uppercase transition-all duration-200 ${pathname === subItem.href
+                                ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600"
+                                : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 hover:border-l-4 hover:border-blue-400"
+                                }`}
                               onClick={() => setIsOpen(false)}
                             >
                               {subItem.text}
@@ -230,11 +215,10 @@ const Navbar = () => {
               ))}
             </ul>
           </nav>
-          <div className={`cs_toolbox ${
-                      isScrolled
-                          ? "text-black hover:text-blue-600"
-                          : "text-white hover:text-blue-600"
-                    }`}>
+          <div className={`cs_toolbox scale-75 sm:scale-90 md:scale-100 ${isScrolled
+            ? "text-black hover:text-blue-600"
+            : "text-white hover:text-blue-600"
+            }`}>
             <span className="cs_icon_btn" onClick={() => setIsOpen(!isOpen)}>
               <span className="cs_icon_btn_in">
                 <span></span>
@@ -246,31 +230,29 @@ const Navbar = () => {
           </div>
           <div
             ref={menuRef}
-            className={`fixed inset-0 bg-black overflow-hidden flex flex-col items-start justify-start z-[115] transition-all ${
-              isOpen ? "h-screen" : "h-0"
-            }`}
+            className={`fixed inset-0 bg-black overflow-y-auto flex flex-col items-start justify-start z-[115] transition-all ${isOpen ? "h-screen" : "h-0"
+              }`}
           >
-            <div className="p-10 flex flex-row-reverse justify-between w-[90%] mx-auto">
-              <div>
+            <div className="w-full px-4 sm:px-6 py-4 sm:py-6 flex flex-col gap-6 sm:gap-8">
+              <div className="flex justify-end">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-black font-bold opacity-100 transform mr-8 hover:-translate-y-1 -mt-2 translate-x-8 transition-all duration-300 rounded-full border-white p-2 border-2"
+                  className="text-white font-bold opacity-100 transform hover:-translate-y-1 transition-all duration-300 rounded-full border-white p-1.5 sm:p-2 border-2"
                 >
-                  <X color="white" strokeWidth={3}/>
+                  <X color="white" size={24} className="sm:w-6 sm:h-6" strokeWidth={3} />
                 </button>
               </div>
-              <div className="text-white">
-                <p>9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan</p>
+              <div className="text-white px-2 sm:px-4">
+                <p className="text-xs sm:text-sm leading-relaxed">9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan</p>
               </div>
-              <nav className="flex flex-col items-start gap-16 mt-10">
+              <nav className="flex flex-col items-start gap-6 sm:gap-10 mt-6 sm:mt-8 w-full px-2">
                 {NavLinks.map((link, index) => (
                   <Link
                     key={link.text}
                     href={link.href}
                     ref={(el) => (linksRef.current[index] = el)}
-                    className={`text-5xl font-extrabold uppercase hover:text-blue-600 text-white opacity-0 transform -translate-y-5 transition-all duration-300 relative ${
-                      pathname === link.href ? "text-blue-600" : "text-white"
-                    }`}
+                    className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold uppercase hover:text-blue-400 text-white opacity-0 transform -translate-y-5 transition-all duration-300 relative ${pathname === link.href ? "text-blue-400" : "text-white"
+                      }`}
                     data-menu={link.text}
                     onClick={() => setIsOpen(false)}
                   >
