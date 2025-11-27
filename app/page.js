@@ -1,16 +1,14 @@
 import React from "react";
+import Whoarewe from "@/components/Whoarewe";
 import Main from "@/components/Main";
 import WorkFlow from "@/components/Workflow";
 import Services from "@/components/Services";
 import Counter from "@/components/Counter";
+import Subscribe from "@/components/Subscribe";
 import KWSCMap from "@/components/KWSCMAP";
 import NewsUpdate from "@/components/NewsUpdate";
 import Projects from "@/components/Projects";
 import MediaGallery from "@/components/MediaGallery";
-import AchievementComponent from "@/components/Achievement";
-import OurLeadership from "@/components/OurLeadership";
-import FAQs from "@/components/Faqs";
-import WaterTodaySection from "@/components/Watertodaysection";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { SnapshotModule } from "@prisma/client";
 import { buildHomePayload } from "@/lib/home/payload";
@@ -21,17 +19,16 @@ export default async function Home() {
   return (
     <>
       <Main hero={homeData.hero} />
-      <WaterTodaySection updates={homeData.waterToday} />
-      <Services />
+      <Whoarewe />
       <NewsUpdate />
       <Projects projects={homeData.projects} />
-      <OurLeadership team={homeData.leadership} insights={homeData.leadershipInsights} />
-      <AchievementComponent items={homeData.achievements} />
+
       <KWSCMap />
       <WorkFlow steps={homeData.workflow} />
       <Counter stats={homeData.counters} />
-      <FAQs items={homeData.faqs} />
       <MediaGallery items={homeData.mediaCarousel} />
+
+
     </>
   );
 }
