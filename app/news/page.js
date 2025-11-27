@@ -128,19 +128,19 @@ export default function News() {
       title: "Hub Canal Inauguration Ceremony",
       description: "Photos from the official inauguration ceremony of the New Hub Canal project",
       type: "Photos",
-      img: "https://placehold.co/600x400/0f172a/06b6d4?text=INAUGURATION+CEREMONY" 
+      img: "/otherImages/bhutto.png"
     },
     {
       title: "Infrastructure Development",
       description: "Visual documentation of ongoing infrastructure development projects",
       type: "Photos",
-      img: "https://placehold.co/600x400/0f172a/3b82f6?text=INFRASTRUCTURE"
+      img: "/otherImages/infa.png"
     },
     {
       title: "Community Engagement",
       description: "Images from community engagement and development programs",
       type: "Photos",
-      img: "https://placehold.co/600x400/0f172a/a855f7?text=COMMUNITY"
+      img: "/otherImages/comunity.jpeg"
     }
   ];
 
