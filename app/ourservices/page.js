@@ -171,8 +171,7 @@ export default function Services() {
                 "from-yellow-100 to-orange-200": "linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%)",
                 default: "linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)",
               };
-              arr3.add(gradient);
-              
+
 
 
               return (
