@@ -6,7 +6,7 @@
   },
   "programs": [
     {
-      "id": "51211900-a4c7-4f26-878a-b44d5dbeb135",
+      "id": "89483e71-cccf-4897-94d5-906ecfee2b55",
       "title": "Recruitment",
       "slug": "recruitment",
       "heroTitle": "Recruitment",
@@ -19,12 +19,12 @@
         "Career growth prospects"
       ],
       "seoId": null,
-      "createdAt": "2025-12-04T16:31:17.790Z",
-      "updatedAt": "2025-12-04T16:31:17.790Z",
+      "createdAt": "2025-12-04T17:08:39.012Z",
+      "updatedAt": "2025-12-04T17:08:39.012Z",
       "seo": null
     },
     {
-      "id": "d15ea1ec-abca-4bf9-b9fb-8767e4b28b75",
+      "id": "e9729b1e-cd35-4c67-a458-b6be4a0463c0",
       "title": "Young Graduate Program",
       "slug": "young-graduate-program",
       "heroTitle": "Young Graduate Program",
@@ -37,12 +37,12 @@
         "Potential for permanent employment"
       ],
       "seoId": null,
-      "createdAt": "2025-12-04T16:31:18.197Z",
-      "updatedAt": "2025-12-04T16:31:18.197Z",
+      "createdAt": "2025-12-04T17:08:39.445Z",
+      "updatedAt": "2025-12-04T17:08:39.445Z",
       "seo": null
     },
     {
-      "id": "e816a5fc-a588-4087-a19f-a367f7a289d7",
+      "id": "dd9f153b-1d0d-4154-9ca0-a426dfaff430",
       "title": "Consultancies",
       "slug": "consultancies",
       "heroTitle": "Consultancies",
@@ -55,14 +55,14 @@
         "Collaboration with industry experts"
       ],
       "seoId": null,
-      "createdAt": "2025-12-04T16:31:18.424Z",
-      "updatedAt": "2025-12-04T16:31:18.424Z",
+      "createdAt": "2025-12-04T17:08:39.664Z",
+      "updatedAt": "2025-12-04T17:08:39.664Z",
       "seo": null
     }
   ],
   "openings": [
     {
-      "id": "dc1bb985-7f94-4f3c-968f-64ad2e931593",
+      "id": "124c8c75-dda8-4d7a-9b51-773a9c8af70c",
       "programId": null,
       "title": "Graduate Trainee",
       "slug": "graduate-trainee-karachi-3",
@@ -71,26 +71,26 @@
       "jobType": "Training Program",
       "compensation": null,
       "status": "PUBLISHED",
-      "publishAt": "2025-12-04T16:31:25.678Z",
+      "publishAt": "2025-12-04T17:08:47.679Z",
       "expireAt": null,
       "applyUrl": null,
       "applyEmail": null,
       "summary": "Graduate Trainee role at Various Departments",
       "description": null,
       "seoId": null,
-      "createdAt": "2025-12-04T16:31:25.680Z",
-      "updatedAt": "2025-12-04T16:31:25.680Z",
+      "createdAt": "2025-12-04T17:08:47.689Z",
+      "updatedAt": "2025-12-04T17:08:47.689Z",
       "requirements": [
         {
-          "id": "f2ec9142-0ab0-4878-95b2-af946313f75b",
-          "careerOpeningId": "dc1bb985-7f94-4f3c-968f-64ad2e931593",
+          "id": "5eaa8559-67ad-497a-8f85-5ec57c89b08e",
+          "careerOpeningId": "124c8c75-dda8-4d7a-9b51-773a9c8af70c",
           "type": "QUALIFICATION",
           "content": "Fresh Graduate",
           "order": 0
         },
         {
-          "id": "dcca67f7-4e01-432d-9f49-7c2c1322831f",
-          "careerOpeningId": "dc1bb985-7f94-4f3c-968f-64ad2e931593",
+          "id": "007c7ac6-074e-4504-b2d1-3e9b4e4fea02",
+          "careerOpeningId": "124c8c75-dda8-4d7a-9b51-773a9c8af70c",
           "type": "RESPONSIBILITY",
           "content": "Deliver on KW&SC service excellence commitments.",
           "order": 0
@@ -105,7 +105,7 @@
       ]
     },
     {
-      "id": "9eff5115-f6a8-4057-a84b-37570905f9c0",
+      "id": "75f2a257-6ed4-4b64-88a1-c88e95f09631",
       "programId": null,
       "title": "Assistant Engineer",
       "slug": "assistant-engineer-karachi-2",
@@ -114,26 +114,26 @@
       "jobType": "Full-time",
       "compensation": null,
       "status": "PUBLISHED",
-      "publishAt": "2025-12-04T16:31:24.661Z",
+      "publishAt": "2025-12-04T17:08:46.586Z",
       "expireAt": null,
       "applyUrl": null,
       "applyEmail": null,
       "summary": "Assistant Engineer role at Technical Services",
       "description": null,
       "seoId": null,
-      "createdAt": "2025-12-04T16:31:24.663Z",
-      "updatedAt": "2025-12-04T16:31:24.663Z",
+      "createdAt": "2025-12-04T17:08:46.596Z",
+      "updatedAt": "2025-12-04T17:08:46.596Z",
       "requirements": [
         {
-          "id": "5dc7d9d3-ce6a-4457-ba81-6480c4098908",
-          "careerOpeningId": "9eff5115-f6a8-4057-a84b-37570905f9c0",
+          "id": "678f8a6f-e474-4a1d-8c9a-0fcabfb6f611",
+          "careerOpeningId": "75f2a257-6ed4-4b64-88a1-c88e95f09631",
           "type": "QUALIFICATION",
           "content": "2+ years",
           "order": 0
         },
         {
-          "id": "6aeca8ba-6e79-401b-a363-77feb67c4665",
-          "careerOpeningId": "9eff5115-f6a8-4057-a84b-37570905f9c0",
+          "id": "c00eca47-ef36-4e39-9d18-5cae965781f6",
+          "careerOpeningId": "75f2a257-6ed4-4b64-88a1-c88e95f09631",
           "type": "RESPONSIBILITY",
           "content": "Deliver on KW&SC service excellence commitments.",
           "order": 0
@@ -148,7 +148,7 @@
       ]
     },
     {
-      "id": "15140719-e897-4f62-9090-19d3d2ce9bb9",
+      "id": "a60fe855-5fef-48ef-8889-54f09f6613c3",
       "programId": null,
       "title": "Executive Engineer (Sewerage)",
       "slug": "executive-engineer-sewerage-karachi-1",
@@ -157,26 +157,26 @@
       "jobType": "Full-time",
       "compensation": null,
       "status": "PUBLISHED",
-      "publishAt": "2025-12-04T16:31:23.652Z",
+      "publishAt": "2025-12-04T17:08:45.334Z",
       "expireAt": null,
       "applyUrl": null,
       "applyEmail": null,
       "summary": "Executive Engineer (Sewerage) role at Sewerage Department",
       "description": null,
       "seoId": null,
-      "createdAt": "2025-12-04T16:31:23.655Z",
-      "updatedAt": "2025-12-04T16:31:23.655Z",
+      "createdAt": "2025-12-04T17:08:45.343Z",
+      "updatedAt": "2025-12-04T17:08:45.343Z",
       "requirements": [
         {
-          "id": "952b1eef-e4a3-4deb-ab50-39e68599a63b",
-          "careerOpeningId": "15140719-e897-4f62-9090-19d3d2ce9bb9",
+          "id": "32c7dc4e-c1a9-4442-b8ac-f997ddc1d721",
+          "careerOpeningId": "a60fe855-5fef-48ef-8889-54f09f6613c3",
           "type": "QUALIFICATION",
           "content": "5+ years",
           "order": 0
         },
         {
-          "id": "bd742896-afba-462d-b934-dda378d2887d",
-          "careerOpeningId": "15140719-e897-4f62-9090-19d3d2ce9bb9",
+          "id": "cf21f217-0383-4ade-81bd-04e7febd185c",
+          "careerOpeningId": "a60fe855-5fef-48ef-8889-54f09f6613c3",
           "type": "RESPONSIBILITY",
           "content": "Deliver on KW&SC service excellence commitments.",
           "order": 0
@@ -191,7 +191,7 @@
       ]
     },
     {
-      "id": "629cfd73-b07d-4c6a-aae2-847dfa02cafc",
+      "id": "8f662dd7-1d23-4bf8-a3e4-fc191cac0363",
       "programId": null,
       "title": "Executive Engineer (Water)",
       "slug": "executive-engineer-water-karachi-0",
@@ -200,26 +200,26 @@
       "jobType": "Full-time",
       "compensation": null,
       "status": "PUBLISHED",
-      "publishAt": "2025-12-04T16:31:22.053Z",
+      "publishAt": "2025-12-04T17:08:43.578Z",
       "expireAt": null,
       "applyUrl": null,
       "applyEmail": null,
       "summary": "Executive Engineer (Water) role at Water Supply Department",
       "description": null,
       "seoId": null,
-      "createdAt": "2025-12-04T16:31:22.055Z",
-      "updatedAt": "2025-12-04T16:31:22.055Z",
+      "createdAt": "2025-12-04T17:08:43.588Z",
+      "updatedAt": "2025-12-04T17:08:43.588Z",
       "requirements": [
         {
-          "id": "58d999ec-d322-42fa-b8c6-10a13973301f",
-          "careerOpeningId": "629cfd73-b07d-4c6a-aae2-847dfa02cafc",
+          "id": "c5c35463-0baf-4103-be2f-75623becc9d0",
+          "careerOpeningId": "8f662dd7-1d23-4bf8-a3e4-fc191cac0363",
           "type": "QUALIFICATION",
           "content": "5+ years",
           "order": 0
         },
         {
-          "id": "9ff995a2-0442-4acf-b8af-66d4070a8c58",
-          "careerOpeningId": "629cfd73-b07d-4c6a-aae2-847dfa02cafc",
+          "id": "00b7876f-6719-4190-a93d-0d17850da1d3",
+          "careerOpeningId": "8f662dd7-1d23-4bf8-a3e4-fc191cac0363",
           "type": "RESPONSIBILITY",
           "content": "Deliver on KW&SC service excellence commitments.",
           "order": 0
@@ -236,171 +236,171 @@
   ],
   "benefits": [
     {
-      "id": "8de9e3b8-6ae9-43e9-8f80-88eabb53a7b2",
+      "id": "a0491dfa-9d52-4a43-ad69-0e890c55de17",
       "title": "Competitive salary packages",
       "summary": null,
       "iconKey": null,
       "order": 0,
-      "createdAt": "2025-12-04T16:31:18.625Z",
-      "updatedAt": "2025-12-04T16:31:18.625Z"
+      "createdAt": "2025-12-04T17:08:39.881Z",
+      "updatedAt": "2025-12-04T17:08:39.881Z"
     },
     {
-      "id": "a1385141-dfe0-477f-bae7-da7ad4a0f34e",
+      "id": "9528f711-fafe-4049-b747-7052309f57f8",
       "title": "Professional development opportunities",
       "summary": null,
       "iconKey": null,
       "order": 1,
-      "createdAt": "2025-12-04T16:31:19.025Z",
-      "updatedAt": "2025-12-04T16:31:19.025Z"
+      "createdAt": "2025-12-04T17:08:40.309Z",
+      "updatedAt": "2025-12-04T17:08:40.309Z"
     },
     {
-      "id": "c0141134-70ba-4613-a9e6-03b5b9cb569b",
+      "id": "a3dea597-efa6-4be6-8cc4-2f132d392800",
       "title": "Health insurance benefits",
       "summary": null,
       "iconKey": null,
       "order": 2,
-      "createdAt": "2025-12-04T16:31:19.225Z",
-      "updatedAt": "2025-12-04T16:31:19.225Z"
+      "createdAt": "2025-12-04T17:08:40.524Z",
+      "updatedAt": "2025-12-04T17:08:40.524Z"
     },
     {
-      "id": "b1616ca6-cd11-4f0e-9ae4-7dc1e521b3af",
+      "id": "702eb50f-e159-4f0a-9122-f74f0d1b42a9",
       "title": "Pension scheme",
       "summary": null,
       "iconKey": null,
       "order": 3,
-      "createdAt": "2025-12-04T16:31:19.426Z",
-      "updatedAt": "2025-12-04T16:31:19.426Z"
+      "createdAt": "2025-12-04T17:08:40.740Z",
+      "updatedAt": "2025-12-04T17:08:40.740Z"
     },
     {
-      "id": "8f32334b-19dd-4811-9e7c-e34201737f37",
+      "id": "70f9f80e-f56f-4fad-91db-5ef17342b973",
       "title": "Career growth prospects",
       "summary": null,
       "iconKey": null,
       "order": 4,
-      "createdAt": "2025-12-04T16:31:19.630Z",
-      "updatedAt": "2025-12-04T16:31:19.630Z"
+      "createdAt": "2025-12-04T17:08:41.190Z",
+      "updatedAt": "2025-12-04T17:08:41.190Z"
     },
     {
-      "id": "87d09b12-665e-4ed1-8bf1-ae79d58981e3",
+      "id": "0546bc88-fafa-427d-8f8e-0a08e45b02ab",
       "title": "A structured program",
       "summary": null,
       "iconKey": null,
       "order": 5,
-      "createdAt": "2025-12-04T16:31:19.833Z",
-      "updatedAt": "2025-12-04T16:31:19.833Z"
+      "createdAt": "2025-12-04T17:08:41.408Z",
+      "updatedAt": "2025-12-04T17:08:41.408Z"
     },
     {
-      "id": "7d227547-018f-4f6a-8d53-a15df4cb0e16",
+      "id": "2452abf1-1994-46c4-86ce-f023d8586204",
       "title": "Mentorship from senior professionals",
       "summary": null,
       "iconKey": null,
       "order": 6,
-      "createdAt": "2025-12-04T16:31:20.039Z",
-      "updatedAt": "2025-12-04T16:31:20.039Z"
+      "createdAt": "2025-12-04T17:08:41.628Z",
+      "updatedAt": "2025-12-04T17:08:41.628Z"
     },
     {
-      "id": "435f4309-b91c-4b4e-9b76-bd0324c2d19b",
+      "id": "c78eb574-befc-4f8f-862c-13e745262346",
       "title": "Hands-on project experience",
       "summary": null,
       "iconKey": null,
       "order": 7,
-      "createdAt": "2025-12-04T16:31:20.440Z",
-      "updatedAt": "2025-12-04T16:31:20.440Z"
+      "createdAt": "2025-12-04T17:08:41.847Z",
+      "updatedAt": "2025-12-04T17:08:41.847Z"
     },
     {
-      "id": "9061f5f4-31c6-49eb-ac23-1cacfb384295",
+      "id": "6ce944c1-e019-472b-8a28-a702c6e1cc0b",
       "title": "Training and skill development",
       "summary": null,
       "iconKey": null,
       "order": 8,
-      "createdAt": "2025-12-04T16:31:20.640Z",
-      "updatedAt": "2025-12-04T16:31:20.640Z"
+      "createdAt": "2025-12-04T17:08:42.065Z",
+      "updatedAt": "2025-12-04T17:08:42.065Z"
     },
     {
-      "id": "3f503314-7e87-4ba7-89fb-b56c572e2a85",
+      "id": "5c453963-0e25-4f25-a340-f62d7ee15820",
       "title": "Potential for permanent employment",
       "summary": null,
       "iconKey": null,
       "order": 9,
-      "createdAt": "2025-12-04T16:31:20.842Z",
-      "updatedAt": "2025-12-04T16:31:20.842Z"
+      "createdAt": "2025-12-04T17:08:42.283Z",
+      "updatedAt": "2025-12-04T17:08:42.283Z"
     },
     {
-      "id": "16888022-0c13-4e6b-977d-07b1f0249fba",
+      "id": "bbd47d9c-74a9-405f-98f4-13e6e14e30fb",
       "title": "Project-based assignments",
       "summary": null,
       "iconKey": null,
       "order": 10,
-      "createdAt": "2025-12-04T16:31:21.048Z",
-      "updatedAt": "2025-12-04T16:31:21.048Z"
+      "createdAt": "2025-12-04T17:08:42.499Z",
+      "updatedAt": "2025-12-04T17:08:42.499Z"
     },
     {
-      "id": "b52ed0d9-0ea1-47b7-a1f9-e5913c8edbce",
+      "id": "e31c6b7d-79af-4153-b92c-c889aab02240",
       "title": "Flexible working arrangements",
       "summary": null,
       "iconKey": null,
       "order": 11,
-      "createdAt": "2025-12-04T16:31:21.254Z",
-      "updatedAt": "2025-12-04T16:31:21.254Z"
+      "createdAt": "2025-12-04T17:08:42.717Z",
+      "updatedAt": "2025-12-04T17:08:42.717Z"
     },
     {
-      "id": "74296b9a-32aa-462b-9f02-5d83bf2c0222",
+      "id": "c50e2b99-49a9-44e5-99b1-753a85d2ef6a",
       "title": "Competitive consultancy rates",
       "summary": null,
       "iconKey": null,
       "order": 12,
-      "createdAt": "2025-12-04T16:31:21.456Z",
-      "updatedAt": "2025-12-04T16:31:21.456Z"
+      "createdAt": "2025-12-04T17:08:42.934Z",
+      "updatedAt": "2025-12-04T17:08:42.934Z"
     },
     {
-      "id": "76b8dbc6-9a26-4cea-af11-ce6641507c92",
+      "id": "d1fecb53-2f64-45d4-af30-63b3234530fb",
       "title": "Access to latest technology",
       "summary": null,
       "iconKey": null,
       "order": 13,
-      "createdAt": "2025-12-04T16:31:21.655Z",
-      "updatedAt": "2025-12-04T16:31:21.655Z"
+      "createdAt": "2025-12-04T17:08:43.152Z",
+      "updatedAt": "2025-12-04T17:08:43.152Z"
     },
     {
-      "id": "c6843489-c350-4849-81c8-65d3f1047c39",
+      "id": "684d0cb4-f98f-4750-9cbe-e06f502931f8",
       "title": "Collaboration with industry experts",
       "summary": null,
       "iconKey": null,
       "order": 14,
-      "createdAt": "2025-12-04T16:31:21.855Z",
-      "updatedAt": "2025-12-04T16:31:21.855Z"
+      "createdAt": "2025-12-04T17:08:43.368Z",
+      "updatedAt": "2025-12-04T17:08:43.368Z"
     }
   ],
   "contacts": [
     {
-      "id": "2a8ca50f-cf62-4d68-b6d2-14897bd4584c",
+      "id": "a8a90bc5-2cac-4981-8b3f-507e3be29af7",
       "label": "KW&SC Helpline",
       "email": null,
       "phone": "(+92) 021 111 597 200",
       "description": "24/7 customer facilitation center",
       "availability": "24/7",
-      "createdAt": "2025-12-04T16:31:26.685Z",
-      "updatedAt": "2025-12-04T16:31:26.685Z"
+      "createdAt": "2025-12-04T17:08:48.768Z",
+      "updatedAt": "2025-12-04T17:08:48.768Z"
     },
     {
-      "id": "3d782b6a-6a96-4cb8-83ef-4cbcd2b4aa2a",
+      "id": "39e22799-b6e6-45b9-a01b-d89717115f2a",
       "label": "Central Correspondence Cell",
       "email": "info@kwsc.gos.pk",
       "phone": null,
       "description": "General inquiries and escalations",
       "availability": "Mon–Fri · 9am – 5pm",
-      "createdAt": "2025-12-04T16:31:27.088Z",
-      "updatedAt": "2025-12-04T16:31:27.088Z"
+      "createdAt": "2025-12-04T17:08:49.198Z",
+      "updatedAt": "2025-12-04T17:08:49.198Z"
     },
     {
-      "id": "48fb16c3-cb15-4454-b180-b01dd051e3d8",
+      "id": "2d44ab2b-0d18-415b-96f0-e887df881bcc",
       "label": "Hydrant & Tanker Management",
       "email": "hydrant.cell@kwsc.gos.pk",
       "phone": "(+92) 021 992 45157",
       "description": "Bulk water booking and tanker dispatch",
       "availability": "Daily · 8am – 10pm",
-      "createdAt": "2025-12-04T16:31:27.293Z",
-      "updatedAt": "2025-12-04T16:31:27.293Z"
+      "createdAt": "2025-12-04T17:08:49.413Z",
+      "updatedAt": "2025-12-04T17:08:49.413Z"
     }
   ],
   "seo": {

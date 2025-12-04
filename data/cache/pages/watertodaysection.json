@@ -1,40 +1,37 @@
 {
-  "id": "ae8748b3-bc7a-406a-a2bb-5ddde44aec18",
+  "id": "54eabe84-71e9-4c3a-bfbf-708ce465b2a0",
   "slug": "watertodaysection",
   "title": "Water Today",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:55:45.176Z",
-  "updatedAt": "2025-12-04T16:55:45.176Z",
-  "seoId": "ee5863f2-d65d-4264-964b-23a136ac1b86",
+  "createdAt": "2025-12-04T17:09:51.626Z",
+  "updatedAt": "2025-12-04T17:09:51.626Z",
+  "seoId": "f8f843a5-120a-4890-8baa-a2ff67aef0e1",
   "sections": [
     {
-      "id": "bf39089d-a807-453e-82fd-7756cc6d3b99",
-      "pageId": "ae8748b3-bc7a-406a-a2bb-5ddde44aec18",
+      "id": "b4c4c359-f941-40af-ac4d-38fc53ffed90",
+      "pageId": "54eabe84-71e9-4c3a-bfbf-708ce465b2a0",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Water Today",
         "subtitle": "Daily water supply status"
       },
-      "createdAt": "2025-12-04T16:55:46.601Z",
-      "updatedAt": "2025-12-04T16:55:46.601Z"
+      "createdAt": "2025-12-04T17:09:53.164Z",
+      "updatedAt": "2025-12-04T17:09:53.164Z"
     },
     {
-      "id": "58441ef3-7777-45e9-a20d-35fbd35f3637",
-      "pageId": "ae8748b3-bc7a-406a-a2bb-5ddde44aec18",
-      "type": "TEXT_BLOCK",
+      "id": "015085d8-70fb-4590-b6cf-173bd97a4a8d",
+      "pageId": "54eabe84-71e9-4c3a-bfbf-708ce465b2a0",
+      "type": "WATER_TODAY",
       "order": 1,
-      "content": {
-        "body": "<p>Water supply details...</p>",
-        "heading": "Current Status"
-      },
-      "createdAt": "2025-12-04T16:55:46.601Z",
-      "updatedAt": "2025-12-04T16:55:46.601Z"
+      "content": {},
+      "createdAt": "2025-12-04T17:09:53.164Z",
+      "updatedAt": "2025-12-04T17:09:53.164Z"
     }
   ],
   "seo": {
-    "id": "ee5863f2-d65d-4264-964b-23a136ac1b86",
+    "id": "f8f843a5-120a-4890-8baa-a2ff67aef0e1",
     "title": "Water Today | KW&SC",
     "description": "Learn more about Water Today at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -45,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:55:45.176Z",
-    "updatedAt": "2025-12-04T16:55:45.176Z"
+    "createdAt": "2025-12-04T17:09:51.626Z",
+    "updatedAt": "2025-12-04T17:09:51.626Z"
   }
 }

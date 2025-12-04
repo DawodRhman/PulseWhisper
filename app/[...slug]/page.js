@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPageWithFallback } from "@/lib/page-cache";
 import PageRenderer from "@/components/PageBuilder/PageRenderer";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 // Force dynamic rendering to ensure we get the latest content
 export const dynamic = "force-dynamic";
@@ -50,9 +48,7 @@ export default async function DynamicPage({ params }) {
 
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
       <PageRenderer sections={page.sections} />
-      <Footer />
     </main>
   );
 }

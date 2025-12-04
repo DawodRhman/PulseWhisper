@@ -1,37 +1,37 @@
 {
-  "id": "ecbd15cb-795c-43b0-bea8-f1c26a0dd344",
+  "id": "7520d5a1-5f3c-495f-81f2-f6485c5312f5",
   "slug": "news",
   "title": "News & Updates",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:41:11.058Z",
-  "updatedAt": "2025-12-04T16:41:11.058Z",
-  "seoId": "ea0cddb4-c85d-45e1-8408-a4db617e62c2",
+  "createdAt": "2025-12-04T17:09:38.060Z",
+  "updatedAt": "2025-12-04T17:09:38.060Z",
+  "seoId": "933eb531-f1d5-480f-be6b-c60826abfbd2",
   "sections": [
     {
-      "id": "22b637bf-75d4-4a41-9b41-44e743adc941",
-      "pageId": "ecbd15cb-795c-43b0-bea8-f1c26a0dd344",
+      "id": "8abac3d6-d018-48b4-ab93-20c1fccd25d7",
+      "pageId": "7520d5a1-5f3c-495f-81f2-f6485c5312f5",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "News Room",
         "subtitle": "Latest updates from KW&SC"
       },
-      "createdAt": "2025-12-04T16:41:12.806Z",
-      "updatedAt": "2025-12-04T16:41:12.806Z"
+      "createdAt": "2025-12-04T17:09:39.572Z",
+      "updatedAt": "2025-12-04T17:09:39.572Z"
     },
     {
-      "id": "71e73dc9-de1a-474f-8dc2-2339cbd82388",
-      "pageId": "ecbd15cb-795c-43b0-bea8-f1c26a0dd344",
+      "id": "38e33c4c-077f-40eb-af22-4146c35d4cb7",
+      "pageId": "7520d5a1-5f3c-495f-81f2-f6485c5312f5",
       "type": "NEWS",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T16:41:12.806Z",
-      "updatedAt": "2025-12-04T16:41:12.806Z"
+      "createdAt": "2025-12-04T17:09:39.572Z",
+      "updatedAt": "2025-12-04T17:09:39.572Z"
     }
   ],
   "seo": {
-    "id": "ea0cddb4-c85d-45e1-8408-a4db617e62c2",
+    "id": "933eb531-f1d5-480f-be6b-c60826abfbd2",
     "title": "News & Updates | KW&SC",
     "description": "Learn more about News & Updates at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -42,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:41:11.058Z",
-    "updatedAt": "2025-12-04T16:41:11.058Z"
+    "createdAt": "2025-12-04T17:09:38.060Z",
+    "updatedAt": "2025-12-04T17:09:38.060Z"
   }
 }

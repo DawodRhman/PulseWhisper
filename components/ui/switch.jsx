@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-const Switch = React.forwardRef(({ className, ...props }, ref) => (
+const Switch = React.forwardRef(({ className, onCheckedChange, ...props }, ref) => (
   <input
     type="checkbox"
     className={cn(
@@ -9,6 +9,7 @@ const Switch = React.forwardRef(({ className, ...props }, ref) => (
       className
     )}
     ref={ref}
+    onChange={(e) => onCheckedChange?.(e.target.checked)}
     {...props}
   />
 ))

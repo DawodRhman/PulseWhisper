@@ -8,7 +8,9 @@ import {
   FaHandHoldingWater, 
   FaFileInvoiceDollar,
   FaBuilding,
-  FaLeaf
+  FaLeaf,
+  FaPlus,
+  FaMinus
 } from "react-icons/fa";
 import Loader from "@/components/Loader";
 import gsap from "gsap";
@@ -17,13 +19,135 @@ import { useServicesData } from "@/hooks/useServicesData";
 const IconMap = {
   FaTint,
   FaWater,
-  FaTruck,
+  FaTruck, 
   FaWrench,
   FaHandHoldingWater,
   FaFileInvoiceDollar,
   FaBuilding,
   FaLeaf
 };
+
+function ServiceCardItem({ card }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const Icon = IconMap[card.iconKey] || FaTint;
+  const hasDetails = card.details && card.details.length > 0;
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
+      {/* Card Header - Clickable for Toggle */}
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`p-6 sm:p-8 md:p-10 bg-gradient-to-br ${card.gradientClass || 'from-blue-50 to-white'} border-b border-gray-100 cursor-pointer group`}
+      >
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <div className="space-y-4 flex-1">
+            <div className="flex items-center justify-between md:justify-start gap-4">
+              <div className="inline-flex p-3 bg-white rounded-xl shadow-sm text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                <Icon size={32} />
+              </div>
+              {/* Mobile Toggle Icon */}
+              <div className="md:hidden p-2 bg-white/50 rounded-full text-blue-600">
+                {isOpen ? <FaMinus size={20} /> : <FaPlus size={20} />}
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
+                {card.title}
+              </h3>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                {card.summary || card.description}
+              </p>
+            </div>
+          </div>
+
+          {/* Desktop Toggle Icon */}
+          <div className="hidden md:flex items-center justify-center w-12 h-12 bg-white/50 rounded-full text-blue-600 transition-colors group-hover:bg-white">
+            {isOpen ? <FaMinus size={24} /> : <FaPlus size={24} />}
+          </div>
+        </div>
+      </div>
+
+      {/* Card Details - Collapsible */}
+      <div 
+        className={`grid transition-all duration-500 ease-in-out ${
+          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          {hasDetails ? (
+            <div className="p-6 sm:p-8 md:p-10 grid gap-8 md:grid-cols-2 lg:grid-cols-2 border-t border-gray-100">
+              {card.details.map((detail) => (
+                <div key={detail.id} className="space-y-3">
+                  <h4 className="text-xl font-semibold text-gray-800">
+                    {detail.heading}
+                  </h4>
+                  <div 
+                    className="text-gray-600 leading-relaxed prose prose-blue prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: detail.body }}
+                  />
+                  {detail.bulletPoints && detail.bulletPoints.length > 0 && (
+                    <ul className="space-y-2 mt-3">
+                      {detail.bulletPoints.map((point, idx) => (
+                        <li key={idx} className="flex items-start text-gray-600 text-sm">
+                          <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            card.description && card.description !== card.summary && (
+               <div className="p-6 sm:p-8 md:p-10 border-t border-gray-100">
+                  <p className="text-gray-600">{card.description}</p>
+               </div>
+            )
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ServiceCategoryItem({ category }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="space-y-6">
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between cursor-pointer group select-none"
+      >
+        <div className="space-y-1">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+            {category.title}
+          </h2>
+          {category.summary && (
+            <p className="text-gray-600 max-w-2xl">{category.summary}</p>
+          )}
+        </div>
+        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
+          {isOpen ? <FaMinus size={16} /> : <FaPlus size={16} />}
+        </div>
+      </div>
+
+      <div 
+        className={`grid transition-all duration-500 ease-in-out ${
+          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden space-y-8">
+          {category.cards?.map((card) => (
+            <ServiceCardItem key={card.id} card={card} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Services() {
   const [animationDone, setAnimationDone] = useState(false);
@@ -39,29 +163,6 @@ export default function Services() {
   }, []);
 
   if (loading) return <Loader />;
-
-  // Flatten the structure to display details as the main content blocks
-  // The API returns categories -> cards -> details
-  // We want to display the details (which contain the text content) and their associated cards
-  const serviceBlocks = [];
-  
-  if (data?.categories) {
-    data.categories.forEach(category => {
-      if (category.cards) {
-        category.cards.forEach(card => {
-          if (card.details && card.details.length > 0) {
-            card.details.forEach(detail => {
-              serviceBlocks.push({
-                ...detail,
-                card: card,
-                category: category
-              });
-            });
-          }
-        });
-      }
-    });
-  }
 
   return (
     <>
@@ -83,56 +184,20 @@ export default function Services() {
 
       {/* Services Section */}
       <section className="bg-gray-50 py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
-        <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 space-y-8 sm:space-y-12 md:space-y-16 lg:space-y-20">
+        <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 space-y-16">
           
-          {serviceBlocks.length > 0 ? (
-            serviceBlocks.map((block, index) => {
-              const Icon = IconMap[block.card.iconKey] || FaTint;
-              
-              return (
-                <div key={block.id || index} className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-10 items-center">
-                  <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-gray-800">
-                      {block.heading}
-                    </h2>
-                    <div 
-                      className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 leading-relaxed sm:leading-relaxed md:leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: block.body }}
-                    />
-                    {block.bulletPoints && block.bulletPoints.length > 0 && (
-                      <ul className="list-disc list-inside text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 space-y-1 sm:space-y-1.5 md:space-y-2 pl-2 sm:pl-0">
-                        {block.bulletPoints.map((point, idx) => (
-                          <li key={idx}>{point}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                  <div className={`bg-white rounded-lg sm:rounded-xl md:rounded-2xl shadow-md hover:shadow-lg transition-shadow p-4 sm:p-5 md:p-6 lg:p-8 bg-gradient-to-br ${block.card.gradientClass || 'from-blue-50 to-white'}`}>
-                    <div className="flex items-center mb-4">
-                      <div className="p-3 bg-blue-100 rounded-full mr-4 text-blue-600">
-                        <Icon size={24} />
-                      </div>
-                      <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-semibold text-gray-800">
-                        {block.card.title}
-                      </h3>
-                    </div>
-                    <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 mb-2 leading-relaxed">
-                      {block.card.summary || block.card.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="text-center py-12 text-gray-500">
+          {data?.categories?.map((category) => (
+            <ServiceCategoryItem key={category.id} category={category} />
+          ))}
+
+          {(!data?.categories || data.categories.length === 0) && (
+             <div className="text-center py-12 text-gray-500">
               <p>No services data available.</p>
             </div>
           )}
 
         </div>
       </section>
-
-      {/* ...existing code... */}
     </>
   );
 }

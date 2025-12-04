@@ -1,16 +1,16 @@
 {
-  "id": "1f89170b-6993-4986-a205-f42850429bb4",
+  "id": "27a99242-cb35-4716-b7ca-b36b4a90d738",
   "slug": "aboutus",
   "title": "About Us",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:55:17.945Z",
-  "updatedAt": "2025-12-04T16:55:17.945Z",
-  "seoId": "a86fa8af-0b25-4efb-aefb-09b45068c945",
+  "createdAt": "2025-12-04T17:09:23.040Z",
+  "updatedAt": "2025-12-04T17:09:23.040Z",
+  "seoId": "d8721651-6daf-4d8f-bf95-b8323aebddb9",
   "sections": [
     {
-      "id": "28de511b-3081-4d93-8510-e5a0e45e7bb3",
-      "pageId": "1f89170b-6993-4986-a205-f42850429bb4",
+      "id": "40dddf56-4551-48ef-9e4f-fc99609a9604",
+      "pageId": "27a99242-cb35-4716-b7ca-b36b4a90d738",
       "type": "HERO",
       "order": 0,
       "content": {
@@ -18,42 +18,42 @@
         "subtitle": "Karachi Water and Sewerage Corporation (KW&SC) is committed to providing reliable water and sewerage services to Karachi.",
         "backgroundImage": "/karachicharminar.gif"
       },
-      "createdAt": "2025-12-04T16:55:20.837Z",
-      "updatedAt": "2025-12-04T16:55:20.837Z"
+      "createdAt": "2025-12-04T17:09:25.631Z",
+      "updatedAt": "2025-12-04T17:09:25.631Z"
     },
     {
-      "id": "ef0957da-f234-4550-9e22-7171fe56baff",
-      "pageId": "1f89170b-6993-4986-a205-f42850429bb4",
+      "id": "4a40490c-c7bc-49a9-9989-ba8bd72d1903",
+      "pageId": "27a99242-cb35-4716-b7ca-b36b4a90d738",
       "type": "TEXT_BLOCK",
       "order": 1,
       "content": {
         "body": "\n              <div class=\"space-y-6\">\n                <h3 class=\"text-2xl font-bold text-gray-900\">How KW&SC is Setting New Standards in Water & Sewerage Services for Karachi</h3>\n                <p class=\"text-gray-600 leading-relaxed\">At KW&SC, we strive to provide clean, safe drinking water and efficient sewerage services to all residents of Karachi. Our commitment to excellence and innovation enables us to deliver reliable solutions tailored to the city's needs.</p>\n                <p class=\"text-gray-600 leading-relaxed\">Our mission is to transform KW&SC into a customer‑centric, financially autonomous, and technologically advanced water and sewerage utility. We leverage sustainable practices to ensure long‑term success and contribute to Karachi's water security and sanitation goals.</p>\n              </div>\n            ",
         "heading": "KW&SC Heritage"
       },
-      "createdAt": "2025-12-04T16:55:20.837Z",
-      "updatedAt": "2025-12-04T16:55:20.837Z"
+      "createdAt": "2025-12-04T17:09:25.631Z",
+      "updatedAt": "2025-12-04T17:09:25.631Z"
     },
     {
-      "id": "d902cee6-b098-429a-829d-c08a4952ee17",
-      "pageId": "1f89170b-6993-4986-a205-f42850429bb4",
+      "id": "e9291ed8-1506-4ec7-815f-e7eb61560439",
+      "pageId": "27a99242-cb35-4716-b7ca-b36b4a90d738",
       "type": "LEADERSHIP",
       "order": 2,
       "content": {},
-      "createdAt": "2025-12-04T16:55:20.837Z",
-      "updatedAt": "2025-12-04T16:55:20.837Z"
+      "createdAt": "2025-12-04T17:09:25.631Z",
+      "updatedAt": "2025-12-04T17:09:25.631Z"
     },
     {
-      "id": "e03b58b5-4578-4f57-a521-c6332bf6003b",
-      "pageId": "1f89170b-6993-4986-a205-f42850429bb4",
+      "id": "f0a491bb-7086-4888-bdf1-a4ccdb3fca02",
+      "pageId": "27a99242-cb35-4716-b7ca-b36b4a90d738",
       "type": "FAQ",
       "order": 3,
       "content": {},
-      "createdAt": "2025-12-04T16:55:20.837Z",
-      "updatedAt": "2025-12-04T16:55:20.837Z"
+      "createdAt": "2025-12-04T17:09:25.631Z",
+      "updatedAt": "2025-12-04T17:09:25.631Z"
     }
   ],
   "seo": {
-    "id": "a86fa8af-0b25-4efb-aefb-09b45068c945",
+    "id": "d8721651-6daf-4d8f-bf95-b8323aebddb9",
     "title": "About Us | KW&SC",
     "description": "Learn more about About Us at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -64,7 +64,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:55:17.945Z",
-    "updatedAt": "2025-12-04T16:55:17.945Z"
+    "createdAt": "2025-12-04T17:09:23.040Z",
+    "updatedAt": "2025-12-04T17:09:23.040Z"
   }
 }

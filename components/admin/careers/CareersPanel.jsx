@@ -1,7 +1,8 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Loader2, Plus, RefreshCcw, Trash2 } from "lucide-react";
+import { Loader2, Plus, RefreshCcw, Trash2, Briefcase, Layers, FileText } from "lucide-react";
 import { useAdminCareers } from "@/hooks/useAdminCareers";
+import ApplicationsList from "./ApplicationsList";
 
 const STATUS_OPTIONS = ["DRAFT", "SCHEDULED", "PUBLISHED", "ARCHIVED"];
 const REQUIREMENT_TYPES = ["QUALIFICATION", "RESPONSIBILITY"];
@@ -73,6 +74,7 @@ export default function CareersPanel() {
     updateEntity,
     deleteEntity,
   } = useAdminCareers();
+  const [activeTab, setActiveTab] = useState("OPENINGS");
   const [programForm, setProgramForm] = useState(INITIAL_PROGRAM);
   const [openingForm, setOpeningForm] = useState(INITIAL_OPENING);
   const [requirementForm, setRequirementForm] = useState(INITIAL_REQUIREMENT);
@@ -137,6 +139,47 @@ export default function CareersPanel() {
 
   return (
     <div className="space-y-6">
+      {/* Tabs */}
+      <div className="flex space-x-1 rounded-xl bg-slate-100 p-1">
+        <button
+          onClick={() => setActiveTab("OPENINGS")}
+          className={`flex items-center gap-2 w-full justify-center rounded-lg py-2.5 text-sm font-medium leading-5 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
+            activeTab === "OPENINGS"
+              ? "bg-white text-blue-700 shadow"
+              : "text-slate-600 hover:bg-white/[0.12] hover:text-slate-800"
+          }`}
+        >
+          <Briefcase className="w-4 h-4" />
+          Openings
+        </button>
+        <button
+          onClick={() => setActiveTab("PROGRAMS")}
+          className={`flex items-center gap-2 w-full justify-center rounded-lg py-2.5 text-sm font-medium leading-5 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
+            activeTab === "PROGRAMS"
+              ? "bg-white text-blue-700 shadow"
+              : "text-slate-600 hover:bg-white/[0.12] hover:text-slate-800"
+          }`}
+        >
+          <Layers className="w-4 h-4" />
+          Programs
+        </button>
+        <button
+          onClick={() => setActiveTab("APPLICATIONS")}
+          className={`flex items-center gap-2 w-full justify-center rounded-lg py-2.5 text-sm font-medium leading-5 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
+            activeTab === "APPLICATIONS"
+              ? "bg-white text-blue-700 shadow"
+              : "text-slate-600 hover:bg-white/[0.12] hover:text-slate-800"
+          }`}
+        >
+          <FileText className="w-4 h-4" />
+          Applications
+        </button>
+      </div>
+
+      {activeTab === "APPLICATIONS" ? (
+        <ApplicationsList />
+      ) : (
+        <>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-sm text-slate-500">
           <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
@@ -344,6 +387,9 @@ export default function CareersPanel() {
           </div>
         </aside>
       </div>
+      {/* End of Tab Content */}
+      </>
+      )}
     </div>
   );
 }

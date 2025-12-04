@@ -1,37 +1,37 @@
 {
-  "id": "b4aed674-f360-4dc5-b71d-1dc0e02a2b69",
+  "id": "5a520787-2921-4464-9d6a-4a8ab4ff293f",
   "slug": "ourleadership",
   "title": "Our Leadership",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:55:34.582Z",
-  "updatedAt": "2025-12-04T16:55:34.582Z",
-  "seoId": "36f0f0e3-b438-4404-88aa-06cf591333ce",
+  "createdAt": "2025-12-04T17:09:40.244Z",
+  "updatedAt": "2025-12-04T17:09:40.244Z",
+  "seoId": "cf611c9d-fbcb-4151-89ad-d2e20b1cc3cc",
   "sections": [
     {
-      "id": "9c3d0c95-f836-4e71-a767-8e1b5eab85bd",
-      "pageId": "b4aed674-f360-4dc5-b71d-1dc0e02a2b69",
+      "id": "25825bbf-6d69-46b2-af77-c6c24ec2cd9d",
+      "pageId": "5a520787-2921-4464-9d6a-4a8ab4ff293f",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Our Leadership",
         "subtitle": "Meet the team guiding us"
       },
-      "createdAt": "2025-12-04T16:55:36.254Z",
-      "updatedAt": "2025-12-04T16:55:36.254Z"
+      "createdAt": "2025-12-04T17:09:41.791Z",
+      "updatedAt": "2025-12-04T17:09:41.791Z"
     },
     {
-      "id": "e7740af8-be6b-4182-9909-985076811cf5",
-      "pageId": "b4aed674-f360-4dc5-b71d-1dc0e02a2b69",
+      "id": "b8b61e51-4e2c-4d52-951e-dde36cd27a5e",
+      "pageId": "5a520787-2921-4464-9d6a-4a8ab4ff293f",
       "type": "LEADERSHIP",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T16:55:36.254Z",
-      "updatedAt": "2025-12-04T16:55:36.254Z"
+      "createdAt": "2025-12-04T17:09:41.791Z",
+      "updatedAt": "2025-12-04T17:09:41.791Z"
     }
   ],
   "seo": {
-    "id": "36f0f0e3-b438-4404-88aa-06cf591333ce",
+    "id": "cf611c9d-fbcb-4151-89ad-d2e20b1cc3cc",
     "title": "Our Leadership | KW&SC",
     "description": "Learn more about Our Leadership at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -42,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:55:34.582Z",
-    "updatedAt": "2025-12-04T16:55:34.582Z"
+    "createdAt": "2025-12-04T17:09:40.244Z",
+    "updatedAt": "2025-12-04T17:09:40.244Z"
   }
 }

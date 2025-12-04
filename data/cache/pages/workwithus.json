@@ -1,40 +1,37 @@
 {
-  "id": "e6ebfdc8-9fc0-4703-a204-3e5bb06b10cf",
+  "id": "69a804bf-5d8a-43b2-a8ab-e61119dbbdef",
   "slug": "workwithus",
   "title": "Work With Us",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:32:29.757Z",
-  "updatedAt": "2025-12-04T16:32:29.757Z",
-  "seoId": "74dd6f25-a9f4-4e64-9276-e5781ebfeaf6",
+  "createdAt": "2025-12-04T17:09:56.004Z",
+  "updatedAt": "2025-12-04T17:09:56.004Z",
+  "seoId": "69a1c3bb-72ae-4a94-8b0a-500d774f0210",
   "sections": [
     {
-      "id": "be21a33a-4280-4b5c-9295-82d8e1bec954",
-      "pageId": "e6ebfdc8-9fc0-4703-a204-3e5bb06b10cf",
+      "id": "997c7005-9d3b-49a6-89f3-0895a024d524",
+      "pageId": "69a804bf-5d8a-43b2-a8ab-e61119dbbdef",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Work With Us",
         "subtitle": "Partner with KW&SC"
       },
-      "createdAt": "2025-12-04T16:32:31.152Z",
-      "updatedAt": "2025-12-04T16:32:31.152Z"
+      "createdAt": "2025-12-04T17:09:57.516Z",
+      "updatedAt": "2025-12-04T17:09:57.516Z"
     },
     {
-      "id": "f92270bf-d513-4174-b5ed-a1e71962c04d",
-      "pageId": "e6ebfdc8-9fc0-4703-a204-3e5bb06b10cf",
-      "type": "TEXT_BLOCK",
+      "id": "f7fb7d7f-8053-4806-92d8-037ebe615d80",
+      "pageId": "69a804bf-5d8a-43b2-a8ab-e61119dbbdef",
+      "type": "CAREERS",
       "order": 1,
-      "content": {
-        "body": "<p>Contractor registration...</p>",
-        "heading": "Opportunities"
-      },
-      "createdAt": "2025-12-04T16:32:31.152Z",
-      "updatedAt": "2025-12-04T16:32:31.152Z"
+      "content": {},
+      "createdAt": "2025-12-04T17:09:57.516Z",
+      "updatedAt": "2025-12-04T17:09:57.516Z"
     }
   ],
   "seo": {
-    "id": "74dd6f25-a9f4-4e64-9276-e5781ebfeaf6",
+    "id": "69a1c3bb-72ae-4a94-8b0a-500d774f0210",
     "title": "Work With Us | KW&SC",
     "description": "Learn more about Work With Us at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -45,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:32:29.757Z",
-    "updatedAt": "2025-12-04T16:32:29.757Z"
+    "createdAt": "2025-12-04T17:09:56.004Z",
+    "updatedAt": "2025-12-04T17:09:56.004Z"
   }
 }

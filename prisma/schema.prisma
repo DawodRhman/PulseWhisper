@@ -394,6 +394,24 @@ model CareerOpening {
 
   program CareerProgram? @relation(fields: [programId], references: [id], onDelete: SetNull)
   seo     SeoMeta?       @relation(fields: [seoId], references: [id], onDelete: SetNull)
+  applications JobApplication[]
+}
+
+model JobApplication {
+  id              String        @id @default(uuid())
+  fullName        String
+  fatherName      String?
+  cnic            String?
+  dob             DateTime?
+  education       String?
+  email           String
+  phone           String
+  coverLetter     String?
+  resumeUrl       String
+  careerOpeningId String
+  createdAt       DateTime      @default(now())
+  
+  careerOpening   CareerOpening @relation(fields: [careerOpeningId], references: [id], onDelete: Cascade)
 }
 
 model CareerRequirement {
