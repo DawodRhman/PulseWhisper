@@ -5,6 +5,8 @@ import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
 import content from "@/data/static/content";
 
+export const dynamic = "force-dynamic";
+
 const securityHeaders = {
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "DENY",

@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma';
 import content from '@/data/static/content';
 import MediaGrid from '@/components/MediaGrid';
 
+export const dynamic = "force-dynamic";
+
 const MEDIA_SELECT = {
   id: true,
   url: true,

@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   LayoutDashboard,
@@ -24,6 +24,8 @@ import {
   FileSearch,
   GraduationCap,
   Droplets,
+  LayoutTemplate,
+  Menu,
 } from "lucide-react";
 import ServicesPanel from "@/components/admin/services/ServicesPanel";
 import TendersPanel from "@/components/admin/tenders/TendersPanel";
@@ -43,9 +45,13 @@ import FaqPanel from "@/components/admin/faq/FaqPanel";
 import RtiPanel from "@/components/admin/rti/RtiPanel";
 import EducationPanel from "@/components/admin/education/EducationPanel";
 import WaterTodayPanel from "@/components/admin/watertoday/WaterTodayPanel";
+import PagesPanel from "@/components/admin/pages/PagesPanel";
+import NavigationPanel from "@/components/admin/navigation/NavigationPanel";
 
 const PANELS = [
   { id: "overview", label: "Overview", icon: LayoutDashboard, description: "At-a-glance insight" },
+  { id: "navigation", label: "Navigation", icon: Menu, description: "Manage menu visibility", permissions: ["pages:write"] },
+  { id: "pages", label: "Pages", icon: LayoutTemplate, description: "Manage dynamic pages" },
   { id: "services", label: "Services", icon: ServerCog, description: "Manage service cards", permissions: ["services:write"] },
   { id: "tenders", label: "Tenders", icon: FileText, description: "Procurement pipeline", permissions: ["tenders:write"] },
   { id: "careers", label: "Careers", icon: Briefcase, description: "Open roles", permissions: ["careers:write"] },
@@ -122,12 +128,24 @@ function PanelCard({ title, children }) {
   );
 }
 
-function Highlight({ title, meta, description }) {
+function Highlight({ title, meta, description, timestamp }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   if (!title) return (
     <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-4 text-sm text-slate-400 text-center">
       No recent activity
     </div>
   );
+
+  let content = meta;
+  if (timestamp) {
+    content = mounted ? formatRelative(timestamp) : null;
+  }
+
   return (
     <div className="rounded-xl border border-slate-100 bg-white p-4 shadow-sm">
       <div className="flex justify-between items-start">
@@ -135,7 +153,7 @@ function Highlight({ title, meta, description }) {
            <p className="text-sm font-semibold text-slate-900 line-clamp-1">{title}</p>
            {description ? <p className="text-xs text-slate-500 mt-0.5">{description}</p> : null}
         </div>
-        {meta ? <span className="text-[10px] font-medium bg-slate-100 text-slate-500 px-2 py-1 rounded-full whitespace-nowrap ml-2">{meta}</span> : null}
+        {content ? <span className="text-[10px] font-medium bg-slate-100 text-slate-500 px-2 py-1 rounded-full whitespace-nowrap ml-2">{content}</span> : null}
       </div>
     </div>
   );
@@ -265,12 +283,12 @@ export default function AdminShell({ session, dashboardStats }) {
                               <Highlight
                                 title={highlights?.latestTender?.title}
                                 description={highlights?.latestTender?.status ? `Status: ${highlights.latestTender.status}` : "Tender update"}
-                                meta={highlights?.latestTender ? formatRelative(highlights.latestTender.updatedAt) : null}
+                                timestamp={highlights?.latestTender?.updatedAt}
                               />
                               <Highlight
                                 title={highlights?.latestNews?.title}
                                 description="Newsroom update"
-                                meta={highlights?.latestNews ? formatRelative(highlights.latestNews.publishedAt) : null}
+                                timestamp={highlights?.latestNews?.publishedAt}
                               />
                            </div>
                         </div>
@@ -343,6 +361,10 @@ function PanelContent({ panelId }) {
       return <EducationPanel />;
     case "watertoday":
       return <WaterTodayPanel />;
+    case "pages":
+      return <PagesPanel />;
+    case "navigation":
+      return <NavigationPanel />;
     default:
       return (
         <div className="mt-6 grid gap-4 md:grid-cols-2">

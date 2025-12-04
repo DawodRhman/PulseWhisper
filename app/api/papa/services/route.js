@@ -7,6 +7,8 @@ import { slugify } from "@/lib/string";
 import { ensureAdminSession, handleAdminApiError, AdminAuthError } from "@/lib/auth/guard";
 import { revalidatePath } from "next/cache";
 
+export const dynamic = "force-dynamic";
+
 const ENTITY_TYPE = z.enum(["category", "card", "detail", "resource"]);
 
 const securityHeaders = {

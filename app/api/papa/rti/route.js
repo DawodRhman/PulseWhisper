@@ -6,6 +6,8 @@ import { purgeSnapshot } from "@/lib/cache";
 import { ensureAdminSession, handleAdminApiError } from "@/lib/auth/guard";
 import { revalidatePath } from "next/cache";
 
+export const dynamic = "force-dynamic";
+
 const createSchema = z.object({
   title: z.string().min(1),
   summary: z.string().optional(),

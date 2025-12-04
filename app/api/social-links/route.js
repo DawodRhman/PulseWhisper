@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import content from "@/data/static/content";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const { data, stale } = await resolveWithSnapshot(

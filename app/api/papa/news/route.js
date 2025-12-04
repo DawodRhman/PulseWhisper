@@ -7,6 +7,8 @@ import { purgeSnapshot } from "@/lib/cache";
 import { ensureAdminSession, AdminAuthError, handleAdminApiError } from "@/lib/auth/guard";
 import { revalidatePath } from "next/cache";
 
+export const dynamic = "force-dynamic";
+
 const ENTITY_TYPE = z.enum(["category", "tag", "article"]);
 
 const actionEnvelopeSchema = z.object({

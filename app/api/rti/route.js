@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
 
+export const dynamic = "force-dynamic";
+
 const HERO_CONTENT = {
   title: "Right to Information",
   subtitle: "Access official documents, forms, and information about KW&SC operations",

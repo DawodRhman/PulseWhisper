@@ -13,6 +13,8 @@ import { resolveWithSnapshot } from "@/lib/cache";
 import { SnapshotModule } from "@prisma/client";
 import { buildHomePayload } from "@/lib/home/payload";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const { data: homeData } = await resolveWithSnapshot(SnapshotModule.HOME, buildHomePayload);
 

@@ -6,6 +6,8 @@ import { slugify } from "@/lib/string";
 import { ensureAdminSession, handleAdminApiError, AdminAuthError } from "@/lib/auth/guard";
 import { revalidatePath } from "next/cache";
 
+export const dynamic = "force-dynamic";
+
 const securityHeaders = {
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "DENY",
@@ -34,6 +36,7 @@ const createPageSchema = z.object({
   title: z.string().trim().min(3),
   slug: z.string().trim().min(1).optional(), // Generated if missing
   isPublished: z.boolean().optional().default(false),
+  showInNavbar: z.boolean().optional().default(false),
   sections: z.array(sectionSchema).optional().default([]),
   seo: z.object({
     title: z.string().optional(),
@@ -46,6 +49,7 @@ const updatePageSchema = z.object({
   title: z.string().trim().min(3).optional(),
   slug: z.string().trim().min(1).optional(),
   isPublished: z.boolean().optional(),
+  showInNavbar: z.boolean().optional(),
   sections: z.array(sectionSchema).optional(),
   seo: z.object({
     title: z.string().optional(),
@@ -134,6 +138,7 @@ export async function POST(request) {
           title: data.title,
           slug,
           isPublished: data.isPublished,
+          showInNavbar: data.showInNavbar,
           seo: data.seo ? {
             create: {
               title: data.seo.title || data.title,
@@ -187,6 +192,7 @@ export async function PATCH(request) {
           title: data.title,
           slug,
           isPublished: data.isPublished,
+          showInNavbar: data.showInNavbar,
           seo: data.seo ? {
             upsert: {
               create: { title: data.seo.title || data.title, description: data.seo.description },

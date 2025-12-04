@@ -3,7 +3,7 @@ import { SnapshotModule } from "@prisma/client";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { buildHomePayload } from "@/lib/home/payload";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {

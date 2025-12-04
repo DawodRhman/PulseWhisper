@@ -101,6 +101,8 @@ const argonOptions = {
 
 async function resetTables() {
   await prisma.$transaction([
+    prisma.pageSection.deleteMany(),
+    prisma.page.deleteMany(),
     prisma.adminSession.deleteMany(),
     prisma.newsTagMap.deleteMany(),
     prisma.tenderAttachment.deleteMany(),
@@ -712,6 +714,197 @@ async function seedWaterToday() {
   }
 }
 
+async function seedPages() {
+  console.log("📄 Seeding pages...");
+  
+  const pages = [
+    {
+      title: "About Us",
+      slug: "aboutus",
+      sections: [
+        {
+          type: "HERO",
+          order: 0,
+          content: {
+            title: "ABOUT US",
+            subtitle: "Karachi Water and Sewerage Corporation (KW&SC) is committed to providing reliable water and sewerage services to Karachi.",
+            backgroundImage: "/karachicharminar.gif"
+          }
+        },
+        {
+          type: "TEXT_BLOCK",
+          order: 1,
+          content: {
+            heading: "KW&SC Heritage",
+            body: `
+              <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-gray-900">How KW&SC is Setting New Standards in Water & Sewerage Services for Karachi</h3>
+                <p class="text-gray-600 leading-relaxed">At KW&SC, we strive to provide clean, safe drinking water and efficient sewerage services to all residents of Karachi. Our commitment to excellence and innovation enables us to deliver reliable solutions tailored to the city's needs.</p>
+                <p class="text-gray-600 leading-relaxed">Our mission is to transform KW&SC into a customer‑centric, financially autonomous, and technologically advanced water and sewerage utility. We leverage sustainable practices to ensure long‑term success and contribute to Karachi's water security and sanitation goals.</p>
+              </div>
+            `
+          }
+        },
+        { type: "LEADERSHIP", order: 2, content: {} },
+        { type: "FAQ", order: 3, content: {} }
+      ]
+    },
+    {
+      title: "Achievements",
+      slug: "achievements",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Our Achievements", subtitle: "Milestones in our journey" } },
+        { type: "CARD_GRID", order: 1, content: { heading: "Awards & Recognition", description: "Celebrating our success" } }
+      ]
+    },
+    {
+      title: "Careers",
+      slug: "careers",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Join Our Team", subtitle: "Build your career with us" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "Why Work With Us?", body: "<p>We offer a dynamic work environment...</p>" } }
+      ]
+    },
+    {
+      title: "Contact Us",
+      slug: "contact",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Contact Us", subtitle: "We are here to help" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "Get in Touch", body: "<p>Visit our offices or call us...</p>" } }
+      ]
+    },
+    {
+      title: "Education",
+      slug: "education",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Education & Awareness", subtitle: "Learning resources for the community" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "Water Conservation", body: "<p>Learn how to save water...</p>" } }
+      ]
+    },
+    {
+      title: "FAQs",
+      slug: "faqs",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Frequently Asked Questions", subtitle: "Find answers to common queries" } },
+        { type: "FAQ", order: 1, content: {} }
+      ]
+    },
+    {
+      title: "News & Updates",
+      slug: "news",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "News Room", subtitle: "Latest updates from KW&SC" } },
+        { type: "MEDIA_GALLERY", order: 1, content: {} }
+      ]
+    },
+    {
+      title: "Our Leadership",
+      slug: "ourleadership",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Our Leadership", subtitle: "Meet the team guiding us" } },
+        { type: "LEADERSHIP", order: 1, content: {} }
+      ]
+    },
+    {
+      title: "Our Services",
+      slug: "ourservices",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Our Services", subtitle: "What we offer to Karachi" } },
+        { type: "SERVICES", order: 1, content: {} }
+      ]
+    },
+    {
+      title: "Our Projects",
+      slug: "portfolio",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Our Projects", subtitle: "Building a better future" } },
+        { type: "PROJECTS", order: 1, content: {} }
+      ]
+    },
+    {
+      title: "Right to Information",
+      slug: "right-to-information",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Right to Information", subtitle: "Transparency and accountability" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "RTI Policy", body: "<p>Details about RTI...</p>" } }
+      ]
+    },
+    {
+      title: "Tenders",
+      slug: "tenders",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Tenders", subtitle: "Procurement opportunities" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "Active Tenders", body: "<p>List of active tenders...</p>" } }
+      ]
+    },
+    {
+      title: "Water Today",
+      slug: "watertodaysection",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Water Today", subtitle: "Daily water supply status" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "Current Status", body: "<p>Water supply details...</p>" } }
+      ]
+    },
+    {
+      title: "What We Do",
+      slug: "whatwedo",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "What We Do", subtitle: "Our core responsibilities" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "Overview", body: "<p>We manage water and sewerage...</p>" } }
+      ]
+    },
+    {
+      title: "Work With Us",
+      slug: "workwithus",
+      sections: [
+        { type: "HERO", order: 0, content: { title: "Work With Us", subtitle: "Partner with KW&SC" } },
+        { type: "TEXT_BLOCK", order: 1, content: { heading: "Opportunities", body: "<p>Contractor registration...</p>" } }
+      ]
+    }
+  ];
+
+  for (const page of pages) {
+    // Upsert the page
+    const pageRecord = await prisma.page.upsert({
+      where: { slug: page.slug },
+      update: {
+        title: page.title,
+        isPublished: true,
+      },
+      create: {
+        title: page.title,
+        slug: page.slug,
+        isPublished: true,
+        seo: {
+          create: {
+            title: `${page.title} | KW&SC`,
+            description: `Learn more about ${page.title} at Karachi Water & Sewerage Corporation.`,
+          }
+        }
+      }
+    });
+
+    // Clear existing sections to avoid duplicates/conflicts on re-seed
+    await prisma.pageSection.deleteMany({
+      where: { pageId: pageRecord.id }
+    });
+
+    // Create new sections
+    if (page.sections && page.sections.length > 0) {
+      await prisma.pageSection.createMany({
+        data: page.sections.map(section => ({
+          pageId: pageRecord.id,
+          type: section.type,
+          order: section.order,
+          content: section.content
+        }))
+      });
+    }
+    
+    console.log(`   - Seeded page: ${page.title}`);
+  }
+}
+
 async function main() {
   console.log("🧹 Resetting tables...");
   await resetTables();
@@ -763,6 +956,8 @@ async function main() {
 
   console.log("🧾 Seeding cached snapshots...");
   await seedSnapshots();
+
+  await seedPages();
 
   console.log("✅ Prisma seed completed successfully.");
 }

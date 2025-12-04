@@ -87,57 +87,82 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const [dynamicPages, setDynamicPages] = useState([]);
+
+  useEffect(() => {
+    const fetchPages = async () => {
+      try {
+        const res = await fetch("/api/pages");
+        const json = await res.json();
+        if (json.data) {
+          setDynamicPages(json.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch dynamic pages:", error);
+      }
+    };
+    fetchPages();
+  }, []);
+
+  const getPageData = (slug) => dynamicPages.find(p => p.slug === slug);
+
+  const menuSkeleton = [
+    { slug: "home", href: "/", text: "Home", alwaysShow: true },
+    { 
+      slug: "whatwedo", 
+      submenu: ["ourservices", "portfolio", "workwithus", "news", "right-to-information"]
+    },
+    {
+      slug: "aboutus",
+      submenu: [
+        { slug: "aboutus", text: "Our Heritage" },
+        "watertodaysection", "achievements", "ourleadership", "careers", "faqs"
+      ]
+    },
+    { slug: "tenders" },
+    { slug: "education" },
+    { slug: "contact" }
+  ];
+
   const NavLinks = [
-    { href: "/", text: "Home" },
+    ...menuSkeleton.map(item => {
+      const page = getPageData(item.slug);
+      // Show if it's "alwaysShow" OR (page exists AND showInNavbar is true)
+      // For hardcoded items that might not be in DB yet (unlikely now), default to true?
+      // Since we seeded everything, page should exist.
+      const isVisible = item.alwaysShow || (page && page.showInNavbar);
+      
+      if (!isVisible) return null;
 
-    {
-      href: "/whatwedo",
-      text: "What We Do",
-      submenu: [
-        { href: "/ourservices", text: "Our Services" },
-        { href: "/portfolio", text: "Our Projects" },
-        { href: "/workwithus", text: "Work With Us" },
-        { href: "/news", text: "News & Updates" },
-        { href: "/right-to-information", text: "Right to Information" },
-      ]
-    },
-    {
-      href: "/aboutus",
-      text: "About Us",
-      submenu: [
-        { href: "/aboutus", text: "Our Heritage" },
-        { href: "/watertodaysection", text: "Water Today" },
-        { href: "/achievements", text: "Achievements" },
-        { href: "/ourleadership", text: "Our Leadership" },
-        { href: "/careers", text: "Careers" },
-        { href: "/faqs", text: "FAQs" },
-      ]
-    },
-    //{ 
-    //  href: "/portfolio", 
-    //  text: "Our Projects",
-    //  submenu: [
-    //  { href: "/portfolio", text: "All Projects" },
+      const link = {
+        href: item.href || `/${item.slug}`,
+        text: page?.title || item.text || item.slug,
+      };
 
-    //  ]
-    //  },
+      if (item.submenu) {
+        link.submenu = item.submenu.map(sub => {
+          const subSlug = typeof sub === 'string' ? sub : sub.slug;
+          const subPage = getPageData(subSlug);
+          const subVisible = subPage && subPage.showInNavbar;
+          
+          if (!subVisible) return null;
 
-    {
-      href: "/tenders",
-      text: "Tenders",
+          return {
+            href: `/${subSlug}`,
+            text: (typeof sub === 'object' && sub.text) ? sub.text : (subPage?.title || subSlug)
+          };
+        }).filter(Boolean);
+      }
+      return link;
+    }).filter(Boolean),
 
-    },
-    {
-      href: "/education",
-      text: "Education",
-
-    },
-
-    {
-      href: "/contact",
-      text: "Contact",
-
-    },
+    // Add dynamic pages to the end of the menu
+    ...dynamicPages
+      .filter(p => p.showInNavbar && !menuSkeleton.flatMap(i => [i.slug, ...(i.submenu || []).map(s => typeof s === 'string' ? s : s.slug)]).includes(p.slug))
+      .map(p => ({
+        href: `/${p.slug}`,
+        text: p.title,
+      }))
   ];
 
   // Handle submenu hover animations with grace period

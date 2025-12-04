@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection";
+import GenericHero from "./GenericHero";
 import Services from "@/components/Services";
 import Projects from "@/components/Projects";
 import OurLeadership from "@/components/OurLeadership";
@@ -28,7 +28,7 @@ const TextBlock = ({ content }) => {
 };
 
 const COMPONENT_MAP = {
-  HERO: HeroSection, // Expects props compatible with HeroSection
+  HERO: GenericHero,
   TEXT_BLOCK: TextBlock,
   SERVICES: Services,
   PROJECTS: Projects,
@@ -48,19 +48,17 @@ export default function PageRenderer({ sections }) {
     <div className="flex flex-col w-full">
       {sections.map((section) => {
         const Component = COMPONENT_MAP[section.type];
-        
         if (!Component) {
           console.warn(`Unknown section type: ${section.type}`);
           return null;
         }
 
-        return (
-          <div key={section.id || Math.random()} className="w-full">
-            {/* Pass the content JSON as props to the component */}
-            <Component {...section.content} />
-          </div>
-        );
+        // Pass the content object as props to the component
+        // For components that don't take props (like Services which might fetch its own data),
+        // these extra props will just be ignored, which is fine.
+        return <Component key={section.id || Math.random()} {...section.content} />;
       })}
     </div>
   );
 }
+

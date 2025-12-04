@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
 
+export const dynamic = "force-dynamic";
+
 const HERO_CONTENT = {
   title: "Education & Awareness",
   subtitle: "Empowering the community with knowledge about water conservation and hygiene.",

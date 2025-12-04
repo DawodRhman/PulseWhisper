@@ -5,6 +5,8 @@ import prisma from "@/lib/prisma";
 import { purgeSnapshot } from "@/lib/cache";
 import { ensureAdminSession, AdminAuthError, handleAdminApiError } from "@/lib/auth/guard";
 
+export const dynamic = "force-dynamic";
+
 const ENTITY_TYPE = z.enum(["link"]);
 
 const actionEnvelopeSchema = z.object({
