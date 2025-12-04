@@ -5,7 +5,7 @@ import gsap from "gsap";
 import Link from "next/link";
 import { Globe, MoveRight } from "lucide-react";
 
-// import GetYourBillPopup from "@/components/GetYourBill";
+import GetYourBillPopup from "@/components/GetYourBill";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -118,10 +118,10 @@ export default function Home() {
         </div>
 
         {/* Get Your Bill Popup */}
-        {/* <GetYourBillPopup
+        <GetYourBillPopup
           open={showBillPopup}
           onClose={() => setShowBillPopup(false)}
-        /> */}
+        />
 
         {/* Glass Panel */}
         <div

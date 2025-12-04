@@ -63,7 +63,7 @@ export const SERVICE_CARD_FALLBACKS = [
 
 const FALLBACK_DATA = {
   hero: {
-    title: "What We Do",
+    title: "Our Services",
     subtitle:
       "Comprehensive water and sewerage services ensuring clean water supply and efficient wastewater management for Karachi.",
     backgroundImage: "/teentalwarkarachi.gif",

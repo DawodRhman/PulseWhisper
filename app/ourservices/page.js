@@ -65,14 +65,18 @@ export default function Services() {
       {loading && <Loader />}
 
       <section
-        className="relative h-screen transition-opacity duration-700 bg-cover bg-center text-white flex justify-center items-center"
+        className="relative h-screen transition-opacity duration-700 bg-cover bg-center text-white flex justify-center items-center overflow-hidden"
         style={heroImage ? { backgroundImage: `url(${heroImage})` } : undefined}
       >
         <div className="absolute inset-0 bg-blue-900/60 z-0" />
-        <div className="relative z-[1] max-w-[75%] m-20 mx-auto flex items-center justify-center text-center">
-          <div className="w-[85%]">
-            <h2 className="text-[8vh] font-bold">{heroTitle}</h2>
-            <p className="mt-6 text-[3.5vh]">{heroSubtitle}</p>
+        <div className="relative z-[1] max-w-5xl mx-auto flex items-center justify-center text-center px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="w-full sm:w-[90%] md:w-[85%]">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">
+              {heroTitle}
+            </h2>
+            <p className="mt-4 sm:mt-6 md:mt-8 text-sm sm:text-lg md:text-xl lg:text-2xl">
+              {heroSubtitle}
+            </p>
           </div>
         </div>
       </section>

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import gsap from "gsap";
+import { Fade } from "react-awesome-reveal";
+import Image from "next/image";
 
 export default function WaterToday() {
   const [loading, setLoading] = useState(true);
@@ -46,49 +48,58 @@ export default function WaterToday() {
     <>
       {loading && <Loader />}
 
-      {/* Banner */}
-      <section
-        className={`relative h-[50vh] md:h-[70vh] transition-opacity duration-700 bg-[url('/teentalwarkarachi.gif')] bg-cover bg-center text-white flex justify-center items-center`}
+      {/* 1. Futuristic Hero Section */}
+      <section className={`relative h-screen sm:h-screen md:h-[70vh] lg:h-screen transition-opacity duration-700 bg-cover bg-center text-white flex justify-center items-center overflow-hidden`}
+        style={{ backgroundImage: `url('/teentalwarkarachi.gif')` }}
       >
-        <div className="absolute inset-0 bg-blue-900/80 z-0 backdrop-blur-sm"></div>
-        <div className="relative z-[1] text-center px-6 max-w-5xl">
-          <h2 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-cyan-200 drop-shadow-[0_0_25px_rgba(6,182,212,0.5)]">
-            Water Today
-          </h2>
-          <p className="mt-6 text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light">
-            Discover the current state of water supply, innovations, and community initiatives by KW&SC to ensure Karachi has clean and safe water.
-          </p>
+        {/* Dark overlay to blend with dark theme */}
+        <div className="absolute inset-0 bg-blue-900/60 z-0"></div>
+
+        <div className="relative z-[1] w-full px-3 sm:px-4 md:px-6 lg:px-8 flex items-center justify-center text-center">
+          <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl">
+            <Fade direction="up" cascade damping={0.1} triggerOnce duration={1000}>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extrabold leading-tight tracking-tight">
+                Water Today
+              </h2>
+              <p className="mt-4 sm:mt-5 md:mt-6 lg:mt-8 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl text-slate-300 max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto font-light leading-relaxed">
+                Discover the current state of water supply, innovations, and community initiatives by KW&SC to ensure Karachi has clean and safe water.
+              </p>
+            </Fade>
+          </div>
         </div>
       </section>
 
-      {/* Latest Updates Section */}
+      {/* 2. Latest Updates Section (if data from API exists) */}
       {updates.length > 0 && (
-        <section className="py-12 bg-white border-b border-slate-100">
-          <div className="max-w-5xl mx-auto px-6">
-            <h3 className="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-2">
-              <span className="w-2 h-8 bg-cyan-500 rounded-full"></span>
-              Latest Updates
-            </h3>
-            <div className="grid gap-6 md:grid-cols-2">
-              {updates.map((update) => (
-                <div key={update.id} className="p-6 rounded-xl border border-slate-100 bg-slate-50 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-3">
-                    <h4 className="font-bold text-lg text-slate-900">{update.title}</h4>
-                    {update.status && (
-                      <span className={`text-xs font-bold px-2 py-1 rounded-full ${
-                        update.status === 'Normal' ? 'bg-green-100 text-green-700' : 
-                        update.status === 'Alert' ? 'bg-red-100 text-red-700' : 
-                        'bg-blue-100 text-blue-700'
-                      }`}>
-                        {update.status}
-                      </span>
-                    )}
+        <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white border-b border-slate-100">
+          <div className="max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+            <Fade direction="down" triggerOnce duration={1000}>
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-8 sm:mb-10 md:mb-12 flex items-center gap-2">
+                <span className="w-2 h-8 bg-cyan-500 rounded-full"></span>
+                Latest Updates
+              </h3>
+            </Fade>
+            <div className="grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              {updates.map((update, index) => (
+                <Fade key={update.id} direction="up" triggerOnce duration={800} delay={index * 100}>
+                  <div className="p-4 sm:p-6 md:p-8 rounded-lg sm:rounded-xl md:rounded-2xl border border-slate-100 bg-slate-50 hover:shadow-lg transition-shadow duration-300">
+                    <div className="flex justify-between items-start mb-3 sm:mb-4">
+                      <h4 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-slate-900">{update.title}</h4>
+                      {update.status && (
+                        <span className={`text-xs sm:text-xs md:text-sm font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full whitespace-nowrap ${update.status === 'Normal' ? 'bg-green-100 text-green-700' :
+                            update.status === 'Alert' ? 'bg-red-100 text-red-700' :
+                              'bg-blue-100 text-blue-700'
+                          }`}>
+                          {update.status}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-slate-600 text-xs sm:text-sm md:text-base mb-4 leading-relaxed">{update.summary}</p>
+                    <div className="text-xs sm:text-xs md:text-sm text-slate-400">
+                      {update.publishedAt ? new Date(update.publishedAt).toLocaleDateString() : "Just now"}
+                    </div>
                   </div>
-                  <p className="text-slate-600 text-sm mb-4">{update.summary}</p>
-                  <div className="text-xs text-slate-400">
-                    {update.publishedAt ? new Date(update.publishedAt).toLocaleDateString() : "Just now"}
-                  </div>
-                </div>
+                </Fade>
               ))}
             </div>
           </div>
@@ -98,7 +109,7 @@ export default function WaterToday() {
       {/* Content Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-5xl mx-auto px-6 space-y-12 text-gray-800">
-          
+
           <div>
             <img
               src="/watertoday/blog1.jpg"
@@ -135,7 +146,7 @@ export default function WaterToday() {
         </div>
       </section>
 
-     
+
     </>
   );
 }

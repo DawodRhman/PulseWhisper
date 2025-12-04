@@ -222,7 +222,7 @@ export default function WorkWithUs() {
           </motion.p>
           <motion.a
             variants={itemVariants}
-            href="/contactus"
+            href="/contact"
             className="inline-flex items-center px-6 sm:px-8 md:px-10 lg:px-12 2xl:px-14 py-2.5 sm:py-3 md:py-3.5 lg:py-4 2xl:py-5 text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl font-semibold sm:font-bold rounded-lg sm:rounded-lg md:rounded-xl lg:rounded-xl transition-all duration-300 
                        bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900 
                        hover:from-cyan-300 hover:to-blue-400 shadow-lg sm:shadow-xl hover:shadow-cyan-400/50"

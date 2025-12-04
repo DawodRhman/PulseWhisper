@@ -9,9 +9,12 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [expandedMobileSubmenu, setExpandedMobileSubmenu] = useState(null);
   const menuRef = useRef(null);
   const linksRef = useRef([]);
   const submenuRefs = useRef([]);
+  const mobileSubmenuRefs = useRef([]);
+  const hoverTimeoutRef = useRef(null);
   const pathname = usePathname();
   const isAdminView = pathname?.startsWith("/papa");
 
@@ -22,6 +25,37 @@ const Navbar = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  // Handle mobile submenu expansion animations
+  useEffect(() => {
+    mobileSubmenuRefs.current.forEach((ref, index) => {
+      if (ref) {
+        if (expandedMobileSubmenu === index) {
+          // Expand the submenu
+          gsap.to(ref, {
+            height: "auto",
+            opacity: 1,
+            duration: 0.3,
+            ease: "power2.out",
+            onStart: () => {
+              ref.style.display = "block";
+            },
+          });
+        } else {
+          // Collapse the submenu
+          gsap.to(ref, {
+            height: 0,
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.in",
+            onComplete: () => {
+              ref.style.display = "none";
+            },
+          });
+        }
+      }
+    });
+  }, [expandedMobileSubmenu]);
 
 
   useEffect(() => {
@@ -106,9 +140,14 @@ const Navbar = () => {
     },
   ];
 
-  // Handle submenu hover animations
+  // Handle submenu hover animations with grace period
   useEffect(() => {
     if (hoveredIndex !== null && NavLinks[hoveredIndex]?.submenu) {
+      // Clear any pending timeout when hovering
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+
       const submenuRef = submenuRefs.current[hoveredIndex];
       if (submenuRef) {
         submenuRef.style.display = "block";
@@ -127,21 +166,29 @@ const Navbar = () => {
         );
       }
     } else {
-      // Hide all submenus when not hovering
-      submenuRefs.current.forEach((ref, index) => {
-        if (ref && hoveredIndex !== index) {
-          gsap.to(ref, {
-            opacity: 0,
-            y: 10,
-            duration: 0.2,
-            ease: "power2.in",
-            onComplete: () => {
-              if (ref) ref.style.display = "none";
-            },
-          });
-        }
-      });
+      // Hide all submenus when not hovering, but with a delay to allow movement
+      hoverTimeoutRef.current = setTimeout(() => {
+        submenuRefs.current.forEach((ref, index) => {
+          if (ref && hoveredIndex !== index) {
+            gsap.to(ref, {
+              opacity: 0,
+              y: 10,
+              duration: 0.2,
+              ease: "power2.in",
+              onComplete: () => {
+                if (ref) ref.style.display = "none";
+              },
+            });
+          }
+        });
+      }, 300);
     }
+
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
   }, [hoveredIndex]);
 
   return (
@@ -247,17 +294,73 @@ const Navbar = () => {
               </div>
               <nav className="flex flex-col items-start gap-6 sm:gap-10 mt-6 sm:mt-8 w-full px-2">
                 {NavLinks.map((link, index) => (
-                  <Link
-                    key={link.text}
-                    href={link.href}
-                    ref={(el) => (linksRef.current[index] = el)}
-                    className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold uppercase hover:text-blue-400 text-white opacity-0 transform -translate-y-5 transition-all duration-300 relative ${pathname === link.href ? "text-blue-400" : "text-white"
-                      }`}
-                    data-menu={link.text}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.text}
-                  </Link>
+                  <div key={link.text} className="w-full">
+                    {/* Row: main link + 'Open Sub Menu' button (if submenu) */}
+                    <div className="flex items-center gap-3 w-full">
+                      {/* Main page link (always navigates) */}
+                      <Link
+                        href={link.href}
+                        ref={(el) => (linksRef.current[index] = el)}
+                        className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold uppercase opacity-0 transform -translate-y-5 transition-all duration-300 ${pathname === link.href ? "text-blue-400" : "text-white hover:text-blue-400"
+                          }`}
+                        data-menu={link.text}
+                        onClick={() => {
+                          setIsOpen(false);
+                          setExpandedMobileSubmenu(null);
+                        }}
+                      >
+                        {link.text}
+                      </Link>
+
+                      {/* Open Sub Menu button, only for items with submenu */}
+                      {link.submenu && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExpandedMobileSubmenu(
+                              expandedMobileSubmenu === index ? null : index
+                            )
+                          }
+                          className="text-white hover:text-blue-400 transition-colors p-2"
+                        >
+                          <ChevronDown
+                            size={24}
+                            className={`transition-transform duration-300 ${expandedMobileSubmenu === index ? "rotate-180" : ""
+                              }`}
+                          />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Mobile Submenu */}
+                    {link.submenu && (
+                      <div
+                        ref={(el) => (mobileSubmenuRefs.current[index] = el)}
+                        className="overflow-hidden"
+                        style={{ display: "none", height: 0, opacity: 0 }}
+                      >
+                        <ul className="flex flex-col gap-3 sm:gap-4 mt-4 sm:mt-6 pl-6 sm:pl-8 border-l-2 border-blue-400">
+                          {link.submenu.map((subItem) => (
+                            <li key={subItem.href}>
+                              <Link
+                                href={subItem.href}
+                                className={`text-lg sm:text-xl md:text-2xl font-semibold uppercase transition-all duration-200 flex items-center gap-2 ${pathname === subItem.href
+                                  ? "text-blue-400"
+                                  : "text-gray-300 hover:text-blue-400"
+                                  }`}
+                                onClick={() => {
+                                  setIsOpen(false);
+                                  setExpandedMobileSubmenu(null);
+                                }}
+                              >
+                                {subItem.text}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 ))}
               </nav>
             </div>
