@@ -5,6 +5,21 @@ import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
 import content from "@/data/static/content";
 
+const securityHeaders = {
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-XSS-Protection": "1; mode=block",
+};
+
+function jsonResponse(body, init = {}) {
+  const response = NextResponse.json(body, init);
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+  return response;
+}
+
 const FALLBACK_HERO =
   content?.services?.hero || {
     title: "What We Do",
@@ -145,7 +160,7 @@ export async function GET() {
       }
     );
 
-    return NextResponse.json({ data, meta: { stale } });
+    return jsonResponse({ data, meta: { stale } });
   } catch (error) {
     console.error("GET /api/services", error);
     const fallbackPayload = {
@@ -153,6 +168,6 @@ export async function GET() {
       categories: mapServicesFallback(),
       seo: null,
     };
-    return NextResponse.json({ data: fallbackPayload, meta: { stale: true } });
+    return jsonResponse({ data: fallbackPayload, meta: { stale: true } });
   }
 }
