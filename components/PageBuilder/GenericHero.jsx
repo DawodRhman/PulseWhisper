@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { motion } from "framer-motion";
 import OptimizedImage from "@/components/OptimizedImage";
@@ -8,20 +10,21 @@ const fadeInUp = {
 };
 
 export default function GenericHero({ title, subtitle, backgroundImage }) {
+  // Use provided image or fallback to a default
+  const bgImage = backgroundImage || "/bg-1.jpg";
+
   return (
     <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-gray-900 text-white">
       {/* Background Image */}
-      {backgroundImage && (
-        <div className="absolute inset-0 z-0">
-          <OptimizedImage
-            src={backgroundImage}
-            alt="Hero Background"
-            fill
-            className="object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-      )}
+      <div className="absolute inset-0 z-0">
+        <OptimizedImage
+          src={bgImage}
+          alt="Hero Background"
+          fill
+          className="object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">

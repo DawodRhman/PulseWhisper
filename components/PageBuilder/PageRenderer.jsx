@@ -9,18 +9,18 @@ import Subscribe from "@/components/Subscribe";
 import GenericCardGrid from "./GenericCardGrid";
 
 // A simple generic text block component
-const TextBlock = ({ content }) => {
+const TextBlock = ({ heading, body }) => {
   return (
     <section className="py-12 px-4 md:px-8 max-w-7xl mx-auto">
-      {content.heading && (
+      {heading && (
         <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
-          {content.heading}
+          {heading}
         </h2>
       )}
-      {content.body && (
+      {body && (
         <div 
           className="prose max-w-none text-gray-600 leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: content.body }} 
+          dangerouslySetInnerHTML={{ __html: body }} 
         />
       )}
     </section>
@@ -41,7 +41,12 @@ const COMPONENT_MAP = {
 
 export default function PageRenderer({ sections }) {
   if (!sections || sections.length === 0) {
-    return null;
+    return (
+      <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">Content Not Available</h2>
+        <p className="text-gray-600">This page is currently under construction or has no content.</p>
+      </div>
+    );
   }
 
   return (

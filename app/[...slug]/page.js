@@ -8,6 +8,10 @@ import Footer from "@/components/Footer";
 export const dynamic = "force-dynamic";
 
 async function getPage(slugArray) {
+  if (!slugArray) {
+    console.error("getPage called with undefined slugArray");
+    return null;
+  }
   const slug = slugArray.join("/");
   const page = await prisma.page.findUnique({
     where: { slug },
@@ -22,7 +26,12 @@ async function getPage(slugArray) {
 }
 
 export async function generateMetadata({ params }) {
-  const page = await getPage(params.slug);
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
+  
+  if (!slug) return {};
+
+  const page = await getPage(slug);
   
   if (!page) return {};
 
@@ -34,7 +43,15 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function DynamicPage({ params }) {
-  const page = await getPage(params.slug);
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
+  
+  if (!slug) {
+    console.error("DynamicPage: slug is missing in params", resolvedParams);
+    notFound();
+  }
+
+  const page = await getPage(slug);
 
   if (!page || !page.isPublished) {
     notFound();

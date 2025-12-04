@@ -14,10 +14,12 @@ const OptimizedImage = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  const isGif = typeof src === 'string' && src.toLowerCase().endsWith('.gif');
+
   useEffect(() => {
     // Preload image for better performance
     if (src && !isLoaded) {
-      const img = new Image();
+      const img = new window.Image();
       img.onload = () => setIsLoaded(true);
       img.onerror = () => setHasError(true);
       img.src = src;
@@ -48,6 +50,7 @@ const OptimizedImage = ({
         priority={priority}
         placeholder={placeholder}
         blurDataURL={blurDataURL}
+        unoptimized={isGif || props.unoptimized}
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
