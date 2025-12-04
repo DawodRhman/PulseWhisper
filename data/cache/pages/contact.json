@@ -1,0 +1,48 @@
+{
+  "id": "94b0ec7a-6d17-423a-8b6b-ec25390bbb53",
+  "slug": "contact",
+  "title": "Contact Us",
+  "isPublished": true,
+  "showInNavbar": false,
+  "createdAt": "2025-12-04T17:09:31.477Z",
+  "updatedAt": "2025-12-04T17:09:31.477Z",
+  "seoId": "a6030908-70c7-4262-877f-8ab43c88e448",
+  "sections": [
+    {
+      "id": "d1a83a1f-c6c2-49c5-aa0a-f59549755017",
+      "pageId": "94b0ec7a-6d17-423a-8b6b-ec25390bbb53",
+      "type": "HERO",
+      "order": 0,
+      "content": {
+        "title": "Contact Us",
+        "subtitle": "We are here to help"
+      },
+      "createdAt": "2025-12-04T17:09:32.994Z",
+      "updatedAt": "2025-12-04T17:09:32.994Z"
+    },
+    {
+      "id": "946a62b2-9fc8-4a92-8242-8b95635c1641",
+      "pageId": "94b0ec7a-6d17-423a-8b6b-ec25390bbb53",
+      "type": "CONTACT",
+      "order": 1,
+      "content": {},
+      "createdAt": "2025-12-04T17:09:32.994Z",
+      "updatedAt": "2025-12-04T17:09:32.994Z"
+    }
+  ],
+  "seo": {
+    "id": "a6030908-70c7-4262-877f-8ab43c88e448",
+    "title": "Contact Us | KW&SC",
+    "description": "Learn more about Contact Us at Karachi Water & Sewerage Corporation.",
+    "keywords": null,
+    "canonicalUrl": null,
+    "ogTitle": null,
+    "ogDescription": null,
+    "ogImageUrl": null,
+    "twitterCard": "summary_large_image",
+    "structuredData": null,
+    "allowIndexing": true,
+    "createdAt": "2025-12-04T17:09:31.477Z",
+    "updatedAt": "2025-12-04T17:09:31.477Z"
+  }
+}

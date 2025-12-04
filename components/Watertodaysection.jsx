@@ -1,6 +1,8 @@
 "use client";
 import React, { useMemo } from "react";
 import Link from "next/link";
+import { useWaterTodayData } from "@/hooks/useWaterTodayData";
+import Loader from "@/components/Loader";
 
 const FALLBACK_UPDATE = {
   title: "Water Today",
@@ -9,13 +11,19 @@ const FALLBACK_UPDATE = {
   publishedAt: new Date().toISOString(),
 };
 
-export default function WaterTodaySection({ updates }) {
+export default function WaterTodaySection({ updates: propUpdates }) {
+  const { data, loading } = useWaterTodayData();
+  
+  const updates = propUpdates || data?.updates || [];
+  
   const latestUpdate = useMemo(() => {
     if (Array.isArray(updates) && updates.length > 0) {
       return updates[0];
     }
     return FALLBACK_UPDATE;
   }, [updates]);
+
+  if (loading && !propUpdates) return <Loader />;
 
   const imageUrl = latestUpdate.media?.url || FALLBACK_UPDATE.media.url;
 

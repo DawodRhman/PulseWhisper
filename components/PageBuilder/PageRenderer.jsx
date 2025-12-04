@@ -11,6 +11,10 @@ import Career from "@/components/Career";
 import Tenders from "@/components/Tenders";
 import WorkFlow from "@/components/Workflow";
 import NewsUpdate from "@/components/NewsUpdate";
+import Rti from "@/components/Rti";
+import Watertodaysection from "@/components/Watertodaysection";
+import Contact from "@/components/Contact";
+import Education from "@/components/Education";
 
 // A simple generic text block component
 const TextBlock = ({ heading, body }) => {
@@ -45,6 +49,10 @@ const COMPONENT_MAP = {
   TENDERS: Tenders,
   WORKFLOW: WorkFlow,
   NEWS: NewsUpdate,
+  RTI: Rti,
+  WATER_TODAY: Watertodaysection,
+  CONTACT: Contact,
+  EDUCATION: Education,
 };
 
 export default function PageRenderer({ sections }) {

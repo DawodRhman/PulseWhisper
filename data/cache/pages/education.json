@@ -1,40 +1,37 @@
 {
-  "id": "10eb0cea-3450-4f2c-8eb9-1d4707f47792",
+  "id": "7f5c2e50-ed71-45d4-8cbe-0bba4a993c5f",
   "slug": "education",
   "title": "Education",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T15:36:35.761Z",
-  "updatedAt": "2025-12-04T15:36:35.761Z",
-  "seoId": "0144be5f-195b-4523-972a-410c53e5dcf2",
+  "createdAt": "2025-12-04T17:09:33.646Z",
+  "updatedAt": "2025-12-04T17:09:33.646Z",
+  "seoId": "bbd838d1-565a-4d9b-91eb-0ae97de94a0f",
   "sections": [
     {
-      "id": "20ed227d-8d65-4909-92ad-c17253a44bb0",
-      "pageId": "10eb0cea-3450-4f2c-8eb9-1d4707f47792",
+      "id": "51b1f3f6-2ee6-47e5-ae80-9d040aaac2b9",
+      "pageId": "7f5c2e50-ed71-45d4-8cbe-0bba4a993c5f",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Education & Awareness",
         "subtitle": "Learning resources for the community"
       },
-      "createdAt": "2025-12-04T15:36:38.631Z",
-      "updatedAt": "2025-12-04T15:36:38.631Z"
+      "createdAt": "2025-12-04T17:09:35.232Z",
+      "updatedAt": "2025-12-04T17:09:35.232Z"
     },
     {
-      "id": "e4ffde76-03c8-48bb-ad96-32c23aec8b5f",
-      "pageId": "10eb0cea-3450-4f2c-8eb9-1d4707f47792",
-      "type": "TEXT_BLOCK",
+      "id": "0f7d1b78-001c-4fef-99ad-b865469cb539",
+      "pageId": "7f5c2e50-ed71-45d4-8cbe-0bba4a993c5f",
+      "type": "EDUCATION",
       "order": 1,
-      "content": {
-        "body": "<p>Learn how to save water...</p>",
-        "heading": "Water Conservation"
-      },
-      "createdAt": "2025-12-04T15:36:38.631Z",
-      "updatedAt": "2025-12-04T15:36:38.631Z"
+      "content": {},
+      "createdAt": "2025-12-04T17:09:35.232Z",
+      "updatedAt": "2025-12-04T17:09:35.232Z"
     }
   ],
   "seo": {
-    "id": "0144be5f-195b-4523-972a-410c53e5dcf2",
+    "id": "bbd838d1-565a-4d9b-91eb-0ae97de94a0f",
     "title": "Education | KW&SC",
     "description": "Learn more about Education at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -45,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T15:36:35.761Z",
-    "updatedAt": "2025-12-04T15:36:35.761Z"
+    "createdAt": "2025-12-04T17:09:33.646Z",
+    "updatedAt": "2025-12-04T17:09:33.646Z"
   }
 }

@@ -830,7 +830,7 @@ async function seedPages() {
       slug: "contact",
       sections: [
         { type: "HERO", order: 0, content: { title: "Contact Us", subtitle: "We are here to help" } },
-        { type: "TEXT_BLOCK", order: 1, content: { heading: "Get in Touch", body: "<p>Visit our offices or call us...</p>" } }
+        { type: "CONTACT", order: 1, content: {} }
       ]
     },
     {
@@ -838,7 +838,7 @@ async function seedPages() {
       slug: "education",
       sections: [
         { type: "HERO", order: 0, content: { title: "Education & Awareness", subtitle: "Learning resources for the community" } },
-        { type: "TEXT_BLOCK", order: 1, content: { heading: "Water Conservation", body: "<p>Learn how to save water...</p>" } }
+        { type: "EDUCATION", order: 1, content: {} }
       ]
     },
     {
@@ -886,7 +886,7 @@ async function seedPages() {
       slug: "right-to-information",
       sections: [
         { type: "HERO", order: 0, content: { title: "Right to Information", subtitle: "Transparency and accountability" } },
-        { type: "TEXT_BLOCK", order: 1, content: { heading: "RTI Policy", body: "<p>Details about RTI...</p>" } }
+        { type: "RTI", order: 1, content: {} }
       ]
     },
     {
@@ -902,7 +902,7 @@ async function seedPages() {
       slug: "watertodaysection",
       sections: [
         { type: "HERO", order: 0, content: { title: "Water Today", subtitle: "Daily water supply status" } },
-        { type: "TEXT_BLOCK", order: 1, content: { heading: "Current Status", body: "<p>Water supply details...</p>" } }
+        { type: "WATER_TODAY", order: 1, content: {} }
       ]
     },
     {

@@ -1,37 +1,37 @@
 {
-  "id": "9676a75b-54a0-474c-ba64-8e616846c57f",
+  "id": "0cefa6bf-42a0-4480-83ff-3b10a1731031",
   "slug": "tenders",
   "title": "Tenders",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:32:23.421Z",
-  "updatedAt": "2025-12-04T16:32:23.421Z",
-  "seoId": "6ed5491a-d9d2-4b85-9eec-f784ef425c3d",
+  "createdAt": "2025-12-04T16:41:22.454Z",
+  "updatedAt": "2025-12-04T16:41:22.454Z",
+  "seoId": "c579eafa-4fbb-4e5f-918f-e0e5c1360ec8",
   "sections": [
     {
-      "id": "0c7de103-85fb-491e-822d-561c281d11bb",
-      "pageId": "9676a75b-54a0-474c-ba64-8e616846c57f",
+      "id": "4d2094fb-f0d7-4d2a-8936-90c6ff747255",
+      "pageId": "0cefa6bf-42a0-4480-83ff-3b10a1731031",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Tenders",
         "subtitle": "Procurement opportunities"
       },
-      "createdAt": "2025-12-04T16:32:24.944Z",
-      "updatedAt": "2025-12-04T16:32:24.944Z"
+      "createdAt": "2025-12-04T16:41:23.992Z",
+      "updatedAt": "2025-12-04T16:41:23.992Z"
     },
     {
-      "id": "7e13284e-a29e-4078-a98c-38e124da8244",
-      "pageId": "9676a75b-54a0-474c-ba64-8e616846c57f",
+      "id": "284b7199-3685-48bd-b2f4-c73f5b2d6735",
+      "pageId": "0cefa6bf-42a0-4480-83ff-3b10a1731031",
       "type": "TENDERS",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T16:32:24.944Z",
-      "updatedAt": "2025-12-04T16:32:24.944Z"
+      "createdAt": "2025-12-04T16:41:23.992Z",
+      "updatedAt": "2025-12-04T16:41:23.992Z"
     }
   ],
   "seo": {
-    "id": "6ed5491a-d9d2-4b85-9eec-f784ef425c3d",
+    "id": "c579eafa-4fbb-4e5f-918f-e0e5c1360ec8",
     "title": "Tenders | KW&SC",
     "description": "Learn more about Tenders at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -42,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:32:23.421Z",
-    "updatedAt": "2025-12-04T16:32:23.421Z"
+    "createdAt": "2025-12-04T16:41:22.454Z",
+    "updatedAt": "2025-12-04T16:41:22.454Z"
   }
 }

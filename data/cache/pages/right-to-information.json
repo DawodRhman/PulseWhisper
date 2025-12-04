@@ -1,40 +1,37 @@
 {
-  "id": "5b053db8-b532-4d4c-b2b0-76d6304481cd",
+  "id": "e9d74325-2cfb-45ce-87e1-9377dd85440e",
   "slug": "right-to-information",
   "title": "Right to Information",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:32:21.047Z",
-  "updatedAt": "2025-12-04T16:32:21.047Z",
-  "seoId": "dc62c7ab-c039-47e4-ba55-b0b99d50d29e",
+  "createdAt": "2025-12-04T16:55:40.911Z",
+  "updatedAt": "2025-12-04T16:55:40.911Z",
+  "seoId": "40a5772b-b7ee-4e84-a72a-edecba254583",
   "sections": [
     {
-      "id": "4d9abf3a-d6d4-4faa-bb49-b75dd99b714c",
-      "pageId": "5b053db8-b532-4d4c-b2b0-76d6304481cd",
+      "id": "6d39b8f3-1a0f-4643-82d5-3e3713a7414f",
+      "pageId": "e9d74325-2cfb-45ce-87e1-9377dd85440e",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Right to Information",
         "subtitle": "Transparency and accountability"
       },
-      "createdAt": "2025-12-04T16:32:22.692Z",
-      "updatedAt": "2025-12-04T16:32:22.692Z"
+      "createdAt": "2025-12-04T16:55:42.534Z",
+      "updatedAt": "2025-12-04T16:55:42.534Z"
     },
     {
-      "id": "3ef38cf1-ddbe-4302-81f2-60540451fe9e",
-      "pageId": "5b053db8-b532-4d4c-b2b0-76d6304481cd",
-      "type": "TEXT_BLOCK",
+      "id": "0f465521-632c-49d3-b38d-b14cb72b0f6a",
+      "pageId": "e9d74325-2cfb-45ce-87e1-9377dd85440e",
+      "type": "RTI",
       "order": 1,
-      "content": {
-        "body": "<p>Details about RTI...</p>",
-        "heading": "RTI Policy"
-      },
-      "createdAt": "2025-12-04T16:32:22.692Z",
-      "updatedAt": "2025-12-04T16:32:22.692Z"
+      "content": {},
+      "createdAt": "2025-12-04T16:55:42.534Z",
+      "updatedAt": "2025-12-04T16:55:42.534Z"
     }
   ],
   "seo": {
-    "id": "dc62c7ab-c039-47e4-ba55-b0b99d50d29e",
+    "id": "40a5772b-b7ee-4e84-a72a-edecba254583",
     "title": "Right to Information | KW&SC",
     "description": "Learn more about Right to Information at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -45,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:32:21.047Z",
-    "updatedAt": "2025-12-04T16:32:21.047Z"
+    "createdAt": "2025-12-04T16:55:40.911Z",
+    "updatedAt": "2025-12-04T16:55:40.911Z"
   }
 }

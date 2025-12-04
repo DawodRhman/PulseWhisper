@@ -6,7 +6,7 @@
   },
   "open": [
     {
-      "id": "fd0ca3a5-61a7-41bf-b0ec-a5f3b6365c1b",
+      "id": "dddd9527-536a-4494-8277-ea523c65c842",
       "tenderNumber": "TND-001",
       "title": "Supply of Water Treatment Chemicals",
       "summary": "KW&SC invites suppliers for the provision of high-grade water treatment chemicals.",
@@ -17,7 +17,7 @@
       "attachments": []
     },
     {
-      "id": "6be9fc6f-5512-4a95-938e-820a82be187b",
+      "id": "d6da0732-1842-48a8-abd1-3512c18512bd",
       "tenderNumber": "TND-002",
       "title": "Pipeline Rehabilitation Works - Zone B",
       "summary": "Tender for pipeline repair and rehabilitation in designated Zone B.",
@@ -28,7 +28,7 @@
       "attachments": []
     },
     {
-      "id": "eba10efa-113d-468e-89ea-40e754fd692d",
+      "id": "94ee4e0f-11c9-4279-a887-730127b4a31d",
       "tenderNumber": "TND-003",
       "title": "IT System Upgrade & Maintenance",
       "summary": "Upgrade of central billing and customer management software.",
@@ -39,7 +39,7 @@
       "attachments": []
     },
     {
-      "id": "b3c4c473-cf7b-448c-9a5f-b8ad2b9a9234",
+      "id": "2dbee913-ba76-4fec-8bf0-fa44451fed8a",
       "tenderNumber": "TND-004",
       "title": "Bulk Meter Supply & Installation",
       "summary": "Procurement and installation of 500 industrial-grade flow meters.",
@@ -50,7 +50,7 @@
       "attachments": []
     },
     {
-      "id": "fcc065fb-350a-4ec9-8750-914652893b34",
+      "id": "fb9fd639-96b0-4d02-8acb-f2509419ad2a",
       "tenderNumber": "TND-005",
       "title": "Security & Guard Services Contract",
       "summary": "Contract for armed and unarmed security personnel for all facilities.",
@@ -61,7 +61,7 @@
       "attachments": []
     },
     {
-      "id": "a9c65cac-e426-4528-a2fb-b3c507891f6b",
+      "id": "b1c495dd-b2c4-4aa8-b250-765f77262170",
       "tenderNumber": "TND-006",
       "title": "Office Stationery and Supplies",
       "summary": "Annual supply tender for all general office consumables.",
@@ -72,7 +72,7 @@
       "attachments": []
     },
     {
-      "id": "ce9ba6eb-fe0b-4a76-8be6-d4b4e6093086",
+      "id": "e9ee3730-ffcf-4c2f-a5c5-3528a03e1b2a",
       "tenderNumber": "TND-007",
       "title": "Vehicle Fleet Maintenance",
       "summary": "Maintenance and repair contract for KW&SC's vehicle fleet (light and heavy vehicles).",
@@ -83,7 +83,7 @@
       "attachments": []
     },
     {
-      "id": "8f3f24ce-c189-4a86-9bf3-6378ac1b8b48",
+      "id": "f52f1c7d-e4c1-4650-a953-bf936c1cfd1e",
       "tenderNumber": "TND-008",
       "title": "Reservoir Cleaning and Desilting",
       "summary": "Specialized services for cleaning and desilting two main water reservoirs.",
@@ -94,7 +94,7 @@
       "attachments": []
     },
     {
-      "id": "55ae4bd3-70b0-408c-bd7c-c0f523dddcab",
+      "id": "25ed86ca-eae9-4f31-830b-e67dda992a78",
       "tenderNumber": "TND-009",
       "title": "HR Consultancy for Training",
       "summary": "Consultancy services for staff development and professional training programs.",
@@ -105,7 +105,7 @@
       "attachments": []
     },
     {
-      "id": "680d5141-498a-4c99-a8d4-78ebb1455fea",
+      "id": "d2673803-293a-4e62-8a5e-f5942ed4abc6",
       "tenderNumber": "TND-010",
       "title": "Civil Works for New Office Block",
       "summary": "Tender for the foundation and structural civil works of a new administrative building.",
@@ -118,7 +118,7 @@
   ],
   "closed": [
     {
-      "id": "33ff0843-d15d-4386-b529-bef0d3ca45a9",
+      "id": "af0817b1-7d36-4fdd-9862-d6e193553503",
       "tenderNumber": "TND-011",
       "title": "Electrical Maintenance Services",
       "summary": "Closed tender for maintenance of electrical systems across facilities.",
@@ -129,7 +129,7 @@
       "attachments": []
     },
     {
-      "id": "d643a2f9-5946-49d8-9bf4-c275e9c8b1f4",
+      "id": "9cce1425-2b88-45b0-86ef-9ac2a3a68f4f",
       "tenderNumber": "TND-012",
       "title": "Machinery Equipment Supply",
       "summary": "Closed tender for industrial machinery procurement.",
@@ -142,7 +142,7 @@
   ],
   "cancelled": [
     {
-      "id": "4275fd8c-6599-41d6-b5b9-94fead07ca92",
+      "id": "7dc27691-3d8a-4148-83d6-890170d599ef",
       "tenderNumber": "TND-013",
       "title": "Drilling Equipment Purchase",
       "summary": "Tender cancelled due to revised project scope and budgetary constraints.",
@@ -153,7 +153,7 @@
       "attachments": []
     },
     {
-      "id": "e6eb6852-ad2c-4056-b721-bb67e7fe5cb8",
+      "id": "f7466b3d-6168-41e2-ad22-7883e7fd9954",
       "tenderNumber": "TND-014",
       "title": "Water Quality Lab Upgrade",
       "summary": "Tender cancelled; process will be re-initiated later with new specifications.",

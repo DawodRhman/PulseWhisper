@@ -9,7 +9,7 @@
   },
   "projects": [
     {
-      "id": "28e699c6-42f3-4911-8407-65d7277237ce",
+      "id": "11cd3523-efee-427f-a813-6b23527ee53c",
       "title": "K-IV Water Supply Project (Phase-I)",
       "summary": "Add 260 MGD of water to the Karachi system, including bulk conveyance, pumping stations, and distribution upgrades.",
       "status": "COMPLETED",
@@ -18,7 +18,7 @@
       "order": 0,
       "linkUrl": null,
       "media": {
-        "id": "9d48b26e-53b3-48de-bc6d-7cae7029c557",
+        "id": "c9852d1b-8c22-46f1-b516-d1e2adb9a13a",
         "url": "/media/projects/kiv-phase.svg",
         "label": "K-IV Water Supply Project (Phase-I)",
         "altText": null,
@@ -28,7 +28,7 @@
       }
     },
     {
-      "id": "0b8b27c9-4f7a-4817-9ae3-d995a960005c",
+      "id": "526f148c-7288-41c0-8dca-08c1ab582e59",
       "title": "Dhabeji Pumping Station Rehabilitation",
       "summary": "Rehabilitation and upgrade of pumping machinery at Dhabeji to ensure optimal transmission capacity and reduced downtime.",
       "status": "ONGOING",
@@ -37,7 +37,7 @@
       "order": 1,
       "linkUrl": null,
       "media": {
-        "id": "89f33e2a-966c-49ef-955c-2b13b6417910",
+        "id": "90f7257d-5b07-459c-ae2c-242597ad36d3",
         "url": "/media/projects/dhabeji.svg",
         "label": "Dhabeji Pumping Station Rehabilitation",
         "altText": null,
@@ -47,7 +47,7 @@
       }
     },
     {
-      "id": "fa923122-aa32-4913-9b2c-d094b3b26b1c",
+      "id": "48637afa-cde5-4903-bec1-8f08aa2e161f",
       "title": "Sewerage System Overhaul (District East)",
       "summary": "Replacement of damaged sewage lines and construction of new disposal structures in District East.",
       "status": "ONGOING",
@@ -56,7 +56,7 @@
       "order": 2,
       "linkUrl": null,
       "media": {
-        "id": "de9fd744-bdb3-4467-8c74-ad1a929f5d25",
+        "id": "6d4c0553-6dee-4cb1-8812-a5573753f86f",
         "url": "/media/projects/sewerage-east.svg",
         "label": "Sewerage System Overhaul (District East)",
         "altText": null,
@@ -66,7 +66,7 @@
       }
     },
     {
-      "id": "5ee440e5-38fa-4f13-83a0-4781e3e4b475",
+      "id": "84e6b054-27d4-4e58-9a6e-52698313b023",
       "title": "Water Tanker Service Digitization",
       "summary": "Centralized digital system for managing tanker requests, tracking, and billing to improve transparency.",
       "status": "PLANNING",
@@ -75,7 +75,7 @@
       "order": 3,
       "linkUrl": null,
       "media": {
-        "id": "03db8b44-2a67-4daa-8643-52d3f3d0c971",
+        "id": "b0c091a4-d9a3-4b09-ab9b-cc189353e067",
         "url": "/media/projects/tanker-digitization.svg",
         "label": "Water Tanker Service Digitization",
         "altText": null,
@@ -85,7 +85,7 @@
       }
     },
     {
-      "id": "1f41b47b-ed30-43b0-8cf3-ce1a4447ac69",
+      "id": "0947e9bb-8602-421d-aaa8-d57e7659d138",
       "title": "Gadani Bulk Water Supply Scheme",
       "summary": "Construction of a new bulk water line to connect Gadani to the main KW&SC network.",
       "status": "PAUSED",
@@ -94,7 +94,7 @@
       "order": 4,
       "linkUrl": null,
       "media": {
-        "id": "b763c70a-2ba3-4078-9243-dea904842da7",
+        "id": "f7b7a25f-f4fc-4520-8b8b-d49cd1fd07d2",
         "url": "/media/projects/gadani-scheme.svg",
         "label": "Gadani Bulk Water Supply Scheme",
         "altText": null,
@@ -106,13 +106,13 @@
   ],
   "leadership": [
     {
-      "id": "ba246649-81d4-4530-a33b-af761a8f047c",
+      "id": "b36f6a1a-096f-4c28-9825-2ce47a52c206",
       "name": "Aftab Alam Chandio",
       "designation": "Chief Engineer Sewerage",
       "bio": null,
       "priority": 0,
       "media": {
-        "id": "a9284184-1027-4547-9863-4ccc758c963b",
+        "id": "de2cfbcb-8646-41e1-ac74-fe6150777cde",
         "url": "/leaders/bilal.svg",
         "label": "Engr. Asadullah Khan",
         "altText": null,
@@ -123,13 +123,13 @@
       "socials": null
     },
     {
-      "id": "81046043-f26e-4929-a513-8e5d2cb48cb6",
+      "id": "16cb85b7-f97b-4a20-98d2-dae9859b73b1",
       "name": "Ahmed Ali Siddiqui",
       "designation": "Managing Director",
       "bio": null,
       "priority": 0,
       "media": {
-        "id": "5c0def8b-187d-4b02-a8db-43aa5cbb8acb",
+        "id": "d9932433-020d-4b03-975d-6212133df79d",
         "url": "/leaders/salahuddin.svg",
         "label": "Syed Nasir Hussain Shah",
         "altText": null,
@@ -140,13 +140,13 @@
       "socials": null
     },
     {
-      "id": "507cd857-78eb-4d8d-9bda-d67c88ab9acf",
+      "id": "8611005f-d2cc-4542-8418-72db7874f658",
       "name": "Asadullah Khan",
       "designation": "Chief Operating Officer",
       "bio": null,
       "priority": 0,
       "media": {
-        "id": "23ed6e8c-d399-44af-9a3b-d41eaeb8c1b4",
+        "id": "f18d7d42-aae9-4f04-b2d6-27bd367df1a3",
         "url": "/leaders/imran.svg",
         "label": "Syed Salahuddin Ahmed",
         "altText": null,
@@ -157,13 +157,13 @@
       "socials": null
     },
     {
-      "id": "74c1b63f-3760-49da-a221-caa7a01d3f47",
+      "id": "1c613e00-bd5c-4c0f-9732-ad06a03b9602",
       "name": "Muhammad Ali Sheikh",
       "designation": "Chief Engineer Water Supply",
       "bio": null,
       "priority": 0,
       "media": {
-        "id": "0ee2c2b2-8e38-4652-8f96-27e08836eb2f",
+        "id": "8c1bf910-03ce-497c-a909-bcff71b4f7c6",
         "url": "/leaders/sarah.svg",
         "label": "Abdul Jabbar Shah",
         "altText": null,
@@ -190,42 +190,42 @@
   ],
   "achievements": [
     {
-      "id": "54166f80-b66c-4533-82d4-9b472eea6caa",
+      "id": "e93fbadd-c6b5-44b8-8327-1298ce4f6169",
       "title": "Hydrant Management Cell",
       "summary": "Established comprehensive hydrant management system to combat illegal water connections.",
       "metric": "2024",
       "icon": "/icon/airdrop.png"
     },
     {
-      "id": "7f7e21e1-c67c-4afd-a4e3-1113e5d75481",
+      "id": "39b94eed-35c4-40eb-aed0-3a578121a780",
       "title": "Global Water Summit 2024",
       "summary": "Represented Pakistan at the prestigious Global Water Summit in London.",
       "metric": "2024",
       "icon": "/icon/people.png"
     },
     {
-      "id": "eaa6ce6f-8f7e-4dde-9d38-70aa59082546",
+      "id": "73eab873-32f6-499b-99ea-8363e63c9f3d",
       "title": "Rangers Partnership",
       "summary": "Joined forces with Pakistan Rangers to combat illegal hydrants and water theft.",
       "metric": "2024",
       "icon": "/icon/microphone.png"
     },
     {
-      "id": "3817d0e1-e4f8-4e08-a597-6ddd4474a76b",
+      "id": "64bc2bfd-c582-41c8-b74a-aad48547db37",
       "title": "Fareeda Salam Center",
       "summary": "Established community development center to engage with local communities.",
       "metric": "2024",
       "icon": "/icon/user-icon.png"
     },
     {
-      "id": "88a24fd3-43db-4a4f-8bd5-3846affd642a",
+      "id": "56917932-21aa-4d68-b498-a32e39341e5a",
       "title": "Grievance Redressal",
       "summary": "Introduced comprehensive GRM cell to address customer complaints.",
       "metric": "2024",
       "icon": "/icon/clipboar02.svg"
     },
     {
-      "id": "d85bdc57-e8e1-4973-bd03-50576a6c4169",
+      "id": "e52e6ca4-b926-4981-9a17-e2413c9c54f5",
       "title": "Digital Transformation",
       "summary": "Implemented online billing, mobile apps, and automated systems.",
       "metric": "2024",
@@ -234,25 +234,25 @@
   ],
   "counters": [
     {
-      "id": "4d7a89c2-5135-41b8-ba14-f9751ba0ee5c",
+      "id": "a438fda9-8a19-4c4b-a972-e91c47378978",
       "label": "Water Connections",
       "value": 1200000,
       "suffix": "M"
     },
     {
-      "id": "65c80fd3-8a74-4e35-b3d9-faace571c5d5",
+      "id": "15babf04-5d4d-4d2e-be96-b056a5cc9af7",
       "label": "Sewerage Connections",
       "value": 800000,
       "suffix": "M"
     },
     {
-      "id": "9e1d2084-38a4-43e5-8a0c-168f33a59a40",
+      "id": "66fe436a-b201-42bb-b431-86e30da69cce",
       "label": "Years of Service",
       "value": 22,
       "suffix": ""
     },
     {
-      "id": "57e1ba5d-e5ba-4240-8fc8-4d83d1f29ca0",
+      "id": "bac067dc-7c66-4371-80a5-c52ed8aedfc9",
       "label": "Water Treatment Plants",
       "value": 12,
       "suffix": ""
@@ -261,7 +261,7 @@
   "workflow": [
     {
       "id": "01",
-      "originalId": "1813a556-3ee2-4ed9-acc9-6a3caa71bcb6",
+      "originalId": "06bbe035-15b9-498e-9188-6da4bfc93483",
       "title": "Bulk Water Supply & Treatment",
       "summary": "Managing abstraction of raw water, pumping systems, and treatment operations across Karachi.",
       "theme": null,
@@ -269,7 +269,7 @@
     },
     {
       "id": "02",
-      "originalId": "e57fc992-3582-4c3b-bf68-c1dc75e3416a",
+      "originalId": "047373d2-a232-4443-ad82-de3f3ec1b53a",
       "title": "Sewerage Infrastructure Management",
       "summary": "Planning, operating, and maintaining the sewerage network, pumping stations, and treatment of wastewater.",
       "theme": null,
@@ -277,7 +277,7 @@
     },
     {
       "id": "03",
-      "originalId": "df754352-a509-445e-9e36-0a29532192c8",
+      "originalId": "949ceb2a-990a-4fc9-a4b5-aaf9243b49c5",
       "title": "Distribution & Network Integrity",
       "summary": "Managing the distribution network, reducing NRW, and minimizing illegal connections through asset rehabilitation.",
       "theme": null,
@@ -285,7 +285,7 @@
     },
     {
       "id": "04",
-      "originalId": "6ac1e79e-c1c9-4135-a0ee-d8e88cce73fd",
+      "originalId": "4b551c6a-a25d-4308-8c71-b1a5fd9f97c3",
       "title": "Revenue, Customer & Governance",
       "summary": "Driving financial sustainability, accurate metering, billing, grievance redressal, and governance.",
       "theme": null,
@@ -294,7 +294,7 @@
   ],
   "mediaCarousel": [
     {
-      "id": "ddfdae47-c297-4520-b8ec-9da5e018c823",
+      "id": "fa9d1fa4-31fc-453b-a80d-521ac21d44f6",
       "title": "Syed Nasir Hussain Shah",
       "caption": "Syed Nasir Hussain Shah",
       "credit": "Minister LG&HD",
@@ -303,7 +303,7 @@
       "albumSlug": "leadership-carousel"
     },
     {
-      "id": "dead8805-14c4-41d3-8814-71653f2e0bf2",
+      "id": "7a74035e-53fe-4e50-bce3-fffaca0020a2",
       "title": "Syed Salahuddin Ahmed",
       "caption": "Syed Salahuddin Ahmed",
       "credit": "MD KW&SC",
@@ -312,7 +312,7 @@
       "albumSlug": "leadership-carousel"
     },
     {
-      "id": "ef44b281-d134-4f95-91b5-3cf5a21bec02",
+      "id": "962d9d6c-a5b9-46c2-be8c-e99e31c76ec0",
       "title": "Abdul Jabbar Shah",
       "caption": "Abdul Jabbar Shah",
       "credit": "COO KW&SC",
@@ -321,7 +321,7 @@
       "albumSlug": "leadership-carousel"
     },
     {
-      "id": "291a312d-6669-400b-88ac-6e789c9c462b",
+      "id": "574f9d06-cdd2-4ce2-b0b0-56faabb7e473",
       "title": "Engr. Asadullah Khan",
       "caption": "Engr. Asadullah Khan",
       "credit": "DMD (T/P&D)",
@@ -330,7 +330,7 @@
       "albumSlug": "leadership-carousel"
     },
     {
-      "id": "32803061-3307-4f23-8f6c-987b94d4c557",
+      "id": "0734cedd-2ef4-4bc9-8bd7-0926b1913614",
       "title": "Dr. Syed Saif ur Rehman",
       "caption": "Dr. Syed Saif ur Rehman",
       "credit": "Administrator KMC",
@@ -339,7 +339,7 @@
       "albumSlug": "leadership-carousel"
     },
     {
-      "id": "0d4bbc1f-9b82-4e80-8133-d87389a4c04f",
+      "id": "bd5b3abe-f596-4e45-9f0f-06483ed3aef2",
       "title": "Hafiz Muhammad Ilyas",
       "caption": "Hafiz Muhammad Ilyas",
       "credit": "Chief Engineer (Water)",
@@ -348,7 +348,7 @@
       "albumSlug": "leadership-carousel"
     },
     {
-      "id": "64df460e-983f-45c9-b018-59faabdf4c2e",
+      "id": "76c1ffd2-2d95-4ab5-9c04-b1361e9666cd",
       "title": "Naseer Ahmed",
       "caption": "Naseer Ahmed",
       "credit": "Chief Engineer (Sewerage)",
@@ -357,7 +357,7 @@
       "albumSlug": "leadership-carousel"
     },
     {
-      "id": "22eed098-4501-4a7e-980c-924feaf46150",
+      "id": "8491a32d-ddfb-4fb9-b0fa-64d29096e608",
       "title": "Muhammad Sohail",
       "caption": "Muhammad Sohail",
       "credit": "Chief Engineer (M&E)",
@@ -368,31 +368,31 @@
   ],
   "faqs": [
     {
-      "id": "b3e707b2-f127-456e-a6b8-bedeef01e335",
+      "id": "753c770d-ddb2-472a-a2f7-210ef3a4b9d0",
       "question": "How can I get a new water connection?",
       "answer": "For residential, commercial, bulk, or industrial connections, submit an application with required documents at the nearest KW&SC office. The process includes site inspection, approval, and installation.",
       "category": "New Connection"
     },
     {
-      "id": "c39fbbe3-5a5c-4230-9f6b-f5d99b600cf3",
+      "id": "9fc33e96-8f6b-470f-b251-07c46205a7b9",
       "question": "How can I get a duplicate bill?",
       "answer": "Visit web.kwsb.crdc.biz or the nearest KW&SC office with your account number and CNIC to get a duplicate bill.",
       "category": "Billing"
     },
     {
-      "id": "d390c253-08c1-42b7-8159-f83c87108ede",
+      "id": "3f5c2683-3677-4e0e-9e42-0293928085f3",
       "question": "Where can I complain about sewerage?",
       "answer": "Use complain.kwsc.gos.pk or call (+92) 021 111 597 200 to log sewerage complaints.",
       "category": "Complaints"
     },
     {
-      "id": "ff0487b4-3c25-4314-8452-3614d656d171",
+      "id": "c346afab-88e7-498c-a93f-9df322dd16bb",
       "question": "How can I order a water tanker?",
       "answer": "Book through campaign.kwsc.gos.pk or by calling our customer service helpline.",
       "category": "Tanker Service"
     },
     {
-      "id": "582c0255-3dba-4dca-9324-34c1657207f0",
+      "id": "0808a4ea-bb6b-4a18-8430-e3c297f2eec8",
       "question": "How can I report water theft?",
       "answer": "Call (+92) 021 111 597 200 or contact the Hydrant Management Cell to report illegal connections.",
       "category": "Water Theft"
@@ -404,7 +404,7 @@
       "title": "Water Today – Daily Water Supply Status",
       "summary": "Today’s water distribution across Karachi remains stable, with major pumping stations operating at optimal capacity.",
       "status": "PUBLISHED",
-      "publishedAt": "2025-12-04T16:42:06.524Z",
+      "publishedAt": "2025-12-04T17:17:06.998Z",
       "media": {
         "url": "/downtownkarachi.gif"
       }

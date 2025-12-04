@@ -1,0 +1,92 @@
+{
+  "hero": {
+    "title": "Contact KW&SC",
+    "subtitle": "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
+    "backgroundImage": "/teentalwarkarachi.gif"
+  },
+  "channels": [
+    {
+      "id": "a8a90bc5-2cac-4981-8b3f-507e3be29af7",
+      "label": "KW&SC Helpline",
+      "description": "24/7 customer facilitation center",
+      "phone": "(+92) 021 111 597 200",
+      "email": null,
+      "availability": "24/7"
+    },
+    {
+      "id": "39e22799-b6e6-45b9-a01b-d89717115f2a",
+      "label": "Central Correspondence Cell",
+      "description": "General inquiries and escalations",
+      "phone": null,
+      "email": "info@kwsc.gos.pk",
+      "availability": "Mon–Fri · 9am – 5pm"
+    },
+    {
+      "id": "2d44ab2b-0d18-415b-96f0-e887df881bcc",
+      "label": "Hydrant & Tanker Management",
+      "description": "Bulk water booking and tanker dispatch",
+      "phone": "(+92) 021 992 45157",
+      "email": "hydrant.cell@kwsc.gos.pk",
+      "availability": "Daily · 8am – 10pm"
+    }
+  ],
+  "offices": [
+    {
+      "id": "d7f16d1f-a1f1-4d8c-80c9-683e26048ea2",
+      "label": "Headquarters (Main Office)",
+      "address": "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350",
+      "latitude": 24.8724729779183,
+      "longitude": 67.09062367500356,
+      "phone": "(+92) 021 111 597 200",
+      "email": "info@kwsc.gos.pk",
+      "hours": "Mon–Fri · 9am – 5pm",
+      "mapEmbedUrl": "https://www.google.com/maps?q=24.8724729779183%2C67.09062367500356&z=14&output=embed"
+    },
+    {
+      "id": "bc2069a9-fcaf-4e21-82d7-020321bd8ef1",
+      "label": "North Karachi Customer Center",
+      "address": "Sector 11-A, Near Power House, North Karachi",
+      "latitude": 24.97746427741636,
+      "longitude": 67.03051407500588,
+      "phone": "(+92) 021 992 60001",
+      "email": "customercare.north@kwsc.pk",
+      "hours": "Mon–Sat · 9am – 7pm",
+      "mapEmbedUrl": "https://www.google.com/maps?q=24.97746427741636%2C67.03051407500588&z=14&output=embed"
+    },
+    {
+      "id": "523b51dc-4fe2-4813-b74f-ab31e29f1d2e",
+      "label": "K-IV Project Site Office",
+      "address": "Super Highway, near Dhabeji Pumping Station, Thatta",
+      "latitude": 25.32162627745771,
+      "longitude": 67.57014697501359,
+      "phone": "(+92) 021 993 30301",
+      "email": "project.k4@kwsc.pk",
+      "hours": "Mon–Sat · 8am – 6pm",
+      "mapEmbedUrl": "https://www.google.com/maps?q=25.32162627745771%2C67.57014697501359&z=14&output=embed"
+    },
+    {
+      "id": "d6527c57-f928-4b40-9631-78a0baf490d0",
+      "label": "Dhabeji Pumping Station",
+      "address": "Dhabeji, Thatta District, Sindh, Pakistan",
+      "latitude": 25.3265,
+      "longitude": 67.5761,
+      "phone": "Operations Control Only",
+      "email": "operations@kwsc.pk",
+      "hours": "24/7 Operations",
+      "mapEmbedUrl": "https://www.google.com/maps?q=25.3265%2C67.5761&z=14&output=embed"
+    }
+  ],
+  "seo": {
+    "id": null,
+    "title": "Contact KW&SC | Karachi Water & Sewerage Corporation",
+    "description": "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
+    "keywords": null,
+    "canonicalUrl": "/contact",
+    "ogTitle": "Contact KW&SC | Karachi Water & Sewerage Corporation",
+    "ogDescription": "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
+    "ogImageUrl": "/teentalwarkarachi.gif",
+    "twitterCard": "summary_large_image",
+    "structuredData": null,
+    "allowIndexing": true
+  }
+}

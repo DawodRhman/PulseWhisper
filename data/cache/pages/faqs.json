@@ -1,0 +1,48 @@
+{
+  "id": "e162ac3d-04e3-4fd6-9807-ee6fe643215e",
+  "slug": "faqs",
+  "title": "FAQs",
+  "isPublished": true,
+  "showInNavbar": false,
+  "createdAt": "2025-12-04T16:55:30.459Z",
+  "updatedAt": "2025-12-04T16:55:30.459Z",
+  "seoId": "9811a20a-894e-4768-9225-f73590a679e1",
+  "sections": [
+    {
+      "id": "9ffda0e6-d3c2-4efd-88e9-415aa49a4be3",
+      "pageId": "e162ac3d-04e3-4fd6-9807-ee6fe643215e",
+      "type": "HERO",
+      "order": 0,
+      "content": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Find answers to common queries"
+      },
+      "createdAt": "2025-12-04T16:55:31.891Z",
+      "updatedAt": "2025-12-04T16:55:31.891Z"
+    },
+    {
+      "id": "b60bc8d9-d89f-4dc9-b926-a81c7d69cec8",
+      "pageId": "e162ac3d-04e3-4fd6-9807-ee6fe643215e",
+      "type": "FAQ",
+      "order": 1,
+      "content": {},
+      "createdAt": "2025-12-04T16:55:31.891Z",
+      "updatedAt": "2025-12-04T16:55:31.891Z"
+    }
+  ],
+  "seo": {
+    "id": "9811a20a-894e-4768-9225-f73590a679e1",
+    "title": "FAQs | KW&SC",
+    "description": "Learn more about FAQs at Karachi Water & Sewerage Corporation.",
+    "keywords": null,
+    "canonicalUrl": null,
+    "ogTitle": null,
+    "ogDescription": null,
+    "ogImageUrl": null,
+    "twitterCard": "summary_large_image",
+    "structuredData": null,
+    "allowIndexing": true,
+    "createdAt": "2025-12-04T16:55:30.459Z",
+    "updatedAt": "2025-12-04T16:55:30.459Z"
+  }
+}

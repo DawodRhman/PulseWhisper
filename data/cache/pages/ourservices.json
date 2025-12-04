@@ -1,37 +1,37 @@
 {
-  "id": "7caa08ce-ea72-40c6-b614-4e92a374e0ec",
+  "id": "84ac02d1-11d8-4a55-be3b-62daf244de4c",
   "slug": "ourservices",
   "title": "Our Services",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:32:16.963Z",
-  "updatedAt": "2025-12-04T16:32:16.963Z",
-  "seoId": "5ce13474-5362-408e-9533-9dc2f1cb228b",
+  "createdAt": "2025-12-04T16:55:36.860Z",
+  "updatedAt": "2025-12-04T16:55:36.860Z",
+  "seoId": "4796b814-6eec-41c8-abe1-517a71cac0df",
   "sections": [
     {
-      "id": "b156085a-d839-47f9-8f77-3ed26e541b39",
-      "pageId": "7caa08ce-ea72-40c6-b614-4e92a374e0ec",
+      "id": "93911e9e-0bfa-4c95-bcd2-e689cce95746",
+      "pageId": "84ac02d1-11d8-4a55-be3b-62daf244de4c",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Our Services",
         "subtitle": "What we offer to Karachi"
       },
-      "createdAt": "2025-12-04T16:32:18.391Z",
-      "updatedAt": "2025-12-04T16:32:18.391Z"
+      "createdAt": "2025-12-04T16:55:38.287Z",
+      "updatedAt": "2025-12-04T16:55:38.287Z"
     },
     {
-      "id": "86a0bbde-cf82-4948-b78f-b6f67b729ecc",
-      "pageId": "7caa08ce-ea72-40c6-b614-4e92a374e0ec",
+      "id": "e6815708-32d1-41e1-9b2a-22c11587a12f",
+      "pageId": "84ac02d1-11d8-4a55-be3b-62daf244de4c",
       "type": "SERVICES",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T16:32:18.391Z",
-      "updatedAt": "2025-12-04T16:32:18.391Z"
+      "createdAt": "2025-12-04T16:55:38.287Z",
+      "updatedAt": "2025-12-04T16:55:38.287Z"
     }
   ],
   "seo": {
-    "id": "5ce13474-5362-408e-9533-9dc2f1cb228b",
+    "id": "4796b814-6eec-41c8-abe1-517a71cac0df",
     "title": "Our Services | KW&SC",
     "description": "Learn more about Our Services at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -42,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:32:16.963Z",
-    "updatedAt": "2025-12-04T16:32:16.963Z"
+    "createdAt": "2025-12-04T16:55:36.860Z",
+    "updatedAt": "2025-12-04T16:55:36.860Z"
   }
 }

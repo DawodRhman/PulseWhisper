@@ -1,0 +1,70 @@
+{
+  "hero": {
+    "title": "Right to Information",
+    "subtitle": "Access official documents, forms, and information about KW&SC operations",
+    "backgroundImage": "/teentalwarkarachi.gif"
+  },
+  "documents": [
+    {
+      "id": "8b88b093-62cf-4b98-bc39-55d8d47bcca2",
+      "title": "Application Form for Groundwater Licence",
+      "description": "Official form for groundwater licence applications",
+      "type": "Form",
+      "link": "https://www.kwsc.gos.pk/assets/documents/application-form-for-ground-water-licence.pdf",
+      "order": 0
+    },
+    {
+      "id": "3965ae2b-96bf-4884-b41f-46f38dd0f5d2",
+      "title": "KW&SC Act 2023",
+      "description": "Complete text of the Karachi Water and Sewerage Corporation Act 2023",
+      "type": "Legal Document",
+      "link": "https://www.kwsc.gos.pk/assets/documents/KW_SC_Act%2C_2023.pdf",
+      "order": 1
+    },
+    {
+      "id": "9e435783-d460-49fc-838b-0f9fdd86a249",
+      "title": "Subsoil Extraction Regulations",
+      "description": "Regulations governing subsoil extraction activities",
+      "type": "Regulation",
+      "link": "https://www.kwsc.gos.pk/assets/documents/groundwater-Reg-2024.pdf",
+      "order": 2
+    },
+    {
+      "id": "6c9c36f8-5c18-4a4c-be10-34feaee517c2",
+      "title": "KW&SC Budget Summary 2023-2024",
+      "description": "Annual budget summary and financial overview",
+      "type": "Financial",
+      "link": "https://www.kwsc.gos.pk/assets/documents/Budget_summary_2023-2024.pdf",
+      "order": 3
+    },
+    {
+      "id": "28c4c6a2-7b1d-4786-b722-16cd393ac73e",
+      "title": "Signed Code of Conduct",
+      "description": "Official code of conduct document signed by KW&SC",
+      "type": "Policy",
+      "link": "https://www.kwsc.gos.pk/assets/documents/Signed-CoC.pdf",
+      "order": 4
+    },
+    {
+      "id": "1d025eea-0069-44a1-b44b-3362ea6eac60",
+      "title": "Maintenance Works Report",
+      "description": "Comprehensive report on maintenance activities",
+      "type": "Report",
+      "link": "https://www.kwsc.gos.pk/assets/documents/Maintenance_Work.pdf",
+      "order": 5
+    }
+  ],
+  "seo": {
+    "id": null,
+    "title": "Right to Information | Karachi Water & Sewerage Corporation",
+    "description": "Access official documents, forms, and information about KW&SC operations",
+    "keywords": null,
+    "canonicalUrl": "/right-to-information",
+    "ogTitle": "Right to Information | Karachi Water & Sewerage Corporation",
+    "ogDescription": "Access official documents, forms, and information about KW&SC operations",
+    "ogImageUrl": "/teentalwarkarachi.gif",
+    "twitterCard": "summary_large_image",
+    "structuredData": null,
+    "allowIndexing": true
+  }
+}
