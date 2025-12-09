@@ -80,14 +80,12 @@ const Navbar = () => {
   // ✅ Track scroll position for background switch
   useEffect(() => {
     const handleScroll = () => {
-      // If not on home page, always treat as scrolled (solid background)
-      // OR if on home page, check scroll position
-      if (pathname !== "/") {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(window.scrollY > 80);
-      }
+      setIsScrolled(window.scrollY > 80); // Change background after 50px scroll
     };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  
 
     // Run immediately to set initial state
     handleScroll();

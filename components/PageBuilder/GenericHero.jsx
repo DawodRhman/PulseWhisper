@@ -14,7 +14,7 @@ export default function GenericHero({ title, subtitle, backgroundImage }) {
   const bgImage = backgroundImage || "/bg-1.jpg";
 
   return (
-    <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-gray-900 text-white">
+    <section className="relative w-full  min-h-full flex items-center justify-center overflow-hidden bg-gray-900 text-white">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <OptimizedImage
@@ -27,7 +27,7 @@ export default function GenericHero({ title, subtitle, backgroundImage }) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
+      <div className="relative z-10 container flex justify-center items-center align-middle mx-auto px-4 text-center">
         <motion.div
           variants={fadeInUp}
           initial="hidden"

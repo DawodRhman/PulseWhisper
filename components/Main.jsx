@@ -186,7 +186,7 @@ export default function Home() {
                   </div>
                   <span className="text-sm sm:text-base truncate">KWSC Assistant</span>
                 </div>
-                <button onClick={() => setChatOpen(false)} className="text-gray-600 font-bold text-lg flex-shrink-0 ml-2">&times;</button>
+                <button onClick={() => setChatOpen(false)} className="text-gray-600 font-normal  text-5xl flex-shrink-0 ml-2">&times;</button>
               </div>
 
               <div className="flex-1 p-3 sm:p-4 overflow-y-auto space-y-2 bg-gray-50">
