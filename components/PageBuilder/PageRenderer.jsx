@@ -9,7 +9,7 @@ import Subscribe from "@/components/Subscribe";
 import GenericCardGrid from "./GenericCardGrid";
 import Career from "@/components/Career";
 import Tenders from "@/components/Tenders";
-import WorkFlow from "@/components/Workflow";
+import WhatWeDo from "@/components/WhatWeDo";
 import NewsUpdate from "@/components/NewsUpdate";
 import Rti from "@/components/Rti";
 import Watertodaysection from "@/components/Watertodaysection";
@@ -47,7 +47,7 @@ const COMPONENT_MAP = {
   CARD_GRID: GenericCardGrid,
   CAREERS: Career,
   TENDERS: Tenders,
-  WORKFLOW: WorkFlow,
+  WORKFLOW: WhatWeDo,
   NEWS: NewsUpdate,
   RTI: Rti,
   WATER_TODAY: Watertodaysection,

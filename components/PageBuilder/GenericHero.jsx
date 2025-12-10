@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-import OptimizedImage from "@/components/OptimizedImage";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -10,43 +9,41 @@ const fadeInUp = {
 };
 
 export default function GenericHero({ title, subtitle, backgroundImage }) {
+
   // Use provided image or fallback to a default
   const bgImage = backgroundImage || "/bg-1.jpg";
 
   return (
-    <section className="relative w-full  min-h-full flex items-center justify-center overflow-hidden bg-gray-900 text-white">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <OptimizedImage
-          src={bgImage}
-          alt="Hero Background"
-          fill
-          className="object-cover opacity-60"
-        />
-        <div className="absolute inset-0 bg-black/40" />
+    <section className="relative h-[100vh] transition-opacity duration-700 bg-cover bg-center flex justify-center items-center overflow-hidden text-white" 
+  style={{ backgroundImage: `url(${bgImage})` }}>
+      
+
+      <div className="absolute inset-0 bg-slate-900/80 z-0"></div>
+
+
+      <div className="absolute inset-0 tech-grid-bg opacity-30 z-0"></div>
+
+      <div className="relative z-[1] w-full max-w-3xl mx-auto text-center px-4 py-4">
+
+
+        {title && (
+          <h2
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight"
+            style={{ fontFamily: 'Roboto, sans-serif' }}
+          >
+            {title}
+          </h2>
+        )}
+
+        {subtitle && (
+          <p className="mt-2 sm:mt-3 md:mt-4 text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
+            {subtitle}
+          </p>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 container flex justify-center items-center align-middle mx-auto px-4 text-center">
-        <motion.div
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto space-y-6"
-        >
-          {title && (
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              {title}
-            </h1>
-          )}
-          {subtitle && (
-            <p className="text-xl md:text-2xl text-gray-200 font-light">
-              {subtitle}
-            </p>
-          )}
-        </motion.div>
-      </div>
-    </section>
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 w-full h-12 sm:h-16 bg-gradient-to-t from-[#020617] to-transparent z-10"></div>
+    </section >
   );
 }
