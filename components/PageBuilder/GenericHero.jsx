@@ -11,7 +11,7 @@ const fadeInUp = {
 export default function GenericHero({ title, subtitle, backgroundImage }) {
 
   // Use provided image or fallback to a default
-  const bgImage = backgroundImage || "/bg-1.jpg";
+  const bgImage = backgroundImage || "/9.gif";
 
   return (
     <section className="relative h-[100vh] transition-opacity duration-700 bg-cover bg-center flex justify-center items-center overflow-hidden text-white" 
