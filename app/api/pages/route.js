@@ -12,6 +12,8 @@ export async function GET() {
         title: true,
         slug: true,
         showInNavbar: true,
+        navLabel: true,
+        navGroup: true,
       },
       orderBy: { title: "asc" },
     });
