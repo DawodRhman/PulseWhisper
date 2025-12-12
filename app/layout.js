@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MouseFollower from "@/components/MouseFollower";
+import CookieConsent from "@/components/CookieConsent";
 
 
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         {children}
         <Footer />
+        <CookieConsent />
       </body>
     </html>
   );
