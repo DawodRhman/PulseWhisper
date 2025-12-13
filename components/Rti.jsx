@@ -20,7 +20,7 @@ export default function Rti() {
         <div className="max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12">
           <div className="text-center mb-12 sm:mb-14 md:mb-16 lg:mb-20">
             <Fade direction="down" triggerOnce duration={1000}>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-6xl font-bold text-blue-900 mb-3 sm:mb-4 md:mb-5 lg:mb-6">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-blue-900 mb-4">
                 Public Documents & Information
               </h1>
               <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -67,7 +67,7 @@ export default function Rti() {
 
           <div className="mt-12 sm:mt-16 md:mt-20 lg:mt-24 bg-white rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14">
             <Fade direction="up" triggerOnce duration={1000}>
-              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl 2xl:text-5xl font-bold text-blue-900 mb-6 sm:mb-8">Employee Information</h2>
+              <h2 className="text-4xl font-bold text-blue-900 mb-6">Employee Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12">
                 <div>
                   <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-semibold text-gray-900 mb-3 sm:mb-4">XEN Offices</h3>

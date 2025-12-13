@@ -59,7 +59,7 @@ export default function Career() {
         {/* Header */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24">
           <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-extrabold text-gray-900 mb-3 sm:mb-4 md:mb-5 lg:mb-6">
+            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-4">
               {data.hero?.title || "Opportunities To Make A Difference"}
             </h2>
             <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-lg text-gray-600 max-w-4xl mx-auto">

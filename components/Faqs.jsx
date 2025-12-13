@@ -134,7 +134,7 @@ export default function FAQs({ items }) {
 
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 xl:mb-14 2xl:mb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-extrabold text-gray-900 tracking-tight">
+          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900">
             Common Questions
           </h2>
           <p className="text-gray-500 mt-2 sm:mt-3 md:mt-4 text-xs sm:text-sm md:text-base lg:text-lg">

@@ -22,8 +22,8 @@ export default function Education() {
                   <img src={post.image} alt={post.title} className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto" />
                 </div>
                 <div className="md:flex-1">
-                  <h3 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl 2xl:text-5xl font-bold text-cyan-400 mb-2 sm:mb-3 md:mb-4 lg:mb-5">{post.title}</h3>
-                  <p className="text-slate-300 leading-relaxed text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-lg">{post.description}</p>
+                  <h3 className="text-xl font-bold text-cyan-400 mb-3">{post.title}</h3>
+                  <p className="text-base text-slate-300 leading-relaxed">{post.description}</p>
                 </div>
               </div>
             </Fade>

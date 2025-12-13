@@ -7,11 +7,11 @@
   "navLabel": null,
   "navGroup": "aboutus",
   "createdAt": "2025-12-04T17:09:26.495Z",
-  "updatedAt": "2025-12-12T19:06:25.641Z",
+  "updatedAt": "2025-12-13T09:41:32.462Z",
   "seoId": "8f4f061a-7088-443c-a509-8b0422b5b1eb",
   "sections": [
     {
-      "id": "a036f1ba-3745-4f30-8242-b0fc103b7a96",
+      "id": "d638f8e3-99df-4fb4-95f0-490c1da83ec3",
       "pageId": "ebf2163a-0d5a-491b-a3b5-631ae97c4f2a",
       "type": "HERO",
       "order": 0,
@@ -19,20 +19,17 @@
         "title": "Our Achievements",
         "subtitle": "Milestones in our journey"
       },
-      "createdAt": "2025-12-04T17:09:28.356Z",
-      "updatedAt": "2025-12-04T17:09:28.356Z"
+      "createdAt": "2025-12-13T09:41:32.493Z",
+      "updatedAt": "2025-12-13T09:41:32.493Z"
     },
     {
-      "id": "8eaed82c-ff36-45c0-9098-3cbed3f9a9ce",
+      "id": "8012cbe2-16bb-4113-b65e-4225e05d16ee",
       "pageId": "ebf2163a-0d5a-491b-a3b5-631ae97c4f2a",
-      "type": "CARD_GRID",
+      "type": "ACHIEVEMENTS",
       "order": 1,
-      "content": {
-        "heading": "Awards & Recognition",
-        "description": "Celebrating our success"
-      },
-      "createdAt": "2025-12-04T17:09:28.356Z",
-      "updatedAt": "2025-12-04T17:09:28.356Z"
+      "content": {},
+      "createdAt": "2025-12-13T09:41:32.493Z",
+      "updatedAt": "2025-12-13T09:41:32.493Z"
     }
   ],
   "seo": {
@@ -48,6 +45,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:26.495Z",
-    "updatedAt": "2025-12-04T17:09:26.495Z"
+    "updatedAt": "2025-12-13T09:41:32.462Z"
   }
 }

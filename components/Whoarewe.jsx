@@ -66,7 +66,7 @@ const WhoAreWe = () => {
           >
             <h2
               className={`
-                text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-blue-900
+                text-4xl sm:text-6xl lg:text-7xl font-extrabold text-blue-900
                 transition-all duration-1000 ease-out
                 leading-tight md:leading-normal
                 ${isActive ? "text-left" : "text-center md:text-left"}

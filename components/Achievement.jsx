@@ -81,70 +81,93 @@ export default function AchievementComponent({ items }) {
   }, []);
 
   return (
-    <div className="w-full z-20 relative px-4 md:px-0">
-      {/* Section Header */}
-      <div className="mb-10 text-center">
-        <Fade direction="down" triggerOnce duration={800}>
-          <h3 className="text-2xl md:text-3xl font-bold text-white tracking-wide uppercase">
-            KW&SC <span className="text-cyan-400">Achievements</span>
-          </h3>
-          <div className="h-1 w-20 bg-cyan-500 mx-auto mt-2 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
-        </Fade>
-      </div>
+    <section className="min-h-screen bg-[#020617] py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none"></div>
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse pointer-events-none mix-blend-screen"></div>
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse delay-1000 pointer-events-none mix-blend-screen"></div>
 
-      {/* Grid */}
-      <div className="flex flex-wrap justify-center gap-6">
-        {achievements.map((achievement, index) => (
-          <Fade
-            key={achievement.id || index}
-            direction="up"
-            triggerOnce
-            duration={600}
-            delay={index * 100}
-            className="w-full md:w-[48%] lg:w-[30%]"
-          >
-            <div
-              className="group relative bg-gray-900/60 backdrop-blur-md rounded-xl p-6 border border-gray-700/50 
-                         transition-all duration-300 hover:-translate-y-1 hover:bg-gray-800/80
-                         hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] h-full"
+      {/* Content Container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+        {/* Section Header */}
+        <div className="mb-12 md:mb-16 text-center">
+          <Fade direction="down" triggerOnce duration={800}>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-4">
+              KW&SC <span className="text-cyan-400 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Achievements</span>
+            </h2>
+            <p className="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light">
+              Celebrating milestones and excellence in water & sewerage management
+            </p>
+            <div className="h-1.5 w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mt-6 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.6)]"></div>
+          </Fade>
+        </div>
+
+        {/* Achievements Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {achievements.map((achievement, index) => (
+            <Fade
+              key={achievement.id || index}
+              direction="up"
+              triggerOnce
+              duration={600}
+              delay={index * 100}
             >
-              {/* Futuristic Corner Accent */}
-              <div className="absolute top-0 right-0 w-6 h-6 border-t border-r border-cyan-500/50 rounded-tr-xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
+              <div
+                className="group relative bg-slate-800/40 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-slate-700/50 
+                           transition-all duration-500 hover:-translate-y-2 hover:bg-slate-800/60
+                           hover:border-cyan-400/60 hover:shadow-[0_20px_40px_rgba(6,182,212,0.15),0_0_30px_rgba(6,182,212,0.1)] 
+                           h-full flex flex-col overflow-hidden"
+              >
+                {/* Animated Background Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-blue-500/0 to-purple-500/0 group-hover:from-cyan-500/5 group-hover:via-blue-500/5 group-hover:to-purple-500/5 transition-all duration-500 rounded-2xl"></div>
 
-              <div className="flex items-start justify-between mb-4">
-                {/* Icon */}
-                <div className="w-10 h-10 bg-blue-900/40 rounded-lg flex items-center justify-center border border-blue-500/30 group-hover:border-cyan-400 transition-colors">
-                  <Image
-                    src={achievement.icon}
-                    width={24}
-                    height={24}
-                    alt={achievement.title}
-                    className="invert opacity-80 group-hover:opacity-100 transition-opacity"
-                  />
+                {/* Corner Accents */}
+                <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-cyan-500/30 rounded-tr-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 border-b border-l border-cyan-500/30 rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                {/* Icon Container */}
+                <div className="relative mb-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-cyan-500/20 rounded-xl blur-xl group-hover:bg-cyan-500/30 transition-all duration-500"></div>
+                      <div className="relative w-14 h-14 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-500">
+                        <Image
+                          src={achievement.icon}
+                          width={28}
+                          height={28}
+                          alt={achievement.title}
+                          className="invert opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Year Badge */}
+                    <span className="bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 border border-cyan-500/40 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide shadow-lg backdrop-blur-sm group-hover:from-cyan-800/60 group-hover:to-blue-800/60 group-hover:border-cyan-400/60 group-hover:shadow-cyan-500/20 transition-all duration-300">
+                      {achievement.year}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Year Badge */}
-                <span className="bg-cyan-900/40 text-cyan-300 border border-cyan-500/30 px-3 py-1 rounded-full text-xs font-mono shadow-sm">
-                  {achievement.year}
-                </span>
-              </div>
+                {/* Content */}
+                <div className="relative flex-1 flex flex-col">
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-cyan-100 transition-colors duration-300 leading-tight">
+                    {achievement.title}
+                  </h3>
+                  <p className="text-sm md:text-base text-slate-300 leading-relaxed group-hover:text-slate-200 transition-colors duration-300 flex-1">
+                    {achievement.description}
+                  </p>
+                </div>
 
-              {/* Content */}
-              <div>
-                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-100 transition-colors">
-                  {achievement.title}
-                </h4>
-                <p className="text-sm text-gray-300 leading-snug group-hover:text-gray-200">
-                  {achievement.description}
-                </p>
-              </div>
+                {/* Bottom Accent Line */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent group-hover:via-cyan-400/80 transition-all duration-500"></div>
 
-              {/* Bottom Accent Line */}
-              <div className="absolute bottom-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent group-hover:via-cyan-400/70 transition-all"></div>
-            </div>
-          </Fade>
-        ))}
+                {/* Shine Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-2xl"></div>
+              </div>
+            </Fade>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

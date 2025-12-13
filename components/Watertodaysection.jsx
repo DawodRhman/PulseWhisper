@@ -34,7 +34,7 @@ export default function WaterTodaySection({ updates: propUpdates }) {
       <div className="absolute bottom-0 right-0 w-64 sm:w-80 md:w-96 lg:w-[30rem] h-64 sm:h-80 md:h-96 lg:h-[30rem] bg-cyan-100/40 rounded-full blur-3xl"></div>
 
       <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl lg:max-w-7xl xl:max-w-7xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12 relative z-10">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-6xl font-bold text-gray-800 mb-6 sm:mb-8 md:mb-10 lg:mb-12 xl:mb-14 2xl:mb-16 text-center tracking-tight">
+        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-800 mb-4 text-center">
           {latestUpdate.title}
         </h2>
 

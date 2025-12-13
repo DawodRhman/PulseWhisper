@@ -83,7 +83,7 @@ export default function WorkWithUs() {
             >
                 <motion.h2
                     variants={itemVariants}
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-b from-white to-cyan-300 drop-shadow-lg"
+                    className="text-4xl sm:text-6xl lg:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-b from-white to-cyan-300 drop-shadow-lg"
                 >
                     Work With KW&SC
                 </motion.h2>
@@ -112,7 +112,7 @@ export default function WorkWithUs() {
                     >
                         <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 mb-3 sm:mb-4 md:mb-5 lg:mb-6">
                             <section.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-9 lg:h-9 text-cyan-400 p-1 sm:p-1.5 md:p-2 bg-cyan-900/50 rounded-lg shadow-md shadow-cyan-500/20 flex-shrink-0" />
-                            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-white leading-tight">
+                            <h3 className="text-xl font-bold text-white leading-tight">
                                 {section.title}
                             </h3>
                         </div>

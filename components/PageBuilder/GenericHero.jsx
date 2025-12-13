@@ -28,8 +28,7 @@ export default function GenericHero({ title, subtitle, backgroundImage, backgrou
 
         {title && (
           <h2
-            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight"
-            style={{ fontFamily: 'Roboto, sans-serif' }}
+            className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white"
           >
             {title}
           </h2>

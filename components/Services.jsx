@@ -169,7 +169,7 @@ export default function Services() {
       {/* Corporate Section Header */}
       <section className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
         <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-4">
             {data.hero?.title || "Our Services"}
           </h1>
           <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-600 max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto leading-relaxed sm:leading-relaxed md:leading-relaxed">

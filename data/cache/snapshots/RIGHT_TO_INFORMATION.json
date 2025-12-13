@@ -6,7 +6,7 @@
   },
   "documents": [
     {
-      "id": "8b88b093-62cf-4b98-bc39-55d8d47bcca2",
+      "id": "6b2db5d5-da6e-4686-beaa-7136d9d01414",
       "title": "Application Form for Groundwater Licence",
       "description": "Official form for groundwater licence applications",
       "type": "Form",
@@ -14,7 +14,7 @@
       "order": 0
     },
     {
-      "id": "3965ae2b-96bf-4884-b41f-46f38dd0f5d2",
+      "id": "7b55693e-2df3-4b34-8eda-7ed96a3ac3f7",
       "title": "KW&SC Act 2023",
       "description": "Complete text of the Karachi Water and Sewerage Corporation Act 2023",
       "type": "Legal Document",
@@ -22,7 +22,7 @@
       "order": 1
     },
     {
-      "id": "9e435783-d460-49fc-838b-0f9fdd86a249",
+      "id": "2038992f-d190-4e34-8ebf-f4da0e658638",
       "title": "Subsoil Extraction Regulations",
       "description": "Regulations governing subsoil extraction activities",
       "type": "Regulation",
@@ -30,7 +30,7 @@
       "order": 2
     },
     {
-      "id": "6c9c36f8-5c18-4a4c-be10-34feaee517c2",
+      "id": "9ed73915-d8cf-47ef-9f11-b654ca800946",
       "title": "KW&SC Budget Summary 2023-2024",
       "description": "Annual budget summary and financial overview",
       "type": "Financial",
@@ -38,7 +38,7 @@
       "order": 3
     },
     {
-      "id": "28c4c6a2-7b1d-4786-b722-16cd393ac73e",
+      "id": "e19b02f8-e176-4d88-9cd5-a7570f2a5178",
       "title": "Signed Code of Conduct",
       "description": "Official code of conduct document signed by KW&SC",
       "type": "Policy",
@@ -46,7 +46,7 @@
       "order": 4
     },
     {
-      "id": "1d025eea-0069-44a1-b44b-3362ea6eac60",
+      "id": "b488467d-805c-483c-a4df-adb5b53166b6",
       "title": "Maintenance Works Report",
       "description": "Comprehensive report on maintenance activities",
       "type": "Report",

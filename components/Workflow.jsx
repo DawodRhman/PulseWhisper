@@ -150,7 +150,7 @@ const WorkFlow = ({ steps }) => {
                         <span>KW&SC Core Mandate</span>
                     </div>
                     {/* Darker, high-contrast header text */}
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-blue-700 drop-shadow-sm tracking-tight">
+                    <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-blue-700 drop-shadow-sm">
                         Our <span className="text-blue-700">Commitment</span>
                     </h2>
                     <p className="max-w-2xl sm:max-w-3xl mx-auto mt-3 sm:mt-4 md:mt-5 text-sm sm:text-base md:text-lg text-gray-600">
@@ -206,7 +206,7 @@ const WorkFlow = ({ steps }) => {
                                         >
                                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4 mb-2 sm:mb-3">
                                                 {/* Title Text */}
-                                                <h4 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold transition-colors duration-500 ${isActive ? process.color : 'text-gray-900'}`}>{process.title}</h4>
+                                                <h4 className={`text-xl font-bold transition-colors duration-500 ${isActive ? process.color : 'text-gray-900'}`}>{process.title}</h4>
                                                 {/* Number */}
                                                 <span className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold transition-colors duration-500 flex-shrink-0 ${isActive ? process.color : 'text-gray-400'}`}>{process.id}</span>
                                             </div>

@@ -68,7 +68,7 @@ const GenericCardGrid = ({ heading, description, cards = [] }) => {
       {(heading || description) && (
         <div className="text-center mb-12">
           {heading && (
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">
               {heading}
             </h2>
           )}
@@ -125,7 +125,7 @@ const GenericCardGrid = ({ heading, description, cards = [] }) => {
         <div className="max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12">
           <div className="text-center mb-12 sm:mb-14 md:mb-16 lg:mb-20">
             <Fade direction="down" triggerOnce duration={1000}>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-6xl font-extrabold text-white mb-3 sm:mb-4 md:mb-5 lg:mb-6">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-4">
                 Our Digital & Infrastructural Feats
               </h1>
               <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl text-gray-400 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto font-mono">
@@ -165,7 +165,7 @@ const GenericCardGrid = ({ heading, description, cards = [] }) => {
 
                   {/* Title and Description */}
                   <div>
-                    <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-extrabold text-white mb-2 sm:mb-3 md:mb-4 mt-2 sm:mt-3 md:mt-4 tracking-wide">
+                    <h3 className="text-xl font-bold text-white mb-3 mt-3 tracking-wide">
                       {achievement.title}
                     </h3>
                     <p className="text-gray-400 leading-relaxed text-xs sm:text-sm md:text-base lg:text-base">

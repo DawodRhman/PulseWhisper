@@ -99,7 +99,7 @@ const NewsCard = ({ news, index }) => {
           <Tag className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-400" />
           <span className="text-[10px] sm:text-xs font-mono text-cyan-500 tracking-widest uppercase">{news.category}</span>
         </div>
-        <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2 sm:mb-3 leading-snug group-hover:text-cyan-200 transition-colors">
+        <h3 className="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-200 transition-colors">
           {news.title}
         </h3>
         <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 line-clamp-3 group-hover:text-slate-300 transition-colors">
@@ -194,7 +194,7 @@ export default function NewsUpdates() {
             <Activity className="w-2.5 h-2.5 sm:w-3 sm:h-3 animate-pulse" />
             <span className="tracking-widest">LIVE SYSTEM UPDATES</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight mb-3 sm:mb-4 md:mb-6 leading-tight sm:leading-normal">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight mb-4 leading-tight">
             KW&SC <span className="text-cyan-400">LATEST NEWS</span>
           </h1>
           <p className="max-w-2xl mx-auto text-xs sm:text-sm md:text-base lg:text-lg text-slate-400 leading-relaxed px-2 sm:px-0">
