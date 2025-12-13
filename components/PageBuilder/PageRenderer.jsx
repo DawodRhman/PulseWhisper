@@ -45,7 +45,8 @@ const COMPONENT_MAP = {
   FAQ: Faqs,
   MEDIA_GALLERY: MediaGallery,
   SUBSCRIBE: Subscribe,
-  CARD_GRID: GenericCardGrid,
+  ACHIEVEMENTS: Achievement,
+  // CARD_GRID: GenericCardGrid,
   CAREERS: Career,
   TENDERS: Tenders,
   WORKFLOW: WhatWeDo,
@@ -54,7 +55,6 @@ const COMPONENT_MAP = {
   WATER_TODAY: Watertodaysection,
   CONTACT: Contact,
   EDUCATION: Education,
-  ACHIEVEMENTS: Achievement,
 };
 
 export default function PageRenderer({ sections }) {
