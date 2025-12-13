@@ -44,8 +44,41 @@ function normalizeFaqs(items) {
 export default function FAQs({ items }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [fetchedFaqs, setFetchedFaqs] = useState(null);
 
-  const faqs = useMemo(() => normalizeFaqs(items), [items]);
+  useEffect(() => {
+    if (!items || items.length === 0) {
+      fetch('/api/faqs')
+        .then(res => res.json())
+        .then(data => {
+          if (data.data) {
+            const flattened = [];
+            // Process categories
+            if (data.data.categories) {
+              data.data.categories.forEach(cat => {
+                if (cat.faqs) {
+                  cat.faqs.forEach(faq => {
+                    flattened.push({ ...faq, category: cat.title });
+                  });
+                }
+              });
+            }
+            // Process uncategorized
+            if (data.data.uncategorized) {
+              data.data.uncategorized.forEach(faq => {
+                flattened.push({ ...faq, category: "General" });
+              });
+            }
+            if (flattened.length > 0) {
+              setFetchedFaqs(flattened);
+            }
+          }
+        })
+        .catch(err => console.error("Failed to fetch FAQs:", err));
+    }
+  }, [items]);
+
+  const faqs = useMemo(() => normalizeFaqs(items || fetchedFaqs), [items, fetchedFaqs]);
 
   // Auto-slide logic
   useEffect(() => {

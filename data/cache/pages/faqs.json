@@ -3,9 +3,11 @@
   "slug": "faqs",
   "title": "FAQs",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": "aboutus",
   "createdAt": "2025-12-04T17:09:35.884Z",
-  "updatedAt": "2025-12-04T17:09:35.884Z",
+  "updatedAt": "2025-12-12T19:06:26.918Z",
   "seoId": "9073d1b4-6caa-49de-84e7-1860fc3dfeb1",
   "sections": [
     {
