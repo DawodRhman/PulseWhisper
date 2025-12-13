@@ -14,7 +14,7 @@ export default function GenericHero({ title, subtitle, backgroundImage }) {
   const bgImage = backgroundImage || "/9.gif";
 
   return (
-    <section className="relative h-[100vh] transition-opacity duration-700 bg-cover bg-center flex justify-center items-center overflow-hidden text-white" 
+    <section className="relative h-[70vh] transition-opacity duration-700 bg-cover bg-center flex justify-center items-center overflow-hidden text-white" 
   style={{ backgroundImage: `url(${bgImage})` }}>
       
 
