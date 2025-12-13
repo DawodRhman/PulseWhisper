@@ -112,6 +112,13 @@ const Navbar = () => {
   }, []);
 
   const getPageData = (slug) => dynamicPages.find(p => p.slug === slug);
+  const normalizeKey = (value = "") =>
+    value
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
 
   const menuSkeleton = [
     { slug: "home", href: "/", text: "Home", alwaysShow: true },
@@ -143,45 +150,67 @@ const Navbar = () => {
     { slug: "contact", text: "Contact" }
   ];
 
-  const NavLinks = [
-    ...menuSkeleton.map(item => {
-      const page = getPageData(item.slug);
-      // Always show skeleton items regardless of DB status to ensure navigation structure
-      const isVisible = true;
-      
-      if (!isVisible) return null;
+  // Build nav from skeleton and then inject dynamic pages into groups or as new groups
+  const navMap = new Map();
+  const NavLinks = menuSkeleton.map(item => {
+    const page = getPageData(item.slug);
+    const link = {
+      slug: item.slug,
+      href: item.href || `/${item.slug}`,
+      text: page?.title || item.text || item.slug,
+    };
 
-      const link = {
-        href: item.href || `/${item.slug}`,
-        text: item.text || page?.title || item.slug,
-      };
+    if (item.submenu) {
+      link.submenu = item.submenu.map(sub => {
+        const subSlug = typeof sub === "string" ? sub : sub.slug;
+        const subPage = getPageData(subSlug);
+        return {
+          slug: subSlug,
+          href: `/${subSlug}`,
+          text: subPage?.title || (typeof sub === "object" && sub.text) || subSlug
+        };
+      });
+    }
+    navMap.set(normalizeKey(item.slug || item.text), link);
+    return link;
+  });
 
-      if (item.submenu) {
-        link.submenu = item.submenu.map(sub => {
-          const subSlug = typeof sub === 'string' ? sub : sub.slug;
-          const subPage = getPageData(subSlug);
-          // Always show skeleton submenu items
-          const subVisible = true;
-          
-          if (!subVisible) return null;
+  dynamicPages
+    .filter(p => p.showInNavbar)
+    .forEach((page) => {
+      const label = page.navLabel || page.title;
+      const href = `/${page.slug}`;
+      const groupKey = page.navGroup ? normalizeKey(page.navGroup) : "";
+      const pageKey = normalizeKey(page.slug);
 
-          return {
-            href: `/${subSlug}`,
-            text: (typeof sub === 'object' && sub.text) ? sub.text : (subPage?.title || subSlug)
+      if (groupKey) {
+        let parent = navMap.get(groupKey);
+        if (!parent) {
+          parent = {
+            slug: groupKey,
+            href: `/${groupKey}`,
+            text: page.navGroup,
+            submenu: [],
           };
-        }).filter(Boolean);
+          navMap.set(groupKey, parent);
+          NavLinks.push(parent);
+        }
+        if (!parent.submenu) parent.submenu = [];
+        if (!parent.submenu.some((item) => item.href === href)) {
+          parent.submenu.push({ slug: page.slug, href, text: label });
+        }
+      } else {
+        const existing = navMap.get(pageKey);
+        if (existing) {
+          existing.text = label;
+          existing.href = href;
+        } else {
+          const entry = { slug: page.slug, href, text: label };
+          navMap.set(pageKey, entry);
+          NavLinks.push(entry);
+        }
       }
-      return link;
-    }).filter(Boolean),
-
-    // Add dynamic pages to the end of the menu
-    ...dynamicPages
-      .filter(p => p.showInNavbar && !menuSkeleton.flatMap(i => [i.slug, ...(i.submenu || []).map(s => typeof s === 'string' ? s : s.slug)]).includes(p.slug))
-      .map(p => ({
-        href: `/${p.slug}`,
-        text: p.title,
-      }))
-  ];
+    });
 
   // Handle submenu hover animations with grace period
   useEffect(() => {

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"; // Assuming these exist
 import { Textarea } from "@/components/ui/textarea"; // Assuming these exist
 import { Switch } from "@/components/ui/switch"; // Assuming these exist
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import MediaPicker from "@/components/admin/media/MediaPicker";
 
 const SECTION_TYPES = [
   { value: "HERO", label: "Hero Section" },
@@ -26,6 +27,8 @@ export default function PageEditor({ page, onSave, onCancel }) {
     slug: "",
     isPublished: false,
     showInNavbar: false,
+    navLabel: "",
+    navGroup: "",
     seo: { title: "", description: "" },
     sections: [],
   });
@@ -39,6 +42,8 @@ export default function PageEditor({ page, onSave, onCancel }) {
         slug: page.slug,
         isPublished: page.isPublished,
         showInNavbar: page.showInNavbar || false,
+        navLabel: page.navLabel || "",
+        navGroup: page.navGroup || "",
         seo: page.seo || { title: "", description: "" },
         sections: page.sections || [],
       });
@@ -187,6 +192,34 @@ export default function PageEditor({ page, onSave, onCancel }) {
               />
               <Label htmlFor="showInNavbar">Show in Navbar</Label>
             </div>
+            {formData.showInNavbar && (
+              <div className="space-y-3">
+                <div>
+                  <Label htmlFor="navLabel">Navbar Label</Label>
+                  <Input 
+                    id="navLabel" 
+                    name="navLabel" 
+                    value={formData.navLabel} 
+                    onChange={handleChange} 
+                    placeholder="Defaults to page title" 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="navGroup">Navbar Group</Label>
+                  <Input 
+                    id="navGroup" 
+                    name="navGroup" 
+                    value={formData.navGroup} 
+                    onChange={handleChange} 
+                    placeholder="e.g., whatwedo, aboutus, or a new group name"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    To nest under an existing menu, use its slug (whatwedo, aboutus, tenders, education, contact, etc.).
+                    Enter a new label to create a new menu group with this page inside.
+                  </p>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -241,34 +274,39 @@ export default function PageEditor({ page, onSave, onCancel }) {
           </div>
         )}
 
-        {formData.sections.map((section, index) => (
-          <Card key={index} className="relative group">
-            <div className="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button type="button" size="icon" variant="ghost" onClick={() => handleMoveSection(index, "up")} disabled={index === 0}>
-                <ArrowUp className="w-4 h-4" />
-              </Button>
-              <Button type="button" size="icon" variant="ghost" onClick={() => handleMoveSection(index, "down")} disabled={index === formData.sections.length - 1}>
-                <ArrowDown className="w-4 h-4" />
-              </Button>
-              <Button type="button" size="icon" variant="destructive" onClick={() => handleRemoveSection(index)}>
-                <Trash className="w-4 h-4" />
-              </Button>
-            </div>
-            
-            <CardHeader>
-              <CardTitle className="text-sm uppercase tracking-wider text-muted-foreground">
-                {SECTION_TYPES.find(t => t.value === section.type)?.label || section.type}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <SectionForm 
-                type={section.type} 
-                content={section.content} 
-                onChange={(field, value) => handleSectionContentChange(index, field, value)} 
-              />
-            </CardContent>
-          </Card>
-        ))}
+        {formData.sections.map((section, index) => {
+          const sectionAnchorId = `section-${index + 1}-${(section.type || "section").toLowerCase()}`;
+          return (
+            <Card key={index} id={sectionAnchorId} className="relative group">
+              <div className="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button type="button" size="icon" variant="ghost" onClick={() => handleMoveSection(index, "up")} disabled={index === 0}>
+                  <ArrowUp className="w-4 h-4" />
+                </Button>
+                <Button type="button" size="icon" variant="ghost" onClick={() => handleMoveSection(index, "down")} disabled={index === formData.sections.length - 1}>
+                  <ArrowDown className="w-4 h-4" />
+                </Button>
+                <Button type="button" size="icon" variant="destructive" onClick={() => handleRemoveSection(index)}>
+                  <Trash className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              <CardHeader>
+                <CardTitle className="text-sm uppercase tracking-wider text-muted-foreground">
+                  {SECTION_TYPES.find(t => t.value === section.type)?.label || section.type}{" "}
+                  <span className="text-xs lowercase text-muted-foreground">#{sectionAnchorId}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <SectionForm 
+                  type={section.type} 
+                  content={section.content} 
+                  idPrefix={sectionAnchorId}
+                  onChange={(field, value) => handleSectionContentChange(index, field, value)} 
+                />
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </form>
   );
@@ -277,7 +315,7 @@ export default function PageEditor({ page, onSave, onCancel }) {
 function getDefaultContent(type) {
   switch (type) {
     case "HERO":
-      return { title: "Hero Title", subtitle: "Hero Subtitle", backgroundImage: "" };
+      return { title: "Hero Title", subtitle: "Hero Subtitle", backgroundImage: "", backgroundMediaId: "", backgroundMeta: null };
     case "TEXT_BLOCK":
       return { heading: "Section Heading", body: "<p>Enter your text here...</p>" };
     case "CARD_GRID":
@@ -294,22 +332,39 @@ function getDefaultContent(type) {
   }
 }
 
-function SectionForm({ type, content, onChange }) {
+function SectionForm({ type, content, onChange, idPrefix }) {
+  const fieldId = (suffix) => (idPrefix ? `${idPrefix}-${suffix}` : suffix);
+
   switch (type) {
     case "HERO":
       return (
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Title</Label>
-            <Input value={content.title || ""} onChange={e => onChange("title", e.target.value)} />
+            <Label htmlFor={fieldId("title")}>Title</Label>
+            <Input id={fieldId("title")} value={content.title || ""} onChange={e => onChange("title", e.target.value)} />
           </div>
           <div>
-            <Label>Subtitle</Label>
-            <Input value={content.subtitle || ""} onChange={e => onChange("subtitle", e.target.value)} />
+            <Label htmlFor={fieldId("subtitle")}>Subtitle</Label>
+            <Input id={fieldId("subtitle")} value={content.subtitle || ""} onChange={e => onChange("subtitle", e.target.value)} />
+          </div>
+          <div className="col-span-2 space-y-2">
+            <MediaPicker
+              label="Hero Background (image or GIF)"
+              value={content.backgroundMediaId || ""}
+              category="page-hero"
+              accept="image/*"
+              onChange={(assetId, asset) => {
+                onChange("backgroundMediaId", assetId || "");
+                onChange("backgroundMeta", asset || null);
+                onChange("backgroundImage", asset?.url || "");
+              }}
+            />
+            <p className="text-xs text-muted-foreground">Upload or pick a GIF/image to use behind the hero content.</p>
           </div>
           <div className="col-span-2">
-            <Label>Background Image URL</Label>
-            <Input value={content.backgroundImage || ""} onChange={e => onChange("backgroundImage", e.target.value)} />
+            <Label htmlFor={fieldId("backgroundImage")}>Background Image URL</Label>
+            <Input id={fieldId("backgroundImage")} value={content.backgroundImage || ""} onChange={e => onChange("backgroundImage", e.target.value)} />
+            <p className="text-xs text-muted-foreground mt-1">Optional override if you prefer to paste a direct URL.</p>
           </div>
         </div>
       );
@@ -317,12 +372,13 @@ function SectionForm({ type, content, onChange }) {
       return (
         <div className="space-y-4">
           <div>
-            <Label>Heading</Label>
-            <Input value={content.heading || ""} onChange={e => onChange("heading", e.target.value)} />
+            <Label htmlFor={fieldId("heading")}>Heading</Label>
+            <Input id={fieldId("heading")} value={content.heading || ""} onChange={e => onChange("heading", e.target.value)} />
           </div>
           <div>
-            <Label>Body (HTML supported)</Label>
+            <Label htmlFor={fieldId("body")}>Body (HTML supported)</Label>
             <Textarea 
+              id={fieldId("body")}
               value={content.body || ""} 
               onChange={e => onChange("body", e.target.value)} 
               className="min-h-[150px] font-mono text-sm"
@@ -334,16 +390,17 @@ function SectionForm({ type, content, onChange }) {
       return (
         <div className="space-y-4">
           <div>
-            <Label>Heading</Label>
-            <Input value={content.heading || ""} onChange={e => onChange("heading", e.target.value)} />
+            <Label htmlFor={fieldId("heading")}>Heading</Label>
+            <Input id={fieldId("heading")} value={content.heading || ""} onChange={e => onChange("heading", e.target.value)} />
           </div>
           <div>
-            <Label>Description</Label>
-            <Input value={content.description || ""} onChange={e => onChange("description", e.target.value)} />
+            <Label htmlFor={fieldId("description")}>Description</Label>
+            <Input id={fieldId("description")} value={content.description || ""} onChange={e => onChange("description", e.target.value)} />
           </div>
           <div className="p-4 bg-muted rounded-md">
             <p className="text-sm text-muted-foreground mb-2">Cards (JSON format for now)</p>
             <Textarea 
+              id={fieldId("cards")}
               value={JSON.stringify(content.cards || [], null, 2)} 
               onChange={e => {
                 try {

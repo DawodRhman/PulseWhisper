@@ -3,9 +3,11 @@
   "slug": "aboutus",
   "title": "About Us",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": "About Us",
+  "navGroup": null,
   "createdAt": "2025-12-04T17:09:23.040Z",
-  "updatedAt": "2025-12-04T17:09:23.040Z",
+  "updatedAt": "2025-12-12T19:06:24.745Z",
   "seoId": "d8721651-6daf-4d8f-bf95-b8323aebddb9",
   "sections": [
     {
@@ -27,11 +29,11 @@
       "type": "TEXT_BLOCK",
       "order": 1,
       "content": {
-        "body": "\n              <div class=\"space-y-6\">\n                <h3 class=\"text-2xl font-bold text-gray-900\">How KW&SC is Setting New Standards in Water & Sewerage Services for Karachi</h3>\n                <p class=\"text-gray-600 leading-relaxed\">At KW&SC, we strive to provide clean, safe drinking water and efficient sewerage services to all residents of Karachi. Our commitment to excellence and innovation enables us to deliver reliable solutions tailored to the city's needs.</p>\n                <p class=\"text-gray-600 leading-relaxed\">Our mission is to transform KW&SC into a customer‑centric, financially autonomous, and technologically advanced water and sewerage utility. We leverage sustainable practices to ensure long‑term success and contribute to Karachi's water security and sanitation goals.</p>\n              </div>\n            ",
+        "body": "<section class=\"bg-black w-full overflow-x-hidden\"><div class=\"text-white max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12 py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 2xl:py-32\"><div class=\"text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 2xl:mb-20\"><Fade direction=\"down\" triggerOnce duration=\"1000\"><div class=\"inline-flex items-center gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-2.5 xl:gap-2.5 2xl:gap-2.5 px-3 sm:px-4 md:px-5 lg:px-5 xl:px-5 2xl:px-5 py-0.5 sm:py-1 md:py-1.5 lg:py-1 xl:py-1 2xl:py-1 shadow-md bg-slate-100 text-black rounded-full text-xs sm:text-sm md:text-base lg:text-sm xl:text-sm 2xl:text-sm font-medium\"><Image src=\"/icon/magic-black.svg\" width=\"16\" height=\"16\" alt=\"Magic Icon\" class=\"sm:w-5 md:w-6 lg:w-5 xl:w-5 2xl:w-5\" />About Us</div></Fade></div><div class=\"flex flex-col md:flex-row items-center justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10 2xl:gap-12 mb-8 sm:mb-12 md:mb-16 lg:mb-20 2xl:mb-24\"><div class=\"hidden sm:block w-12 sm:w-16 md:w-20 lg:w-28 xl:w-32 2xl:w-40 h-[1px] sm:h-[1.5px] md:h-[2px] lg:h-[2.5px] 2xl:h-[3px] bg-blue-700\"></div><h1 class=\"text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold whitespace-nowrap\">KW&SC Heritage</h1><div class=\"hidden sm:block w-12 sm:w-16 md:w-20 lg:w-28 xl:w-32 2xl:w-40 h-[1px] sm:h-[1.5px] md:h-[2px] lg:h-[2.5px] 2xl:h-[3px] bg-blue-700\"></div></div><div class=\"flex flex-col md:flex-row gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 2xl:gap-20\"><div class=\"flex-1 w-full\"><Fade direction=\"left\" triggerOnce duration=\"1200\"><h2 class=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold w-full md:w-11/12 leading-tight sm:leading-tight md:leading-snug lg:leading-snug\">How KW&SC is Setting New Standards in Water & Sewerage Services for Karachi</h2></Fade></div><div class=\"flex-1 w-full text-gray-400 font-bold text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 2xl:space-y-8\"><Fade direction=\"right\" triggerOnce duration=\"1000\"><p>At KW&SC, we strive to provide clean, safe drinking water and efficient sewerage services to all residents of Karachi. Our commitment to excellence and innovation enables us to deliver reliable solutions tailored to the city's needs.</p><p>Our mission is to transform KW&SC into a customer-centric, financially autonomous, and technologically advanced water and sewerage utility. We leverage sustainable practices to ensure long-term success and contribute to Karachi's water security and sanitation goals.</p></Fade></div></div></div></section>",
         "heading": "KW&SC Heritage"
       },
       "createdAt": "2025-12-04T17:09:25.631Z",
-      "updatedAt": "2025-12-04T17:09:25.631Z"
+      "updatedAt": "2025-12-11T09:52:24.536Z"
     },
     {
       "id": "e9291ed8-1506-4ec7-815f-e7eb61560439",

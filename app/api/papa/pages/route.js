@@ -5,6 +5,8 @@ import prisma from "@/lib/prisma";
 import { slugify } from "@/lib/string";
 import { ensureAdminSession, handleAdminApiError, AdminAuthError } from "@/lib/auth/guard";
 import { revalidatePath } from "next/cache";
+import fs from "fs/promises";
+import path from "path";
 
 export const dynamic = "force-dynamic";
 
@@ -23,20 +25,53 @@ function jsonResponse(body, init = {}) {
   return response;
 }
 
+// --- Cache helpers (invalidate file cache used by getPageWithFallback) ---
+const CACHE_DIR = path.join(process.cwd(), "data", "cache", "pages");
+
+async function invalidatePageCache(slug) {
+  if (!slug) return;
+  const cacheKey = slug.replace(/[^a-z0-9-]/g, "_");
+  const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
+  try {
+    await fs.unlink(cachePath);
+  } catch {
+    // Ignore if cache file does not exist or cannot be removed
+  }
+}
+
 // --- Validation Schemas ---
 
 const sectionSchema = z.object({
   id: z.string().optional(), // Optional for new sections
   type: z.string().min(1),
   order: z.coerce.number().int().default(0),
-  content: z.record(z.unknown()), // Flexible JSON content
+  // Allow any JSON-ish payload (object, array, primitives, null)
+  content: z.any(),
 });
+
+const slugSchema = z.preprocess(
+  (val) => {
+    if (typeof val === "string" && val.trim() === "") return undefined;
+    return val;
+  },
+  z.string().trim().min(1).optional()
+);
+
+const navFieldSchema = z.preprocess(
+  (val) => {
+    if (typeof val === "string" && val.trim() === "") return undefined;
+    return val;
+  },
+  z.string().trim().min(1).optional()
+);
 
 const createPageSchema = z.object({
   title: z.string().trim().min(3),
-  slug: z.string().trim().min(1).optional(), // Generated if missing
+  slug: slugSchema, // Generated if missing
   isPublished: z.boolean().optional().default(false),
   showInNavbar: z.boolean().optional().default(false),
+  navLabel: navFieldSchema,
+  navGroup: navFieldSchema,
   sections: z.array(sectionSchema).optional().default([]),
   seo: z.object({
     title: z.string().optional(),
@@ -47,9 +82,11 @@ const createPageSchema = z.object({
 const updatePageSchema = z.object({
   id: z.string().min(1),
   title: z.string().trim().min(3).optional(),
-  slug: z.string().trim().min(1).optional(),
+  slug: slugSchema,
   isPublished: z.boolean().optional(),
   showInNavbar: z.boolean().optional(),
+  navLabel: navFieldSchema,
+  navGroup: navFieldSchema,
   sections: z.array(sectionSchema).optional(),
   seo: z.object({
     title: z.string().optional(),
@@ -129,7 +166,15 @@ export async function POST(request) {
     const body = await request.json();
     const data = createPageSchema.parse(body);
 
-    const slug = slugify(data.slug || data.title);
+    const slugSource = data.slug || data.title;
+    const slug = slugify(slugSource);
+
+    // Prepare sections payload
+    const sectionData = (data.sections || []).map((s, index) => ({
+      type: s.type,
+      order: typeof s.order === "number" ? s.order : index,
+      content: s.content,
+    }));
 
     // Transaction to create page, sections, and SEO
     const page = await prisma.$transaction(async (tx) => {
@@ -139,19 +184,19 @@ export async function POST(request) {
           slug,
           isPublished: data.isPublished,
           showInNavbar: data.showInNavbar,
+          navLabel: data.navLabel,
+          navGroup: data.navGroup,
           seo: data.seo ? {
             create: {
               title: data.seo.title || data.title,
               description: data.seo.description,
             }
           } : undefined,
-          sections: {
-            create: data.sections.map(s => ({
-              type: s.type,
-              order: s.order,
-              content: s.content,
-            })),
-          },
+          sections: sectionData.length
+            ? {
+                create: sectionData,
+              }
+            : undefined,
         },
         include: { sections: true, seo: true },
       });
@@ -159,6 +204,7 @@ export async function POST(request) {
     });
 
     await logAudit({ session, action: "PAGE_CREATE", recordId: page.id, diff: { after: page }, request });
+    await invalidatePageCache(page.slug);
     revalidatePath("/"); // Revalidate everything for now, or specific paths
     
     return jsonResponse({ data: page }, { status: 201 });
@@ -182,7 +228,8 @@ export async function PATCH(request) {
       return jsonResponse({ error: "Page not found" }, { status: 404 });
     }
 
-    const slug = data.slug ? slugify(data.slug) : (data.title ? slugify(data.title) : undefined);
+    const slugSource = data.slug || data.title || existing.slug;
+    const slug = slugSource ? slugify(slugSource) : undefined;
 
     const page = await prisma.$transaction(async (tx) => {
       // Update Page fields
@@ -193,6 +240,8 @@ export async function PATCH(request) {
           slug,
           isPublished: data.isPublished,
           showInNavbar: data.showInNavbar,
+          navLabel: data.navLabel,
+          navGroup: data.navGroup,
           seo: data.seo ? {
             upsert: {
               create: { title: data.seo.title || data.title, description: data.seo.description },
@@ -206,14 +255,16 @@ export async function PATCH(request) {
       // For simplicity in this iteration: Delete existing sections and create new ones if provided
       if (data.sections) {
         await tx.pageSection.deleteMany({ where: { pageId: data.id } });
-        await tx.pageSection.createMany({
-          data: data.sections.map(s => ({
-            pageId: data.id,
-            type: s.type,
-            order: s.order,
-            content: s.content,
-          })),
-        });
+        if (data.sections.length) {
+          await tx.pageSection.createMany({
+            data: data.sections.map((s, index) => ({
+              pageId: data.id,
+              type: s.type,
+              order: typeof s.order === "number" ? s.order : index,
+              content: s.content,
+            })),
+          });
+        }
       }
 
       return tx.page.findUnique({
@@ -223,6 +274,10 @@ export async function PATCH(request) {
     });
 
     await logAudit({ session, action: "PAGE_UPDATE", recordId: page.id, diff: { before: existing, after: page }, request });
+    await invalidatePageCache(existing.slug);
+    if (page.slug && page.slug !== existing.slug) {
+      await invalidatePageCache(page.slug);
+    }
     revalidatePath(`/${page.slug}`);
     
     return jsonResponse({ data: page });
@@ -245,6 +300,7 @@ export async function DELETE(request) {
     await prisma.page.delete({ where: { id } });
 
     await logAudit({ session, action: "PAGE_DELETE", recordId: id, diff: { before: existing }, request });
+    await invalidatePageCache(existing.slug);
     revalidatePath(`/${existing.slug}`);
 
     return jsonResponse({ success: true });

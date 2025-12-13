@@ -1,37 +1,37 @@
 {
-  "id": "f9c95d53-31f1-493c-b152-49bf3355dfb8",
+  "id": "0b71fd85-bdb3-4299-bfa9-5a35428d3ef2",
   "slug": "portfolio",
   "title": "Our Projects",
   "isPublished": true,
   "showInNavbar": false,
-  "createdAt": "2025-12-04T16:41:18.099Z",
-  "updatedAt": "2025-12-04T16:41:18.099Z",
-  "seoId": "7719b063-f36f-4fed-9f0c-304bb7970036",
+  "createdAt": "2025-12-04T17:09:44.864Z",
+  "updatedAt": "2025-12-04T17:09:44.864Z",
+  "seoId": "8ab84667-53df-46a5-89d8-9c05d162aba2",
   "sections": [
     {
-      "id": "5cf80c4f-95ba-4b6b-8dc6-71767cfab69a",
-      "pageId": "f9c95d53-31f1-493c-b152-49bf3355dfb8",
+      "id": "68c80049-eac2-4112-bb45-622d347e4776",
+      "pageId": "0b71fd85-bdb3-4299-bfa9-5a35428d3ef2",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Our Projects",
         "subtitle": "Building a better future"
       },
-      "createdAt": "2025-12-04T16:41:19.620Z",
-      "updatedAt": "2025-12-04T16:41:19.620Z"
+      "createdAt": "2025-12-04T17:09:46.491Z",
+      "updatedAt": "2025-12-04T17:09:46.491Z"
     },
     {
-      "id": "8ef3c9ed-f999-47b2-90f6-c42249da131d",
-      "pageId": "f9c95d53-31f1-493c-b152-49bf3355dfb8",
+      "id": "e2ecb103-de70-4270-a466-2e97cd68eba8",
+      "pageId": "0b71fd85-bdb3-4299-bfa9-5a35428d3ef2",
       "type": "PROJECTS",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T16:41:19.620Z",
-      "updatedAt": "2025-12-04T16:41:19.620Z"
+      "createdAt": "2025-12-04T17:09:46.491Z",
+      "updatedAt": "2025-12-04T17:09:46.491Z"
     }
   ],
   "seo": {
-    "id": "7719b063-f36f-4fed-9f0c-304bb7970036",
+    "id": "8ab84667-53df-46a5-89d8-9c05d162aba2",
     "title": "Our Projects | KW&SC",
     "description": "Learn more about Our Projects at Karachi Water & Sewerage Corporation.",
     "keywords": null,
@@ -42,7 +42,7 @@
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true,
-    "createdAt": "2025-12-04T16:41:18.099Z",
-    "updatedAt": "2025-12-04T16:41:18.099Z"
+    "createdAt": "2025-12-04T17:09:44.864Z",
+    "updatedAt": "2025-12-04T17:09:44.864Z"
   }
 }

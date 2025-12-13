@@ -1,33 +1,35 @@
 {
   "id": "8d1e79fc-4cf2-48fa-86b2-c2f30ac4efd4",
   "slug": "ourservices",
-  "title": "Our Services",
+  "title": "Ourservices",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": "whatwedo",
   "createdAt": "2025-12-04T17:09:42.454Z",
-  "updatedAt": "2025-12-04T17:09:42.454Z",
+  "updatedAt": "2025-12-12T19:06:22.714Z",
   "seoId": "451f48d8-0c7a-4a61-b728-e33f8dbeb02a",
   "sections": [
     {
-      "id": "b2a99abe-9d69-4982-9243-8e7c0df94ac9",
+      "id": "34ffe5a0-0764-4e4d-8f86-542873b1e8c7",
       "pageId": "8d1e79fc-4cf2-48fa-86b2-c2f30ac4efd4",
       "type": "HERO",
       "order": 0,
       "content": {
-        "title": "Our Services",
+        "title": "How we Serve",
         "subtitle": "What we offer to Karachi"
       },
-      "createdAt": "2025-12-04T17:09:44.214Z",
-      "updatedAt": "2025-12-04T17:09:44.214Z"
+      "createdAt": "2025-12-12T18:48:24.466Z",
+      "updatedAt": "2025-12-12T18:48:24.466Z"
     },
     {
-      "id": "17abde93-6e06-4951-9ae2-a8860ec27219",
+      "id": "a197e4c9-38aa-4d76-9275-6552dea1ae0c",
       "pageId": "8d1e79fc-4cf2-48fa-86b2-c2f30ac4efd4",
       "type": "SERVICES",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T17:09:44.214Z",
-      "updatedAt": "2025-12-04T17:09:44.214Z"
+      "createdAt": "2025-12-12T18:48:24.466Z",
+      "updatedAt": "2025-12-12T18:48:24.466Z"
     }
   ],
   "seo": {
@@ -43,6 +45,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:42.454Z",
-    "updatedAt": "2025-12-04T17:09:42.454Z"
+    "updatedAt": "2025-12-12T18:48:23.392Z"
   }
 }
