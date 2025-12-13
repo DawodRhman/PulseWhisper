@@ -157,23 +157,6 @@
       "socials": null
     },
     {
-      "id": "cdc88a9e-ff7b-4302-a0a6-13b90001dae8",
-      "name": "Dawood Rehman",
-      "designation": "PM",
-      "bio": null,
-      "priority": 0,
-      "media": {
-        "id": "51ff0309-cc28-4ad7-b25f-080e15a4e4ff",
-        "url": "/uploads/1765627050742-0f7e5142.jpg",
-        "label": "1765026420252.jpg",
-        "altText": null,
-        "width": 896,
-        "height": 1152,
-        "mimeType": "image/jpeg"
-      },
-      "socials": null
-    },
-    {
       "id": "1c613e00-bd5c-4c0f-9732-ad06a03b9602",
       "name": "Muhammad Ali Sheikh",
       "designation": "Chief Engineer Water Supply",
@@ -421,7 +404,7 @@
       "title": "Water Today – Daily Water Supply Status",
       "summary": "Today’s water distribution across Karachi remains stable, with major pumping stations operating at optimal capacity.",
       "status": "PUBLISHED",
-      "publishedAt": "2025-12-13T12:05:07.858Z",
+      "publishedAt": "2025-12-13T12:56:09.966Z",
       "media": {
         "url": "/downtownkarachi.gif"
       }

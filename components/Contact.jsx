@@ -49,18 +49,21 @@ export default function Contact() {
   };
 
   // ...existing code... Form submission handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitMessage(null);
 
-    // Simulate API call delay
-    setTimeout(() => {
-      console.log("Form Data Submitted:", formData);
-      setIsSubmitting(false);
-      setSubmitMessage("Thank you! Your inquiry has been submitted. We will contact you shortly.");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      // Reset form after successful submission
+      if (!res.ok) throw new Error("Failed to submit");
+
+      setSubmitMessage("Thank you! Your inquiry has been submitted. We will contact you shortly.");
       setFormData({
         name: "",
         email: "",
@@ -68,7 +71,12 @@ export default function Contact() {
         category: "",
         message: "",
       });
-    }, 2000);
+    } catch (error) {
+      console.error(error);
+      setSubmitMessage("Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // ...existing code... API fetch for contact data

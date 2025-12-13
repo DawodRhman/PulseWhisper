@@ -1,18 +1,9 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { Activity, Calendar, ChevronRight, Tag } from "lucide-react";
+import { useNewsData } from "@/hooks/useNewsData";
 
 // --- Mock Data with Futuristic/Tech Spin ---
-
-
-
-
-
-
-
-
-
-
 const mockNewsData = [
   {
     id: 1,
@@ -147,6 +138,7 @@ function normalizeNews(articles) {
 }
 
 export default function NewsUpdates() {
+  const { data, loading: hookLoading, error } = useNewsData();
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -168,27 +160,24 @@ export default function NewsUpdates() {
     `;
     document.head.appendChild(style);
 
-    async function fetchNews() {
-      try {
-        const res = await fetch('/api/news');
-        if (!res.ok) throw new Error('Failed to fetch news');
-        const json = await res.json();
-        const articles = json.articles || [];
-        setNews(normalizeNews(articles));
-      } catch (error) {
-        console.error("Failed to load news:", error);
-        setNews(mockNewsData);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchNews();
-
     return () => {
       document.head.removeChild(style);
     };
   }, []);
+
+  useEffect(() => {
+    if (hookLoading) {
+      setLoading(true);
+      return;
+    }
+
+    if (error || !data?.articles) {
+      setNews(mockNewsData);
+    } else {
+      setNews(normalizeNews(data.articles));
+    }
+    setLoading(false);
+  }, [data, hookLoading, error]);
 
   return (
     <section className="min-h-screen bg-[#020617] py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden font-sans selection:bg-cyan-500/30 selection:text-cyan-200">

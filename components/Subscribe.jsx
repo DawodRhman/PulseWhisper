@@ -1,9 +1,37 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Subscribe = () => {
-  const handleSubmit = (e) => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email) return;
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Failed to subscribe");
+
+      setMessage(data.message || "Thank you for subscribing!");
+      setEmail("");
+    } catch (error) {
+      console.error(error);
+      setMessage(error.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   }
   return (
    <>
@@ -66,31 +94,42 @@ const Subscribe = () => {
 
           {/* Newsletter Form */}
           <div className="mt-8">
-            <form className="relative max-w-[645px] w-full mx-auto">
+            <form onSubmit={handleSubmit} className="relative max-w-[645px] w-full mx-auto">
               <input
-                type="text"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Your Email"
                 className=" placeholder:text-white w-full h-[80px] px-[30px] text-[18px] border border-white bg-transparent outline-none text-white focus:border-blue-400"
+                required
               />
               <button
                 type="submit"
-                className="absolute top-0 right-0 w-[75px] h-[80px] bg-transparent border-0 cursor-pointer transition-all duration-400]"
+                disabled={loading}
+                className="absolute top-0 right-0 w-[75px] h-[80px] bg-transparent border-0 cursor-pointer transition-all duration-400 disabled:opacity-50"
               >
-                <svg
-                  width="30"
-                  height="26"
-                  viewBox="0 0 30 26"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M29.6063 0.212923C29.3188 0.00917327 28.9413 -0.0183267 28.6288 0.145423L0.503806 14.8329C0.171306 15.0067 -0.0249444 15.3617 0.0025556 15.7354C0.0313056 16.1104 0.280056 16.4304 0.633806 16.5517L8.45256 19.2242L25.1038 4.98667L12.2188 20.5104L25.3226 24.9892C25.4201 25.0217 25.5226 25.0392 25.6251 25.0392C25.7951 25.0392 25.9638 24.9929 26.1126 24.9029C26.3501 24.7579 26.5113 24.5142 26.5526 24.2404L29.9901 1.11542C30.0413 0.765423 29.8938 0.417923 29.6063 0.212923Z"
-                    fill="white"
-                    className='hover:fill-blue-400'
-                  />
-                </svg>
+                {loading ? (
+                  <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
+                ) : (
+                  <svg
+                    width="30"
+                    height="26"
+                    viewBox="0 0 30 26"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M29.6063 0.212923C29.3188 0.00917327 28.9413 -0.0183267 28.6288 0.145423L0.503806 14.8329C0.171306 15.0067 -0.0249444 15.3617 0.0025556 15.7354C0.0313056 16.1104 0.280056 16.4304 0.633806 16.5517L8.45256 19.2242L25.1038 4.98667L12.2188 20.5104L25.3226 24.9892C25.4201 25.0217 25.5226 25.0392 25.6251 25.0392C25.7951 25.0392 25.9638 24.9929 26.1126 24.9029C26.3501 24.7579 26.5113 24.5142 26.5526 24.2404L29.9901 1.11542C30.0413 0.765423 29.8938 0.417923 29.6063 0.212923Z"
+                      fill="white"
+                      className='hover:fill-blue-400'
+                    />
+                  </svg>
+                )}
               </button>
             </form>
+            {message && (
+              <p className="text-center text-white mt-4">{message}</p>
+            )}
           </div>
         </div>
 

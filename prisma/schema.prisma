@@ -58,6 +58,9 @@ enum AuditModule {
   EDUCATION
   SUBSCRIPTIONS
   SETTINGS
+  SOCIAL_LINKS
+  RIGHT_TO_INFORMATION
+  CONTACT     
 }
 
 enum SnapshotModule {
@@ -726,3 +729,4 @@ model PageSection {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+

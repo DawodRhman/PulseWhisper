@@ -3,9 +3,11 @@
   "slug": "portfolio",
   "title": "Our Projects",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": "whatwedo",
   "createdAt": "2025-12-04T17:09:44.864Z",
-  "updatedAt": "2025-12-04T17:09:44.864Z",
+  "updatedAt": "2025-12-12T19:06:23.114Z",
   "seoId": "8ab84667-53df-46a5-89d8-9c05d162aba2",
   "sections": [
     {

@@ -105,3 +105,29 @@ export async function GET() {
     });
   }
 }
+
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { name, email, mobile, category, message } = body;
+
+    if (!message) {
+      return NextResponse.json({ error: "Message is required" }, { status: 400 });
+    }
+
+    await prisma.feedbackSubmission.create({
+      data: {
+        name,
+        email,
+        subject: category,
+        message: `${message} \n\n Mobile: ${mobile}`,
+        source: "Contact Page",
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("POST /api/contact", error);
+    return NextResponse.json({ error: "Failed to submit feedback" }, { status: 500 });
+  }
+}

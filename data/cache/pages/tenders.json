@@ -3,9 +3,11 @@
   "slug": "tenders",
   "title": "Tenders",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": null,
   "createdAt": "2025-12-04T17:09:49.315Z",
-  "updatedAt": "2025-12-04T17:09:49.315Z",
+  "updatedAt": "2025-12-12T19:06:27.335Z",
   "seoId": "5f6c3ef4-7d7e-4032-9089-8fb1bdcaab72",
   "sections": [
     {
