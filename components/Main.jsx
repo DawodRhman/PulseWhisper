@@ -7,8 +7,16 @@ import { Globe, MoveRight } from "lucide-react";
 
 import GetYourBillPopup from "@/components/GetYourBill";
 
-export default function Home() {
+export default function Home({ hero }) {
   const [loading, setLoading] = useState(true);
+  const {
+    eyebrow = "Karachi Water & Sewerage Corporation",
+    title = "Committed to Deliver",
+    subtitle = "Ensuring clean, safe water supply and efficient sewerage services for Karachi.",
+    ctaLabel = "Learn About KW&SC",
+    ctaHref = "/aboutus",
+    backgroundImage = "/karachicharminar.gif"
+  } = hero || {};
   const [language, setLanguage] = useState("en");
   const [chatOpen, setChatOpen] = useState(false);
   const [showBillPopup, setShowBillPopup] = useState(false);
@@ -66,7 +74,8 @@ export default function Home() {
       {loading && <Loader />}
 
       <section
-        className="relative min-h-screen transition-opacity duration-700 bg-[url('/karachicharminar.gif')] bg-cover bg-center text-white flex flex-col items-center justify-start overflow-hidden px-4 sm:px-6 pt-20 sm:pt-24 md:pt-32 lg:pt-40"
+        className="relative min-h-screen transition-opacity duration-700 bg-cover bg-center text-white flex flex-col items-center justify-start overflow-hidden px-4 sm:px-6 pt-20 sm:pt-24 md:pt-32 lg:pt-40"
+        style={{ backgroundImage: `url('${backgroundImage}')` }}
       >
         {/* Language Toggle */}
         <div className="absolute top-4 sm:top-5 right-4 sm:right-5 z-[50]">
@@ -132,27 +141,27 @@ export default function Home() {
           <div className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full 
             bg-cyan-950/20 border border-cyan-500/20 text-cyan-300 text-xs font-mono mb-4 sm:mb-6">
             <Globe className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="text-xs sm:text-xs">KARACHI WATER & SEWERAGE CORPORATION</span>
+            <span className="text-xs sm:text-xs uppercase">{eyebrow}</span>
           </div>
 
           <h1
             className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight"
             style={{ fontFamily: "Roboto, sans-serif" }}
           >
-            COMMITTED TO DELIVER
+            {title.toUpperCase()}
           </h1>
 
           <p className="mt-3 sm:mt-4 md:mt-5 text-xs sm:text-base md:text-lg text-slate-200 max-w-2xl mx-auto font-light leading-relaxed">
-            Ensuring a reliable, clean water supply and modern sewerage services across Karachi — focused on integrity, sustainability, and public trust.
+            {subtitle}
           </p>
 
           <div className="mt-6 sm:mt-8 md:mt-10">
             <Link
-              href="/aboutus"
+              href={ctaHref}
               className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-lg border border-white/10
                 bg-white/5 hover:bg-white/10 backdrop-blur-sm font-semibold text-white transition-all duration-200 text-sm sm:text-base"
             >
-              <span className="whitespace-nowrap">Learn About KW&amp;SC</span>
+              <span className="whitespace-nowrap">{ctaLabel}</span>
               <MoveRight size={18} className="sm:block hidden" />
               <MoveRight size={16} className="sm:hidden" />
             </Link>

@@ -3,6 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Activity, Calendar, ChevronRight, Tag } from "lucide-react";
 
 // --- Mock Data with Futuristic/Tech Spin ---
+
+
+
+
+
+
+
+
+
+
 const mockNewsData = [
   {
     id: 1,
@@ -121,6 +131,21 @@ const NewsCard = ({ news, index }) => {
   );
 };
 
+function normalizeNews(articles) {
+  if (!articles || articles.length === 0) return mockNewsData;
+  
+  return articles.map((article, index) => ({
+    id: article.id || index,
+    title: article.title,
+    date: article.publishedAt ? new Date(article.publishedAt).toLocaleDateString() : new Date().toLocaleDateString(),
+    category: article.category?.title || "GENERAL",
+    summary: article.summary || "",
+    icon: <Activity className="w-6 h-6 text-cyan-400" />, 
+    imagePlaceholder: article.heroMedia?.url || `https://placehold.co/800x450/0f172a/06b6d4?text=${encodeURIComponent(article.title || 'News')}`,
+    status: article.status || "PUBLISHED"
+  }));
+}
+
 export default function NewsUpdates() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -143,13 +168,24 @@ export default function NewsUpdates() {
     `;
     document.head.appendChild(style);
 
-    const timer = setTimeout(() => {
-      setNews(mockNewsData);
-      setLoading(false);
-    }, 800);
+    async function fetchNews() {
+      try {
+        const res = await fetch('/api/news');
+        if (!res.ok) throw new Error('Failed to fetch news');
+        const json = await res.json();
+        const articles = json.articles || [];
+        setNews(normalizeNews(articles));
+      } catch (error) {
+        console.error("Failed to load news:", error);
+        setNews(mockNewsData);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchNews();
 
     return () => {
-      clearTimeout(timer);
       document.head.removeChild(style);
     };
   }, []);

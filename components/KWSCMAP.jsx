@@ -1,10 +1,15 @@
 'use client';
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { MapPin, Phone, Mail, Building2, HardHat, Zap, Menu, X, ChevronDown } from "lucide-react";
+import { useContactData } from "@/hooks/useContactData";
 
 export default function Kwscmap() {
+  const { data } = useContactData();
+  const apiLocations = data?.offices || [];
+
   // Define all possible KW&SC locations with their details
-  const locations = useMemo(() => [
+  const locations = useMemo(() => {
+    const fallback = [
     {
       id: 'hq',
       name: 'Headquarters (Main Office)',
@@ -49,9 +54,30 @@ export default function Kwscmap() {
       // Coordinates for Dhabeji
       mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3606.3263045237735!2d67.57014697501358!3d25.32162627745771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb94026857f6d39%3A0x5a18a91b29a65d50!2sDhabeji%20Pumping%20Station!5e0!3m2!1sen!2spk!4v1700676600000!5m2!1sen!2spk",
     }
-  ], []);
+    ];
 
-  const [activeLocationId, setActiveLocationId] = useState('hq');
+    if (apiLocations.length > 0) {
+      return apiLocations.map((loc) => ({
+        id: loc.id,
+        name: loc.label,
+        shortName: loc.label.split(' ').slice(0, 2).join(' '),
+        icon: <MapPin className="w-5 h-5 text-blue-600" />,
+        address: loc.address,
+        phone: loc.phone || "N/A",
+        email: loc.email || "N/A",
+        mapEmbedUrl: loc.mapEmbedUrl
+      }));
+    }
+    return fallback;
+  }, [apiLocations]);
+
+  const [activeLocationId, setActiveLocationId] = useState(null);
+
+  useEffect(() => {
+    if (locations.length > 0 && !activeLocationId) {
+      setActiveLocationId(locations[0].id);
+    }
+  }, [locations, activeLocationId]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
 

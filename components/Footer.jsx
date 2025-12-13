@@ -3,6 +3,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { Mail, MapPin, Phone, ExternalLink } from "lucide-react";
 import { SocialLinks, CopyRight } from "@/components/SocialLinks";
+import { useContactData } from "@/hooks/useContactData";
 
 const footer_data = {
   email: "info@kwsc.gos.pk",
@@ -14,6 +15,15 @@ const footer_data = {
 
 const Footer = () => {
   const pathname = usePathname();
+  const { data } = useContactData();
+
+  const contactInfo = {
+    email: data?.channels?.find(c => c.label === "Email")?.email || footer_data.email,
+    phone: data?.channels?.find(c => c.label === "Helpline")?.phone || footer_data.phone,
+    location: data?.offices?.find(o => o.id === "hq")?.address || footer_data.location,
+    footer_info: footer_data.footer_info,
+  };
+
   if (pathname?.startsWith("/papa")) {
     return null;
   }
@@ -39,7 +49,7 @@ const Footer = () => {
                 className="mb-6 object-contain h-24 w-auto"
               />
               <p className="mb-6 text-gray-600 leading-relaxed text-base">
-                {footer_data.footer_info}
+                {contactInfo.footer_info}
               </p>
             </div>
           </div>
@@ -52,19 +62,19 @@ const Footer = () => {
               <div className="flex items-start gap-3">
                 <MapPin className="text-cyan-500 mt-1 flex-shrink-0" size={20} />
                 <span className="text-sm text-gray-600 hover:text-cyan-600 transition-colors">
-                    {footer_data.location}
+                    {contactInfo.location}
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="text-cyan-500 flex-shrink-0" size={20} />
-                <a href={`tel:${footer_data.phone.replace(/[\s\(\)]/g, '')}`} className="text-sm text-gray-600 hover:text-cyan-600 transition-colors">
-                    {footer_data.phone}
+                <a href={`tel:${contactInfo.phone.replace(/[\s\(\)]/g, '')}`} className="text-sm text-gray-600 hover:text-cyan-600 transition-colors">
+                    {contactInfo.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="text-cyan-500 flex-shrink-0" size={20} />
-                <a href={`mailto:${footer_data.email}`} className="text-sm text-gray-600 hover:text-cyan-600 transition-colors">
-                    {footer_data.email}
+                <a href={`mailto:${contactInfo.email}`} className="text-sm text-gray-600 hover:text-cyan-600 transition-colors">
+                    {contactInfo.email}
                 </a>
               </div>
             </div>
