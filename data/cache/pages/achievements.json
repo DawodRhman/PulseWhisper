@@ -3,9 +3,11 @@
   "slug": "achievements",
   "title": "Achievements",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": "aboutus",
   "createdAt": "2025-12-04T17:09:26.495Z",
-  "updatedAt": "2025-12-04T17:09:26.495Z",
+  "updatedAt": "2025-12-12T19:06:25.641Z",
   "seoId": "8f4f061a-7088-443c-a509-8b0422b5b1eb",
   "sections": [
     {

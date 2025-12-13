@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Fade } from "react-awesome-reveal";
 import Image from "next/image";
 
@@ -56,7 +56,29 @@ function normalizeAchievements(items) {
 }
 
 export default function AchievementComponent({ items }) {
-  const achievements = useMemo(() => normalizeAchievements(items), [items]);
+  const [fetched, setFetched] = useState(null);
+  const achievements = useMemo(
+    () => normalizeAchievements(items && items.length ? items : fetched),
+    [items, fetched]
+  );
+
+  useEffect(() => {
+    let canceled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/papa/achievements");
+        if (!res.ok) return;
+        const json = await res.json().catch(() => null);
+        if (!json?.data) return;
+        if (!canceled) setFetched(json.data);
+      } catch {
+        // swallow: fallback data will be used
+      }
+    })();
+    return () => {
+      canceled = true;
+    };
+  }, []);
 
   return (
     <div className="w-full z-20 relative px-4 md:px-0">
