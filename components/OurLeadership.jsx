@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 
 const FALLBACK_TEAM = [
@@ -43,8 +43,28 @@ const FALLBACK_INSIGHTS = [
 const PLACEHOLDER_PORTRAIT = "/leaders/placeholder.svg";
 
 export default function OurLeadership({ team, insights }) {
+  const [fetchedTeam, setFetchedTeam] = useState(null);
+
+  useEffect(() => {
+    async function fetchLeadership() {
+      try {
+        const res = await fetch("/api/leadership");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.members && Array.isArray(data.members) && data.members.length > 0) {
+            setFetchedTeam(data.members);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch leadership", error);
+      }
+    }
+    fetchLeadership();
+  }, []);
+
   const roster = useMemo(() => {
-    const list = Array.isArray(team) && team.length ? team : FALLBACK_TEAM;
+    const sourceData = fetchedTeam || team;
+    const list = Array.isArray(sourceData) && sourceData.length ? sourceData : FALLBACK_TEAM;
     return list.map((member, index) => ({
       id: member.id || member.name || `leader-${index}`,
       name: member.name,
@@ -52,7 +72,7 @@ export default function OurLeadership({ team, insights }) {
       bio: member.bio,
       image: member.portrait?.url || member.media?.url || member.img || PLACEHOLDER_PORTRAIT,
     }));
-  }, [team]);
+  }, [team, fetchedTeam]);
 
   const insightCards = Array.isArray(insights) && insights.length ? insights : FALLBACK_INSIGHTS;
 

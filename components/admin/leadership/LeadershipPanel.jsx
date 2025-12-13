@@ -195,7 +195,11 @@ export default function LeadershipPanel() {
   async function handleDelete(member) {
     if (!member?.id) return;
     if (!window.confirm(`Remove ${member.name}? This cannot be undone.`)) return;
-    await deleteEntity("member", { id: member.id });
+    try {
+      await deleteEntity("member", { id: member.id });
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
   }
 
   function handleUpdateSelect(memberId) {
@@ -351,14 +355,16 @@ export default function LeadershipPanel() {
                         <button
                           type="button"
                           onClick={() => prefillForms(member)}
-                          className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                          disabled={actionState.pending}
+                          className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Edit
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDelete(member)}
-                          className="rounded-lg p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                          disabled={actionState.pending}
+                          className="rounded-lg p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
                           aria-label={`Delete ${member.name}`}
                         >
                           <Trash2 size={16} />

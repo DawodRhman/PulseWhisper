@@ -3,9 +3,11 @@
   "slug": "ourleadership",
   "title": "Our Leadership",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": "Our Leadership",
+  "navGroup": "aboutus",
   "createdAt": "2025-12-04T17:09:40.244Z",
-  "updatedAt": "2025-12-04T17:09:40.244Z",
+  "updatedAt": "2025-12-12T19:06:26.069Z",
   "seoId": "cf611c9d-fbcb-4151-89ad-d2e20b1cc3cc",
   "sections": [
     {

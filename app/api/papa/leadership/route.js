@@ -26,7 +26,7 @@ const socialSchema = z
 
 const seoPayloadSchema = z
   .object({
-    title: z.string().trim().min(3).optional(),
+    title: z.string().trim().min(3).optional().nullable(),
     description: nullableString,
     keywords: nullableString,
     canonicalUrl: nullableUrl,

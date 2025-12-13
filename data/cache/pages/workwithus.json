@@ -2,16 +2,16 @@
   "id": "69a804bf-5d8a-43b2-a8ab-e61119dbbdef",
   "slug": "workwithus",
   "title": "Work With Us",
-  "isPublished": false,
-  "showInNavbar": false,
+  "isPublished": true,
+  "showInNavbar": true,
   "navLabel": null,
   "navGroup": "whatwedo",
   "createdAt": "2025-12-04T17:09:56.004Z",
-  "updatedAt": "2025-12-13T11:24:13.643Z",
+  "updatedAt": "2025-12-13T11:25:36.866Z",
   "seoId": "69a1c3bb-72ae-4a94-8b0a-500d774f0210",
   "sections": [
     {
-      "id": "1d403ed8-c2c6-4ffa-8ecd-f7036d510363",
+      "id": "ae86411d-e668-406a-9b1e-2cf9502db0bb",
       "pageId": "69a804bf-5d8a-43b2-a8ab-e61119dbbdef",
       "type": "HERO",
       "order": 0,
@@ -19,8 +19,8 @@
         "title": "Work With Us",
         "subtitle": "Partner with KW&SC"
       },
-      "createdAt": "2025-12-13T11:24:13.687Z",
-      "updatedAt": "2025-12-13T11:24:13.687Z"
+      "createdAt": "2025-12-13T11:25:36.882Z",
+      "updatedAt": "2025-12-13T11:25:36.882Z"
     }
   ],
   "seo": {
@@ -36,6 +36,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:56.004Z",
-    "updatedAt": "2025-12-13T11:24:13.643Z"
+    "updatedAt": "2025-12-13T11:25:36.866Z"
   }
 }

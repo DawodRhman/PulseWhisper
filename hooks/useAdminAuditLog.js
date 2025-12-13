@@ -12,9 +12,18 @@ export function getDefaultAuditFilters() {
 function parseErrorPayload(payload, fallback) {
   if (!payload) return fallback;
   if (typeof payload === "string") return payload;
+  const parts = [];
   if (payload?.details?.formErrors?.length) {
-    return payload.details.formErrors.join(" ");
+    parts.push(payload.details.formErrors.join(" "));
   }
+  if (payload?.details?.fieldErrors) {
+    for (const [field, errors] of Object.entries(payload.details.fieldErrors)) {
+      if (errors && errors.length) {
+        parts.push(`${field}: ${errors.join(", ")}`);
+      }
+    }
+  }
+  if (parts.length > 0) return parts.join("; ");
   if (payload?.error) return payload.error;
   return fallback;
 }

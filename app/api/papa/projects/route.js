@@ -17,7 +17,7 @@ const nullableString = z.string().trim().optional().nullable();
 const nullableUrl = z.string().trim().optional().nullable();
 const seoPayloadSchema = z
   .object({
-    title: z.string().trim().min(3).optional(),
+    title: z.string().trim().min(3).optional().nullable(),
     description: nullableString,
     keywords: nullableString,
     canonicalUrl: nullableUrl,

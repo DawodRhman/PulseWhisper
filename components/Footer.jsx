@@ -18,9 +18,9 @@ const Footer = () => {
   const { data } = useContactData();
 
   const contactInfo = {
-    email: data?.channels?.find(c => c.label === "Email")?.email || footer_data.email,
-    phone: data?.channels?.find(c => c.label === "Helpline")?.phone || footer_data.phone,
-    location: data?.offices?.find(o => o.id === "hq")?.address || footer_data.location,
+    email: data?.channels?.find(c => c.label === "Email")?.email || data?.channels?.[0]?.email || footer_data.email,
+    phone: data?.channels?.find(c => c.label === "Helpline")?.phone || data?.channels?.[0]?.phone || footer_data.phone,
+    location: data?.offices?.find(o => o.id === "hq")?.address || data?.offices?.[0]?.address || footer_data.location,
     footer_info: footer_data.footer_info,
   };
 

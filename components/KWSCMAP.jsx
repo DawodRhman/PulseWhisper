@@ -65,7 +65,7 @@ export default function Kwscmap() {
         address: loc.address,
         phone: loc.phone || "N/A",
         email: loc.email || "N/A",
-        mapEmbedUrl: loc.mapEmbedUrl
+        mapEmbedUrl: loc.mapEmbedUrl || `https://www.google.com/maps?q=${encodeURIComponent(loc.address)}&output=embed`
       }));
     }
     return fallback;
