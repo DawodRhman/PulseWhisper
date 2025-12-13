@@ -27,7 +27,7 @@ async function fetchAchievements() {
 
 export async function GET() {
   try {
-    await ensureAdminSession("settings:write");
+    // Public read: allow frontend to render achievements
     const data = await fetchAchievements();
     return NextResponse.json({ data });
   } catch (error) {

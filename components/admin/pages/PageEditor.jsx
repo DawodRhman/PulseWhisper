@@ -19,6 +19,7 @@ const SECTION_TYPES = [
   { value: "PROJECTS", label: "Projects Section" },
   { value: "MEDIA_GALLERY", label: "Media Gallery" },
   { value: "SUBSCRIBE", label: "Subscribe Section" },
+  { value: "ACHIEVEMENTS", label: "Achievements" },
 ];
 
 export default function PageEditor({ page, onSave, onCancel }) {
@@ -420,6 +421,7 @@ function SectionForm({ type, content, onChange, idPrefix }) {
     case "PROJECTS":
     case "MEDIA_GALLERY":
     case "SUBSCRIBE":
+    case "ACHIEVEMENTS":
       return (
         <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200">
           <p className="text-sm">

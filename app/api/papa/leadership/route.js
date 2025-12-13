@@ -142,14 +142,23 @@ async function resolveMediaAsset({ mediaId, mediaUrl, label }) {
   if (!mediaUrl) return null;
   const existing = await prisma.mediaAsset.findUnique({ where: { url: mediaUrl } });
   if (existing) return existing.id;
-  const asset = await prisma.mediaAsset.create({
-    data: {
-      url: mediaUrl,
-      label: label || "Leadership portrait",
-      category: "leadership",
-    },
-  });
-  return asset.id;
+  try {
+    const asset = await prisma.mediaAsset.create({
+      data: {
+        url: mediaUrl,
+        label: label || "Leadership portrait",
+        category: "leadership",
+      },
+    });
+    return asset.id;
+  } catch (error) {
+    if (error?.code === "P2002") {
+      // Unique constraint hit after concurrent create; fetch existing
+      const dup = await prisma.mediaAsset.findUnique({ where: { url: mediaUrl } });
+      if (dup) return dup.id;
+    }
+    throw error;
+  }
 }
 
 function normalizeSeoPayload(baseTitle, seoPayload) {

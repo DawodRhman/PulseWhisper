@@ -50,7 +50,7 @@ export default function OurLeadership({ team, insights }) {
       name: member.name,
       role: member.designation || member.role,
       bio: member.bio,
-      image: member.media?.url || member.img || PLACEHOLDER_PORTRAIT,
+      image: member.portrait?.url || member.media?.url || member.img || PLACEHOLDER_PORTRAIT,
     }));
   }, [team]);
 

@@ -15,6 +15,7 @@ import Rti from "@/components/Rti";
 import Watertodaysection from "@/components/Watertodaysection";
 import Contact from "@/components/Contact";
 import Education from "@/components/Education";
+import Achievement from "@/components/Achievement";
 
 // A simple generic text block component
 const TextBlock = ({ heading, body }) => {
@@ -53,6 +54,7 @@ const COMPONENT_MAP = {
   WATER_TODAY: Watertodaysection,
   CONTACT: Contact,
   EDUCATION: Education,
+  ACHIEVEMENTS: Achievement,
 };
 
 export default function PageRenderer({ sections }) {
@@ -82,4 +84,3 @@ export default function PageRenderer({ sections }) {
     </div>
   );
 }
-
