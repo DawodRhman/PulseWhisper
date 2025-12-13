@@ -47,7 +47,7 @@ const createSchemas = {
       tenderId: z.string().min(1),
       label: nullableString,
       mediaId: z.string().optional(),
-      mediaUrl: z.string().url().optional(),
+      mediaUrl: z.string().trim().optional(),
     })
     .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
       message: "Provide mediaId or mediaUrl",
@@ -79,7 +79,7 @@ const updateSchemas = {
       id: z.string().min(1),
       label: nullableString,
       mediaId: z.string().optional(),
-      mediaUrl: z.string().url().optional(),
+      mediaUrl: z.string().trim().optional(),
     })
     .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
       message: "Provide mediaId or mediaUrl",

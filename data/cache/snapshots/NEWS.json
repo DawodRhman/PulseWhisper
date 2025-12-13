@@ -1,0 +1,269 @@
+{
+  "hero": {
+    "title": "Latest News",
+    "subtitle": "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
+    "backgroundImage": "/media/hero/news-desk.svg"
+  },
+  "categories": [
+    {
+      "id": "7e454512-08d2-4ca6-99b6-d607e4d6425e",
+      "title": "INFRASTRUCTURE",
+      "slug": "infrastructure",
+      "order": 0,
+      "createdAt": "2025-12-04T17:08:54.616Z",
+      "updatedAt": "2025-12-04T17:08:54.616Z"
+    },
+    {
+      "id": "11572baf-fec5-406b-999c-20ec80e18574",
+      "title": "DIGITAL SERVICES",
+      "slug": "digital-services",
+      "order": 0,
+      "createdAt": "2025-12-04T17:08:55.745Z",
+      "updatedAt": "2025-12-04T17:08:55.745Z"
+    },
+    {
+      "id": "d337b400-784c-474e-8007-16d976e0f2fb",
+      "title": "MAINTENANCE",
+      "slug": "maintenance",
+      "order": 0,
+      "createdAt": "2025-12-04T17:08:56.640Z",
+      "updatedAt": "2025-12-04T17:08:56.640Z"
+    },
+    {
+      "id": "76b89c92-a124-406b-a456-71215376e059",
+      "title": "SUSTAINABILITY",
+      "slug": "sustainability",
+      "order": 0,
+      "createdAt": "2025-12-04T17:08:57.300Z",
+      "updatedAt": "2025-12-04T17:08:57.300Z"
+    },
+    {
+      "id": "69b81b48-ba5f-4e90-a4fa-63c2b54b5b3f",
+      "title": "PUBLIC RELATIONS",
+      "slug": "public-relations",
+      "order": 0,
+      "createdAt": "2025-12-04T17:08:58.030Z",
+      "updatedAt": "2025-12-04T17:08:58.030Z"
+    }
+  ],
+  "articles": [
+    {
+      "id": "df101203-6334-4066-987b-85d589870006",
+      "categoryId": "7e454512-08d2-4ca6-99b6-d607e4d6425e",
+      "title": "K-IV Project: Phase I Operational Status Confirmed",
+      "slug": "k-iv-project-phase-i-operational-status-confirmed",
+      "subtitle": null,
+      "summary": "System diagnostics confirm Phase I of the K-IV water supply grid is fully operational, injecting 260 MGD into the primary distribution network. Pressure levels are stable.",
+      "content": {
+        "body": "System diagnostics confirm Phase I of the K-IV water supply grid is fully operational, injecting 260 MGD into the primary distribution network. Pressure levels are stable."
+      },
+      "status": "PUBLISHED",
+      "publishedAt": "2025-11-15T00:00:00.000Z",
+      "heroMediaId": "8ef0e2a0-b1fd-47c0-bc42-8f2058c57b14",
+      "seoId": null,
+      "createdAt": "2025-12-04T17:08:55.303Z",
+      "updatedAt": "2025-12-04T17:08:55.303Z",
+      "category": {
+        "id": "7e454512-08d2-4ca6-99b6-d607e4d6425e",
+        "title": "INFRASTRUCTURE",
+        "slug": "infrastructure",
+        "order": 0,
+        "createdAt": "2025-12-04T17:08:54.616Z",
+        "updatedAt": "2025-12-04T17:08:54.616Z"
+      },
+      "tags": [],
+      "heroMedia": {
+        "id": "8ef0e2a0-b1fd-47c0-bc42-8f2058c57b14",
+        "url": "/media/news/kiv-operational.svg",
+        "label": "K-IV Project: Phase I Operational Status Confirmed",
+        "mimeType": "image/svg+xml",
+        "fileSize": 695,
+        "width": 1200,
+        "height": 675,
+        "checksum": "03e0d079c00b9a66652777dc3666494c",
+        "category": "news",
+        "altText": null,
+        "createdAt": "2025-12-04T17:08:55.089Z",
+        "updatedAt": "2025-12-04T17:08:55.089Z"
+      },
+      "seo": null
+    },
+    {
+      "id": "ec60a782-c4b7-46c7-90c3-58e90802c4fa",
+      "categoryId": "11572baf-fec5-406b-999c-20ec80e18574",
+      "title": "E-Billing Portal V2.0 Deployed",
+      "slug": "e-billing-portal-v2-0-deployed",
+      "subtitle": null,
+      "summary": "The upgraded digital payment gateway is live. New features include real-time consumption analytics, instant ledger updates, and biometric login support for verified consumers.",
+      "content": {
+        "body": "The upgraded digital payment gateway is live. New features include real-time consumption analytics, instant ledger updates, and biometric login support for verified consumers."
+      },
+      "status": "PUBLISHED",
+      "publishedAt": "2025-10-28T00:00:00.000Z",
+      "heroMediaId": "c8690727-9f3f-45aa-b7f5-3b4577c1425b",
+      "seoId": null,
+      "createdAt": "2025-12-04T17:08:56.184Z",
+      "updatedAt": "2025-12-04T17:08:56.184Z",
+      "category": {
+        "id": "11572baf-fec5-406b-999c-20ec80e18574",
+        "title": "DIGITAL SERVICES",
+        "slug": "digital-services",
+        "order": 0,
+        "createdAt": "2025-12-04T17:08:55.745Z",
+        "updatedAt": "2025-12-04T17:08:55.745Z"
+      },
+      "tags": [],
+      "heroMedia": {
+        "id": "c8690727-9f3f-45aa-b7f5-3b4577c1425b",
+        "url": "/media/news/digital-billing.svg",
+        "label": "E-Billing Portal V2.0 Deployed",
+        "mimeType": "image/svg+xml",
+        "fileSize": 783,
+        "width": 1200,
+        "height": 675,
+        "checksum": "b390570bd8aafdfd286bf13c700d1c22",
+        "category": "news",
+        "altText": null,
+        "createdAt": "2025-12-04T17:08:55.963Z",
+        "updatedAt": "2025-12-04T17:08:55.963Z"
+      },
+      "seo": null
+    },
+    {
+      "id": "9b43bd71-d6ce-49e4-87d0-b5d39a2bf87f",
+      "categoryId": "d337b400-784c-474e-8007-16d976e0f2fb",
+      "title": "Sewerage Network Overhaul: Sector 4 & 7",
+      "slug": "sewerage-network-overhaul-sector-4-7",
+      "subtitle": null,
+      "summary": "Automated dredging units have been deployed in Lyari and Gadap. Predictive AI modeling suggests a 40% efficiency increase in flow rates post-rehabilitation.",
+      "content": {
+        "body": "Automated dredging units have been deployed in Lyari and Gadap. Predictive AI modeling suggests a 40% efficiency increase in flow rates post-rehabilitation."
+      },
+      "status": "PUBLISHED",
+      "publishedAt": "2025-10-10T00:00:00.000Z",
+      "heroMediaId": "851a0b98-3cbb-425a-a928-c2e6ae587623",
+      "seoId": null,
+      "createdAt": "2025-12-04T17:08:57.083Z",
+      "updatedAt": "2025-12-04T17:08:57.083Z",
+      "category": {
+        "id": "d337b400-784c-474e-8007-16d976e0f2fb",
+        "title": "MAINTENANCE",
+        "slug": "maintenance",
+        "order": 0,
+        "createdAt": "2025-12-04T17:08:56.640Z",
+        "updatedAt": "2025-12-04T17:08:56.640Z"
+      },
+      "tags": [],
+      "heroMedia": {
+        "id": "851a0b98-3cbb-425a-a928-c2e6ae587623",
+        "url": "/media/news/hydro-testing.svg",
+        "label": "Sewerage Network Overhaul: Sector 4 & 7",
+        "mimeType": "image/svg+xml",
+        "fileSize": 782,
+        "width": 1200,
+        "height": 675,
+        "checksum": "aa8dc6772ffd7c78e335f8b8025bad29",
+        "category": "news",
+        "altText": null,
+        "createdAt": "2025-12-04T17:08:56.862Z",
+        "updatedAt": "2025-12-04T17:08:56.862Z"
+      },
+      "seo": null
+    },
+    {
+      "id": "51b91d6a-772d-4537-85e1-ecda2cbbbda3",
+      "categoryId": "76b89c92-a124-406b-a456-71215376e059",
+      "title": "Industrial Water Conservation Protocol",
+      "slug": "industrial-water-conservation-protocol",
+      "subtitle": null,
+      "summary": "Smart metering mandates are now in effect for all industrial zones. Real-time monitoring will detect unauthorized usage patterns and optimize resource allocation.",
+      "content": {
+        "body": "Smart metering mandates are now in effect for all industrial zones. Real-time monitoring will detect unauthorized usage patterns and optimize resource allocation."
+      },
+      "status": "PUBLISHED",
+      "publishedAt": "2025-09-22T00:00:00.000Z",
+      "heroMediaId": "3eb19375-6b2e-478c-90a8-742dce9d6cd7",
+      "seoId": null,
+      "createdAt": "2025-12-04T17:08:57.814Z",
+      "updatedAt": "2025-12-04T17:08:57.814Z",
+      "category": {
+        "id": "76b89c92-a124-406b-a456-71215376e059",
+        "title": "SUSTAINABILITY",
+        "slug": "sustainability",
+        "order": 0,
+        "createdAt": "2025-12-04T17:08:57.300Z",
+        "updatedAt": "2025-12-04T17:08:57.300Z"
+      },
+      "tags": [],
+      "heroMedia": {
+        "id": "3eb19375-6b2e-478c-90a8-742dce9d6cd7",
+        "url": "/media/news/smart-meters.svg",
+        "label": "Industrial Water Conservation Protocol",
+        "mimeType": "image/svg+xml",
+        "fileSize": 804,
+        "width": 1200,
+        "height": 675,
+        "checksum": "0e3507fb6c1a3e2ca76b9eff5cb9cf0e",
+        "category": "news",
+        "altText": null,
+        "createdAt": "2025-12-04T17:08:57.520Z",
+        "updatedAt": "2025-12-04T17:08:57.520Z"
+      },
+      "seo": null
+    },
+    {
+      "id": "5ab87f96-0fd6-4613-baff-edd542a4fc73",
+      "categoryId": "69b81b48-ba5f-4e90-a4fa-63c2b54b5b3f",
+      "title": "Community Outreach: Clean Water Initiative",
+      "slug": "community-outreach-clean-water-initiative",
+      "subtitle": null,
+      "summary": "KW&SC technical teams conducted a seminar on next-gen filtration methods. Attendees were briefed on smart-home leak detection systems and water quality standards.",
+      "content": {
+        "body": "KW&SC technical teams conducted a seminar on next-gen filtration methods. Attendees were briefed on smart-home leak detection systems and water quality standards."
+      },
+      "status": "PUBLISHED",
+      "publishedAt": "2025-09-01T00:00:00.000Z",
+      "heroMediaId": "692e8f3b-8fcd-4ced-8595-fdb352cdb07d",
+      "seoId": null,
+      "createdAt": "2025-12-04T17:08:58.479Z",
+      "updatedAt": "2025-12-04T17:08:58.479Z",
+      "category": {
+        "id": "69b81b48-ba5f-4e90-a4fa-63c2b54b5b3f",
+        "title": "PUBLIC RELATIONS",
+        "slug": "public-relations",
+        "order": 0,
+        "createdAt": "2025-12-04T17:08:58.030Z",
+        "updatedAt": "2025-12-04T17:08:58.030Z"
+      },
+      "tags": [],
+      "heroMedia": {
+        "id": "692e8f3b-8fcd-4ced-8595-fdb352cdb07d",
+        "url": "/media/news/storm-response.svg",
+        "label": "Community Outreach: Clean Water Initiative",
+        "mimeType": "image/svg+xml",
+        "fileSize": 804,
+        "width": 1200,
+        "height": 675,
+        "checksum": "e85cd7f6f3d865245b219bb9e90d6f3a",
+        "category": "news",
+        "altText": null,
+        "createdAt": "2025-12-04T17:08:58.255Z",
+        "updatedAt": "2025-12-04T17:08:58.255Z"
+      },
+      "seo": null
+    }
+  ],
+  "seo": {
+    "id": null,
+    "title": "Latest News | Karachi Water & Sewerage Corporation",
+    "description": "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
+    "keywords": null,
+    "canonicalUrl": "/news",
+    "ogTitle": "Latest News | Karachi Water & Sewerage Corporation",
+    "ogDescription": "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
+    "ogImageUrl": "/media/hero/news-desk.svg",
+    "twitterCard": "summary_large_image",
+    "structuredData": null,
+    "allowIndexing": true
+  }
+}

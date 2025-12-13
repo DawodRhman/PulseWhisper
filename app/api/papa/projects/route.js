@@ -14,7 +14,7 @@ const actionEnvelopeSchema = z.object({
 
 const orderField = z.coerce.number().int().min(0).optional();
 const nullableString = z.string().trim().optional().nullable();
-const nullableUrl = z.string().url().optional().nullable();
+const nullableUrl = z.string().trim().optional().nullable();
 const seoPayloadSchema = z
   .object({
     title: z.string().trim().min(3).optional(),
@@ -42,7 +42,7 @@ const createSchemas = {
       order: orderField,
       linkUrl: nullableUrl,
       mediaId: z.string().optional(),
-      mediaUrl: z.string().url().optional(),
+      mediaUrl: z.string().trim().optional(),
       seo: seoPayloadSchema.optional(),
     })
     .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
@@ -60,7 +60,7 @@ const updateSchemas = {
     order: orderField,
     linkUrl: nullableUrl,
     mediaId: z.string().optional(),
-    mediaUrl: z.string().url().optional(),
+    mediaUrl: z.string().trim().optional(),
     seo: seoPayloadSchema.optional(),
   }),
 };

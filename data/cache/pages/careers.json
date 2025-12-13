@@ -3,9 +3,11 @@
   "slug": "careers",
   "title": "Careers",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": "aboutus",
   "createdAt": "2025-12-04T17:09:29.258Z",
-  "updatedAt": "2025-12-04T17:09:29.258Z",
+  "updatedAt": "2025-12-12T19:06:26.493Z",
   "seoId": "1337c2f1-3469-451f-af6b-967200d8e614",
   "sections": [
     {

@@ -15,11 +15,11 @@ const actionEnvelopeSchema = z.object({
 
 const orderField = z.coerce.number().int().min(0).optional();
 const nullableString = z.string().trim().optional().nullable();
-const nullableUrl = z.string().url().optional().nullable();
+const nullableUrl = z.string().trim().optional().nullable();
 const socialSchema = z
   .object({
-    linkedin: z.string().url().optional().nullable(),
-    twitter: z.string().url().optional().nullable(),
+    linkedin: z.string().trim().optional().nullable(),
+    twitter: z.string().trim().optional().nullable(),
     email: z.string().email().optional().nullable(),
   })
   .partial();
@@ -47,7 +47,7 @@ const createSchemas = {
       bio: nullableString,
       priority: orderField,
       mediaId: z.string().optional(),
-      mediaUrl: z.string().url().optional(),
+      mediaUrl: z.string().trim().optional(),
       socials: socialSchema.optional(),
       seo: seoPayloadSchema.optional(),
     })
@@ -65,7 +65,7 @@ const updateSchemas = {
     bio: nullableString,
     priority: orderField,
     mediaId: z.string().optional(),
-    mediaUrl: z.string().url().optional(),
+    mediaUrl: z.string().trim().optional(),
     socials: socialSchema.optional(),
     seo: seoPayloadSchema.optional(),
   }),

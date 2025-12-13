@@ -43,7 +43,7 @@ const createSchemas = {
       status: z.nativeEnum(PublicationStatus).default(PublicationStatus.DRAFT),
       publishedAt: dateInput,
       heroMediaId: z.string().optional(),
-      heroMediaUrl: z.string().url().optional(),
+      heroMediaUrl: z.string().trim().optional(),
       tagIds: z.array(z.string()).optional(),
     })
     .refine((value) => Boolean(value.heroMediaId || value.heroMediaUrl || value.summary || value.contentBody), {
@@ -74,7 +74,7 @@ const updateSchemas = {
     status: z.nativeEnum(PublicationStatus).optional(),
     publishedAt: dateInput,
     heroMediaId: z.string().optional(),
-    heroMediaUrl: z.string().url().optional(),
+    heroMediaUrl: z.string().trim().optional(),
     tagIds: z.array(z.string()).optional(),
   }),
 };

@@ -3,9 +3,11 @@
   "slug": "whatwedo",
   "title": "What We Do",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": "What We Do",
+  "navGroup": null,
   "createdAt": "2025-12-04T17:09:53.816Z",
-  "updatedAt": "2025-12-04T17:09:53.816Z",
+  "updatedAt": "2025-12-12T19:06:22.098Z",
   "seoId": "b61d63ae-09ca-4e29-8136-3d3b433b0b91",
   "sections": [
     {

@@ -81,7 +81,7 @@ const createSchemas = {
       description: z.string().trim().optional().nullable(),
       externalUrl: z.string().url().optional().nullable(),
       mediaId: z.string().optional(),
-      mediaUrl: z.string().url().optional(),
+      mediaUrl: z.string().trim().optional(),
     })
     .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
       message: "Provide mediaId or mediaUrl",
@@ -123,7 +123,7 @@ const updateSchemas = {
     description: z.string().trim().optional().nullable(),
     externalUrl: z.string().url().optional().nullable(),
     mediaId: z.string().optional(),
-    mediaUrl: z.string().url().optional(),
+    mediaUrl: z.string().trim().optional(),
   }),
 };
 
