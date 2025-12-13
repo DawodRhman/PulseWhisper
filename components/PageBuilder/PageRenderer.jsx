@@ -6,7 +6,6 @@ import OurLeadership from "@/components/OurLeadership";
 import Faqs from "@/components/Faqs";
 import MediaGallery from "@/components/MediaGallery";
 import Subscribe from "@/components/Subscribe";
-import GenericCardGrid from "./GenericCardGrid";
 import Career from "@/components/Career";
 import Tenders from "@/components/Tenders";
 import WhatWeDo from "@/components/WhatWeDo";
@@ -15,7 +14,9 @@ import Rti from "@/components/Rti";
 import Watertodaysection from "@/components/Watertodaysection";
 import Contact from "@/components/Contact";
 import Education from "@/components/Education";
+import WorkWithUs from "@/components/Workwithus";
 import Achievement from "@/components/Achievement";
+
 
 // A simple generic text block component
 const TextBlock = ({ heading, body }) => {
@@ -46,7 +47,7 @@ const COMPONENT_MAP = {
   MEDIA_GALLERY: MediaGallery,
   SUBSCRIBE: Subscribe,
   ACHIEVEMENTS: Achievement,
-  // CARD_GRID: GenericCardGrid,
+  WORKWITHUS: WorkWithUs,
   CAREERS: Career,
   TENDERS: Tenders,
   WORKFLOW: WhatWeDo,
