@@ -20,6 +20,7 @@ const SECTION_TYPES = [
   { value: "MEDIA_GALLERY", label: "Media Gallery" },
   { value: "SUBSCRIBE", label: "Subscribe Section" },
   { value: "ACHIEVEMENTS", label: "Achievements" },
+  { value: "WORKWITHUS", label: "WorkWithUs" },
 ];
 
 export default function PageEditor({ page, onSave, onCancel }) {
@@ -316,9 +317,18 @@ export default function PageEditor({ page, onSave, onCancel }) {
 function getDefaultContent(type) {
   switch (type) {
     case "HERO":
-      return { title: "Hero Title", subtitle: "Hero Subtitle", backgroundImage: "", backgroundMediaId: "", backgroundMeta: null };
+      return {
+        title: "Hero Title",
+        subtitle: "Hero Subtitle",
+        backgroundImage: "",
+        backgroundMediaId: "",
+        backgroundMeta: null,
+      };
     case "TEXT_BLOCK":
-      return { heading: "Section Heading", body: "<p>Enter your text here...</p>" };
+      return {
+        heading: "Section Heading",
+        body: "<p>Enter your text here...</p>",
+      };
     case "CARD_GRID":
       return { heading: "Grid Heading", description: "Description", cards: [] };
     case "FAQ":
@@ -327,6 +337,8 @@ function getDefaultContent(type) {
     case "PROJECTS":
     case "MEDIA_GALLERY":
     case "SUBSCRIBE":
+      return {}; // These components manage their own data or don't need config yet
+    case "WORKWITHUS":
       return {}; // These components manage their own data or don't need config yet
     default:
       return {};
@@ -342,11 +354,19 @@ function SectionForm({ type, content, onChange, idPrefix }) {
         <div className="grid gap-4 md:grid-cols-2">
           <div>
             <Label htmlFor={fieldId("title")}>Title</Label>
-            <Input id={fieldId("title")} value={content.title || ""} onChange={e => onChange("title", e.target.value)} />
+            <Input
+              id={fieldId("title")}
+              value={content.title || ""}
+              onChange={(e) => onChange("title", e.target.value)}
+            />
           </div>
           <div>
             <Label htmlFor={fieldId("subtitle")}>Subtitle</Label>
-            <Input id={fieldId("subtitle")} value={content.subtitle || ""} onChange={e => onChange("subtitle", e.target.value)} />
+            <Input
+              id={fieldId("subtitle")}
+              value={content.subtitle || ""}
+              onChange={(e) => onChange("subtitle", e.target.value)}
+            />
           </div>
           <div className="col-span-2 space-y-2">
             <MediaPicker
@@ -360,12 +380,22 @@ function SectionForm({ type, content, onChange, idPrefix }) {
                 onChange("backgroundImage", asset?.url || "");
               }}
             />
-            <p className="text-xs text-muted-foreground">Upload or pick a GIF/image to use behind the hero content.</p>
+            <p className="text-xs text-muted-foreground">
+              Upload or pick a GIF/image to use behind the hero content.
+            </p>
           </div>
           <div className="col-span-2">
-            <Label htmlFor={fieldId("backgroundImage")}>Background Image URL</Label>
-            <Input id={fieldId("backgroundImage")} value={content.backgroundImage || ""} onChange={e => onChange("backgroundImage", e.target.value)} />
-            <p className="text-xs text-muted-foreground mt-1">Optional override if you prefer to paste a direct URL.</p>
+            <Label htmlFor={fieldId("backgroundImage")}>
+              Background Image URL
+            </Label>
+            <Input
+              id={fieldId("backgroundImage")}
+              value={content.backgroundImage || ""}
+              onChange={(e) => onChange("backgroundImage", e.target.value)}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Optional override if you prefer to paste a direct URL.
+            </p>
           </div>
         </div>
       );
@@ -374,14 +404,18 @@ function SectionForm({ type, content, onChange, idPrefix }) {
         <div className="space-y-4">
           <div>
             <Label htmlFor={fieldId("heading")}>Heading</Label>
-            <Input id={fieldId("heading")} value={content.heading || ""} onChange={e => onChange("heading", e.target.value)} />
+            <Input
+              id={fieldId("heading")}
+              value={content.heading || ""}
+              onChange={(e) => onChange("heading", e.target.value)}
+            />
           </div>
           <div>
             <Label htmlFor={fieldId("body")}>Body (HTML supported)</Label>
-            <Textarea 
+            <Textarea
               id={fieldId("body")}
-              value={content.body || ""} 
-              onChange={e => onChange("body", e.target.value)} 
+              value={content.body || ""}
+              onChange={(e) => onChange("body", e.target.value)}
               className="min-h-[150px] font-mono text-sm"
             />
           </div>
@@ -392,18 +426,28 @@ function SectionForm({ type, content, onChange, idPrefix }) {
         <div className="space-y-4">
           <div>
             <Label htmlFor={fieldId("heading")}>Heading</Label>
-            <Input id={fieldId("heading")} value={content.heading || ""} onChange={e => onChange("heading", e.target.value)} />
+            <Input
+              id={fieldId("heading")}
+              value={content.heading || ""}
+              onChange={(e) => onChange("heading", e.target.value)}
+            />
           </div>
           <div>
             <Label htmlFor={fieldId("description")}>Description</Label>
-            <Input id={fieldId("description")} value={content.description || ""} onChange={e => onChange("description", e.target.value)} />
+            <Input
+              id={fieldId("description")}
+              value={content.description || ""}
+              onChange={(e) => onChange("description", e.target.value)}
+            />
           </div>
           <div className="p-4 bg-muted rounded-md">
-            <p className="text-sm text-muted-foreground mb-2">Cards (JSON format for now)</p>
-            <Textarea 
+            <p className="text-sm text-muted-foreground mb-2">
+              Cards (JSON format for now)
+            </p>
+            <Textarea
               id={fieldId("cards")}
-              value={JSON.stringify(content.cards || [], null, 2)} 
-              onChange={e => {
+              value={JSON.stringify(content.cards || [], null, 2)}
+              onChange={(e) => {
                 try {
                   onChange("cards", JSON.parse(e.target.value));
                 } catch (err) {
@@ -425,13 +469,31 @@ function SectionForm({ type, content, onChange, idPrefix }) {
       return (
         <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200">
           <p className="text-sm">
-            This section is <strong>dynamic</strong>. It will automatically display the latest {type.toLowerCase().replace("_", " ")} from the database.
+            This section is <strong>dynamic</strong>. It will automatically
+            display the latest {type.toLowerCase().replace("_", " ")} from the
+            database.
+            <br />
+            No configuration is needed here.
+          </p>
+        </div>
+      );
+    case "WORKWITHUS":
+      return (
+        <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200">
+          <p className="text-sm">
+            This section is <strong>dynamic</strong>. It will automatically
+            display the latest {type.toLowerCase().replace("_", " ")} from the
+            database.
             <br />
             No configuration is needed here.
           </p>
         </div>
       );
     default:
-      return <p className="text-sm text-muted-foreground">No configuration available for this section type.</p>;
+      return (
+        <p className="text-sm text-muted-foreground">
+          No configuration available for this section type.
+        </p>
+      );
   }
 }
