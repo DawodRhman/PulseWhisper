@@ -3,9 +3,11 @@
   "slug": "news",
   "title": "News & Updates",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": "News & Updates",
+  "navGroup": "whatwedo",
   "createdAt": "2025-12-04T17:09:38.060Z",
-  "updatedAt": "2025-12-04T17:09:38.060Z",
+  "updatedAt": "2025-12-12T19:06:23.926Z",
   "seoId": "933eb531-f1d5-480f-be6b-c60826abfbd2",
   "sections": [
     {

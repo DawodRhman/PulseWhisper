@@ -16,67 +16,86 @@ import {
   Globe,
 } from "lucide-react";
 
-// --- Mock Data with Futuristic/Tech Spin ---
-const mockNewsData = [
+// --- Mock Data ---
+const mockArticles = [
   {
-    id: 1,
-    title: "K-IV Project: Phase I Operational Status Confirmed",
-    date: "2025-11-15",
-    category: "INFRASTRUCTURE",
-    summary:
-      "System diagnostics confirm Phase I of the K-IV water supply grid is fully operational, injecting 260 MGD into the primary distribution network. Pressure levels are stable.",
-    icon: <Activity className="w-6 h-6 text-cyan-400" />,
-    imagePlaceholder:
-      "https://placehold.co/800x450/0f172a/06b6d4?text=K-IV+OPERATIONAL",
-    status: "ONLINE",
+    date: "Aug 13, 2025",
+    title: "PPP Chairman Bilawal Bhutto Zardari inaugurates New Hub Canal",
+    description:
+      "The New Hub Canal project has been officially inaugurated, marking a significant milestone in Karachi's water infrastructure development.",
+    type: "Inauguration",
+    id: "UP-001",
+    img: "/otherImages/bhutto.png",
   },
   {
-    id: 2,
-    title: "E-Billing Portal V2.0 Deployed",
-    date: "2025-10-28",
-    category: "DIGITAL SERVICES",
-    summary:
-      "The upgraded digital payment gateway is live. New features include real-time consumption analytics, instant ledger updates, and biometric login support for verified consumers.",
-    icon: <Activity className="w-6 h-6 text-purple-400" />,
-    imagePlaceholder:
-      "https://placehold.co/800x450/0f172a/a855f7?text=PORTAL+V2.0",
-    status: "ACTIVE",
+    date: "Aug 6, 2025",
+    title: "Mayor Karachi visits New Hub Canal with officials and experts",
+    description:
+      "Comprehensive inspection and review of the completed New Hub Canal project by city leadership.",
+    type: "Inspection",
+    id: "UP-002",
+    img: "/otherImages/mayor.png",
   },
   {
-    id: 3,
-    title: "Sewerage Network Overhaul: Sector 4 & 7",
-    date: "2025-10-10",
-    category: "MAINTENANCE",
-    summary:
-      "Automated dredging units have been deployed in Lyari and Gadap. Predictive AI modeling suggests a 40% efficiency increase in flow rates post-rehabilitation.",
-    icon: <Activity className="w-6 h-6 text-blue-400" />,
-    imagePlaceholder:
-      "https://placehold.co/800x450/0f172a/3b82f6?text=NETWORK+OVERHAUL",
-    status: "IN PROGRESS",
+    date: "Aug 6, 2025",
+    title: "First major water project completed in 22 years",
+    description:
+      "KW&SC celebrates the completion of the city's first major water project in nearly two decades.",
+    type: "Achievement",
+    id: "UP-003",
   },
   {
-    id: 4,
-    title: "Industrial Water Conservation Protocol",
-    date: "2025-09-22",
-    category: "SUSTAINABILITY",
-    summary:
-      "Smart metering mandates are now in effect for all industrial zones. Real-time monitoring will detect unauthorized usage patterns and optimize resource allocation.",
-    icon: <Activity className="w-6 h-6 text-emerald-400" />,
-    imagePlaceholder:
-      "https://placehold.co/800x450/0f172a/10b981?text=CONSERVATION+PROTOCOL",
-    status: "MANDATORY",
+    date: "July 24, 2025",
+    title: "KWSC Board approves Ahmed Ali Siddiqui as permanent CEO",
+    description:
+      "Board of Directors officially appoints Ahmed Ali Siddiqui as the permanent CEO of KW&SC.",
+    type: "Leadership",
+    id: "UP-004",
+    img: "/otherImages/ceo.png",
   },
   {
-    id: 5,
-    title: "Community Outreach: Clean Water Initiative",
-    date: "2025-09-01",
-    category: "PUBLIC RELATIONS",
-    summary:
-      "KW&SC technical teams conducted a seminar on next-gen filtration methods. Attendees were briefed on smart-home leak detection systems and water quality standards.",
-    icon: <Activity className="w-6 h-6 text-pink-400" />,
-    imagePlaceholder:
-      "https://placehold.co/800x450/0f172a/ec4899?text=OUTREACH+INITIATIVE",
-    status: "COMPLETED",
+    date: "May 3, 2025",
+    title: "CEO visits NEK Old & New Filter Plants",
+    description:
+      "CEO conducts inspection of water filtration facilities to ensure quality standards.",
+    type: "Inspection",
+    id: "UP-005",
+  },
+  {
+    date: "Aug 13, 2025",
+    title: "New Hub Canal Project Successfully Completed",
+    description:
+      "KW&SC announces the successful completion of the New Hub Canal project, ahead of schedule.",
+    link: "https://www.kwsc.gos.pk/news-and-updates#press-release",
+    id: "PR-101",
+  },
+  {
+    date: "July 24, 2025",
+    title: "New CEO Appointment Announcement",
+    description:
+      "Official announcement regarding the appointment of Ahmed Ali Siddiqui as permanent CEO.",
+    link: "https://www.kwsc.gos.pk/news-and-updates#press-release",
+    id: "PR-102",
+  },
+  {
+    title: "Hub Canal Inauguration Ceremony",
+    description:
+      "Photos from the official inauguration ceremony of the New Hub Canal project",
+    type: "Photos",
+    img: "/otherImages/bhutto.png",
+  },
+  {
+    title: "Infrastructure Development",
+    description:
+      "Visual documentation of ongoing infrastructure development projects",
+    type: "Photos",
+    img: "/otherImages/infa.png",
+  },
+  {
+    title: "Community Engagement",
+    description: "Images from community engagement and development programs",
+    type: "Photos",
+    img: "/otherImages/comunity.jpeg",
   },
 ];
 
@@ -155,19 +174,20 @@ const NewsCard = ({ news, index }) => {
 };
 
 function normalizeNews(articles) {
-  if (!articles || articles.length === 0) return mockNewsData;
+  if (!articles || articles.length === 0) return mockArticles;
 
   return articles.map((article, index) => ({
     id: article.id || index,
     title: article.title,
     date: article.publishedAt
       ? new Date(article.publishedAt).toLocaleDateString()
-      : new Date().toLocaleDateString(),
-    category: article.category?.title || "GENERAL",
-    summary: article.summary || "",
+      : article.date || new Date().toLocaleDateString(),
+    category: article.category?.title || article.type || "GENERAL",
+    description: article.summary || article.description || "",
     icon: <Activity className="w-6 h-6 text-cyan-400" />,
-    imagePlaceholder:
+    img:
       article.heroMedia?.url ||
+      article.img ||
       `https://placehold.co/800x450/0f172a/06b6d4?text=${encodeURIComponent(
         article.title || "News"
       )}`,
@@ -181,44 +201,57 @@ function categorizNews(articles) {
     return { latestUpdates: [], pressReleases: [], mediaGallery: [] };
   }
 
+  // Adjust slices based on data length (Mock data has 10 items: 5 updates, 2 PRs, 3 Gallery)
+  const isMock = articles.length <= 12;
+  const prStart = 5;
+  const prEnd = isMock ? 7 : 9;
+  const galleryStart = isMock ? 7 : 9;
+  const galleryEnd = isMock ? 15 : 15;
+
   const latestUpdates = articles.slice(0, 5).map((article, index) => ({
     id: article.id || index,
     title: article.title,
     date: article.publishedAt
       ? new Date(article.publishedAt).toLocaleDateString()
-      : new Date().toLocaleDateString(),
-    category: article.category?.title || "GENERAL",
-    summary: article.summary || "",
-    imagePlaceholder:
+      : article.date || new Date().toLocaleDateString(),
+    category: article.category?.title || article.type || "GENERAL",
+    description: article.summary || article.description || "",
+    img:
       article.heroMedia?.url ||
+      article.img ||
       `https://placehold.co/800x450/0f172a/06b6d4?text=${encodeURIComponent(
         article.title || "News"
       )}`,
     status: article.status || "PUBLISHED",
   }));
 
-  const pressReleases = articles.slice(5, 9).map((article, index) => ({
-    id: article.id || index,
-    title: article.title,
-    date: article.publishedAt
-      ? new Date(article.publishedAt).toLocaleDateString()
-      : new Date().toLocaleDateString(),
-    description: article.summary || "",
-    link: `/news/${article.slug || article.id}`,
-    category: article.category?.title || "PRESS RELEASE",
-  }));
+  const pressReleases = articles
+    .slice(prStart, prEnd)
+    .map((article, index) => ({
+      id: article.id || index,
+      title: article.title,
+      date: article.publishedAt
+        ? new Date(article.publishedAt).toLocaleDateString()
+        : article.date || new Date().toLocaleDateString(),
+      description: article.summary || article.description || "",
+      link: article.link || `/news/${article.slug || article.id}`,
+      category: article.category?.title || "PRESS RELEASE",
+    }));
 
-  const mediaGallery = articles.slice(9, 15).map((article, index) => ({
-    id: article.id || index,
-    title: article.title,
-    description: article.summary || "",
-    type: article.category?.title || "MEDIA",
-    img:
-      article.heroMedia?.url ||
-      `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(
-        article.title || "Media"
-      )}`,
-  }));
+  const mediaGallery = articles
+    .slice(galleryStart, galleryEnd)
+    .map((article, index) => ({
+      id: article.id || index,
+      title: article.title,
+      description: article.summary || article.description || "",
+      type: article.category?.title || article.type || "MEDIA",
+      img:
+        article.heroMedia?.url ||
+        article.img ||
+        `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(
+          article.title || "Media"
+        )}`,
+    }));
 
   return { latestUpdates, pressReleases, mediaGallery };
 }
@@ -307,9 +340,14 @@ export default function NewsUpdates() {
     }
 
     if (error || !data?.articles) {
-      setNews(mockNewsData);
-      setPressReleases([]);
-      setMediaGallery([]);
+      const {
+        latestUpdates,
+        pressReleases: pr,
+        mediaGallery: mg,
+      } = categorizNews(mockArticles);
+      setNews(latestUpdates);
+      setPressReleases(pr);
+      setMediaGallery(mg);
     } else {
       const normalized = normalizeNews(data.articles);
       const {
