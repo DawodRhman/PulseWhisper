@@ -13,14 +13,25 @@ const SECTION_TYPES = [
   { value: "HERO", label: "Hero Section" },
   { value: "TEXT_BLOCK", label: "Text Block" },
   { value: "CARD_GRID", label: "Card Grid" },
-  { value: "FAQ", label: "FAQ Section" },
-  { value: "LEADERSHIP", label: "Leadership Team" },
-  { value: "SERVICES", label: "Services Section" },
-  { value: "PROJECTS", label: "Projects Section" },
+  { value: "SERVICES", label: "Services" },
+  { value: "WHO_ARE_WE", label: "Who We Are" },
+  { value: "NEWS", label: "News Updates" },
+  { value: "PROJECTS", label: "Projects" },
+  { value: "MAP", label: "KWSC Map" },
+  { value: "WORKFLOW", label: "Workflow" },
+  { value: "COUNTER", label: "Counters" },
+  { value: "LEADERSHIP", label: "Leadership" },
+  { value: "FAQ", label: "FAQ" },
   { value: "MEDIA_GALLERY", label: "Media Gallery" },
-  { value: "SUBSCRIBE", label: "Subscribe Section" },
+  { value: "SUBSCRIBE", label: "Subscribe" },
   { value: "ACHIEVEMENTS", label: "Achievements" },
-  { value: "WORKWITHUS", label: "WorkWithUs" },
+  { value: "WORKWITHUS", label: "Work With Us" },
+  { value: "CONTACT", label: "Contact" },
+  { value: "EDUCATION", label: "Education" },
+  { value: "TENDERS", label: "Tenders" },
+  { value: "CAREERS", label: "Careers" },
+  { value: "RTI", label: "RTI" },
+  { value: "WATER_TODAY", label: "Water Today" },
   { value: "DYNAMIC_CONTENT", label: "Dynamic Code & Data" },
 ];
 
@@ -264,9 +275,9 @@ export default function PageEditor({ page, onSave, onCancel }) {
       </div>
 
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col gap-4">
           <h3 className="text-xl font-semibold">Content Sections</h3>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {SECTION_TYPES.map(type => (
               <Button 
                 key={type.value} 
@@ -342,14 +353,26 @@ function getDefaultContent(type) {
       };
     case "CARD_GRID":
       return { heading: "Grid Heading", description: "Description", cards: [] };
+    case "SERVICES":
+      return { title: "Our Services", subtitle: "Comprehensive water and sewerage services for the city." };
     case "FAQ":
     case "LEADERSHIP":
-    case "SERVICES":
     case "PROJECTS":
     case "MEDIA_GALLERY":
     case "SUBSCRIBE":
-      return {}; // These components manage their own data or don't need config yet
+    case "ACHIEVEMENTS":
     case "WORKWITHUS":
+    case "WHO_ARE_WE":
+    case "NEWS":
+    case "MAP":
+    case "WORKFLOW":
+    case "COUNTER":
+    case "CONTACT":
+    case "EDUCATION":
+    case "TENDERS":
+    case "CAREERS":
+    case "RTI":
+    case "WATER_TODAY":
       return {}; // These components manage their own data or don't need config yet
     default:
       return {};
@@ -470,30 +493,57 @@ function SectionForm({ type, content, onChange, idPrefix }) {
           </div>
         </div>
       );
+    case "SERVICES":
+      return (
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor={fieldId("title")}>Section Title</Label>
+            <Input
+              id={fieldId("title")}
+              value={content.title || ""}
+              onChange={(e) => onChange("title", e.target.value)}
+              placeholder="Our Services"
+            />
+          </div>
+          <div>
+            <Label htmlFor={fieldId("subtitle")}>Subtitle</Label>
+            <Input
+              id={fieldId("subtitle")}
+              value={content.subtitle || ""}
+              onChange={(e) => onChange("subtitle", e.target.value)}
+              placeholder="Description text..."
+            />
+          </div>
+          <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200 mt-4">
+            <p className="text-sm">
+              The service cards are managed separately in the <strong>Services</strong> section of the admin panel.
+            </p>
+          </div>
+        </div>
+      );
     case "FAQ":
     case "LEADERSHIP":
-    case "SERVICES":
     case "PROJECTS":
     case "MEDIA_GALLERY":
     case "SUBSCRIBE":
     case "ACHIEVEMENTS":
-      return (
-        <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200">
-          <p className="text-sm">
-            This section is <strong>dynamic</strong>. It will automatically
-            display the latest {type.toLowerCase().replace("_", " ")} from the
-            database.
-            <br />
-            No configuration is needed here.
-          </p>
-        </div>
-      );
     case "WORKWITHUS":
+    case "WHO_ARE_WE":
+    case "NEWS":
+    case "MAP":
+    case "WORKFLOW":
+    case "COUNTER":
+    case "CONTACT":
+    case "EDUCATION":
+    case "TENDERS":
+    case "CAREERS":
+    case "RTI":
+    case "WATER_TODAY":
       return (
         <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200">
           <p className="text-sm">
             This section is <strong>dynamic</strong>. It will automatically
-            display the latest {type.toLowerCase().replace("_", " ")} from the
+            display the latest {type.toLowerCase().replace(/_/g, " ")} from the
             database.
             <br />
             No configuration is needed here.

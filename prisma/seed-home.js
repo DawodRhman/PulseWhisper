@@ -28,6 +28,36 @@ async function main() {
           title: "Our Services",
           subtitle: "Comprehensive water and sewerage services for the city."
         }
+      },
+      {
+        type: "WHO_ARE_WE",
+        order: 2,
+        content: {}
+      },
+      {
+        type: "NEWS",
+        order: 3,
+        content: {}
+      },
+      {
+        type: "PROJECTS",
+        order: 4,
+        content: {}
+      },
+      {
+        type: "MAP",
+        order: 5,
+        content: {}
+      },
+      {
+        type: "WORKFLOW",
+        order: 6,
+        content: {}
+      },
+      {
+        type: "COUNTER",
+        order: 7,
+        content: {}
       }
     ]
   };

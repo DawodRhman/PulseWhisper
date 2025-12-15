@@ -18,6 +18,10 @@ import WorkWithUs from "@/components/Workwithus";
 import Achievement from "@/components/Achievement";
 import Heritage from "@/components/Heritage";
 import DynamicLoader from "./DynamicLoader";
+import Whoarewe from "@/components/Whoarewe";
+import KWSCMap from "@/components/KWSCMAP";
+import Counter from "@/components/Counter";
+import Workflow from "@/components/Workflow";
 
 
 // A simple generic text block component
@@ -85,16 +89,20 @@ const COMPONENT_MAP = {
   WORKWITHUS: WorkWithUs,
   CAREERS: Career,
   TENDERS: Tenders,
-  WORKFLOW: WhatWeDo,
+  WORKFLOW: Workflow,
+  WHAT_WE_DO: WhatWeDo,
   NEWS: NewsUpdate,
   RTI: Rti,
   WATER_TODAY: Watertodaysection,
   CONTACT: Contact,
   EDUCATION: Education,
   DYNAMIC_CONTENT: DynamicLoader,
+  WHO_ARE_WE: Whoarewe,
+  MAP: KWSCMap,
+  COUNTER: Counter,
 };
 
-export default function PageRenderer({ sections }) {
+export default function PageRenderer({ sections, contextData }) {
   if (!sections || sections.length === 0) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
@@ -113,10 +121,15 @@ export default function PageRenderer({ sections }) {
           return null;
         }
 
-        // Pass the content object as props to the component
-        // For components that don't take props (like Services which might fetch its own data),
-        // these extra props will just be ignored, which is fine.
-        return <Component key={section.id || Math.random()} {...section.content} />;
+        // Inject context data for specific components if available
+        let extraProps = {};
+        if (contextData) {
+          if (section.type === "PROJECTS") extraProps.projects = contextData.projects;
+          if (section.type === "COUNTER") extraProps.stats = contextData.counters;
+          if (section.type === "WORKFLOW") extraProps.steps = contextData.workflow;
+        }
+
+        return <Component key={section.id || Math.random()} {...section.content} {...extraProps} />;
       })}
     </div>
   );
