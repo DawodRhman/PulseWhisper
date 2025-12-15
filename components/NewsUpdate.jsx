@@ -100,72 +100,58 @@ const mockArticles = [
 ];
 
 const NewsCard = ({ news, index }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <div
-      className="group relative bg-slate-900/60 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-500/50 transition-all duration-500 flex flex-col h-full"
+      className="relative bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col h-full hover:shadow-lg transition-shadow duration-300"
       style={{
         animation: `fadeInUp 0.6s ease-out forwards`,
-        animationDelay: `${index * 0.15}s`,
+        animationDelay: `${index * 0.05}s`,
         opacity: 0,
         transform: "translateY(20px)",
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image */}
-      <div className="relative h-32 sm:h-40 md:h-48 overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900/20 z-10"></div>
-        <div
-          className={`absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/10 to-transparent z-20 h-[200%] w-full -translate-y-full ${
-            isHovered ? "animate-scan" : ""
-          }`}
-        ></div>
+      <div className="relative h-40 sm:h-48 md:h-56 overflow-hidden">
         <img
           src={news.imagePlaceholder}
           alt={news.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+          className="w-full h-full object-cover"
         />
-        {/* HUD Badge */}
-        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 z-30">
-          <div className="bg-black/70 backdrop-blur-md border border-cyan-500/30 text-cyan-400 text-[8px] sm:text-[10px] tracking-widest font-mono px-1.5 sm:px-2 py-0.5 sm:py-1 rounded flex items-center gap-1 sm:gap-2">
-            <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-full w-full bg-cyan-500"></span>
-            </span>
+        {/* Status Badge */}
+        <div className="absolute top-3 right-3">
+          <div className="bg-white/90 text-gray-800 text-xs font-medium px-2 py-1 rounded">
             {news.status}
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-3 sm:p-4 md:p-5 lg:p-6 flex flex-col flex-grow relative">
-        <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-          <Tag className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-400" />
-          <span className="text-[10px] sm:text-xs font-mono text-cyan-500 tracking-widest uppercase">
+      <div className="p-4 sm:p-5 flex flex-col flex-grow">
+        <div className="flex items-center gap-2 mb-2">
+          <Tag className="w-3 h-3 text-gray-400" />
+          <span className="text-xs font-medium text-blue-700 uppercase tracking-wider">
             {news.category}
           </span>
         </div>
-        <h3 className="text-xl font-bold text-white mb-3 leading-snug group-hover:text-cyan-200 transition-colors">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
           {news.title}
         </h3>
-        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 line-clamp-3 group-hover:text-slate-300 transition-colors">
+        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
           {news.summary}
         </p>
 
         {/* Footer */}
-        <div className="mt-auto pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-mono text-slate-500 flex-shrink-0">
-            <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-            <span className="truncate">{news.date}</span>
+        <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <Calendar className="w-3 h-3" />
+            <span>{news.date}</span>
           </div>
           <a
             href="#"
-            className="flex items-center gap-0.5 sm:gap-1 text-xs sm:text-sm font-bold text-cyan-500 hover:text-cyan-300 transition-colors group/link flex-shrink-0"
+            className="text-sm font-medium text-blue-700 hover:text-blue-900 flex items-center gap-1"
           >
-            ACCESS DATA
-            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover/link:translate-x-1" />
+            Read More
+            <ChevronRight className="w-4 h-4" />
           </a>
         </div>
       </div>
@@ -265,96 +251,19 @@ export default function NewsUpdates() {
   const [activeTab, setActiveTab] = useState("updates");
 
   useEffect(() => {
-    const style = document.createElement("style");
-    style.innerHTML = `
-      @keyframes scan {
-        0% { transform: translateY(-100%); }
-        100% { transform: translateY(100%); }
-      }
-      .animate-scan {
-        animation: scan 2.5s linear infinite;
-      }
-      .tech-grid-bg {
-        background-image: 
-          linear-gradient(to right, rgba(6, 182, 212, 0.1) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
-        background-size: 40px 40px;
-        mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
-  useEffect(() => {
-    const loaderTimeline = gsap.timeline({
-      onComplete: () => setLoading(false),
-    });
-
-    loaderTimeline
-      .fromTo(
-        ".loader",
-        { scaleY: 0, transformOrigin: "50% 100%" },
-        { scaleY: 1, duration: 0.5, ease: "power2.inOut" }
-      )
-      .to(".loader", {
-        scaleY: 0,
-        transformOrigin: "0% -100%",
-        duration: 0.5,
-        ease: "power2.inOut",
-      })
-      .to(
-        ".wrapper",
-        { y: "-100%", ease: "power4.inOut", duration: 1 },
-        "-=0.8"
-      );
-  }, []);
-
-  useEffect(() => {
-    // Inject animations
-    const style = document.createElement("style");
-    style.innerHTML = `
-      @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      @keyframes scan {
-        0% { transform: translateY(-100%); }
-        100% { transform: translateY(100%); }
-      }
-      .animate-scan {
-        animation: scan 2s linear infinite;
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-
-  useEffect(() => {
     if (hookLoading) {
       setLoading(true);
       return;
     }
 
     if (error || !data?.articles) {
-      const {
-        latestUpdates,
-        pressReleases: pr,
-        mediaGallery: mg,
-      } = categorizNews(mockArticles);
+      const { latestUpdates, pressReleases: pr, mediaGallery: mg } = categorizNews(mockArticles);
       setNews(latestUpdates);
       setPressReleases(pr);
       setMediaGallery(mg);
     } else {
       const normalized = normalizeNews(data.articles);
-      const {
-        latestUpdates,
-        pressReleases: pr,
-        mediaGallery: mg,
-      } = categorizNews(data.articles);
+      const { latestUpdates, pressReleases: pr, mediaGallery: mg } = categorizNews(data.articles);
       setNews(normalized);
       setPressReleases(pr);
       setMediaGallery(mg);
@@ -362,202 +271,120 @@ export default function NewsUpdates() {
     setLoading(false);
   }, [data, hookLoading, error]);
 
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-[50vh]">Loading...</div>;
+  }
+
   return (
-    <section className="min-h-screen bg-[#020617] py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* Background */}
-      <div className="relative py-20">
-        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+    <section className="py-12 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            LATEST NEWS
+          </h2>
+          <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+        </div>
 
-        <div className="w-full max-w-7xl mx-auto px-8 relative z-10">
-          <div className="text-center mb-12">
-            <Fade direction="down" triggerOnce duration={1000}>
-              <h1 className="text-4xl font-bold text-white mb-3 flex items-center justify-center gap-3">
-                <Cpu className="text-cyan-400 w-8 h-8" />
-                LATEST TRANSMISSIONS
-              </h1>
-              <div className="h-1 w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto"></div>
-            </Fade>
+        {/* Tabs */}
+        <div className="flex justify-center mb-10">
+          <div className="bg-gray-100 p-1 rounded-lg inline-flex gap-1">
+            {[
+              { id: "updates", label: "Latest News", icon: <Activity size={16} /> },
+              { id: "press", label: "Press Releases", icon: <FileText size={16} /> },
+              { id: "media", label: "Gallery", icon: <Camera size={16} /> },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm ${activeTab === tab.id ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
           </div>
+        </div>
 
-          {/* Tabs */}
-          <div className="flex justify-center mb-14">
-            <div className="bg-slate-900/80 backdrop-blur-lg p-1.5 rounded-xl border border-white/10 shadow-2xl inline-flex gap-2">
-              {[
-                {
-                  id: "updates",
-                  label: "Live Updates",
-                  icon: <Activity className="w-4 h-4" />,
-                },
-                {
-                  id: "press",
-                  label: "Press Releases",
-                  icon: <FileText className="w-4 h-4" />,
-                },
-                {
-                  id: "media",
-                  label: "Gallery",
-                  icon: <Camera className="w-4 h-4" />,
-                },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-mono text-sm transition-all border ${
-                    activeTab === tab.id
-                      ? "bg-cyan-950/60 border-cyan-500 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
-                      : "bg-transparent border-transparent text-slate-400 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  {tab.icon}
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Live Updates with Images */}
+        {/* Content */}
+        <div className="space-y-8">
+          {/* Latest News */}
           {activeTab === "updates" && (
             <div className="grid grid-cols-1 gap-6">
-              {news.map((update, index) => (
-                <Fade
-                  key={index}
-                  direction="up"
-                  triggerOnce
-                  duration={600}
-                  delay={index * 100}
-                >
-                  <div className="group relative bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 hover:border-cyan-500/50 transition-all duration-500">
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                      {/* LEFT CONTENT */}
-                      <div className="flex-1 flex flex-col gap-4">
-                        <div className="flex flex-wrap items-center gap-3 mb-3">
-                          <span className="bg-cyan-950/50 border border-cyan-500/30 text-cyan-400 px-3 py-0.5 rounded text-xs font-mono uppercase">
-                            {update.type}
-                          </span>
-
-                          <span className="text-slate-500 text-xs font-mono flex items-center gap-1">
-                            <Calendar className="w-3 h-3" /> {update.date}
-                          </span>
-
-                          <span className="text-slate-600 text-[10px] font-mono border border-slate-700 px-1.5 rounded">
-                            ID: {update.id}
-                          </span>
-                        </div>
-
-                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-200 transition-colors">
-                          {update.title}
-                        </h3>
-
-                        <p className="text-slate-400 leading-relaxed text-sm md:text-base mb-4">
-                          {update.description}
-                        </p>
-
-                        <button className="inline-flex items-center gap-1 text-cyan-400 font-mono text-sm hover:text-cyan-300 transition-all">
-                          READ MORE
-                          <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      {/* IMAGE (optional) */}
-                      {update.img && (
-                        <div className="flex-shrink-0 w-full md:w-48 h-32 md:h-40 overflow-hidden rounded-xl group-hover:scale-105 transition-transform duration-500">
-                          <img
-                            src={update.img}
-                            alt={update.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
+              {news.map((item, index) => (
+                <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
+                        {item.type}
+                      </span>
+                      <span className="text-gray-500 text-sm flex items-center gap-1">
+                        <Calendar size={14} /> {item.date}
+                      </span>
                     </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      {item.summary}
+                    </p>
+                    <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
+                      Read more <ChevronRight size={16} />
+                    </a>
                   </div>
-                </Fade>
+                </div>
               ))}
             </div>
           )}
 
           {/* Press Releases */}
           {activeTab === "press" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {pressReleases.map((release, index) => (
-                <Fade
-                  key={index}
-                  direction="up"
-                  triggerOnce
-                  duration={600}
-                  delay={index * 100}
-                >
-                  <div className="group relative bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-xl p-8 hover:bg-slate-800/40 transition-all duration-300">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="bg-purple-950/30 text-purple-300 px-3 py-1 rounded-full text-xs font-bold uppercase">
-                        OFFICIAL RELEASE
-                      </span>
-                      <span className="text-slate-500 text-xs font-mono">
-                        {release.date}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-purple-200">
-                      {release.title}
-                    </h3>
-
-                    <p className="text-slate-400 mb-6 text-base">
-                      {release.description}
-                    </p>
-
-                    {release.link && (
-                      <Link
-                        href={release.link}
-                        target="_blank"
-                        className="inline-flex items-center gap-2 text-purple-400 font-mono text-sm hover:text-purple-300"
-                      >
-                        ACCESS DOCUMENT
-                        <ChevronRight className="w-4 h-4" />
-                      </Link>
-                    )}
+            <div className="grid grid-cols-1 gap-6">
+              {pressReleases.map((item, index) => (
+                <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                  <div className="flex justify-between items-start mb-3">
+                    <span className="text-gray-500 text-sm">{item.date}</span>
+                    <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
+                      Press Release
+                    </span>
                   </div>
-                </Fade>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    {item.description}
+                  </p>
+                  <a 
+                    href={item.link || '#'} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
+                  >
+                    Read more <ChevronRight size={16} />
+                  </a>
+                </div>
               ))}
             </div>
           )}
 
-          {/* Gallery */}
+          {/* Media Gallery */}
           {activeTab === "media" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {mediaGallery.map((item, index) => (
-                <Fade
-                  key={index}
-                  direction="up"
-                  triggerOnce
-                  duration={600}
-                  delay={index * 100}
-                >
-                  <div className="group bg-slate-900 rounded-xl overflow-hidden border border-white/10 hover:border-cyan-500/50 transition-all">
-                    <div className="relative h-56 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/20 to-transparent h-[200%] -translate-y-full group-hover:animate-scan"></div>
-                      <img
-                        src={item.img}
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"
-                      />
-                    </div>
-
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Tag className="w-4 h-4 text-slate-500" />
-                        <span className="text-xs font-mono text-cyan-500 uppercase tracking-widest">
-                          {item.type}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-200">
-                        {item.title}
-                      </h3>
-                      <p className="text-slate-400 text-sm line-clamp-2">
-                        {item.description}
-                      </p>
+                <div key={index} className="group relative rounded-lg overflow-hidden bg-gray-100">
+                  <div className="aspect-w-16 aspect-h-9">
+                    <img
+                      src={item.img || item.imagePlaceholder}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <div>
+                      <h4 className="text-white font-medium">{item.title}</h4>
+                      <p className="text-gray-200 text-sm">{item.description}</p>
                     </div>
                   </div>
-                </Fade>
+                </div>
               ))}
             </div>
           )}

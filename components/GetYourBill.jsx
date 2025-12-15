@@ -27,8 +27,8 @@ export default function GetYourBill({ open, onClose }) {
                     />
 
                     <input
-                        type="number"
-                        placeholder="Meter Number"
+                        type="tel"
+                        placeholder="Mobile Number"
                         className="w-full border p-3 rounded text-[#000]"
                     />
 

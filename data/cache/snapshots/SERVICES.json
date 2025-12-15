@@ -6,36 +6,27 @@
   },
   "categories": [
     {
-      "id": "14c420ac-4cc8-40ad-9b8d-2e638d94de2b",
-      "title": "Water Supply Services",
-      "slug": "water-supply-services",
-      "summary": "Bulk abstraction, treatment, and distribution.",
+      "id": "fallback-category",
+      "title": "What We Do",
+      "summary": "Comprehensive water and sewerage services ensuring clean water supply and efficient wastewater management for Karachi.",
       "heroCopy": null,
       "order": 0,
-      "seoId": null,
-      "createdAt": "2025-12-04T17:08:28.492Z",
-      "updatedAt": "2025-12-04T17:08:28.492Z",
       "seo": null,
       "cards": [
         {
-          "id": "3ec3a039-74ad-4e6d-91db-be92b126d6ba",
-          "categoryId": "14c420ac-4cc8-40ad-9b8d-2e638d94de2b",
+          "id": "fallback-card-0",
+          "categoryId": "fallback-category",
           "title": "Water Supply Services",
           "summary": "Reliable clean water distribution across Karachi.",
-          "description": null,
+          "description": "Reliable clean water distribution across Karachi.",
           "iconKey": "FaTint",
           "gradientClass": "from-blue-100 to-blue-300",
           "order": 0,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:29.355Z",
-          "updatedAt": "2025-12-04T17:08:29.355Z",
           "seo": null,
           "media": null,
           "details": [
             {
-              "id": "802c90e3-8d1d-4ebc-8121-70755c93d65b",
-              "serviceCardId": "3ec3a039-74ad-4e6d-91db-be92b126d6ba",
+              "id": "fallback-detail-0",
               "heading": "Water Supply Services",
               "body": "KW&SC sources water from multiple locations including Hub Dam, Keenjhar Lake, and other strategic water sources to ensure adequate supply for Karachi's growing population.",
               "bulletPoints": [
@@ -44,13 +35,10 @@
                 "Groundwater extraction",
                 "Desalination plants"
               ],
-              "order": 0,
-              "createdAt": "2025-12-04T17:08:31.316Z",
-              "updatedAt": "2025-12-04T17:08:31.316Z"
+              "order": 0
             },
             {
-              "id": "4aa824be-50ea-4208-9d60-d25bbc39ed9a",
-              "serviceCardId": "3ec3a039-74ad-4e6d-91db-be92b126d6ba",
+              "id": "fallback-detail-1",
               "heading": "Water Filtration Process",
               "body": "Our state-of-the-art filtration plants ensure that water meets international quality standards before distribution to consumers.",
               "bulletPoints": [
@@ -59,13 +47,10 @@
                 "Quality testing laboratories",
                 "Continuous monitoring systems"
               ],
-              "order": 1,
-              "createdAt": "2025-12-04T17:08:31.750Z",
-              "updatedAt": "2025-12-04T17:08:31.750Z"
+              "order": 1
             },
             {
-              "id": "bfe295fd-65c2-4186-bd51-e00039cad7e9",
-              "serviceCardId": "3ec3a039-74ad-4e6d-91db-be92b126d6ba",
+              "id": "fallback-detail-2",
               "heading": "Sewerage Infrastructure",
               "body": "Comprehensive sewerage network covering residential, commercial, and industrial areas across Karachi.",
               "bulletPoints": [
@@ -74,13 +59,10 @@
                 "Treatment facilities",
                 "Maintenance services"
               ],
-              "order": 2,
-              "createdAt": "2025-12-04T17:08:31.966Z",
-              "updatedAt": "2025-12-04T17:08:31.966Z"
+              "order": 2
             },
             {
-              "id": "615f50a1-1b59-4202-ba91-fffb933ada84",
-              "serviceCardId": "3ec3a039-74ad-4e6d-91db-be92b126d6ba",
+              "id": "fallback-detail-3",
               "heading": "Sewerage Treatment",
               "body": "Advanced treatment plants ensure proper processing of wastewater before disposal, protecting the environment.",
               "bulletPoints": [
@@ -89,13 +71,10 @@
                 "Tertiary treatment facilities",
                 "Environmental compliance"
               ],
-              "order": 3,
-              "createdAt": "2025-12-04T17:08:32.186Z",
-              "updatedAt": "2025-12-04T17:08:32.186Z"
+              "order": 3
             },
             {
-              "id": "353ec97a-bbcd-4c74-be2b-b42b860484e4",
-              "serviceCardId": "3ec3a039-74ad-4e6d-91db-be92b126d6ba",
+              "id": "fallback-detail-4",
               "heading": "Revenue Resource Generation",
               "body": "Efficient billing system ensuring accurate charges and timely collection of water and sewerage fees.",
               "bulletPoints": [
@@ -104,157 +83,97 @@
                 "Automated meter reading",
                 "Customer service support"
               ],
-              "order": 4,
-              "createdAt": "2025-12-04T17:08:32.407Z",
-              "updatedAt": "2025-12-04T17:08:32.407Z"
+              "order": 4
             }
           ]
         },
         {
-          "id": "ec0a556b-77f8-42aa-9712-f54c723ed623",
-          "categoryId": "14c420ac-4cc8-40ad-9b8d-2e638d94de2b",
-          "title": "Infrastructure Maintenance",
-          "summary": "Regular maintenance and upgrade of water infrastructure.",
-          "description": null,
-          "iconKey": "FaTools",
-          "gradientClass": "from-indigo-100 to-purple-200",
-          "order": 2,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:30.010Z",
-          "updatedAt": "2025-12-04T17:08:30.010Z",
-          "seo": null,
-          "media": null,
-          "details": []
-        },
-        {
-          "id": "12b81e95-4ca6-4e6f-be74-22a8c2096b39",
-          "categoryId": "14c420ac-4cc8-40ad-9b8d-2e638d94de2b",
-          "title": "Water Quality Testing",
-          "summary": "Comprehensive water quality monitoring and testing.",
-          "description": null,
-          "iconKey": "FaShieldAlt",
-          "gradientClass": "from-green-100 to-teal-200",
-          "order": 3,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:30.225Z",
-          "updatedAt": "2025-12-04T17:08:30.225Z",
-          "seo": null,
-          "media": null,
-          "details": []
-        },
-        {
-          "id": "2f5920f0-0f91-4372-b488-2fa77796c373",
-          "categoryId": "14c420ac-4cc8-40ad-9b8d-2e638d94de2b",
-          "title": "Emergency Services",
-          "summary": "24/7 emergency water and sewerage services.",
-          "description": null,
-          "iconKey": "FaPhone",
-          "gradientClass": "from-red-100 to-orange-200",
-          "order": 4,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:30.444Z",
-          "updatedAt": "2025-12-04T17:08:30.444Z",
-          "seo": null,
-          "media": null,
-          "details": []
-        },
-        {
-          "id": "53a3a8ab-831d-457f-a60a-5d28075a00ec",
-          "categoryId": "14c420ac-4cc8-40ad-9b8d-2e638d94de2b",
-          "title": "Water Treatment",
-          "summary": "Advanced water treatment and purification processes.",
-          "description": null,
-          "iconKey": "FaChartLine",
-          "gradientClass": "from-teal-100 to-green-200",
-          "order": 6,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:30.876Z",
-          "updatedAt": "2025-12-04T17:08:30.876Z",
-          "seo": null,
-          "media": null,
-          "details": []
-        }
-      ],
-      "resources": []
-    },
-    {
-      "id": "a137afaa-be9d-4b0e-8611-74ccdaf17184",
-      "title": "Sewerage Services",
-      "slug": "sewerage-services",
-      "summary": "Collection, treatment, and disposal.",
-      "heroCopy": null,
-      "order": 1,
-      "seoId": null,
-      "createdAt": "2025-12-04T17:08:28.926Z",
-      "updatedAt": "2025-12-04T17:08:28.926Z",
-      "seo": null,
-      "cards": [
-        {
-          "id": "bd8fee79-d253-4601-b839-d390e13d93a3",
-          "categoryId": "a137afaa-be9d-4b0e-8611-74ccdaf17184",
+          "id": "fallback-card-1",
+          "categoryId": "fallback-category",
           "title": "Sewerage Management",
           "summary": "Efficient wastewater collection and treatment systems.",
-          "description": null,
+          "description": "Efficient wastewater collection and treatment systems.",
           "iconKey": "FaWater",
           "gradientClass": "from-cyan-100 to-blue-200",
           "order": 1,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:29.791Z",
-          "updatedAt": "2025-12-04T17:08:29.791Z",
-          "seo": null,
-          "media": null,
-          "details": []
-        }
-      ],
-      "resources": []
-    },
-    {
-      "id": "9612a40a-5ecc-4193-bbd1-e89c31f62903",
-      "title": "Revenue & Customer Services",
-      "slug": "revenue-customer-services",
-      "summary": "Billing, collections, and customer care.",
-      "heroCopy": null,
-      "order": 2,
-      "seoId": null,
-      "createdAt": "2025-12-04T17:08:29.140Z",
-      "updatedAt": "2025-12-04T17:08:29.140Z",
-      "seo": null,
-      "cards": [
-        {
-          "id": "ddddfe94-23b0-4d19-8b1a-0637e5529ee3",
-          "categoryId": "9612a40a-5ecc-4193-bbd1-e89c31f62903",
-          "title": "Customer Support",
-          "summary": "Dedicated customer service and complaint resolution.",
-          "description": null,
-          "iconKey": "FaCogs",
-          "gradientClass": "from-purple-100 to-pink-200",
-          "order": 5,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:30.662Z",
-          "updatedAt": "2025-12-04T17:08:30.662Z",
           "seo": null,
           "media": null,
           "details": []
         },
         {
-          "id": "b2b68cbc-2e67-418b-bfb9-cb6b33017bfa",
-          "categoryId": "9612a40a-5ecc-4193-bbd1-e89c31f62903",
+          "id": "fallback-card-2",
+          "categoryId": "fallback-category",
+          "title": "Infrastructure Maintenance",
+          "summary": "Regular maintenance and upgrade of water infrastructure.",
+          "description": "Regular maintenance and upgrade of water infrastructure.",
+          "iconKey": "FaTools",
+          "gradientClass": "from-indigo-100 to-purple-200",
+          "order": 2,
+          "seo": null,
+          "media": null,
+          "details": []
+        },
+        {
+          "id": "fallback-card-3",
+          "categoryId": "fallback-category",
+          "title": "Water Quality Testing",
+          "summary": "Comprehensive water quality monitoring and testing.",
+          "description": "Comprehensive water quality monitoring and testing.",
+          "iconKey": "FaShieldAlt",
+          "gradientClass": "from-green-100 to-teal-200",
+          "order": 3,
+          "seo": null,
+          "media": null,
+          "details": []
+        },
+        {
+          "id": "fallback-card-4",
+          "categoryId": "fallback-category",
+          "title": "Emergency Services",
+          "summary": "24/7 emergency water and sewerage services.",
+          "description": "24/7 emergency water and sewerage services.",
+          "iconKey": "FaPhone",
+          "gradientClass": "from-red-100 to-orange-200",
+          "order": 4,
+          "seo": null,
+          "media": null,
+          "details": []
+        },
+        {
+          "id": "fallback-card-5",
+          "categoryId": "fallback-category",
+          "title": "Customer Support",
+          "summary": "Dedicated customer service and complaint resolution.",
+          "description": "Dedicated customer service and complaint resolution.",
+          "iconKey": "FaCogs",
+          "gradientClass": "from-purple-100 to-pink-200",
+          "order": 5,
+          "seo": null,
+          "media": null,
+          "details": []
+        },
+        {
+          "id": "fallback-card-6",
+          "categoryId": "fallback-category",
+          "title": "Water Treatment",
+          "summary": "Advanced water treatment and purification processes.",
+          "description": "Advanced water treatment and purification processes.",
+          "iconKey": "FaChartLine",
+          "gradientClass": "from-teal-100 to-green-200",
+          "order": 6,
+          "seo": null,
+          "media": null,
+          "details": []
+        },
+        {
+          "id": "fallback-card-7",
+          "categoryId": "fallback-category",
           "title": "Billing Services",
           "summary": "Convenient online billing and payment systems.",
-          "description": null,
+          "description": "Convenient online billing and payment systems.",
           "iconKey": "FaDatabase",
           "gradientClass": "from-yellow-100 to-orange-200",
           "order": 7,
-          "mediaId": null,
-          "seoId": null,
-          "createdAt": "2025-12-04T17:08:31.095Z",
-          "updatedAt": "2025-12-04T17:08:31.095Z",
           "seo": null,
           "media": null,
           "details": []
@@ -262,99 +181,39 @@
       ],
       "resources": [
         {
-          "id": "23bcb7be-9f21-4f7d-935e-96873e2f6674",
-          "serviceCategoryId": "9612a40a-5ecc-4193-bbd1-e89c31f62903",
+          "id": "fallback-resource-4-0",
           "title": "Connection Guidelines",
           "description": "Streamlined process for new connections and service modifications.",
-          "mediaId": "d1fff6d4-a27a-4758-baa2-af4fc5e8961c",
           "externalUrl": "https://www.kwsc.gos.pk/assets/documents/Connection-Guideline-RRG.pdf",
-          "createdAt": "2025-12-04T17:08:33.058Z",
-          "updatedAt": "2025-12-04T17:08:33.058Z",
           "media": {
-            "id": "d1fff6d4-a27a-4758-baa2-af4fc5e8961c",
-            "url": "https://www.kwsc.gos.pk/assets/documents/Connection-Guideline-RRG.pdf",
-            "label": "Connection Guidelines",
-            "mimeType": null,
-            "fileSize": null,
-            "width": null,
-            "height": null,
-            "checksum": null,
-            "category": "resource",
-            "altText": null,
-            "createdAt": "2025-12-04T17:08:32.625Z",
-            "updatedAt": "2025-12-04T17:08:32.625Z"
+            "url": "https://www.kwsc.gos.pk/assets/documents/Connection-Guideline-RRG.pdf"
           }
         },
         {
-          "id": "7260340b-d4a7-4b18-8fb1-d73b644ddd4d",
-          "serviceCategoryId": "9612a40a-5ecc-4193-bbd1-e89c31f62903",
+          "id": "fallback-resource-4-1",
           "title": "Bulk Water Map",
           "description": "View our comprehensive bulk water distribution network across Karachi.",
-          "mediaId": "bd5072ea-e832-4368-b03f-219cad60656c",
           "externalUrl": "https://www.kwsc.gos.pk/assets/images/Bulk_map.jpeg",
-          "createdAt": "2025-12-04T17:08:33.730Z",
-          "updatedAt": "2025-12-04T17:08:33.730Z",
           "media": {
-            "id": "bd5072ea-e832-4368-b03f-219cad60656c",
-            "url": "https://www.kwsc.gos.pk/assets/images/Bulk_map.jpeg",
-            "label": "Bulk Water Map",
-            "mimeType": null,
-            "fileSize": null,
-            "width": null,
-            "height": null,
-            "checksum": null,
-            "category": "resource",
-            "altText": null,
-            "createdAt": "2025-12-04T17:08:33.501Z",
-            "updatedAt": "2025-12-04T17:08:33.501Z"
+            "url": "https://www.kwsc.gos.pk/assets/images/Bulk_map.jpeg"
           }
         },
         {
-          "id": "0bf75452-3654-453a-aa7e-9e58e822e564",
-          "serviceCategoryId": "9612a40a-5ecc-4193-bbd1-e89c31f62903",
+          "id": "fallback-resource-4-2",
           "title": "Distribution Map",
           "description": "Explore our water distribution network covering all areas of Karachi.",
-          "mediaId": "c1d59613-1c84-4db7-94bd-c3dea8a655aa",
           "externalUrl": "https://www.kwsc.gos.pk/assets/images/Distribution_map.jpeg",
-          "createdAt": "2025-12-04T17:08:34.164Z",
-          "updatedAt": "2025-12-04T17:08:34.164Z",
           "media": {
-            "id": "c1d59613-1c84-4db7-94bd-c3dea8a655aa",
-            "url": "https://www.kwsc.gos.pk/assets/images/Distribution_map.jpeg",
-            "label": "Distribution Map",
-            "mimeType": null,
-            "fileSize": null,
-            "width": null,
-            "height": null,
-            "checksum": null,
-            "category": "resource",
-            "altText": null,
-            "createdAt": "2025-12-04T17:08:33.946Z",
-            "updatedAt": "2025-12-04T17:08:33.946Z"
+            "url": "https://www.kwsc.gos.pk/assets/images/Distribution_map.jpeg"
           }
         },
         {
-          "id": "9ce83d06-725e-4092-8d65-66f6ddae4a0f",
-          "serviceCategoryId": "9612a40a-5ecc-4193-bbd1-e89c31f62903",
+          "id": "fallback-resource-4-3",
           "title": "Sewerage Map",
           "description": "View our comprehensive sewerage network and pumping stations across Karachi.",
-          "mediaId": "ff486845-8e5d-4d69-9f53-8717459bf70b",
           "externalUrl": "https://www.kwsc.gos.pk/assets/images/sewerage-map.jpeg",
-          "createdAt": "2025-12-04T17:08:34.603Z",
-          "updatedAt": "2025-12-04T17:08:34.603Z",
           "media": {
-            "id": "ff486845-8e5d-4d69-9f53-8717459bf70b",
-            "url": "https://www.kwsc.gos.pk/assets/images/sewerage-map.jpeg",
-            "label": "Sewerage Map",
-            "mimeType": null,
-            "fileSize": null,
-            "width": null,
-            "height": null,
-            "checksum": null,
-            "category": "resource",
-            "altText": null,
-            "createdAt": "2025-12-04T17:08:34.384Z",
-            "updatedAt": "2025-12-04T17:08:34.384Z"
+            "url": "https://www.kwsc.gos.pk/assets/images/sewerage-map.jpeg"
           }
         }
       ]
