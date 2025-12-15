@@ -35,6 +35,28 @@ export default function PagesPanel() {
     setView("editor");
   };
 
+  const handleCreateHome = () => {
+    setSelectedPage({
+      title: "Home Page",
+      slug: "home",
+      isPublished: true,
+      sections: [
+        {
+          type: "HERO",
+          order: 0,
+          content: {
+            title: "Committed to Deliver",
+            subtitle: "Ensuring clean, safe water supply and efficient sewerage services for Karachi.",
+            ctaLabel: "Learn About KW&SC",
+            ctaHref: "/aboutus",
+            backgroundImage: "/karachicharminar.gif"
+          }
+        }
+      ]
+    });
+    setView("editor");
+  };
+
   const handleEdit = (page) => {
     setSelectedPage(page);
     setView("editor");
@@ -89,6 +111,18 @@ export default function PagesPanel() {
           <Plus className="w-4 h-4" /> Create Page
         </Button>
       </div>
+
+      {!loading && !pages.some(p => p.slug === "home") && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-blue-900">Home Page Missing</h3>
+            <p className="text-sm text-blue-700">The home page is currently using default hardcoded data. Create it to start editing.</p>
+          </div>
+          <Button onClick={handleCreateHome} variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
+            Initialize Home Page
+          </Button>
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {loading ? (
