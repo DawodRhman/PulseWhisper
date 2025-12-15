@@ -6,6 +6,10 @@ import { v4 as uuidv4 } from "uuid";
 
 export const dynamic = "force-dynamic";
 
+function isVercelDeployment() {
+  return process.env.VERCEL === "1" || process.env.VERCEL === "true";
+}
+
 export async function POST(request) {
   try {
     const formData = await request.formData();
@@ -46,22 +50,41 @@ export async function POST(request) {
       );
     }
 
-    // 3. File Saving (Local Filesystem)
-    // Ensure directory exists
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "resumes");
-    await mkdir(uploadDir, { recursive: true });
+    // 3. File Saving
+    // Vercel deployments cannot persist files to the local filesystem.
+    // Use Vercel Blob in production; keep filesystem in local dev.
 
     // Generate safe filename
     const fileExtension = ".pdf"; // We enforced PDF type
     const fileName = `${uuidv4()}${fileExtension}`;
-    const filePath = path.join(uploadDir, fileName);
 
     // Convert File to Buffer
     const bytes = await resume.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Write file
-    await writeFile(filePath, buffer);
+    let resumeUrl;
+    if (isVercelDeployment()) {
+      if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        return NextResponse.json(
+          { error: "Resume uploads are not configured on production. Set BLOB_READ_WRITE_TOKEN in Vercel env vars." },
+          { status: 500 }
+        );
+      }
+      const { put } = await import("@vercel/blob");
+      const blob = await put(`resumes/${fileName}`, buffer, {
+        access: "public",
+        contentType: "application/pdf",
+        addRandomSuffix: false,
+      });
+      resumeUrl = blob.url;
+    } else {
+      // Ensure directory exists
+      const uploadDir = path.join(process.cwd(), "public", "uploads", "resumes");
+      await mkdir(uploadDir, { recursive: true });
+      const filePath = path.join(uploadDir, fileName);
+      await writeFile(filePath, buffer);
+      resumeUrl = `/uploads/resumes/${fileName}`;
+    }
 
     // 4. Database Record
     const application = await prisma.jobApplication.create({
@@ -74,7 +97,7 @@ export async function POST(request) {
         email,
         phone,
         coverLetter: coverLetter || "",
-        resumeUrl: `/uploads/resumes/${fileName}`,
+        resumeUrl,
         careerOpeningId,
       },
     });

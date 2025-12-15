@@ -56,6 +56,10 @@ const deleteSchemas = {
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
+function isVercelDeployment() {
+  return process.env.VERCEL === "1" || process.env.VERCEL === "true";
+}
+
 async function fetchLibraryPayload() {
   const assets = await prisma.mediaAsset.findMany({
     orderBy: { createdAt: "desc" },
@@ -94,7 +98,7 @@ async function ensureUploadDir() {
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
 }
 
-async function saveUploadedFile(file) {
+async function saveUploadedFile(file, { category } = {}) {
   if (!file || typeof file === "string") {
     throw createHttpError("Invalid file payload", 400);
   }
@@ -103,13 +107,66 @@ async function saveUploadedFile(file) {
   const originalName = file.name || `asset-${Date.now()}`;
   const ext = path.extname(originalName) || ".bin";
   const safeName = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext.toLowerCase()}`;
+  const metadata = describeBuffer(buffer, { filename: originalName });
+
+  // Vercel serverless deployments have an ephemeral, read-only filesystem for writes.
+  // Persist uploads using Vercel Blob in production.
+  if (isVercelDeployment()) {
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      throw createHttpError(
+        "Uploads are not configured for production. Set BLOB_READ_WRITE_TOKEN in Vercel project env vars.",
+        500
+      );
+    }
+
+    const { put } = await import("@vercel/blob");
+    const prefix = (category || "uploads").toString().trim().replace(/[^a-z0-9-_]/gi, "-");
+    const objectKey = `${prefix}/${safeName}`;
+    const blob = await put(objectKey, buffer, {
+      access: "public",
+      contentType: metadata.mimeType || file.type || "application/octet-stream",
+      addRandomSuffix: false,
+    });
+
+    return {
+      buffer,
+      filename: originalName,
+      storedName: safeName,
+      absolutePath: null,
+      url: blob.url,
+      metadata,
+    };
+  }
+
   await ensureUploadDir();
   const absolutePath = path.join(UPLOAD_DIR, safeName);
   await fs.writeFile(absolutePath, buffer);
-  return { buffer, filename: originalName, storedName: safeName, absolutePath };
+  return {
+    buffer,
+    filename: originalName,
+    storedName: safeName,
+    absolutePath,
+    url: `/uploads/${safeName}`,
+    metadata,
+  };
 }
 
 async function deleteLocalFile(url) {
+  if (!url || typeof url !== "string") return;
+
+  // If this is a blob URL, attempt deletion in Vercel Blob.
+  if (url.startsWith("https://") && url.includes(".blob.vercel-storage.com")) {
+    try {
+      if (process.env.BLOB_READ_WRITE_TOKEN) {
+        const { del } = await import("@vercel/blob");
+        await del(url);
+      }
+    } catch {
+      // Best-effort cleanup; do not fail API on delete.
+    }
+    return;
+  }
+
   if (!isUploadUrl(url)) return;
   const relative = url.replace(/^\/+/, "");
   const target = path.join(process.cwd(), "public", relative);
@@ -169,11 +226,11 @@ export async function POST(request) {
       const label = formData.get("label")?.toString().trim() || file.name || "Uploaded media";
       const altTextValue = formData.get("altText");
       const altText = altTextValue ? altTextValue.toString() : null;
-      const saved = await saveUploadedFile(file);
-      const metadata = describeBuffer(saved.buffer, { filename: saved.filename });
+      const saved = await saveUploadedFile(file, { category });
+      const metadata = saved.metadata;
       record = await prisma.mediaAsset.create({
         data: {
-          url: `/uploads/${saved.storedName}`,
+          url: saved.url,
           label,
           category,
           altText,
