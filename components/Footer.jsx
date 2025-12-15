@@ -56,8 +56,7 @@ const Footer = () => {
 
           {/* 2. Contact Information */}
           <div className="lg:col-span-1">
-            {/* Updated title color and border accent for light theme */}
-            <h3 className="text-xl font-extrabold text-blue-600 mb-6 border-l-4 border-cyan-500 pl-3">Get In Touch</h3>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-6">Get In Touch</h3>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <MapPin className="text-cyan-500 mt-1 flex-shrink-0" size={20} />
@@ -82,8 +81,7 @@ const Footer = () => {
 
           {/* 3. Quick Links (Simplified) */}
           <div className="lg:col-span-1">
-            {/* Updated title color and border accent for light theme */}
-            <h3 className="text-xl font-extrabold text-blue-600 mb-6 border-l-4 border-cyan-500 pl-3">Quick Navigation</h3>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-6">Quick Navigation</h3>
             <div className="space-y-3">
               {/* Using standard <a> tag */}
               {[
@@ -103,14 +101,13 @@ const Footer = () => {
 
           {/* 4. Social Media & External Resources */}
           <div className="lg:col-span-1">
-            {/* Updated title color and border accent for light theme */}
-            <h3 className="text-xl font-extrabold text-blue-600 mb-6 border-l-4 border-cyan-500 pl-3">Stay Connected</h3>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-6">Stay Connected</h3>
             
             {/* Social Icons Section - Adjusted background/border for light theme */}
             <SocialLinks variant="icons" className="mb-8" />
 
             {/* External Links */}
-            <h4 className="text-lg font-bold text-gray-600 mb-4">Official Portals</h4>
+            <h4 className="text-lg font-bold text-gray-900 mb-4">Official Portals</h4>
             <div className="space-y-3">
                 {[
                     { label: "Online Complaint System", href: "https://complain.kwsc.gos.pk" },

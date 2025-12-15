@@ -27,10 +27,20 @@ const IconMap = {
   FaLeaf
 };
 
+function getPopupAction(title = "") {
+  const lower = title.toLowerCase();
+  if (lower.includes("complaint")) return "eComplaint";
+  if (lower.includes("tanker")) return "bookTanker";
+  if (lower.includes("bill") || lower.includes("pay")) return "bill";
+  if (lower.includes("connection")) return "newConnection";
+  return null;
+}
+
 function ServiceCardItem({ card }) {
   const [isOpen, setIsOpen] = useState(false);
   const Icon = IconMap[card.iconKey] || FaTint;
   const hasDetails = card.details && card.details.length > 0;
+  const popupAction = getPopupAction(card.title || "");
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
@@ -58,6 +68,19 @@ function ServiceCardItem({ card }) {
               <p className="text-lg text-gray-600 leading-relaxed">
                 {card.summary || card.description}
               </p>
+              {popupAction && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.dispatchEvent(new CustomEvent("kwsc-open-popup", { detail: popupAction }));
+                  }}
+                  className="mt-3 inline-flex items-center gap-2 text-blue-700 hover:text-blue-900 font-semibold text-base"
+                >
+                  Open Service
+                  <FaPlus size={14} />
+                </button>
+              )}
             </div>
           </div>
 
@@ -169,8 +192,8 @@ export default function Services() {
       {/* Corporate Section Header */}
       <section className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
         <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-4">
-            {data.hero?.title || "Our Services"}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-4 uppercase">
+            {(data.hero?.title || "Our Services")?.toUpperCase()}
           </h1>
           <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-600 max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto leading-relaxed sm:leading-relaxed md:leading-relaxed">
             {data.hero?.subtitle || "KW&SC provides essential services to the citizens of Karachi, ensuring efficient water supply, sewerage management, and digital accessibility."}

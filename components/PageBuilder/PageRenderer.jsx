@@ -35,7 +35,7 @@ const TextBlock = ({ heading, body }) => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         {heading && (
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-white text-center">
-            {heading}
+            {heading?.toUpperCase()}
           </h2>
         )}
         {body && (

@@ -57,6 +57,32 @@ export default function Home({ hero }) {
     }
   }, [messages]);
 
+  // Listen for global popup open events triggered from other components (e.g., Services cards)
+  useEffect(() => {
+    const handlePopup = (event) => {
+      const action = event.detail;
+      switch (action) {
+        case "newConnection":
+          setShowNewConnectionPopup(true);
+          break;
+        case "eComplaint":
+          setShowEComplaintPopup(true);
+          break;
+        case "bookTanker":
+          setShowBookTankerPopup(true);
+          break;
+        case "bill":
+          setShowBillPopup(true);
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("kwsc-open-popup", handlePopup);
+    return () => window.removeEventListener("kwsc-open-popup", handlePopup);
+  }, []);
+
   const handleSendMessage = () => {
     if (!inputText.trim()) return;
 
@@ -69,10 +95,6 @@ export default function Home({ hero }) {
         { from: "bot", text: "Thank you for your message. Our team will get back to you shortly." },
       ]);
     }, 1000);
-  };
-
-  const floatAnimation = {
-    animation: "float 3s ease-in-out infinite",
   };
 
   return (
@@ -187,7 +209,6 @@ export default function Home({ hero }) {
         <div className="fixed bottom-3 sm:bottom-5 right-3 sm:right-5 z-[60] flex flex-col items-center">
           <button
             onClick={() => setChatOpen(prev => !prev)}
-            style={floatAnimation}
             className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full overflow-hidden shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.7)] hover:scale-110"
             title="Chat with KWSC Assistant"
           >
@@ -246,14 +267,6 @@ export default function Home({ hero }) {
           )}
         </div>
 
-        <style>
-          {`
-            @keyframes float {
-              0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(-20px); }
-            }
-          `}
-        </style>
       </section>
     </div>
   );

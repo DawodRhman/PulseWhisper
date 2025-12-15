@@ -114,7 +114,7 @@ export default function Contact() {
 
   // ...existing code... Fallback data and data extraction
   const defaultHero = {
-    title: "Contact KW&SC",
+    title: "CONTACT KW&SC",
     subtitle: "Reach out to us for inquiries, complaints, or service requests. We are here to help.",
     backgroundImage: "/teentalwarkarachi.gif",
   };
@@ -260,7 +260,7 @@ export default function Contact() {
           <motion.div variants={itemVariants} className="lg:col-span-1">
             <div className="bg-blue-700 text-white p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14 rounded-2xl sm:rounded-2xl md:rounded-3xl lg:rounded-3xl shadow-xl h-full flex flex-col justify-between">
               <div>
-                <h2 className="text-4xl font-bold mb-4">Direct Contact</h2>
+                <h2 className="text-4xl font-bold mb-4 uppercase">Direct Contact</h2>
                 <p className="mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-blue-200 text-xs sm:text-sm md:text-base">
                   Prefer talking? Find our quick contact details below for immediate assistance.
                 </p>
@@ -317,7 +317,7 @@ export default function Contact() {
           {/* Contact Form */}
           <motion.div variants={itemVariants} className="lg:col-span-2">
             <div className="bg-white p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14 rounded-2xl sm:rounded-2xl md:rounded-3xl lg:rounded-3xl shadow-2xl border border-gray-100">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Send Us a Message</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4 uppercase">Send Us a Message</h2>
               <p className="text-gray-500 mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-xs sm:text-sm md:text-base">
                 Fill out the form below to initiate an inquiry or report an issue.
               </p>

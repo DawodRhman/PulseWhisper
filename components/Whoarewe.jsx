@@ -5,6 +5,18 @@ const WhoAreWe = () => {
   const sectionRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
 
+  const dispatchPopup = (title = "") => {
+    const lower = title.toLowerCase();
+    let detail = null;
+    if (lower.includes("complaint")) detail = "eComplaint";
+    else if (lower.includes("tanker")) detail = "bookTanker";
+    else if (lower.includes("bill")) detail = "bill";
+    else if (lower.includes("connection")) detail = "newConnection";
+    if (detail) {
+      window.dispatchEvent(new CustomEvent("kwsc-open-popup", { detail }));
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return;
@@ -93,6 +105,7 @@ const WhoAreWe = () => {
                   ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}
                 `}
                 style={{ transitionDelay: `${(i + 1) * 150}ms` }}
+                onClick={() => dispatchPopup(item.title)}
               >
                 <p className="font-semibold text-blue-900 text-sm sm:text-base md:text-lg mb-1 sm:mb-2">{item.title}</p>
                 <p className="text-gray-700 text-xs sm:text-sm md:text-sm leading-relaxed">{item.desc}</p>

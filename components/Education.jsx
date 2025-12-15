@@ -10,7 +10,30 @@ export default function Education() {
   if (loading) return <Loader />;
   if (error) return <div className="text-center py-10 text-red-500">Failed to load education resources.</div>;
 
-  const resources = data?.resources || [];
+  const defaultResources = [
+    {
+      title: "Water Conservation Basics",
+      description: "Practical tips for households to reduce daily water consumption, detect leaks early, and use fixtures efficiently.",
+      image: "/bg-1.jpg",
+    },
+    {
+      title: "Safe Drinking Water Guide",
+      description: "Learn how KW&SC treats and monitors water quality, and how you can store and handle drinking water safely at home.",
+      image: "/bg-2.jpg",
+    },
+    {
+      title: "Sewerage Do’s & Don’ts",
+      description: "What NOT to flush or drain, and how proper disposal helps prevent blockages, overflows, and environmental damage.",
+      image: "/downtownkarachi.gif",
+    },
+    {
+      title: "Emergency Preparedness",
+      description: "Steps to prepare your household for water supply interruptions, including safe storage, hygiene, and tanker coordination.",
+      image: "/teentalwarkarachi.gif",
+    },
+  ];
+
+  const resources = (data?.resources && data.resources.length > 0) ? data.resources : defaultResources;
 
   return (
     <section className="bg-[#020617] text-white py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 2xl:py-32">

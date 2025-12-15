@@ -141,10 +141,6 @@ export default function AchievementComponent({ items }) {
                       </div>
                     </div>
 
-                    {/* Year Badge */}
-                    <span className="bg-gradient-to-r from-cyan-900/50 to-blue-900/50 text-cyan-300 border border-cyan-500/40 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide shadow-lg backdrop-blur-sm group-hover:from-cyan-800/60 group-hover:to-blue-800/60 group-hover:border-cyan-400/60 group-hover:shadow-cyan-500/20 transition-all duration-300">
-                      {achievement.year}
-                    </span>
                   </div>
                 </div>
 

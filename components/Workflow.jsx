@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
-    CheckCircle,
     DollarSign,
     Droplets,
     Pipette,
@@ -144,11 +143,6 @@ const WorkFlow = ({ steps }) => {
 
                 {/* Header */}
                 <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
-                    {/* Light/Corporate Header Chip */}
-                    <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-blue-100 border border-blue-300 text-blue-700 text-xs sm:text-sm font-mono tracking-widest uppercase mb-3 sm:mb-4 shadow-sm">
-                        <CheckCircle className="w-4 h-4" />
-                        <span>KW&SC Core Mandate</span>
-                    </div>
                     {/* Darker, high-contrast header text */}
                     <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-blue-700 drop-shadow-sm">
                         Our <span className="text-blue-700">Commitment</span>

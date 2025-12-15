@@ -331,47 +331,53 @@ export default function Tenders() {
 
           {/* Tab Content - Grid Display */}
           <div className="max-w-6xl mx-auto">
-            {activeTab === "open" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-                {filteredTenders.length > 0 ? (
-                  filteredTenders.map((item, i) => (
-                    <TenderCard key={item.id} item={item} tabName="open" index={i} />
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-10 bg-white rounded-xl shadow-lg">
-                    <p className="text-xl text-gray-500">No Open Tenders match your current search criteria.</p>
+          {activeTab === "open" && (
+            <div className="flex flex-wrap justify-center gap-6">
+              {filteredTenders.length > 0 ? (
+                filteredTenders.map((item, i) => (
+                  <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
+                    <TenderCard item={item} tabName="open" index={i} />
                   </div>
-                )}
-              </div>
-            )}
+                ))
+              ) : (
+                <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
+                  <p className="text-xl text-gray-500">No Open Tenders match your current search criteria.</p>
+                </div>
+              )}
+            </div>
+          )}
 
-            {activeTab === "closed" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-                {closedTenders.length > 0 ? (
-                  closedTenders.map((item, i) => (
-                    <TenderCard key={item.id} item={item} tabName="closed" index={i} />
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-10 bg-white rounded-xl shadow-lg">
-                    <p className="text-xl text-gray-500">No Closed Tenders found.</p>
+          {activeTab === "closed" && (
+            <div className="flex flex-wrap justify-center gap-6">
+              {closedTenders.length > 0 ? (
+                closedTenders.map((item, i) => (
+                  <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
+                    <TenderCard item={item} tabName="closed" index={i} />
                   </div>
-                )}
-              </div>
-            )}
+                ))
+              ) : (
+                <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
+                  <p className="text-xl text-gray-500">No Closed Tenders found.</p>
+                </div>
+              )}
+            </div>
+          )}
 
-            {activeTab === "cancelled" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-                {cancelledTenders.length > 0 ? (
-                  cancelledTenders.map((item, i) => (
-                    <TenderCard key={item.id} item={item} tabName="cancelled" index={i} />
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-10 bg-white rounded-xl shadow-lg">
-                    <p className="text-xl text-gray-500">No Cancelled Tenders found.</p>
+          {activeTab === "cancelled" && (
+            <div className="flex flex-wrap justify-center gap-6">
+              {cancelledTenders.length > 0 ? (
+                cancelledTenders.map((item, i) => (
+                  <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
+                    <TenderCard item={item} tabName="cancelled" index={i} />
                   </div>
-                )}
-              </div>
-            )}
+                ))
+              ) : (
+                <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
+                  <p className="text-xl text-gray-500">No Cancelled Tenders found.</p>
+                </div>
+              )}
+            </div>
+          )}
           </div>
         </div>
       </div>

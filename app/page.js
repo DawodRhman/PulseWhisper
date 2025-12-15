@@ -8,7 +8,6 @@ import Subscribe from "@/components/Subscribe";
 import KWSCMap from "@/components/KWSCMAP";
 import NewsUpdate from "@/components/NewsUpdate";
 import Projects from "@/components/Projects";
-import MediaGallery from "@/components/MediaGallery";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { SnapshotModule } from "@prisma/client";
 import { buildHomePayload } from "@/lib/home/payload";
@@ -28,9 +27,6 @@ export default async function Home() {
       <KWSCMap />
       <WorkFlow steps={homeData.workflow} />
       <Counter stats={homeData.counters} />
-      <MediaGallery items={homeData.mediaCarousel} />
-
-
     </>
   );
 }

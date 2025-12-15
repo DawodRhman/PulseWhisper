@@ -232,12 +232,19 @@ const Navbar = () => {
         className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${isScrolled ? "bg-white shadow-lg" : "bg-transparent"
           }`}
       >
-        <div className="w-full mx-auto flex items-center justify-between py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 lg:px-8 transition-colors relative">
-          {/* Logo - Reduced size and linked to home */}
-          <Link href="/" className="flex-shrink-0" style={{ transform: 'translateX(8%)' }}>
-            <img src="/kwsc logo.png" alt="KW&SC Logo" width={40} height={50} className="w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 lg:w-16 lg:h-20 cursor-pointer hover:opacity-80 transition-opacity" loading="lazy" />
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 lg:px-8 transition-colors relative">
+          {/* Logo - centered vertically and sized for banner */}
+          <Link href="/" className="flex-shrink-0 flex items-center justify-center">
+            <img
+              src="/kwsc logo.png"
+              alt="KW&SC Logo"
+              width={56}
+              height={56}
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 cursor-pointer hover:opacity-80 transition-opacity object-contain"
+              loading="lazy"
+            />
           </Link>
-          <div className="absolute left-1/2 transform -translate-x-1/2">
+          <div className="flex-1 flex justify-center">
             <nav className="hidden md:block">
               <ul className="flex gap-4 lg:gap-8 xl:gap-10 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold uppercase">
                 {NavLinks.map((loop, index) => (

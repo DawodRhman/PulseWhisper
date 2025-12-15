@@ -30,7 +30,7 @@ export default function GenericHero({ title, subtitle, backgroundImage, backgrou
           <h2
             className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white"
           >
-            {title}
+            {title?.toUpperCase()}
           </h2>
         )}
 
