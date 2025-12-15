@@ -1,145 +1,308 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Briefcase, Zap, ArrowUpRight, MapPin, Clock } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import Loader from "@/components/Loader";
+import gsap from "gsap";
+import { Fade } from "react-awesome-reveal";
 import Link from "next/link";
+// --- New Lucide Icon Imports ---
+import {
+  Briefcase,
+  Zap,
+  Building,
+  MapPin,
+  Clock,
+  Mail,
+  Phone,
+  ArrowUpRight,
+} from "lucide-react";
 
-export default function Career() {
-  const [data, setData] = useState(null);
+export default function Careers() {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [careersData, setCareersData] = useState(null);
+  const [dataError, setDataError] = useState(null);
 
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
-
+  // GSAP Loader Effect (Kept as is)
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("/api/careers");
-        if (!res.ok) throw new Error("Failed to fetch career data");
-        const json = await res.json();
-        setData(json.data || {});
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
+    const loaderTimeline = gsap.timeline({
+      onComplete: () => setLoading(false),
+    });
+
+    loaderTimeline
+      .fromTo(
+        ".loader",
+        { scaleY: 0, transformOrigin: "50% 100%" },
+        { scaleY: 1, duration: 0.5, ease: "power2.inOut" }
+      )
+      .to(".loader", {
+        scaleY: 0,
+        transformOrigin: "0% -100%",
+        duration: 0.5,
+        ease: "power2.inOut",
+      })
+      .to(
+        ".wrapper",
+        { y: "-100%", ease: "power4.inOut", duration: 1 },
+        "-=0.8"
+      );
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    let isMounted = true;
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/careers");
+        if (!response.ok) throw new Error("Failed to fetch Careers data");
+        const payload = await response.json();
+        if (isMounted) {
+          setCareersData(payload.data);
+        }
+      } catch (error) {
+        console.error("Error fetching Careers data:", error);
+        if (isMounted) setDataError("Unable to load careers.");
+      }
+    };
+    fetchData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
-  if (error) {
-    return (
-      <div className="text-center py-12 text-red-500">
-        <p>Error loading careers: {error}</p>
-      </div>
-    );
-  }
+  const defaultOpportunities = [
+    {
+      title: "Recruitment",
+      description:
+        "Join KW&SC's team of dedicated professionals working to improve Karachi's essential water and sewerage infrastructure.",
+      features: [
+        "Competitive salary packages",
+        "Professional development opportunities",
+        "Health insurance benefits",
+        "Pension scheme",
+        "Career growth prospects",
+      ],
+      link: "https://www.kwsc.gos.pk/careers#Recruitment",
+      type: "Full-time Positions",
+    },
+    {
+      title: "Young Graduate Program",
+      description:
+        "Launch your career with KW&SC's comprehensive graduate program designed for fresh, talented engineers and professionals.",
+      features: [
+        "A structured program",
+        "Mentorship from senior professionals",
+        "Hands-on project experience",
+        "Training and skill development",
+        "Potential for permanent employment",
+      ],
+      link: "https://www.kwsc.gos.pk/careers#YoungGraduateProgram",
+      type: "Graduate Program",
+    },
+    {
+      title: "Consultancies",
+      description:
+        "Partner with KW&SC as an expert consultant to contribute your specialized skills to critical infrastructure projects.",
+      features: [
+        "Project-based assignments",
+        "Flexible working arrangements",
+        "Competitive consultancy rates",
+        "Access to latest technology",
+        "Collaboration with industry experts",
+      ],
+      link: "https://www.kwsc.gos.pk/careers#Consultancies",
+      type: "Consulting",
+    },
+  ];
 
-  if (!data) return null;
+  const careerOpportunities =
+    careersData?.programs?.length > 0
+      ? careersData.programs.map((prog) => ({
+          title: prog.title,
+          description: prog.heroBody || prog.summary || "",
+          features: prog.eligibility ? Object.values(prog.eligibility) : [],
+          link: `/careers/${prog.slug}`,
+          type: "Program",
+        }))
+      : defaultOpportunities;
 
-  const { programs, openings } = data;
+  const currentOpenings =
+    careersData?.openings?.length > 0
+      ? careersData.openings.map((op) => ({
+          id: op.id,
+          position: op.title,
+          department: op.department || "General",
+          location: op.location || "Karachi",
+          type: op.jobType || "Full-time",
+          experience: op.compensation || "N/A", // Using compensation field for experience/salary info as placeholder
+        }))
+      : [];
+
 
   return (
-    <section className="bg-white py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 2xl:py-32" id="careers-content">
-      <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl lg:max-w-7xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12">
-        
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24">
-          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-4">
-              {data.hero?.title || "Opportunities To Make A Difference"}
-            </h2>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-lg text-gray-600 max-w-4xl mx-auto">
-              {data.hero?.subtitle || "Discover the path that aligns with your professional aspirations."}
-            </p>
-          </motion.div>
-        </div>
+    <>
+      {loading && <Loader />}
 
-        {/* Programs */}
-        {programs && programs.length > 0 && (
-          <div className="mb-16">
-            <div className="flex items-center justify-between border-b-2 border-blue-100 pb-2 mb-8">
-              <h3 className="text-2xl font-bold text-gray-800">Explore Programs</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {programs.map((program, index) => (
-                <motion.div key={program.id || index} variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="h-full">
-                  <div className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg p-6 flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:border-blue-400">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center">
-                      <Briefcase className="w-5 h-5 mr-2 text-blue-500" />
-                      {program.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4 flex-grow">{program.heroBody}</p>
-                    
-                    {program.eligibility && program.eligibility.length > 0 && (
-                      <div className="mb-4">
-                        <h4 className="font-bold text-gray-800 mb-2 text-xs uppercase tracking-wide flex items-center">
-                          <Zap className="w-4 h-4 mr-1 text-yellow-500" /> Benefits
-                        </h4>
-                        <ul className="space-y-1">
-                          {program.eligibility.slice(0, 5).map((feat, idx) => (
-                            <li key={idx} className="flex items-start text-gray-500 text-xs">
-                              <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></div>
-                              {feat}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+      {/* 2. Opportunities & Openings Section */}
+      <div className="bg-white py-8 sm:py-12 md:py-20 lg:py-32 xl:py-40 2xl:py-48">
+        <div className="max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="text-center mb-10 sm:mb-14 md:mb-20 lg:mb-24">
+            <Fade direction="down" triggerOnce duration={1000}>
+              <h1 className="text-4xl font-bold text-gray-900 mb-3">
+                Opportunities To Make A Difference
+              </h1>
+              <p className="text-base text-gray-600 max-w-3xl mx-auto">
+                Discover the path that aligns with your professional aspirations
+                and contribute to the core infrastructure of the city.
+              </p>
+            </Fade>
           </div>
-        )}
 
-        {/* Openings */}
-        {openings && openings.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between border-b-2 border-blue-100 pb-2 mb-8">
-              <h3 className="text-2xl font-bold text-gray-800">Current Openings</h3>
-            </div>
-            <div className="grid gap-4">
-              {openings.map((job) => (
-                <div key={job.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow flex flex-col md:flex-row justify-between items-start md:items-center">
+          {/* Career Opportunities Cards (Grid) */}
+          <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b-2 border-blue-500/50 pb-2">
+            Explore Programs
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 mb-12 sm:mb-16 md:mb-20">
+            {careerOpportunities.map((opportunity, index) => (
+              <Fade
+                key={index}
+                direction="up"
+                triggerOnce
+                duration={800}
+                delay={index * 150}
+                className="h-full"
+              >
+                <div
+                  className="bg-white border border-gray-100 rounded-lg sm:rounded-xl md:rounded-2xl shadow-md sm:shadow-lg md:shadow-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col justify-between 
+                             transition-all duration-300 hover:shadow-lg sm:hover:shadow-xl md:hover:shadow-2xl hover:scale-[1.02] hover:border-blue-500/50 h-full"
+                >
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900">{job.title}</h4>
-                    <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500">
-                      <span className="flex items-center"><MapPin className="w-4 h-4 mr-1" /> {job.location || "Karachi"}</span>
-                      <span className="flex items-center"><Clock className="w-4 h-4 mr-1" /> {job.type || "Full-time"}</span>
-                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${job.status === 'OPEN' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                        {job.status}
-                      </span>
+                    <span className="bg-blue-600 text-white px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs md:text-sm font-semibold mb-3 sm:mb-4 inline-block shadow-md">
+                      {opportunity.type}
+                    </span>
+                    <h3 className="text-xl font-bold text-gray-900 my-3 flex items-center">
+                      <Briefcase className="w-5 h-5 mr-2 text-blue-600 flex-shrink-0" />
+                      {opportunity.title}
+                    </h3>
+                    <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-4 border-b border-gray-100 pb-3">
+                      {opportunity.description}
+                    </p>
+
+                    <div className="mb-4 sm:mb-5 md:mb-6">
+                      <h4 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg text-gray-900 mb-2 sm:mb-3 flex items-center">
+                        <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-green-500 flex-shrink-0" />
+                        Benefits & Scope:
+                      </h4>
+                      <ul className="space-y-2 sm:space-y-2.5 md:space-y-3">
+                        {opportunity.features.map((feature, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-start text-xs sm:text-sm text-gray-600"
+                          >
+                            <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mt-0.5 sm:mt-1 flex-shrink-0 mr-2" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-                  <Link href={`/careers/${job.slug || '#'}`} className="mt-4 md:mt-0 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-medium">
-                    Apply Now
+
+                  <Link
+                    href={opportunity.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center w-full justify-center px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-3 mt-3 sm:mt-4 
+                               bg-blue-600 text-white font-semibold text-sm sm:text-base rounded-lg transition-all 
+                               hover:bg-blue-700 hover:shadow-lg shadow-blue-500/30 group"
+                  >
+                    View Details
+                    <ArrowUpRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </Link>
                 </div>
-              ))}
-            </div>
+              </Fade>
+            ))}
           </div>
-        )}
-        
-        {(!programs?.length && !openings?.length) && (
-           <div className="text-center py-12 text-gray-500">
-             <p>No career opportunities currently available. Please check back later.</p>
-           </div>
-        )}
+
+          {/* Current Job Openings (Table-like Grid) */}
+          <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b-2 border-blue-500/50 pb-2">
+            Current Openings
+          </h2>
+          <div className="space-y-3 sm:space-y-4 md:space-y-4">
+            {currentOpenings.length > 0 ? (
+              currentOpenings.map((opening, index) => (
+                <Fade
+                  key={opening.id}
+                  direction="up"
+                  triggerOnce
+                  duration={800}
+                  delay={index * 50}
+                >
+                  <div className="bg-white border border-gray-200 rounded-lg sm:rounded-lg md:rounded-xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-sm sm:shadow-md grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-start sm:items-center gap-3 sm:gap-4 md:gap-4 transition-all duration-300 hover:shadow-md sm:hover:shadow-lg hover:border-blue-300">
+                    {/* Position */}
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-blue-800 sm:col-span-2">
+                      {opening.position}
+                    </h3>
+
+                    {/* Details (Flex/Icons) */}
+                    <div className="flex items-center text-gray-600 text-xs sm:text-sm">
+                      <Building className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2 text-blue-500 flex-shrink-0" />
+                      <span className="truncate">{opening.department}</span>
+                    </div>
+                    <div className="flex items-center text-gray-600 text-xs sm:text-sm">
+                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2 text-blue-500 flex-shrink-0" />
+                      {opening.location}
+                    </div>
+                    <div className="flex items-center text-gray-600 text-xs sm:text-sm">
+                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2 text-blue-500 flex-shrink-0" />
+                      {opening.experience}
+                    </div>
+
+                    {/* Apply Button */}
+                    <button className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 bg-blue-600 text-white font-semibold text-xs sm:text-sm rounded-lg hover:bg-blue-700 transition-colors shadow-sm sm:shadow-md">
+                      Apply Now
+                    </button>
+                  </div>
+                </Fade>
+              ))
+            ) : (
+              <div className="text-center py-10 bg-gray-50 rounded-xl">
+                <p className="text-gray-500">
+                  No current openings available. Please check back later.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* 3. Contact Information / CTA */}
+          <div className="mt-12 sm:mt-16 md:mt-20 bg-blue-800 rounded-lg sm:rounded-lg md:rounded-xl shadow-lg sm:shadow-xl md:shadow-2xl p-5 sm:p-8 md:p-10 lg:p-14 text-white">
+            <Fade direction="up" triggerOnce duration={1000} delay={200}>
+              <div className="text-center">
+                <h2 className="text-4xl font-bold mb-3">
+                  Ready to Start Your KW&SC Career?
+                </h2>
+                <p className="text-base text-blue-100 mb-6 max-w-3xl mx-auto">
+                  For detailed information, reach out to our Human Resources
+                  department directly.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-4 justify-center">
+                  <a
+                    href="mailto:hr@kwsc.gos.pk"
+                    className="inline-flex items-center justify-center px-4 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 bg-cyan-400 text-gray-900 font-semibold sm:font-bold text-xs sm:text-sm md:text-base rounded-lg transition-all hover:bg-cyan-300 shadow-md sm:shadow-lg shadow-cyan-400/50"
+                  >
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
+                    Email: info@kwsc.gos.pk
+                  </a>
+                  <a
+                    href="tel:+92021111597200"
+                    className="inline-flex items-center justify-center px-4 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 bg-white/10 text-white font-semibold sm:font-bold text-xs sm:text-sm md:text-base rounded-lg border border-white/20 transition-colors hover:bg-white/20"
+                  >
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
+                    Call: (+92) 021 111 597 200
+                  </a>
+                </div>
+              </div>
+            </Fade>
+          </div>
+        </div>
       </div>
-    </section>
+    </>
   );
 }
