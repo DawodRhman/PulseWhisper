@@ -7,29 +7,30 @@
   "navLabel": null,
   "navGroup": null,
   "createdAt": "2025-12-04T17:09:49.315Z",
-  "updatedAt": "2025-12-12T19:06:27.335Z",
+  "updatedAt": "2025-12-15T13:37:31.894Z",
   "seoId": "5f6c3ef4-7d7e-4032-9089-8fb1bdcaab72",
   "sections": [
     {
-      "id": "e6b085f9-bc41-4897-9383-e5f9764931cf",
+      "id": "c916c521-4237-4bd5-85cb-7eac1aa77d8a",
       "pageId": "5cae34b0-409e-4ef9-8dd6-28ee285f71e7",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Tenders",
-        "subtitle": "Procurement opportunities"
+        "subtitle": "Procurement opportunities",
+        "backgroundImage": "/uploads/1765800273161-90f568c5.mp4"
       },
-      "createdAt": "2025-12-04T17:09:50.877Z",
-      "updatedAt": "2025-12-04T17:09:50.877Z"
+      "createdAt": "2025-12-15T13:37:31.918Z",
+      "updatedAt": "2025-12-15T13:37:31.918Z"
     },
     {
-      "id": "16407650-b09f-4c1a-88d3-642834ccc94c",
+      "id": "61e19681-08da-472f-91d6-1f59e12bde22",
       "pageId": "5cae34b0-409e-4ef9-8dd6-28ee285f71e7",
       "type": "TENDERS",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T17:09:50.877Z",
-      "updatedAt": "2025-12-04T17:09:50.877Z"
+      "createdAt": "2025-12-15T13:37:31.918Z",
+      "updatedAt": "2025-12-15T13:37:31.918Z"
     }
   ],
   "seo": {
@@ -45,6 +46,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:49.315Z",
-    "updatedAt": "2025-12-04T17:09:49.315Z"
+    "updatedAt": "2025-12-15T13:37:31.894Z"
   }
 }

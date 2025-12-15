@@ -7,29 +7,30 @@
   "navLabel": null,
   "navGroup": "whatwedo",
   "createdAt": "2025-12-04T17:09:44.864Z",
-  "updatedAt": "2025-12-12T19:06:23.114Z",
+  "updatedAt": "2025-12-15T13:37:54.313Z",
   "seoId": "8ab84667-53df-46a5-89d8-9c05d162aba2",
   "sections": [
     {
-      "id": "68c80049-eac2-4112-bb45-622d347e4776",
+      "id": "30476a92-6769-44ea-8bab-19772bb0b998",
       "pageId": "0b71fd85-bdb3-4299-bfa9-5a35428d3ef2",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "Our Projects",
-        "subtitle": "Building a better future"
+        "subtitle": "Building a better future",
+        "backgroundImage": "/uploads/1765800273161-90f568c5.mp4"
       },
-      "createdAt": "2025-12-04T17:09:46.491Z",
-      "updatedAt": "2025-12-04T17:09:46.491Z"
+      "createdAt": "2025-12-15T13:37:54.329Z",
+      "updatedAt": "2025-12-15T13:37:54.329Z"
     },
     {
-      "id": "e2ecb103-de70-4270-a466-2e97cd68eba8",
+      "id": "3c5bc779-b11f-4465-a425-cd5c8904add1",
       "pageId": "0b71fd85-bdb3-4299-bfa9-5a35428d3ef2",
       "type": "PROJECTS",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T17:09:46.491Z",
-      "updatedAt": "2025-12-04T17:09:46.491Z"
+      "createdAt": "2025-12-15T13:37:54.329Z",
+      "updatedAt": "2025-12-15T13:37:54.329Z"
     }
   ],
   "seo": {
@@ -45,6 +46,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:44.864Z",
-    "updatedAt": "2025-12-04T17:09:44.864Z"
+    "updatedAt": "2025-12-15T13:37:54.313Z"
   }
 }

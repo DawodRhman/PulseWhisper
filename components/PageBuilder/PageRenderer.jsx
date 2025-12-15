@@ -17,6 +17,7 @@ import Education from "@/components/Education";
 import WorkWithUs from "@/components/Workwithus";
 import Achievement from "@/components/Achievement";
 import Heritage from "@/components/Heritage";
+import DynamicLoader from "./DynamicLoader";
 
 
 // A simple generic text block component
@@ -90,6 +91,7 @@ const COMPONENT_MAP = {
   WATER_TODAY: Watertodaysection,
   CONTACT: Contact,
   EDUCATION: Education,
+  DYNAMIC_CONTENT: DynamicLoader,
 };
 
 export default function PageRenderer({ sections }) {

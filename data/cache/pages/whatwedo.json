@@ -1,0 +1,69 @@
+{
+  "id": "9c1238de-97d2-49b2-96c8-40a8de27feda",
+  "slug": "whatwedo",
+  "title": "What We Do",
+  "isPublished": true,
+  "showInNavbar": true,
+  "navLabel": "What We Do",
+  "navGroup": null,
+  "createdAt": "2025-12-04T17:09:53.816Z",
+  "updatedAt": "2025-12-15T13:36:11.602Z",
+  "seoId": "b61d63ae-09ca-4e29-8136-3d3b433b0b91",
+  "sections": [
+    {
+      "id": "574becb5-15dc-457d-ae42-3095a2e76c38",
+      "pageId": "9c1238de-97d2-49b2-96c8-40a8de27feda",
+      "type": "HERO",
+      "order": 0,
+      "content": {
+        "title": "What We Do",
+        "subtitle": "Our core responsibilities",
+        "backgroundImage": "/uploads/1765800273161-90f568c5.mp4"
+      },
+      "createdAt": "2025-12-15T13:36:14.057Z",
+      "updatedAt": "2025-12-15T13:36:14.057Z"
+    },
+    {
+      "id": "b55dd029-c463-4372-a219-4330ad746d6d",
+      "pageId": "9c1238de-97d2-49b2-96c8-40a8de27feda",
+      "type": "SERVICES",
+      "order": 1,
+      "content": {},
+      "createdAt": "2025-12-15T13:36:14.057Z",
+      "updatedAt": "2025-12-15T13:36:14.057Z"
+    },
+    {
+      "id": "0feabb83-1894-4e2b-8d65-1be1746b7bef",
+      "pageId": "9c1238de-97d2-49b2-96c8-40a8de27feda",
+      "type": "WORKFLOW",
+      "order": 2,
+      "content": {},
+      "createdAt": "2025-12-15T13:36:14.057Z",
+      "updatedAt": "2025-12-15T13:36:14.057Z"
+    },
+    {
+      "id": "fe077e28-11d0-4032-9ea5-4a0e2192238c",
+      "pageId": "9c1238de-97d2-49b2-96c8-40a8de27feda",
+      "type": "PROJECTS",
+      "order": 3,
+      "content": {},
+      "createdAt": "2025-12-15T13:36:14.057Z",
+      "updatedAt": "2025-12-15T13:36:14.057Z"
+    }
+  ],
+  "seo": {
+    "id": "b61d63ae-09ca-4e29-8136-3d3b433b0b91",
+    "title": "What We Do | KW&SC",
+    "description": "Learn more about What We Do at Karachi Water & Sewerage Corporation.",
+    "keywords": null,
+    "canonicalUrl": null,
+    "ogTitle": null,
+    "ogDescription": null,
+    "ogImageUrl": null,
+    "twitterCard": "summary_large_image",
+    "structuredData": null,
+    "allowIndexing": true,
+    "createdAt": "2025-12-04T17:09:53.816Z",
+    "updatedAt": "2025-12-15T13:36:11.602Z"
+  }
+}

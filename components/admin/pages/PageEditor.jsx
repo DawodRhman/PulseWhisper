@@ -21,6 +21,17 @@ const SECTION_TYPES = [
   { value: "SUBSCRIBE", label: "Subscribe Section" },
   { value: "ACHIEVEMENTS", label: "Achievements" },
   { value: "WORKWITHUS", label: "WorkWithUs" },
+  { value: "DYNAMIC_CONTENT", label: "Dynamic Code & Data" },
+];
+
+const KNOWN_APIS = [
+  { value: "/api/news", label: "News Updates" },
+  { value: "/api/services", label: "Services" },
+  { value: "/api/projects", label: "Projects" },
+  { value: "/api/leadership", label: "Leadership" },
+  { value: "/api/tenders", label: "Tenders" },
+  { value: "/api/careers", label: "Careers" },
+  { value: "/api/watertoday", label: "Water Today" },
 ];
 
 export default function PageEditor({ page, onSave, onCancel }) {
@@ -487,6 +498,75 @@ function SectionForm({ type, content, onChange, idPrefix }) {
             <br />
             No configuration is needed here.
           </p>
+        </div>
+      );
+    case "DYNAMIC_CONTENT":
+      return (
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor={fieldId("apiEndpoint")}>Data Source (API)</Label>
+            <div className="flex gap-2">
+              <select
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={content.apiEndpoint || ""}
+                onChange={(e) => onChange("apiEndpoint", e.target.value)}
+              >
+                <option value="">Select an API...</option>
+                {KNOWN_APIS.map((api) => (
+                  <option key={api.value} value={api.value}>
+                    {api.label} ({api.value})
+                  </option>
+                ))}
+                <option value="custom">Custom URL...</option>
+              </select>
+            </div>
+            {(!KNOWN_APIS.find(a => a.value === content.apiEndpoint) && content.apiEndpoint) && (
+               <Input
+                 className="mt-2"
+                 placeholder="Enter custom API URL (e.g., /api/my-custom-route)"
+                 value={content.apiEndpoint || ""}
+                 onChange={(e) => onChange("apiEndpoint", e.target.value)}
+               />
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor={fieldId("template")}>Item Template (HTML)</Label>
+            <p className="text-xs text-muted-foreground mb-2">
+              Use <code>{"{{fieldName}}"}</code> to insert data. Example: <code>{"<h3>{{title}}</h3>"}</code>.
+              This HTML will be repeated for every item in the API response.
+            </p>
+            <Textarea
+              id={fieldId("template")}
+              value={content.template || ""}
+              onChange={(e) => onChange("template", e.target.value)}
+              className="font-mono text-sm min-h-[150px]"
+              placeholder='<div class="card">
+  <h3>{{title}}</h3>
+  <p>{{summary}}</p>
+</div>'
+            />
+          </div>
+
+          <div>
+            <Label htmlFor={fieldId("containerClass")}>Container CSS Classes</Label>
+            <Input
+              id={fieldId("containerClass")}
+              value={content.containerClass || ""}
+              onChange={(e) => onChange("containerClass", e.target.value)}
+              placeholder="grid grid-cols-1 md:grid-cols-3 gap-6"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor={fieldId("itemClass")}>Item Wrapper CSS Classes</Label>
+            <Input
+              id={fieldId("itemClass")}
+              value={content.itemClass || ""}
+              onChange={(e) => onChange("itemClass", e.target.value)}
+              placeholder="bg-white p-4 rounded shadow"
+            />
+          </div>
         </div>
       );
     default:
