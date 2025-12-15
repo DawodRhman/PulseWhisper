@@ -70,7 +70,8 @@ export function useAdminLeadership() {
       });
       const json = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(parseErrorPayload(json, "Failed to process request"));
+        const message = parseErrorPayload(json, `Request failed (${response.status})`);
+        throw new Error(message);
       }
       setData(json?.data || EMPTY_PAYLOAD);
       setLastFetchedAt(Date.now());

@@ -337,13 +337,20 @@ async function handleDelete(type, data) {
   }
 }
 
-export async function GET() {
+export async function GET(request) {
   try {
-    const limiter = rateLimit(null, { keyPrefix: "admin:leadership:get", limit: 120, windowMs: 60_000 });
-    // rateLimit expects a request; keep it permissive for GET if request is unavailable
-    await ensureAdminSession("leadership:write");
+    const session = await ensureAdminSession("leadership:write");
+
+    const limited = rateLimit(request, {
+      keyPrefix: "admin:leadership:get",
+      limit: 120,
+      windowMs: 60_000,
+      keyId: session?.user?.id,
+    });
+    if (limited instanceof NextResponse) return limited;
+
     const data = await fetchLeadershipPayload();
-    return NextResponse.json({ data });
+    return applyRateLimitHeaders(NextResponse.json({ data }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "GET /api/papa/leadership");
   }
