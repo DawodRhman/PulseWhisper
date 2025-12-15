@@ -56,10 +56,6 @@ const deleteSchemas = {
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
-function isVercelDeployment() {
-  return process.env.VERCEL === "1" || process.env.VERCEL === "true";
-}
-
 async function fetchLibraryPayload() {
   const assets = await prisma.mediaAsset.findMany({
     orderBy: { createdAt: "desc" },
