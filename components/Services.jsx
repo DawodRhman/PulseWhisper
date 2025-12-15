@@ -172,7 +172,7 @@ function ServiceCategoryItem({ category }) {
   );
 }
 
-export default function Services() {
+export default function Services(props) {
   const [animationDone, setAnimationDone] = useState(false);
   const { data, loading: dataLoading, error, stale } = useServicesData();
   const loading = !animationDone || dataLoading;
@@ -187,16 +187,19 @@ export default function Services() {
 
   if (loading) return <Loader />;
 
+  const displayTitle = props.title || data.hero?.title || "Our Services";
+  const displaySubtitle = props.subtitle || data.hero?.subtitle || "KW&SC provides essential services to the citizens of Karachi, ensuring efficient water supply, sewerage management, and digital accessibility.";
+
   return (
     <>
       {/* Corporate Section Header */}
       <section className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
         <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-4 uppercase">
-            {(data.hero?.title || "Our Services")?.toUpperCase()}
+            {displayTitle?.toUpperCase()}
           </h1>
           <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-600 max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto leading-relaxed sm:leading-relaxed md:leading-relaxed">
-            {data.hero?.subtitle || "KW&SC provides essential services to the citizens of Karachi, ensuring efficient water supply, sewerage management, and digital accessibility."}
+            {displaySubtitle}
           </p>
           {error && (
             <p className="mt-4 text-sm text-red-500">Showing cached content due to a network issue. ({error.message})</p>

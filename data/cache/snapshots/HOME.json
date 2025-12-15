@@ -7,6 +7,35 @@
     "ctaHref": "/aboutus",
     "backgroundImage": "/karachicharminar.gif"
   },
+  "sections": [
+    {
+      "id": "b68d58e6-2d78-48a8-9650-5a419d670634",
+      "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
+      "type": "HERO",
+      "order": 0,
+      "content": {
+        "title": "Committed to Deliver",
+        "ctaHref": "/aboutus",
+        "ctaLabel": "Learn About KW&SC",
+        "subtitle": "Ensuring clean, safe water supply and efficient sewerage services for Karachi.",
+        "backgroundImage": "/karachicharminar.gif"
+      },
+      "createdAt": "2025-12-15T14:24:49.122Z",
+      "updatedAt": "2025-12-15T14:24:49.122Z"
+    },
+    {
+      "id": "363a870f-05f4-4e2f-97cb-5e0f5bdf41c3",
+      "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
+      "type": "SERVICES",
+      "order": 1,
+      "content": {
+        "title": "Our Services",
+        "subtitle": "Comprehensive water and sewerage services for the city."
+      },
+      "createdAt": "2025-12-15T14:24:49.122Z",
+      "updatedAt": "2025-12-15T14:24:49.122Z"
+    }
+  ],
   "projects": [
     {
       "id": "11cd3523-efee-427f-a813-6b23527ee53c",
@@ -404,7 +433,7 @@
       "title": "Water Today – Daily Water Supply Status",
       "summary": "Today’s water distribution across Karachi remains stable, with major pumping stations operating at optimal capacity.",
       "status": "PUBLISHED",
-      "publishedAt": "2025-12-15T14:09:34.324Z",
+      "publishedAt": "2025-12-15T14:29:03.533Z",
       "media": {
         "url": "/downtownkarachi.gif"
       }

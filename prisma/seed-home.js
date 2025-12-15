@@ -20,14 +20,43 @@ async function main() {
           ctaHref: "/aboutus",
           backgroundImage: "/karachicharminar.gif"
         }
+      },
+      {
+        type: "SERVICES",
+        order: 1,
+        content: {
+          title: "Our Services",
+          subtitle: "Comprehensive water and sewerage services for the city."
+        }
       }
     ]
   };
 
-  const existing = await prisma.page.findUnique({ where: { slug: "home" } });
+  const existing = await prisma.page.findUnique({
+    where: { slug: "home" },
+    include: { sections: true }
+  });
 
   if (existing) {
-    console.log("⚠️ Home page already exists. Skipping.");
+    console.log("🔄 Updating existing Home page...");
+    // Delete existing sections to replace them with the new structure
+    await prisma.pageSection.deleteMany({
+      where: { pageId: existing.id }
+    });
+    
+    await prisma.page.update({
+      where: { id: existing.id },
+      data: {
+        sections: {
+          create: homePage.sections.map(s => ({
+            type: s.type,
+            order: s.order,
+            content: s.content
+          }))
+        }
+      }
+    });
+    console.log("✅ Home page updated successfully.");
   } else {
     await prisma.page.create({
       data: {
