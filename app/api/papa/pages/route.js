@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AuditModule } from "@prisma/client";
+import { AuditModule, SnapshotModule } from "@prisma/client";
 import { z, ZodError } from "zod";
 import prisma from "@/lib/prisma";
 import { slugify } from "@/lib/string";
@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import fs from "fs/promises";
 import path from "path";
 import { rateLimit, applyRateLimitHeaders } from "@/lib/security/rate-limit";
+import { purgeSnapshot } from "@/lib/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -297,6 +298,13 @@ export async function PATCH(request) {
     if (page.slug && page.slug !== existing.slug) {
       await invalidatePageCache(page.slug);
     }
+    
+    // If this is the home page, purge the home snapshot and revalidate root
+    if (page.slug === "home" || existing.slug === "home") {
+      await purgeSnapshot(SnapshotModule.HOME);
+      revalidatePath("/");
+    }
+
     revalidatePath(`/${page.slug}`);
     
     return applyRateLimitHeaders(jsonResponse({ data: page }), limited?.headers);
