@@ -16,6 +16,8 @@
 # next.js
 /.next/
 /out/
+seed.js
+seed-nav.js
 
 # production
 /build

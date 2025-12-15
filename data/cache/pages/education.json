@@ -3,9 +3,11 @@
   "slug": "education",
   "title": "Education",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": null,
   "createdAt": "2025-12-04T17:09:33.646Z",
-  "updatedAt": "2025-12-04T17:09:33.646Z",
+  "updatedAt": "2025-12-12T19:06:27.740Z",
   "seoId": "bbd838d1-565a-4d9b-91eb-0ae97de94a0f",
   "sections": [
     {

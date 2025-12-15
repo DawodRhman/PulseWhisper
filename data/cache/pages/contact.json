@@ -3,9 +3,11 @@
   "slug": "contact",
   "title": "Contact Us",
   "isPublished": true,
-  "showInNavbar": false,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": null,
   "createdAt": "2025-12-04T17:09:31.477Z",
-  "updatedAt": "2025-12-04T17:09:31.477Z",
+  "updatedAt": "2025-12-12T19:06:28.146Z",
   "seoId": "a6030908-70c7-4262-877f-8ab43c88e448",
   "sections": [
     {

@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const nextConfig = {
   // Image optimization settings
   images: {
@@ -17,6 +23,10 @@ const nextConfig = {
   // Experimental features for better performance
   experimental: {
     optimizePackageImports: ['gsap', 'react-awesome-reveal'],
+  },
+
+  turbopack: {
+    root: __dirname,
   },
 };
 

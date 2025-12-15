@@ -34,7 +34,7 @@ const mockArticles = [
       "Comprehensive inspection and review of the completed New Hub Canal project by city leadership.",
     type: "Inspection",
     id: "UP-002",
-    img: "/otherImages/mayor.png",
+    img: "/otherImages/infa.png",
   },
   {
     date: "Aug 6, 2025",
@@ -51,7 +51,7 @@ const mockArticles = [
       "Board of Directors officially appoints Ahmed Ali Siddiqui as the permanent CEO of KW&SC.",
     type: "Leadership",
     id: "UP-004",
-    img: "/otherImages/ceo.png",
+    img: "/leaders/salahuddin.svg",
   },
   {
     date: "May 3, 2025",

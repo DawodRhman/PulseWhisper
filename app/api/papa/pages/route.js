@@ -7,6 +7,7 @@ import { ensureAdminSession, handleAdminApiError, AdminAuthError } from "@/lib/a
 import { revalidatePath } from "next/cache";
 import fs from "fs/promises";
 import path from "path";
+import { rateLimit, applyRateLimitHeaders } from "@/lib/security/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,7 @@ const CACHE_DIR = path.join(process.cwd(), "data", "cache", "pages");
 
 async function invalidatePageCache(slug) {
   if (!slug) return;
-  const cacheKey = slug.replace(/[^a-z0-9-]/g, "_");
+  const cacheKey = String(slug).toLowerCase().replace(/[^a-z0-9-]/g, "_");
   const cachePath = path.join(CACHE_DIR, `${cacheKey}.json`);
   try {
     await fs.unlink(cachePath);
@@ -163,6 +164,15 @@ export async function GET() {
 export async function POST(request) {
   try {
     const session = await ensureAdminSession("pages:write");
+
+    const limited = rateLimit(request, {
+      keyPrefix: "admin:pages:write",
+      limit: 30,
+      windowMs: 60_000,
+      keyId: session?.user?.id,
+    });
+    if (limited instanceof NextResponse) return limited;
+
     const body = await request.json();
     const data = createPageSchema.parse(body);
 
@@ -207,7 +217,7 @@ export async function POST(request) {
     await invalidatePageCache(page.slug);
     revalidatePath("/"); // Revalidate everything for now, or specific paths
     
-    return jsonResponse({ data: page }, { status: 201 });
+    return applyRateLimitHeaders(jsonResponse({ data: page }, { status: 201 }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "POST /api/admin/pages");
   }
@@ -216,6 +226,15 @@ export async function POST(request) {
 export async function PATCH(request) {
   try {
     const session = await ensureAdminSession("pages:write");
+
+    const limited = rateLimit(request, {
+      keyPrefix: "admin:pages:write",
+      limit: 60,
+      windowMs: 60_000,
+      keyId: session?.user?.id,
+    });
+    if (limited instanceof NextResponse) return limited;
+
     const body = await request.json();
     const data = updatePageSchema.parse(body);
 
@@ -280,7 +299,7 @@ export async function PATCH(request) {
     }
     revalidatePath(`/${page.slug}`);
     
-    return jsonResponse({ data: page });
+    return applyRateLimitHeaders(jsonResponse({ data: page }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "PATCH /api/admin/pages");
   }
@@ -289,6 +308,15 @@ export async function PATCH(request) {
 export async function DELETE(request) {
   try {
     const session = await ensureAdminSession("pages:write");
+
+    const limited = rateLimit(request, {
+      keyPrefix: "admin:pages:write",
+      limit: 20,
+      windowMs: 60_000,
+      keyId: session?.user?.id,
+    });
+    if (limited instanceof NextResponse) return limited;
+
     const body = await request.json();
     const { id } = deletePageSchema.parse(body);
 
@@ -303,7 +331,7 @@ export async function DELETE(request) {
     await invalidatePageCache(existing.slug);
     revalidatePath(`/${existing.slug}`);
 
-    return jsonResponse({ success: true });
+    return applyRateLimitHeaders(jsonResponse({ success: true }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "DELETE /api/admin/pages");
   }

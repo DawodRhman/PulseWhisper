@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { purgeSnapshot } from "@/lib/cache";
 import { ensureAdminSession, AdminAuthError, handleAdminApiError } from "@/lib/auth/guard";
 import { revalidatePath } from "next/cache";
+import { rateLimit, applyRateLimitHeaders } from "@/lib/security/rate-limit";
 
 const ENTITY_TYPE = z.enum(["member"]);
 
@@ -193,22 +194,35 @@ async function upsertSeoMeta({ baseTitle, seoPayload, existingSeoId }) {
 }
 
 async function logAudit({ session, action, recordId, diff, request }) {
-  await prisma.auditLog.create({
-    data: {
-      module: AuditModule.LEADERSHIP,
-      action,
-      recordId: recordId || null,
-      diff,
-      actorId: session?.user?.id || null,
-      ipAddress: getClientIp(request),
-      userAgent: getUserAgent(request),
-    },
-  });
+  try {
+    await prisma.auditLog.create({
+      data: {
+        module: AuditModule.LEADERSHIP,
+        action,
+        recordId: recordId || null,
+        diff,
+        actorId: session?.user?.id || null,
+        ipAddress: getClientIp(request),
+        userAgent: getUserAgent(request),
+      },
+    });
+  } catch (error) {
+    console.warn("⚠️ Leadership audit log failed:", error?.message || error);
+  }
 }
 
 async function purgeHomeSnapshot() {
-  await purgeSnapshot(SnapshotModule.HOME).catch(() => null);
-  revalidatePath("/ourleadership"); // Force update the public page
+  try {
+    await purgeSnapshot(SnapshotModule.HOME).catch(() => null);
+  } catch (error) {
+    console.warn("⚠️ Failed to purge HOME snapshot:", error?.message || error);
+  }
+
+  try {
+    revalidatePath("/ourleadership"); // Force update the public page
+  } catch (error) {
+    console.warn("⚠️ Failed to revalidate /ourleadership:", error?.message || error);
+  }
 }
 
 async function parseActionPayload(request, schemaMap) {
@@ -325,6 +339,8 @@ async function handleDelete(type, data) {
 
 export async function GET() {
   try {
+    const limiter = rateLimit(null, { keyPrefix: "admin:leadership:get", limit: 120, windowMs: 60_000 });
+    // rateLimit expects a request; keep it permissive for GET if request is unavailable
     await ensureAdminSession("leadership:write");
     const data = await fetchLeadershipPayload();
     return NextResponse.json({ data });
@@ -336,12 +352,21 @@ export async function GET() {
 export async function POST(request) {
   try {
     const session = await ensureAdminSession("leadership:write");
+
+    const limited = rateLimit(request, {
+      keyPrefix: "admin:leadership:write",
+      limit: 30,
+      windowMs: 60_000,
+      keyId: session?.user?.id,
+    });
+    if (limited instanceof NextResponse) return limited;
+
     const { type, data } = await parseActionPayload(request, createSchemas);
     const { record, diff } = await handleCreate(type, data);
     await purgeHomeSnapshot();
     await logAudit({ session, action: `${type.toUpperCase()}_CREATE`, recordId: record.id, diff, request });
     const payload = await fetchLeadershipPayload();
-    return NextResponse.json({ data: payload, record });
+    return applyRateLimitHeaders(NextResponse.json({ data: payload, record }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "POST /api/papa/leadership");
   }
@@ -350,12 +375,21 @@ export async function POST(request) {
 export async function PATCH(request) {
   try {
     const session = await ensureAdminSession("leadership:write");
+
+    const limited = rateLimit(request, {
+      keyPrefix: "admin:leadership:write",
+      limit: 60,
+      windowMs: 60_000,
+      keyId: session?.user?.id,
+    });
+    if (limited instanceof NextResponse) return limited;
+
     const { type, data } = await parseActionPayload(request, updateSchemas);
     const { record, diff } = await handleUpdate(type, data);
     await purgeHomeSnapshot();
     await logAudit({ session, action: `${type.toUpperCase()}_UPDATE`, recordId: data.id, diff, request });
     const payload = await fetchLeadershipPayload();
-    return NextResponse.json({ data: payload, record });
+    return applyRateLimitHeaders(NextResponse.json({ data: payload, record }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "PATCH /api/papa/leadership");
   }
@@ -364,12 +398,21 @@ export async function PATCH(request) {
 export async function DELETE(request) {
   try {
     const session = await ensureAdminSession("leadership:write");
+
+    const limited = rateLimit(request, {
+      keyPrefix: "admin:leadership:write",
+      limit: 30,
+      windowMs: 60_000,
+      keyId: session?.user?.id,
+    });
+    if (limited instanceof NextResponse) return limited;
+
     const { type, data } = await parseActionPayload(request, deleteSchemas);
     const { record, diff } = await handleDelete(type, data);
     await purgeHomeSnapshot();
     await logAudit({ session, action: `${type.toUpperCase()}_DELETE`, recordId: data.id, diff, request });
     const payload = await fetchLeadershipPayload();
-    return NextResponse.json({ data: payload, record });
+    return applyRateLimitHeaders(NextResponse.json({ data: payload, record }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "DELETE /api/papa/leadership");
   }
