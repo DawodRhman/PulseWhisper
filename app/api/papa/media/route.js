@@ -105,35 +105,6 @@ async function saveUploadedFile(file, { category } = {}) {
   const safeName = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext.toLowerCase()}`;
   const metadata = describeBuffer(buffer, { filename: originalName });
 
-  // Vercel serverless deployments have an ephemeral, read-only filesystem for writes.
-  // Persist uploads using Vercel Blob in production.
-  if (isVercelDeployment()) {
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      throw createHttpError(
-        "Uploads are not configured for production. Set BLOB_READ_WRITE_TOKEN in Vercel project env vars.",
-        500
-      );
-    }
-
-    const { put } = await import("@vercel/blob");
-    const prefix = (category || "uploads").toString().trim().replace(/[^a-z0-9-_]/gi, "-");
-    const objectKey = `${prefix}/${safeName}`;
-    const blob = await put(objectKey, buffer, {
-      access: "public",
-      contentType: metadata.mimeType || file.type || "application/octet-stream",
-      addRandomSuffix: false,
-    });
-
-    return {
-      buffer,
-      filename: originalName,
-      storedName: safeName,
-      absolutePath: null,
-      url: blob.url,
-      metadata,
-    };
-  }
-
   await ensureUploadDir();
   const absolutePath = path.join(UPLOAD_DIR, safeName);
   await fs.writeFile(absolutePath, buffer);
@@ -149,19 +120,6 @@ async function saveUploadedFile(file, { category } = {}) {
 
 async function deleteLocalFile(url) {
   if (!url || typeof url !== "string") return;
-
-  // If this is a blob URL, attempt deletion in Vercel Blob.
-  if (url.startsWith("https://") && url.includes(".blob.vercel-storage.com")) {
-    try {
-      if (process.env.BLOB_READ_WRITE_TOKEN) {
-        const { del } = await import("@vercel/blob");
-        await del(url);
-      }
-    } catch {
-      // Best-effort cleanup; do not fail API on delete.
-    }
-    return;
-  }
 
   if (!isUploadUrl(url)) return;
   const relative = url.replace(/^\/+/, "");
