@@ -3,9 +3,12 @@ import React, { useEffect, useState, useRef } from "react";
 import Loader from "@/components/Loader";
 import gsap from "gsap";
 import Link from "next/link";
-import { Globe, MoveRight } from "lucide-react";
+import { Globe, MoveRight, Plug, AlertCircle, Truck, Receipt } from "lucide-react";
 
 import GetYourBillPopup from "@/components/GetYourBill";
+import NewConnectionPopup from "@/components/NewConnectionPopup";
+import EComplaintPopup from "@/components/EComplaintPopup";
+import BookTankerPopup from "@/components/BookTankerPopup";
 
 export default function Home({ hero }) {
   const [loading, setLoading] = useState(true);
@@ -20,6 +23,9 @@ export default function Home({ hero }) {
   const [language, setLanguage] = useState("en");
   const [chatOpen, setChatOpen] = useState(false);
   const [showBillPopup, setShowBillPopup] = useState(false);
+  const [showNewConnectionPopup, setShowNewConnectionPopup] = useState(false);
+  const [showEComplaintPopup, setShowEComplaintPopup] = useState(false);
+  const [showBookTankerPopup, setShowBookTankerPopup] = useState(false);
 
   const [messages, setMessages] = useState([
     { from: "bot", text: "Hello! I am KWSC Assistant. How can I help you today?" },
@@ -77,15 +83,6 @@ export default function Home({ hero }) {
         className="relative min-h-screen transition-opacity duration-700 bg-cover bg-center text-white flex flex-col items-center justify-start overflow-hidden px-4 sm:px-6 pt-20 sm:pt-24 md:pt-32 lg:pt-40"
         style={{ backgroundImage: `url('${backgroundImage}')` }}
       >
-        {/* Language Toggle */}
-        <div className="absolute top-4 sm:top-5 right-4 sm:right-5 z-[50]">
-          <button
-            onClick={() => setLanguage(prev => (prev === "en" ? "ur" : "en"))}
-            className="px-2.5 sm:px-3 py-1 rounded-md border border-cyan-400/30 bg-white/10 text-cyan-300 text-xs sm:text-sm font-medium backdrop-blur-sm hover:bg-cyan-500/10 hover:text-white transition-all duration-200"
-          >
-            {language === "en" ? "اردو" : "English"}
-          </button>
-        </div>
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-slate-900/50 z-0"></div>
@@ -93,40 +90,62 @@ export default function Home({ hero }) {
           className="absolute inset-0 bg-[linear-gradient(to_right,rgba(6,182,212,0.05)1px,transparent 1px),linear-gradient(to_bottom,rgba(6,182,212,0.05)1px,transparent 1px)] bg-[length:40px_40px] opacity-15 z-0 pointer-events-none"
         ></div>
 
-        {/* Top Buttons */}
-        <div className="relative z-[20] flex flex-row flex-wrap justify-center gap-1.5 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10 w-full">
-          <Link
-            href="/NewConnectionPage"
-            className="px-2 sm:px-5 py-1.5 sm:py-2.5 rounded-md border border-cyan-400/30 bg-white/5 text-cyan-300 text-xs sm:text-sm font-medium backdrop-blur-sm hover:bg-cyan-500/10 hover:text-white transition-all duration-200 text-center whitespace-nowrap"
+        {/* Top Buttons - Interactive Icons */}
+        <div className="relative z-[20] flex flex-row flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 md:mb-10 w-full">
+          {/* New Connection */}
+          <button
+            onClick={() => setShowNewConnectionPopup(true)}
+            className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
+            title="New Connection"
           >
-            New Connection
-          </Link>
+            <Plug size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">New Connection</span>
+          </button>
 
-          <Link
-            href="/EComplaintPage"
-            className="px-2 sm:px-5 py-1.5 sm:py-2.5 rounded-md border border-cyan-400/30 bg-white/5 text-cyan-300 text-xs sm:text-sm font-medium backdrop-blur-sm hover:bg-cyan-500/10 hover:text-white transition-all duration-200 text-center whitespace-nowrap"
+          {/* E-Complaint */}
+          <button
+            onClick={() => setShowEComplaintPopup(true)}
+            className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
+            title="E-Complaint"
           >
-            E-Complaint
-          </Link>
+            <AlertCircle size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">E-Complaint</span>
+          </button>
 
-          {/* Book Tanker Page */}
-          <Link
-            href="/BookTankerPage"
-            className="px-2 sm:px-5 py-1.5 sm:py-2.5 rounded-md border border-cyan-400/30 bg-white/5 text-cyan-300 text-xs sm:text-sm font-medium backdrop-blur-sm hover:bg-cyan-500/10 hover:text-white transition-all duration-200 text-center whitespace-nowrap"
+          {/* Book Tanker */}
+          <button
+            onClick={() => setShowBookTankerPopup(true)}
+            className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
+            title="Book Tanker"
           >
-            Book Tanker
-          </Link>
+            <Truck size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Book Tanker</span>
+          </button>
 
-          {/* Get Your Bill Popup */}
+          {/* Get Your Bill */}
           <button
             onClick={() => setShowBillPopup(true)}
-            className="px-2 sm:px-5 py-1.5 sm:py-2.5 rounded-md border border-cyan-400/30 bg-white/5 text-cyan-300 text-xs sm:text-sm font-medium backdrop-blur-sm hover:bg-cyan-500/10 hover:text-white transition-all duration-200 text-center whitespace-nowrap"
+            className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
+            title="Get Your Bill"
           >
-            Get Your Bill
+            <Receipt size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Get Your Bill</span>
           </button>
         </div>
 
-        {/* Get Your Bill Popup */}
+        {/* Popups */}
+        <NewConnectionPopup
+          open={showNewConnectionPopup}
+          onClose={() => setShowNewConnectionPopup(false)}
+        />
+        <EComplaintPopup
+          open={showEComplaintPopup}
+          onClose={() => setShowEComplaintPopup(false)}
+        />
+        <BookTankerPopup
+          open={showBookTankerPopup}
+          onClose={() => setShowBookTankerPopup(false)}
+        />
         <GetYourBillPopup
           open={showBillPopup}
           onClose={() => setShowBillPopup(false)}
@@ -138,12 +157,6 @@ export default function Home({ hero }) {
             bg-white/5 backdrop-blur-sm border border-white/5 ring-1 ring-white/10
             flex flex-col items-center text-center shadow-lg"
         >
-          <div className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full 
-            bg-cyan-950/20 border border-cyan-500/20 text-cyan-300 text-xs font-mono mb-4 sm:mb-6">
-            <Globe className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="text-xs sm:text-xs uppercase">{eyebrow}</span>
-          </div>
-
           <h1
             className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white"
           >

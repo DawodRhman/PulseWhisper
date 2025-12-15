@@ -3,7 +3,6 @@ import { Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MouseFollower from "@/components/MouseFollower";
 import CookieConsent from "@/components/CookieConsent";
 
 
@@ -32,7 +31,6 @@ export default function RootLayout({ children }) {
       <body
         className={`${roboto.variable} ${Avg_sans.variable} antialiased`}
       >
-        <MouseFollower />
         <Navbar />
         {children}
         <Footer />

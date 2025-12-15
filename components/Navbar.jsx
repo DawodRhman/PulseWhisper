@@ -1,21 +1,25 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { gsap } from "gsap";
-import { X, ChevronDown } from "lucide-react";
+import { X, ChevronDown, Search, Globe } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [expandedMobileSubmenu, setExpandedMobileSubmenu] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [language, setLanguage] = useState("en");
   const menuRef = useRef(null);
   const linksRef = useRef([]);
   const submenuRefs = useRef([]);
   const mobileSubmenuRefs = useRef([]);
   const hoverTimeoutRef = useRef(null);
+  const searchInputRef = useRef(null);
   const pathname = usePathname();
+  const router = useRouter();
   const isAdminView = pathname?.startsWith("/papa");
 
   if (isAdminView) {
@@ -85,141 +89,100 @@ const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  
-
-    // Run immediately to set initial state
-    handleScroll();
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
-
-  const [dynamicPages, setDynamicPages] = useState([]);
-
-  useEffect(() => {
-    const fetchPages = async () => {
-      try {
-        const res = await fetch("/api/pages");
-        const json = await res.json();
-        if (json.data) {
-          setDynamicPages(json.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch dynamic pages:", error);
-      }
-    };
-    fetchPages();
   }, []);
 
-  const getPageData = (slug) => dynamicPages.find(p => p.slug === slug);
-  const normalizeKey = (value = "") =>
-    value
-      .toString()
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
+  // Handle search
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
 
-  const menuSkeleton = [
-    { slug: "home", href: "/", text: "Home", alwaysShow: true },
-    { 
-      slug: "whatwedo", 
+  // Toggle language
+  const toggleLanguage = () => {
+    setLanguage(prev => prev === "en" ? "ur" : "en");
+    // You can add language switching logic here
+  };
+
+  const NavLinks = [
+    { href: "/", text: "Home" },
+
+    {
+      href: "/whatwedo",
       text: "What We Do",
       submenu: [
-        { slug: "ourservices", text: "Our Services" },
-        { slug: "portfolio", text: "Our Projects" },
-        { slug: "workwithus", text: "Work With Us" },
-        { slug: "news", text: "News & Updates" },
-        { slug: "right-to-information", text: "Right to Information" }
+        { href: "/ourservices", text: "Our Services" },
+        { href: "/portfolio", text: "Our Projects" },
+        { href: "/workwithus", text: "Work With Us" },
+        { href: "/news", text: "News & Updates" },
+        { href: "/right-to-information", text: "Right to Information" },
       ]
     },
     {
-      slug: "aboutus",
+      href: "/aboutus",
       text: "About Us",
       submenu: [
-        { slug: "aboutus", text: "Our Heritage" },
-        { slug: "watertodaysection", text: "Water Today" },
-        { slug: "achievements", text: "Achievements" },
-        { slug: "ourleadership", text: "Our Leadership" },
-        { slug: "careers", text: "Careers" },
-        { slug: "faqs", text: "FAQs" }
+        { href: "/aboutus", text: "Our Heritage" },
+        { href: "/watertodaysection", text: "Water Today" },
+        { href: "/achievements", text: "Achievements" },
+        { href: "/ourleadership", text: "Our Leadership" },
+        { href: "/careers", text: "Careers" },
+        { href: "/faqs", text: "FAQs" },
       ]
     },
-    { slug: "tenders", text: "Tenders" },
-    { slug: "education", text: "Education" },
-    { slug: "contact", text: "Contact" }
+    //{ 
+    //  href: "/portfolio", 
+    //  text: "Our Projects",
+    //  submenu: [
+    //  { href: "/portfolio", text: "All Projects" },
+
+    //  ]
+    //  },
+
+    {
+      href: "/tenders",
+      text: "Tenders",
+
+    },
+    {
+      href: "/education",
+      text: "Education",
+
+    },
+
+    {
+      href: "/contact",
+      text: "Contact",
+
+    },
   ];
-
-  // Build nav from skeleton and then inject dynamic pages into groups or as new groups
-  const navMap = new Map();
-  const NavLinks = menuSkeleton.map(item => {
-    const page = getPageData(item.slug);
-    const link = {
-      slug: item.slug,
-      href: item.href || `/${item.slug}`,
-      text: page?.title || item.text || item.slug,
-    };
-
-    if (item.submenu) {
-      link.submenu = item.submenu.map(sub => {
-        const subSlug = typeof sub === "string" ? sub : sub.slug;
-        const subPage = getPageData(subSlug);
-        return {
-          slug: subSlug,
-          href: `/${subSlug}`,
-          text: subPage?.title || (typeof sub === "object" && sub.text) || subSlug
-        };
-      });
-    }
-    navMap.set(normalizeKey(item.slug || item.text), link);
-    return link;
-  });
-
-  dynamicPages
-    .filter(p => p.showInNavbar)
-    .forEach((page) => {
-      const label = page.navLabel || page.title;
-      const href = `/${page.slug}`;
-      const groupKey = page.navGroup ? normalizeKey(page.navGroup) : "";
-      const pageKey = normalizeKey(page.slug);
-
-      if (groupKey) {
-        let parent = navMap.get(groupKey);
-        if (!parent) {
-          parent = {
-            slug: groupKey,
-            href: `/${groupKey}`,
-            text: page.navGroup,
-            submenu: [],
-          };
-          navMap.set(groupKey, parent);
-          NavLinks.push(parent);
-        }
-        if (!parent.submenu) parent.submenu = [];
-        if (!parent.submenu.some((item) => item.href === href)) {
-          parent.submenu.push({ slug: page.slug, href, text: label });
-        }
-      } else {
-        const existing = navMap.get(pageKey);
-        if (existing) {
-          existing.text = label;
-          existing.href = href;
-        } else {
-          const entry = { slug: page.slug, href, text: label };
-          navMap.set(pageKey, entry);
-          NavLinks.push(entry);
-        }
-      }
-    });
 
   // Handle submenu hover animations with grace period
   useEffect(() => {
-    if (hoveredIndex !== null && NavLinks[hoveredIndex]?.submenu) {
-      // Clear any pending timeout when hovering
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
+    // Clear any pending timeout
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
 
+    if (hoveredIndex !== null && NavLinks[hoveredIndex]?.submenu) {
+      // First, close all other submenus immediately
+      submenuRefs.current.forEach((ref, index) => {
+        if (ref && index !== hoveredIndex) {
+          gsap.to(ref, {
+            opacity: 0,
+            y: 10,
+            duration: 0.15,
+            ease: "power2.in",
+            onComplete: () => {
+              if (ref) ref.style.display = "none";
+            },
+          });
+        }
+      });
+
+      // Then open the hovered submenu
       const submenuRef = submenuRefs.current[hoveredIndex];
       if (submenuRef) {
         submenuRef.style.display = "block";
@@ -240,8 +203,8 @@ const Navbar = () => {
     } else {
       // Hide all submenus when not hovering, but with a delay to allow movement
       hoverTimeoutRef.current = setTimeout(() => {
-        submenuRefs.current.forEach((ref, index) => {
-          if (ref && hoveredIndex !== index) {
+        submenuRefs.current.forEach((ref) => {
+          if (ref) {
             gsap.to(ref, {
               opacity: 0,
               y: 10,
@@ -253,7 +216,7 @@ const Navbar = () => {
             });
           }
         });
-      }, 300);
+      }, 200);
     }
 
     return () => {
@@ -269,72 +232,122 @@ const Navbar = () => {
         className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${isScrolled ? "bg-white shadow-lg" : "bg-transparent"
           }`}
       >
-        <div className="w-full mx-auto flex justify-between items-center py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 lg:px-8 transition-colors">
-          <div className="flex-shrink-0">
-            <img src="/kwsc logo.png" alt="KW&SC Logo" width={60} height={70} className="sm:w-20 sm:h-24 md:w-24 md:h-28 lg:w-28 lg:h-32" />
-          </div>
-          <nav className="hidden md:block">
-            <ul className="flex gap-4 lg:gap-8 xl:gap-10 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold uppercase">
-              {NavLinks.map((loop, index) => (
-                <li
-                  key={loop.href}
-                  className="relative group"
-                  onMouseEnter={() => loop.submenu && setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <Link
-                    href={loop.href}
-                    className={`transition-colors flex items-center gap-0.5 md:gap-1 text-xs md:text-sm lg:text-base ${isScrolled
-                      ? pathname === loop.href
-                        ? "text-blue-300"
-                        : "text-black hover:text-blue-300"
-                      : pathname === loop.href
-                        ? "text-blue-300"
-                        : "text-white hover:text-blue-300"
-                      }`}
-                    onClick={() => setIsOpen(false)}
+        <div className="w-full mx-auto flex items-center justify-between py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 lg:px-8 transition-colors relative">
+          {/* Logo - Reduced size and linked to home */}
+          <Link href="/" className="flex-shrink-0" style={{ transform: 'translateX(8%)' }}>
+            <img src="/kwsc logo.png" alt="KW&SC Logo" width={40} height={50} className="w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 lg:w-16 lg:h-20 cursor-pointer hover:opacity-80 transition-opacity" loading="lazy" />
+          </Link>
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <nav className="hidden md:block">
+              <ul className="flex gap-4 lg:gap-8 xl:gap-10 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold uppercase">
+                {NavLinks.map((loop, index) => (
+                  <li
+                    key={loop.href}
+                    className="relative group"
+                    onMouseEnter={() => loop.submenu && setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
                   >
-                    {loop.text}
-                    {loop.submenu && (
-                      <ChevronDown
-                        size={14}
-                        className={`transition-transform duration-300 md:w-4 md:h-4 ${hoveredIndex === index ? 'rotate-180' : ''
-                          }`}
-                      />
-                    )}
-                  </Link>
-                  {loop.submenu && (
-                    <div
-                      ref={(el) => (submenuRefs.current[index] = el)}
-                      className={`absolute top-full left-0 mt-1 md:mt-2 min-w-max md:min-w-[200px] lg:min-w-[240px] shadow-xl rounded-lg overflow-hidden z-[120] backdrop-blur-sm ${isScrolled ? "bg-white" : "bg-white/95"
+                    <Link
+                      href={loop.href}
+                      className={`transition-colors flex items-center gap-0.5 md:gap-1 text-xs md:text-sm lg:text-base ${isScrolled
+                        ? pathname === loop.href
+                          ? "text-blue-300"
+                          : "text-black hover:text-blue-300"
+                        : pathname === loop.href
+                          ? "text-blue-300"
+                          : "text-white hover:text-blue-300"
                         }`}
-                      style={{ display: "none", opacity: 0 }}
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
+                      onClick={() => setIsOpen(false)}
                     >
-                      <ul className="py-1 md:py-2">
-                        {loop.submenu.map((subItem) => (
-                          <li key={subItem.href}>
-                            <Link
-                              href={subItem.href}
-                              className={`block px-3 md:px-4 lg:px-6 py-2 md:py-3 text-xs md:text-xs lg:text-sm font-semibold uppercase transition-all duration-200 ${pathname === subItem.href
-                                ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600"
-                                : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 hover:border-l-4 hover:border-blue-400"
-                                }`}
-                              onClick={() => setIsOpen(false)}
-                            >
-                              {subItem.text}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className={`cs_toolbox scale-75 sm:scale-90 md:scale-100 ${isScrolled
+                      {loop.text}
+                      {loop.submenu && (
+                        <ChevronDown
+                          size={14}
+                          className={`transition-transform duration-300 md:w-4 md:h-4 ${hoveredIndex === index ? 'rotate-180' : ''
+                            }`}
+                        />
+                      )}
+                    </Link>
+                    {loop.submenu && (
+                      <div
+                        ref={(el) => (submenuRefs.current[index] = el)}
+                        className={`absolute top-full left-0 mt-1 md:mt-2 min-w-max md:min-w-[200px] lg:min-w-[240px] shadow-xl rounded-lg overflow-hidden z-[120] backdrop-blur-sm ${isScrolled ? "bg-white" : "bg-white/95"
+                          }`}
+                        style={{ display: "none", opacity: 0 }}
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        <ul className="py-1 md:py-2">
+                          {loop.submenu.map((subItem) => (
+                            <li key={subItem.href}>
+                              <Link
+                                href={subItem.href}
+                                className={`block px-3 md:px-4 lg:px-6 py-2 md:py-3 text-xs md:text-xs lg:text-sm font-semibold uppercase transition-all duration-200 ${pathname === subItem.href
+                                  ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600"
+                                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 hover:border-l-4 hover:border-blue-400"
+                                  }`}
+                                onClick={() => setIsOpen(false)}
+                              >
+                                {subItem.text}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+          
+          {/* Right Side: Search Bar and Language Toggle - Desktop */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="flex items-center">
+              <div className={`relative flex items-center rounded-md border transition-all duration-300 ${
+                isScrolled
+                  ? "bg-white border-gray-300"
+                  : "bg-white/90 border-white/50 backdrop-blur-sm"
+              }`}>
+                <Search 
+                  size={18} 
+                  className={`absolute left-3 ${
+                    isScrolled ? "text-gray-500" : "text-gray-600"
+                  }`} 
+                />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className={`pl-10 pr-4 py-2 w-48 lg:w-56 xl:w-64 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    isScrolled
+                      ? "bg-white text-gray-900 placeholder-gray-500"
+                      : "bg-transparent text-gray-900 placeholder-gray-500"
+                  }`}
+                />
+              </div>
+            </form>
+
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLanguage}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 border font-medium text-sm ${
+                isScrolled
+                  ? "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-blue-500"
+                  : "bg-white/90 text-gray-700 border-white/50 hover:bg-white backdrop-blur-sm"
+              }`}
+              title={language === "en" ? "Switch to Urdu" : "Switch to English"}
+            >
+              <Globe size={16} />
+              <span>{language === "en" ? "اردو" : "English"}</span>
+            </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className={`cs_toolbox scale-75 sm:scale-90 md:scale-100 md:hidden ${isScrolled
             ? "text-black hover:text-blue-600"
             : "text-white hover:text-blue-600"
             }`}>
@@ -353,7 +366,32 @@ const Navbar = () => {
               }`}
           >
             <div className="w-full px-4 sm:px-6 py-4 sm:py-6 flex flex-col gap-6 sm:gap-8">
-              <div className="flex justify-end">
+              {/* Mobile Header with Search, Language Toggle, and Close */}
+              <div className="flex items-center justify-between gap-3">
+                {/* Mobile Search */}
+                <form onSubmit={handleSearch} className="flex-1 max-w-xs">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search..."
+                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </form>
+
+                {/* Mobile Language Toggle */}
+                <button
+                  onClick={toggleLanguage}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/30 text-white hover:bg-white/20 transition-colors"
+                >
+                  <Globe size={18} />
+                  <span className="text-sm font-medium">{language === "en" ? "اردو" : "English"}</span>
+                </button>
+
+                {/* Close Button */}
                 <button
                   onClick={() => setIsOpen(false)}
                   className="text-white font-bold opacity-100 transform hover:-translate-y-1 transition-all duration-300 rounded-full border-white p-1.5 sm:p-2 border-2"
