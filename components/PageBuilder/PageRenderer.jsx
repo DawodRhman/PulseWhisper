@@ -26,25 +26,45 @@ const TextBlock = ({ heading, body }) => {
     return <Heritage heading={heading} body={body} />;
   }
 
+  const normalizedBody = React.useMemo(() => {
+    if (!body || typeof body !== "string") return body;
+
+    // Backend content may contain React-only tags (e.g., <Fade>, <Image>) inside stored HTML.
+    // Strip/convert them so the layout still renders in the browser.
+    let html = body;
+
+    // Remove <Fade ...> wrappers.
+    html = html.replace(/<\s*Fade[^>]*>/gi, "");
+    html = html.replace(/<\s*\/\s*Fade\s*>/gi, "");
+
+    // Convert Next <Image ... /> to plain <img ... />.
+    html = html.replace(/<\s*Image\b([^>]*)\/>/gi, "<img$1 />");
+    html = html.replace(/<\s*Image\b([^>]*)>(.*?)<\s*\/\s*Image\s*>/gis, "<img$1 />");
+
+    return html;
+  }, [body]);
+
+  const looksLikeFullSectionMarkup = typeof normalizedBody === "string" && /<\s*section\b/i.test(normalizedBody);
+
   // Default styled text block for other TEXT_BLOCK sections
+  if (looksLikeFullSectionMarkup) {
+    return (
+      <div
+        dangerouslySetInnerHTML={{ __html: normalizedBody }}
+      />
+    );
+  }
+
   return (
-    <section className="min-h-screen bg-[#020617] py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none"></div>
-      
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+    <section className="py-12 sm:py-16 md:py-20 lg:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         {heading && (
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-white text-center">
-            {heading?.toUpperCase()}
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-900 text-center">
+            {heading}
           </h2>
         )}
-        {body && (
-          <div 
-            className="prose prose-invert max-w-none text-slate-300 leading-relaxed
-              prose-headings:text-white prose-p:text-slate-300 prose-p:leading-relaxed
-              prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:text-cyan-300"
-            dangerouslySetInnerHTML={{ __html: body }}
-          />
+        {normalizedBody && (
+          <div dangerouslySetInnerHTML={{ __html: normalizedBody }} />
         )}
       </div>
     </section>

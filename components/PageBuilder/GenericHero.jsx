@@ -12,10 +12,27 @@ export default function GenericHero({ title, subtitle, backgroundImage, backgrou
 
   // Use uploaded asset (GIF/image) when available, otherwise fall back
   const bgImage = backgroundMeta?.url || backgroundImage || "/9.gif";
+  const isVideo =
+    backgroundMeta?.mimeType?.startsWith("video/") ||
+    (typeof bgImage === "string" && bgImage.match(/\.(mp4)(\?|#|$)/i));
 
   return (
-    <section className="relative h-[70vh] transition-opacity duration-700 bg-cover bg-center flex justify-center items-center overflow-hidden text-white" 
-  style={{ backgroundImage: `url(${bgImage})` }}>
+    <section
+      className="relative h-[70vh] transition-opacity duration-700 bg-cover bg-center flex justify-center items-center overflow-hidden text-white"
+      style={isVideo ? undefined : { backgroundImage: `url(${bgImage})` }}
+    >
+
+      {isVideo && (
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src={bgImage}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        />
+      )}
       
 
       <div className="absolute inset-0 bg-slate-900/80 z-0"></div>

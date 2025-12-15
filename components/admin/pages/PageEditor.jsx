@@ -370,10 +370,10 @@ function SectionForm({ type, content, onChange, idPrefix }) {
           </div>
           <div className="col-span-2 space-y-2">
             <MediaPicker
-              label="Hero Background (image or GIF)"
+              label="Hero Background (image, GIF, or MP4)"
               value={content.backgroundMediaId || ""}
               category="page-hero"
-              accept="image/*"
+              accept="image/*,video/mp4"
               onChange={(assetId, asset) => {
                 onChange("backgroundMediaId", assetId || "");
                 onChange("backgroundMeta", asset || null);
@@ -381,12 +381,12 @@ function SectionForm({ type, content, onChange, idPrefix }) {
               }}
             />
             <p className="text-xs text-muted-foreground">
-              Upload or pick a GIF/image to use behind the hero content.
+              Upload or pick an image/GIF/MP4 to use behind the hero content.
             </p>
           </div>
           <div className="col-span-2">
             <Label htmlFor={fieldId("backgroundImage")}>
-              Background Image URL
+              Background Media URL
             </Label>
             <Input
               id={fieldId("backgroundImage")}
