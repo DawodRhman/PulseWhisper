@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Loader2, Plus, RefreshCcw, Trash2, CalendarDays, Tag as TagIcon } from "lucide-react";
+import { Loader2, Plus, RefreshCcw, Trash2, CalendarDays, Tag as TagIcon, Pencil } from "lucide-react";
 import { useAdminNews } from "@/hooks/useAdminNews";
 import MediaPicker from "@/components/admin/media/MediaPicker";
 
@@ -68,6 +68,8 @@ export default function NewsPanel() {
   const [categoryForm, setCategoryForm] = useState(INITIAL_CATEGORY);
   const [tagForm, setTagForm] = useState(INITIAL_TAG);
   const [articleForm, setArticleForm] = useState(INITIAL_ARTICLE);
+  const [articleUpdateForm, setArticleUpdateForm] = useState({ ...INITIAL_ARTICLE, id: "" });
+  const [activeTab, setActiveTab] = useState("create");
 
   const statusBuckets = useMemo(() => {
     return STATUS_OPTIONS.reduce(
@@ -114,6 +116,44 @@ export default function NewsPanel() {
     setArticleForm(INITIAL_ARTICLE);
   }
 
+  async function handleArticleUpdateSubmit(event) {
+    event.preventDefault();
+    if (!articleUpdateForm.id) return;
+    await updateEntity("article", {
+      id: articleUpdateForm.id,
+      title: articleUpdateForm.title,
+      slug: nullable(articleUpdateForm.slug) || undefined,
+      summary: nullable(articleUpdateForm.summary),
+      contentBody: nullable(articleUpdateForm.contentBody),
+      categoryId: articleUpdateForm.categoryId || null,
+      status: articleUpdateForm.status,
+      publishedAt: nullable(articleUpdateForm.publishedAt),
+      heroMediaUrl: nullable(articleUpdateForm.heroMediaUrl) || undefined,
+      heroMediaId: nullable(articleUpdateForm.heroMediaId) || undefined,
+      tagIds: articleUpdateForm.tagIds,
+    });
+  }
+
+  function handleArticleSelectForEdit(articleId) {
+    const article = articles.find((a) => a.id === articleId);
+    if (!article) return;
+    setArticleUpdateForm({
+      id: article.id,
+      title: article.title,
+      slug: article.slug || "",
+      summary: article.summary || "",
+      contentBody: article.contentBody || "",
+      categoryId: article.categoryId || "",
+      status: article.status,
+      publishedAt: article.publishedAt ? new Date(article.publishedAt).toISOString().slice(0, 16) : "",
+      heroMediaUrl: article.heroMediaUrl || "",
+      heroMediaId: article.heroMediaId || "",
+      tagIds: article.tags?.map((t) => t.tagId) || [],
+    });
+    setActiveTab("edit");
+    document.getElementById("news-form-container")?.scrollIntoView({ behavior: "smooth" });
+  }
+
   async function handleStatusChange(articleId, status) {
     await updateEntity("article", { id: articleId, status });
   }
@@ -126,6 +166,18 @@ export default function NewsPanel() {
 
   function toggleTag(tagId) {
     setArticleForm((prev) => {
+      const next = new Set(prev.tagIds);
+      if (next.has(tagId)) {
+        next.delete(tagId);
+      } else {
+        next.add(tagId);
+      }
+      return { ...prev, tagIds: Array.from(next) };
+    });
+  }
+
+  function toggleUpdateTag(tagId) {
+    setArticleUpdateForm((prev) => {
       const next = new Set(prev.tagIds);
       if (next.has(tagId)) {
         next.delete(tagId);
@@ -234,6 +286,14 @@ export default function NewsPanel() {
                       </select>
                       <button
                         type="button"
+                        onClick={() => handleArticleSelectForEdit(article.id)}
+                        className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-blue-600 transition"
+                        title="Edit Article"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => handleDelete("article", article.id, article.title)}
                         className="rounded-lg p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
                         aria-label={`Delete ${article.title}`}
@@ -328,89 +388,191 @@ export default function NewsPanel() {
           </div>
         </section>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6" id="news-form-container">
           <div className="sticky top-6 space-y-6">
-            <ActionForm
-              title="Create Category"
-              description="Add a new news category"
-              onSubmit={handleCategorySubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Title" value={categoryForm.title} onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })} required />
-              <Input label="Custom Slug" value={categoryForm.slug} onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })} placeholder="Auto-generated if blank" />
-              <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
-            </ActionForm>
+            {/* Tab Navigation */}
+            <div className="flex rounded-lg bg-slate-100 p-1">
+              <button
+                onClick={() => setActiveTab("create")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Create
+              </button>
+              <button
+                onClick={() => setActiveTab("edit")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Edit
+              </button>
+            </div>
 
-            <ActionForm
-              title="Create Tag"
-              description="Add a new descriptive tag"
-              onSubmit={handleTagSubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Title" value={tagForm.title} onChange={(e) => setTagForm({ ...tagForm, title: e.target.value })} required />
-              <Input label="Custom Slug" value={tagForm.slug} onChange={(e) => setTagForm({ ...tagForm, slug: e.target.value })} placeholder="Auto-generated if blank" />
-            </ActionForm>
-
-            <ActionForm
-              title="Publish Article"
-              description="Create a new news article"
-              onSubmit={handleArticleSubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Title" value={articleForm.title} onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })} required />
-              <TextArea label="Summary" value={articleForm.summary} onChange={(e) => setArticleForm({ ...articleForm, summary: e.target.value })} required />
-              <TextArea label="Body (Markdown/HTML)" rows={6} value={articleForm.contentBody} onChange={(e) => setArticleForm({ ...articleForm, contentBody: e.target.value })} />
-              
-              <Select label="Category" value={articleForm.categoryId} onChange={(e) => setArticleForm({ ...articleForm, categoryId: e.target.value })}>
-                <option value="">Unassigned</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-
-              <Select label="Status" value={articleForm.status} onChange={(e) => setArticleForm({ ...articleForm, status: e.target.value })}>
-                {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-              </Select>
-
-              <Input label="Published At" type="datetime-local" value={articleForm.publishedAt} onChange={(e) => setArticleForm({ ...articleForm, publishedAt: e.target.value })} />
-              
-              <div className="space-y-3 pt-2 border-t border-slate-100">
-                <p className="text-xs font-semibold text-slate-500">Hero Media</p>
-                <Input label="Remote URL" type="url" value={articleForm.heroMediaUrl} onChange={(e) => setArticleForm({ ...articleForm, heroMediaUrl: e.target.value })} placeholder="https://..." />
-                <MediaPicker
-                  label="Or Select from Library"
-                  category="news"
-                  value={articleForm.heroMediaId}
-                  onChange={(assetId, asset) =>
-                    setArticleForm((prev) => ({
-                      ...prev,
-                      heroMediaId: assetId || "",
-                      heroMediaUrl: asset ? asset.url : prev.heroMediaUrl,
-                    }))
-                  }
+            {activeTab === "create" && (
+              <>
+                <ActionForm
+                  title="Create Category"
+                  description="Add a new news category"
+                  onSubmit={handleCategorySubmit}
                   disabled={actionState.pending}
-                />
-              </div>
+                >
+                  <Input label="Title" value={categoryForm.title} onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })} required />
+                  <Input label="Custom Slug" value={categoryForm.slug} onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })} placeholder="Auto-generated if blank" />
+                  <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
+                </ActionForm>
 
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tags</p>
-                {tags.length ? (
-                  <div className="grid grid-cols-2 gap-2">
-                    {tags.map((tag) => (
-                      <label key={tag.id} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-blue-600">
-                        <input
-                          type="checkbox"
-                          checked={selectedTags.has(tag.id)}
-                          onChange={() => toggleTag(tag.id)}
-                          className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className="truncate">{tag.title}</span>
-                      </label>
-                    ))}
+                <ActionForm
+                  title="Create Tag"
+                  description="Add a new descriptive tag"
+                  onSubmit={handleTagSubmit}
+                  disabled={actionState.pending}
+                >
+                  <Input label="Title" value={tagForm.title} onChange={(e) => setTagForm({ ...tagForm, title: e.target.value })} required />
+                  <Input label="Custom Slug" value={tagForm.slug} onChange={(e) => setTagForm({ ...tagForm, slug: e.target.value })} placeholder="Auto-generated if blank" />
+                </ActionForm>
+
+                <ActionForm
+                  title="Publish Article"
+                  description="Create a new news article"
+                  onSubmit={handleArticleSubmit}
+                  disabled={actionState.pending}
+                >
+                  <Input label="Title" value={articleForm.title} onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })} required />
+                  <TextArea label="Summary" value={articleForm.summary} onChange={(e) => setArticleForm({ ...articleForm, summary: e.target.value })} required />
+                  <TextArea label="Body (Markdown/HTML)" rows={6} value={articleForm.contentBody} onChange={(e) => setArticleForm({ ...articleForm, contentBody: e.target.value })} />
+                  
+                  <Select label="Category" value={articleForm.categoryId} onChange={(e) => setArticleForm({ ...articleForm, categoryId: e.target.value })}>
+                    <option value="">Unassigned</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+
+                  <Select label="Status" value={articleForm.status} onChange={(e) => setArticleForm({ ...articleForm, status: e.target.value })}>
+                    {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </Select>
+
+                  <Input label="Published At" type="datetime-local" value={articleForm.publishedAt} onChange={(e) => setArticleForm({ ...articleForm, publishedAt: e.target.value })} />
+                  
+                  <div className="space-y-3 pt-2 border-t border-slate-100">
+                    <p className="text-xs font-semibold text-slate-500">Hero Media</p>
+                    <Input label="Remote URL" type="url" value={articleForm.heroMediaUrl} onChange={(e) => setArticleForm({ ...articleForm, heroMediaUrl: e.target.value })} placeholder="https://..." />
+                    <MediaPicker
+                      label="Or Select from Library"
+                      category="news"
+                      value={articleForm.heroMediaId}
+                      onChange={(assetId, asset) =>
+                        setArticleForm((prev) => ({
+                          ...prev,
+                          heroMediaId: assetId || "",
+                          heroMediaUrl: asset ? asset.url : prev.heroMediaUrl,
+                        }))
+                      }
+                      disabled={actionState.pending}
+                    />
                   </div>
-                ) : (
-                  <p className="text-xs text-slate-400 italic">Create tags first to attach metadata.</p>
-                )}
-              </div>
-            </ActionForm>
+
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tags</p>
+                    {tags.length ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        {tags.map((tag) => (
+                          <label key={tag.id} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-blue-600">
+                            <input
+                              type="checkbox"
+                              checked={selectedTags.has(tag.id)}
+                              onChange={() => toggleTag(tag.id)}
+                              className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span className="truncate">{tag.title}</span>
+                          </label>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-400 italic">Create tags first to attach metadata.</p>
+                    )}
+                  </div>
+                </ActionForm>
+              </>
+            )}
+
+            {activeTab === "edit" && (
+              <ActionForm
+                title="Update Article"
+                description="Edit existing news article"
+                onSubmit={handleArticleUpdateSubmit}
+                disabled={actionState.pending || !articleUpdateForm.id}
+                submitLabel="Save Changes"
+              >
+                <Select
+                  label="Select Article to Edit"
+                  value={articleUpdateForm.id}
+                  onChange={(e) => handleArticleSelectForEdit(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>Select Article</option>
+                  {articles.map((a) => (
+                    <option key={a.id} value={a.id}>{a.title}</option>
+                  ))}
+                </Select>
+
+                <Input label="Title" value={articleUpdateForm.title} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, title: e.target.value })} required disabled={!articleUpdateForm.id} />
+                <Input label="Slug" value={articleUpdateForm.slug} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, slug: e.target.value })} disabled={!articleUpdateForm.id} />
+                <TextArea label="Summary" value={articleUpdateForm.summary} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, summary: e.target.value })} required disabled={!articleUpdateForm.id} />
+                <TextArea label="Body (Markdown/HTML)" rows={6} value={articleUpdateForm.contentBody} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, contentBody: e.target.value })} disabled={!articleUpdateForm.id} />
+                
+                <Select label="Category" value={articleUpdateForm.categoryId} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, categoryId: e.target.value })} disabled={!articleUpdateForm.id}>
+                  <option value="">Unassigned</option>
+                  {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                </Select>
+
+                <Select label="Status" value={articleUpdateForm.status} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, status: e.target.value })} disabled={!articleUpdateForm.id}>
+                  {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                </Select>
+
+                <Input label="Published At" type="datetime-local" value={articleUpdateForm.publishedAt} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, publishedAt: e.target.value })} disabled={!articleUpdateForm.id} />
+                
+                <div className="space-y-3 pt-2 border-t border-slate-100">
+                  <p className="text-xs font-semibold text-slate-500">Hero Media</p>
+                  <Input label="Remote URL" type="url" value={articleUpdateForm.heroMediaUrl} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, heroMediaUrl: e.target.value })} placeholder="https://..." disabled={!articleUpdateForm.id} />
+                  <MediaPicker
+                    label="Or Select from Library"
+                    category="news"
+                    value={articleUpdateForm.heroMediaId}
+                    onChange={(assetId, asset) =>
+                      setArticleUpdateForm((prev) => ({
+                        ...prev,
+                        heroMediaId: assetId || "",
+                        heroMediaUrl: asset ? asset.url : prev.heroMediaUrl,
+                      }))
+                    }
+                    disabled={actionState.pending || !articleUpdateForm.id}
+                  />
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2">
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tags</p>
+                  {tags.length ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      {tags.map((tag) => (
+                        <label key={tag.id} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-blue-600">
+                          <input
+                            type="checkbox"
+                            checked={articleUpdateForm.tagIds?.includes(tag.id)}
+                            onChange={() => toggleUpdateTag(tag.id)}
+                            disabled={!articleUpdateForm.id}
+                            className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
+                          />
+                          <span className="truncate">{tag.title}</span>
+                        </label>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-400 italic">Create tags first to attach metadata.</p>
+                  )}
+                </div>
+              </ActionForm>
+            )}
           </div>
         </aside>
       </div>

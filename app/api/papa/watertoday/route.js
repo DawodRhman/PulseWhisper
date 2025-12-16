@@ -59,11 +59,11 @@ export async function POST(request) {
         },
       },
     });
-    
+
     await purgeSnapshot(SnapshotModule.WATER_TODAY).catch(() => null);
     revalidatePath("/");
     revalidatePath("/watertodaysection");
-    
+
     await prisma.auditLog.create({
       data: {
         module: AuditModule.WATER_TODAY,
@@ -131,7 +131,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("watertoday:write");
+    const session = await ensureAdminSession("watertoday:delete");
     const body = await request.json();
     const { id } = deleteSchema.parse(body);
 

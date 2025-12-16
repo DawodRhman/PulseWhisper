@@ -194,6 +194,9 @@ export async function PATCH(request) {
         break;
       }
       case "status": {
+        if (data.userId === session.user.id) {
+          throw createHttpError("You cannot change your own status", 403);
+        }
         const user = await prisma.user.update({ where: { id: data.userId }, data: { status: data.status } });
         await logAudit({ session, action: "USER_STATUS_UPDATE", recordId: data.userId, diff: { status: data.status } });
         result = user;

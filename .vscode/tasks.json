@@ -1,0 +1,10 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "prisma-db-push",
+			"type": "shell",
+			"command": "npx prisma db push"
+		}
+	]
+}

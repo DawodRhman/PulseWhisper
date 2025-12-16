@@ -60,10 +60,10 @@ export async function POST(request) {
         },
       },
     });
-    
+
     await purgeSnapshot(SnapshotModule.EDUCATION).catch(() => null);
     revalidatePath("/education");
-    
+
     await prisma.auditLog.create({
       data: {
         module: AuditModule.EDUCATION,
@@ -130,7 +130,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("education:write");
+    const session = await ensureAdminSession("education:delete");
     const body = await request.json();
     const { id } = deleteSchema.parse(body);
 

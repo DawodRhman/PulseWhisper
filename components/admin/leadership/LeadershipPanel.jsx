@@ -147,6 +147,8 @@ export default function LeadershipPanel() {
   const [updateForm, setUpdateForm] = useState(() => createInitialUpdateForm());
   const [seoForm, setSeoForm] = useState(() => createInitialSeoForm());
 
+  const [activeTab, setActiveTab] = useState("create"); // "create" | "edit" | "seo"
+
   const leadershipCount = useMemo(() => members.length, [members]);
 
   async function handleCreateSubmit(event) {
@@ -181,6 +183,7 @@ export default function LeadershipPanel() {
     }
     await updateEntity("member", payload);
     setUpdateForm(createInitialUpdateForm());
+    setActiveTab("create");
   }
 
   async function handleSeoSubmit(event) {
@@ -190,6 +193,7 @@ export default function LeadershipPanel() {
     if (!seoPayload) return;
     await updateEntity("member", { id: seoForm.memberId, seo: seoPayload });
     setSeoForm(createInitialSeoForm());
+    setActiveTab("create");
   }
 
   async function handleDelete(member) {
@@ -220,6 +224,7 @@ export default function LeadershipPanel() {
       socials: hydrateSocialState(member.socials),
       includeSocials: Boolean(member.socials),
     });
+    setActiveTab("edit");
   }
 
   function handleSeoSelect(memberId) {
@@ -230,11 +235,18 @@ export default function LeadershipPanel() {
     const member = members.find((entry) => entry.id === memberId);
     if (!member) return;
     setSeoForm({ memberId: member.id, seo: hydrateSeoForm(member.seo) });
+    setActiveTab("seo");
   }
 
   function prefillForms(member) {
     handleUpdateSelect(member.id);
     handleSeoSelect(member.id);
+    setActiveTab("edit");
+    // Scroll to form
+    const formElement = document.getElementById("leadership-form-container");
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   const priorityBuckets = useMemo(() => {
@@ -393,114 +405,148 @@ export default function LeadershipPanel() {
           ) : null}
         </section>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6" id="leadership-form-container">
           <div className="sticky top-6 space-y-6">
-            <ActionForm
-              title="Create Member"
-              description="Add a new leadership member"
-              onSubmit={handleCreateSubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Full Name" value={createForm.name} onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })} required />
-              <Input label="Designation" value={createForm.designation} onChange={(e) => setCreateForm({ ...createForm, designation: e.target.value })} required />
-              <TextArea label="Bio" value={createForm.bio} onChange={(e) => setCreateForm({ ...createForm, bio: e.target.value })} placeholder="1-2 sentences" />
-              <Input label="Priority" type="number" value={createForm.priority} onChange={(e) => setCreateForm({ ...createForm, priority: e.target.value })} placeholder="0 renders first" />
-              
-              <MediaPicker
-                label="Portrait Image"
-                category="leadership"
-                value={createForm.mediaId}
-                onChange={(id, asset) => setCreateForm(prev => ({
-                    ...prev,
-                    mediaId: id,
-                    mediaUrl: asset ? asset.url : prev.mediaUrl
-                }))}
+            {/* Tab Navigation */}
+            <div className="flex rounded-lg bg-slate-100 p-1">
+              <button
+                onClick={() => setActiveTab("create")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Create
+              </button>
+              <button
+                onClick={() => setActiveTab("edit")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => setActiveTab("seo")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "seo" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                SEO
+              </button>
+            </div>
+
+            {activeTab === "create" && (
+              <ActionForm
+                title="Create Member"
+                description="Add a new leadership member"
+                onSubmit={handleCreateSubmit}
                 disabled={actionState.pending}
-              />
-              <Input label="Or Remote Media URL" type="url" value={createForm.mediaUrl} onChange={(e) => setCreateForm({ ...createForm, mediaUrl: e.target.value })} placeholder="https://..." />
-              
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Social Links</p>
-                <Input label="LinkedIn URL" type="url" value={createForm.socials.linkedin} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, linkedin: e.target.value } })} />
-                <Input label="Twitter URL" type="url" value={createForm.socials.twitter} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, twitter: e.target.value } })} />
-                <Input label="Email" type="email" value={createForm.socials.email} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, email: e.target.value } })} />
-              </div>
-              
-              <div className="pt-2 border-t border-slate-100">
-                 <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
-                 <SeoFields
-                    value={createForm.seo}
-                    onChange={(seo) => setCreateForm((prev) => ({ ...prev, seo }))}
-                    disabled={actionState.pending}
-                  />
-              </div>
-            </ActionForm>
-
-            <ActionForm
-              title="Edit Member"
-              description="Update profile details"
-              onSubmit={handleUpdateSubmit}
-              disabled={actionState.pending || !members.length}
-            >
-              <Select label="Select Member" value={updateForm.memberId} onChange={(e) => handleUpdateSelect(e.target.value)} required>
-                 <option value="" disabled>Select Member</option>
-                 {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
-              </Select>
-              
-              <Input label="Full Name" value={updateForm.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })} disabled={!updateForm.memberId} required />
-              <Input label="Designation" value={updateForm.designation} onChange={(e) => setUpdateForm({ ...updateForm, designation: e.target.value })} disabled={!updateForm.memberId} required />
-              <TextArea label="Bio" value={updateForm.bio} onChange={(e) => setUpdateForm({ ...updateForm, bio: e.target.value })} disabled={!updateForm.memberId} />
-              <Input label="Priority" type="number" value={updateForm.priority} onChange={(e) => setUpdateForm({ ...updateForm, priority: e.target.value })} disabled={!updateForm.memberId} />
-              
-              <MediaPicker
-                label="Portrait Image"
-                category="leadership"
-                value={updateForm.mediaId}
-                onChange={(id, asset) => setUpdateForm(prev => ({
-                    ...prev,
-                    mediaId: id,
-                    mediaUrl: asset ? asset.url : prev.mediaUrl
-                }))}
-                disabled={!updateForm.memberId}
-              />
-              <Input label="Or Remote Media URL" type="url" value={updateForm.mediaUrl} onChange={(e) => setUpdateForm({ ...updateForm, mediaUrl: e.target.value })} disabled={!updateForm.memberId} />
-              
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="updateSocials"
-                  checked={updateForm.includeSocials}
-                  onChange={(e) => setUpdateForm({ ...updateForm, includeSocials: e.target.checked })}
-                  disabled={!updateForm.memberId}
-                  className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              >
+                <Input label="Full Name" value={createForm.name} onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })} required />
+                <Input label="Designation" value={createForm.designation} onChange={(e) => setCreateForm({ ...createForm, designation: e.target.value })} required />
+                <TextArea label="Bio" value={createForm.bio} onChange={(e) => setCreateForm({ ...createForm, bio: e.target.value })} placeholder="1-2 sentences" />
+                <Input label="Priority" type="number" value={createForm.priority} onChange={(e) => setCreateForm({ ...createForm, priority: e.target.value })} placeholder="0 renders first" />
+                
+                <MediaPicker
+                  label="Portrait Image"
+                  category="leadership"
+                  value={createForm.mediaId}
+                  onChange={(id, asset) => setCreateForm(prev => ({
+                      ...prev,
+                      mediaId: id,
+                      mediaUrl: asset ? asset.url : prev.mediaUrl
+                  }))}
+                  disabled={actionState.pending}
                 />
-                <label htmlFor="updateSocials" className="text-xs font-medium text-slate-700">Update Social Links</label>
-              </div>
+                <Input label="Or Remote Media URL" type="url" value={createForm.mediaUrl} onChange={(e) => setCreateForm({ ...createForm, mediaUrl: e.target.value })} placeholder="https://..." />
+                
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3">
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Social Links</p>
+                  <Input label="LinkedIn URL" type="url" value={createForm.socials.linkedin} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, linkedin: e.target.value } })} />
+                  <Input label="Twitter URL" type="url" value={createForm.socials.twitter} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, twitter: e.target.value } })} />
+                  <Input label="Email" type="email" value={createForm.socials.email} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, email: e.target.value } })} />
+                </div>
+                
+                <div className="pt-2 border-t border-slate-100">
+                   <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
+                   <SeoFields
+                      value={createForm.seo}
+                      onChange={(seo) => setCreateForm((prev) => ({ ...prev, seo }))}
+                      disabled={actionState.pending}
+                    />
+                </div>
+              </ActionForm>
+            )}
 
-              <div className={`rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3 ${!updateForm.includeSocials ? 'opacity-50 pointer-events-none' : ''}`}>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Social Links</p>
-                <Input label="LinkedIn URL" type="url" value={updateForm.socials.linkedin} onChange={(e) => setUpdateForm({ ...updateForm, socials: { ...updateForm.socials, linkedin: e.target.value } })} disabled={!updateForm.memberId || !updateForm.includeSocials} />
-                <Input label="Twitter URL" type="url" value={updateForm.socials.twitter} onChange={(e) => setUpdateForm({ ...updateForm, socials: { ...updateForm.socials, twitter: e.target.value } })} disabled={!updateForm.memberId || !updateForm.includeSocials} />
-                <Input label="Email" type="email" value={updateForm.socials.email} onChange={(e) => setUpdateForm({ ...updateForm, socials: { ...updateForm.socials, email: e.target.value } })} disabled={!updateForm.memberId || !updateForm.includeSocials} />
-              </div>
-            </ActionForm>
+            {activeTab === "edit" && (
+              <ActionForm
+                title="Edit Member"
+                description="Update profile details"
+                onSubmit={handleUpdateSubmit}
+                disabled={actionState.pending || !members.length}
+              >
+                <Select label="Select Member" value={updateForm.memberId} onChange={(e) => handleUpdateSelect(e.target.value)} required>
+                   <option value="" disabled>Select Member</option>
+                   {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+                </Select>
+                
+                <Input label="Full Name" value={updateForm.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })} disabled={!updateForm.memberId} required />
+                <Input label="Designation" value={updateForm.designation} onChange={(e) => setUpdateForm({ ...updateForm, designation: e.target.value })} disabled={!updateForm.memberId} required />
+                <TextArea label="Bio" value={updateForm.bio} onChange={(e) => setUpdateForm({ ...updateForm, bio: e.target.value })} disabled={!updateForm.memberId} />
+                <Input label="Priority" type="number" value={updateForm.priority} onChange={(e) => setUpdateForm({ ...updateForm, priority: e.target.value })} disabled={!updateForm.memberId} />
+                
+                <MediaPicker
+                  label="Portrait Image"
+                  category="leadership"
+                  value={updateForm.mediaId}
+                  onChange={(id, asset) => setUpdateForm(prev => ({
+                      ...prev,
+                      mediaId: id,
+                      mediaUrl: asset ? asset.url : prev.mediaUrl
+                  }))}
+                  disabled={!updateForm.memberId}
+                />
+                <Input label="Or Remote Media URL" type="url" value={updateForm.mediaUrl} onChange={(e) => setUpdateForm({ ...updateForm, mediaUrl: e.target.value })} disabled={!updateForm.memberId} />
+                
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="updateSocials"
+                    checked={updateForm.includeSocials}
+                    onChange={(e) => setUpdateForm({ ...updateForm, includeSocials: e.target.checked })}
+                    disabled={!updateForm.memberId}
+                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="updateSocials" className="text-xs font-medium text-slate-700">Update Social Links</label>
+                </div>
 
-            <ActionForm
-              title="SEO Overrides"
-              description="Update SEO metadata"
-              onSubmit={handleSeoSubmit}
-              disabled={actionState.pending || !members.length}
-            >
-              <Select label="Select Member" value={seoForm.memberId} onChange={(e) => handleSeoSelect(e.target.value)} required>
-                 <option value="" disabled>Select Member</option>
-                 {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
-              </Select>
-              <SeoFields
-                value={seoForm.seo}
-                onChange={(seo) => setSeoForm((prev) => ({ ...prev, seo }))}
-                disabled={!seoForm.memberId || actionState.pending}
-              />
-            </ActionForm>
+                <div className={`rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3 ${!updateForm.includeSocials ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Social Links</p>
+                  <Input label="LinkedIn URL" type="url" value={updateForm.socials.linkedin} onChange={(e) => setUpdateForm({ ...updateForm, socials: { ...updateForm.socials, linkedin: e.target.value } })} disabled={!updateForm.memberId || !updateForm.includeSocials} />
+                  <Input label="Twitter URL" type="url" value={updateForm.socials.twitter} onChange={(e) => setUpdateForm({ ...updateForm, socials: { ...updateForm.socials, twitter: e.target.value } })} disabled={!updateForm.memberId || !updateForm.includeSocials} />
+                  <Input label="Email" type="email" value={updateForm.socials.email} onChange={(e) => setUpdateForm({ ...updateForm, socials: { ...updateForm.socials, email: e.target.value } })} disabled={!updateForm.memberId || !updateForm.includeSocials} />
+                </div>
+              </ActionForm>
+            )}
+
+            {activeTab === "seo" && (
+              <ActionForm
+                title="SEO Overrides"
+                description="Update SEO metadata"
+                onSubmit={handleSeoSubmit}
+                disabled={actionState.pending || !members.length}
+              >
+                <Select label="Select Member" value={seoForm.memberId} onChange={(e) => handleSeoSelect(e.target.value)} required>
+                   <option value="" disabled>Select Member</option>
+                   {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+                </Select>
+                <SeoFields
+                  value={seoForm.seo}
+                  onChange={(seo) => setSeoForm((prev) => ({ ...prev, seo }))}
+                  disabled={!seoForm.memberId || actionState.pending}
+                />
+              </ActionForm>
+            )}
           </div>
         </aside>
       </div>

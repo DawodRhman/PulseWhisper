@@ -42,9 +42,9 @@ export async function POST(request) {
     const data = createSchema.parse(body);
 
     const record = await prisma.achievement.create({ data });
-    
+
     await purgeSnapshot(SnapshotModule.HOME).catch(() => null);
-    
+
     await prisma.auditLog.create({
       data: {
         module: AuditModule.SETTINGS,
@@ -91,7 +91,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("settings:write");
+    const session = await ensureAdminSession("settings:delete");
     const body = await request.json();
     const { id } = deleteSchema.parse(body);
 

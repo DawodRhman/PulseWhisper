@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Loader2, Plus, RefreshCcw, Trash2, CalendarDays, Paperclip } from "lucide-react";
+import { Loader2, Plus, RefreshCcw, Trash2, CalendarDays, Paperclip, Pencil } from "lucide-react";
 import { useAdminTenders } from "@/hooks/useAdminTenders";
 
 const STATUS_OPTIONS = ["OPEN", "UPCOMING", "CLOSED", "CANCELLED"];
@@ -64,7 +64,9 @@ export default function TendersPanel() {
   } = useAdminTenders();
   const [categoryForm, setCategoryForm] = useState(INITIAL_CATEGORY);
   const [tenderForm, setTenderForm] = useState(INITIAL_TENDER);
+  const [tenderUpdateForm, setTenderUpdateForm] = useState({ ...INITIAL_TENDER, id: "" });
   const [attachmentForm, setAttachmentForm] = useState(INITIAL_ATTACHMENT);
+  const [activeTab, setActiveTab] = useState("create");
 
   const statusBuckets = useMemo(() => {
     return STATUS_OPTIONS.reduce(
@@ -97,6 +99,42 @@ export default function TendersPanel() {
       contactPhone: nullable(tenderForm.contactPhone),
     });
     setTenderForm(INITIAL_TENDER);
+  }
+
+  async function handleTenderUpdateSubmit(event) {
+    event.preventDefault();
+    if (!tenderUpdateForm.id) return;
+    await updateEntity("tender", {
+      id: tenderUpdateForm.id,
+      tenderNumber: tenderUpdateForm.tenderNumber,
+      title: tenderUpdateForm.title,
+      summary: nullable(tenderUpdateForm.summary),
+      status: tenderUpdateForm.status,
+      categoryId: tenderUpdateForm.categoryId || null,
+      publishedAt: nullable(tenderUpdateForm.publishedAt),
+      closingAt: nullable(tenderUpdateForm.closingAt),
+      contactEmail: nullable(tenderUpdateForm.contactEmail),
+      contactPhone: nullable(tenderUpdateForm.contactPhone),
+    });
+  }
+
+  function handleTenderSelectForEdit(tenderId) {
+    const tender = tenders.find((t) => t.id === tenderId);
+    if (!tender) return;
+    setTenderUpdateForm({
+      id: tender.id,
+      tenderNumber: tender.tenderNumber,
+      title: tender.title,
+      summary: tender.summary || "",
+      status: tender.status,
+      categoryId: tender.categoryId || "",
+      publishedAt: tender.publishedAt ? new Date(tender.publishedAt).toISOString().slice(0, 16) : "",
+      closingAt: tender.closingAt ? new Date(tender.closingAt).toISOString().slice(0, 16) : "",
+      contactEmail: tender.contactEmail || "",
+      contactPhone: tender.contactPhone || "",
+    });
+    setActiveTab("edit");
+    document.getElementById("tenders-form-container")?.scrollIntoView({ behavior: "smooth" });
   }
 
   async function handleAttachmentSubmit(event) {
@@ -217,6 +255,14 @@ export default function TendersPanel() {
                       </select>
                       <button
                         type="button"
+                        onClick={() => handleTenderSelectForEdit(tender.id)}
+                        className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-blue-600 transition"
+                        title="Edit Tender"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => handleDelete("tender", tender.id, tender.title)}
                         className="rounded-lg p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
                         title="Delete Tender"
@@ -269,54 +315,115 @@ export default function TendersPanel() {
           </div>
         </section>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6" id="tenders-form-container">
           <div className="sticky top-6 space-y-6">
-            <ActionForm
-              title="Create Category"
-              description="Add a new tender category"
-              onSubmit={handleCategorySubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Label" value={categoryForm.label} onChange={(e) => setCategoryForm({ ...categoryForm, label: e.target.value })} required />
-              <TextArea label="Description" value={categoryForm.description} onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })} />
-              <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
-            </ActionForm>
+            {/* Tab Navigation */}
+            <div className="flex rounded-lg bg-slate-100 p-1">
+              <button
+                onClick={() => setActiveTab("create")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Create
+              </button>
+              <button
+                onClick={() => setActiveTab("edit")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Edit
+              </button>
+            </div>
 
-            <ActionForm
-              title="Publish Tender"
-              description="Create a new tender record"
-              onSubmit={handleTenderSubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Tender Number" value={tenderForm.tenderNumber} onChange={(e) => setTenderForm({ ...tenderForm, tenderNumber: e.target.value })} required />
-              <Input label="Title" value={tenderForm.title} onChange={(e) => setTenderForm({ ...tenderForm, title: e.target.value })} required />
-              <TextArea label="Summary" value={tenderForm.summary} onChange={(e) => setTenderForm({ ...tenderForm, summary: e.target.value })} />
-              <Select label="Status" value={tenderForm.status} onChange={(e) => setTenderForm({ ...tenderForm, status: e.target.value })}>
-                 {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
-              </Select>
-              <Select label="Category" value={tenderForm.categoryId} onChange={(e) => setTenderForm({ ...tenderForm, categoryId: e.target.value })}>
-                 <option value="">Unassigned</option>
-                 {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
-              </Select>
-              <Input label="Published At" type="datetime-local" value={tenderForm.publishedAt} onChange={(e) => setTenderForm({ ...tenderForm, publishedAt: e.target.value })} />
-              <Input label="Closing At" type="datetime-local" value={tenderForm.closingAt} onChange={(e) => setTenderForm({ ...tenderForm, closingAt: e.target.value })} />
-              <Input label="Contact Email" type="email" value={tenderForm.contactEmail} onChange={(e) => setTenderForm({ ...tenderForm, contactEmail: e.target.value })} />
-              <Input label="Contact Phone" value={tenderForm.contactPhone} onChange={(e) => setTenderForm({ ...tenderForm, contactPhone: e.target.value })} />
-            </ActionForm>
+            {activeTab === "create" && (
+              <>
+                <ActionForm
+                  title="Create Category"
+                  description="Add a new tender category"
+                  onSubmit={handleCategorySubmit}
+                  disabled={actionState.pending}
+                >
+                  <Input label="Label" value={categoryForm.label} onChange={(e) => setCategoryForm({ ...categoryForm, label: e.target.value })} required />
+                  <TextArea label="Description" value={categoryForm.description} onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })} />
+                  <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
+                </ActionForm>
 
-            <ActionForm
-              title="Attach File"
-              description="Link a document to a tender"
-              onSubmit={handleAttachmentSubmit}
-              disabled={actionState.pending || !tenders.length}
-            >
-              <Select label="Tender" value={attachmentForm.tenderId} onChange={(e) => setAttachmentForm({ ...attachmentForm, tenderId: e.target.value })} required>
-                 <option value="" disabled>Select Tender</option>
-                 {tenders.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
-              </Select>
-              <Input label="Label" value={attachmentForm.label} onChange={(e) => setAttachmentForm({ ...attachmentForm, label: e.target.value })} />
-              <Input label="Media URL" type="url" value={attachmentForm.mediaUrl} onChange={(e) => setAttachmentForm({ ...attachmentForm, mediaUrl: e.target.value })} required />
-            </ActionForm>
+                <ActionForm
+                  title="Publish Tender"
+                  description="Create a new tender record"
+                  onSubmit={handleTenderSubmit}
+                  disabled={actionState.pending}
+                >
+                  <Input label="Tender Number" value={tenderForm.tenderNumber} onChange={(e) => setTenderForm({ ...tenderForm, tenderNumber: e.target.value })} required />
+                  <Input label="Title" value={tenderForm.title} onChange={(e) => setTenderForm({ ...tenderForm, title: e.target.value })} required />
+                  <TextArea label="Summary" value={tenderForm.summary} onChange={(e) => setTenderForm({ ...tenderForm, summary: e.target.value })} />
+                  <Select label="Status" value={tenderForm.status} onChange={(e) => setTenderForm({ ...tenderForm, status: e.target.value })}>
+                     {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+                  </Select>
+                  <Select label="Category" value={tenderForm.categoryId} onChange={(e) => setTenderForm({ ...tenderForm, categoryId: e.target.value })}>
+                     <option value="">Unassigned</option>
+                     {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                  </Select>
+                  <Input label="Published At" type="datetime-local" value={tenderForm.publishedAt} onChange={(e) => setTenderForm({ ...tenderForm, publishedAt: e.target.value })} />
+                  <Input label="Closing At" type="datetime-local" value={tenderForm.closingAt} onChange={(e) => setTenderForm({ ...tenderForm, closingAt: e.target.value })} />
+                  <Input label="Contact Email" type="email" value={tenderForm.contactEmail} onChange={(e) => setTenderForm({ ...tenderForm, contactEmail: e.target.value })} />
+                  <Input label="Contact Phone" value={tenderForm.contactPhone} onChange={(e) => setTenderForm({ ...tenderForm, contactPhone: e.target.value })} />
+                </ActionForm>
+
+                <ActionForm
+                  title="Attach File"
+                  description="Link a document to a tender"
+                  onSubmit={handleAttachmentSubmit}
+                  disabled={actionState.pending || !tenders.length}
+                >
+                  <Select label="Tender" value={attachmentForm.tenderId} onChange={(e) => setAttachmentForm({ ...attachmentForm, tenderId: e.target.value })} required>
+                     <option value="" disabled>Select Tender</option>
+                     {tenders.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
+                  </Select>
+                  <Input label="Label" value={attachmentForm.label} onChange={(e) => setAttachmentForm({ ...attachmentForm, label: e.target.value })} />
+                  <Input label="Media URL" type="url" value={attachmentForm.mediaUrl} onChange={(e) => setAttachmentForm({ ...attachmentForm, mediaUrl: e.target.value })} required />
+                </ActionForm>
+              </>
+            )}
+
+            {activeTab === "edit" && (
+              <ActionForm
+                title="Update Tender"
+                description="Edit existing tender record"
+                onSubmit={handleTenderUpdateSubmit}
+                disabled={actionState.pending || !tenderUpdateForm.id}
+                submitLabel="Save Changes"
+              >
+                <Select
+                  label="Select Tender to Edit"
+                  value={tenderUpdateForm.id}
+                  onChange={(e) => handleTenderSelectForEdit(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>Select Tender</option>
+                  {tenders.map((t) => (
+                    <option key={t.id} value={t.id}>{t.title}</option>
+                  ))}
+                </Select>
+
+                <Input label="Tender Number" value={tenderUpdateForm.tenderNumber} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, tenderNumber: e.target.value })} required disabled={!tenderUpdateForm.id} />
+                <Input label="Title" value={tenderUpdateForm.title} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, title: e.target.value })} required disabled={!tenderUpdateForm.id} />
+                <TextArea label="Summary" value={tenderUpdateForm.summary} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, summary: e.target.value })} disabled={!tenderUpdateForm.id} />
+                <Select label="Status" value={tenderUpdateForm.status} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, status: e.target.value })} disabled={!tenderUpdateForm.id}>
+                   {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+                </Select>
+                <Select label="Category" value={tenderUpdateForm.categoryId} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, categoryId: e.target.value })} disabled={!tenderUpdateForm.id}>
+                   <option value="">Unassigned</option>
+                   {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                </Select>
+                <Input label="Published At" type="datetime-local" value={tenderUpdateForm.publishedAt} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, publishedAt: e.target.value })} disabled={!tenderUpdateForm.id} />
+                <Input label="Closing At" type="datetime-local" value={tenderUpdateForm.closingAt} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, closingAt: e.target.value })} disabled={!tenderUpdateForm.id} />
+                <Input label="Contact Email" type="email" value={tenderUpdateForm.contactEmail} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, contactEmail: e.target.value })} disabled={!tenderUpdateForm.id} />
+                <Input label="Contact Phone" value={tenderUpdateForm.contactPhone} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, contactPhone: e.target.value })} disabled={!tenderUpdateForm.id} />
+              </ActionForm>
+            )}
           </div>
         </aside>
       </div>

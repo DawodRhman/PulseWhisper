@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Loader2, Plus, RefreshCcw, Trash2, Briefcase, Layers, FileText } from "lucide-react";
+import { Loader2, Plus, RefreshCcw, Trash2, Briefcase, Layers, FileText, Pencil } from "lucide-react";
 import { useAdminCareers } from "@/hooks/useAdminCareers";
 import ApplicationsList from "./ApplicationsList";
 
@@ -74,9 +74,11 @@ export default function CareersPanel() {
     updateEntity,
     deleteEntity,
   } = useAdminCareers();
-  const [activeTab, setActiveTab] = useState("OPENINGS");
+  const [viewMode, setViewMode] = useState("OPENINGS");
+  const [formTab, setFormTab] = useState("create");
   const [programForm, setProgramForm] = useState(INITIAL_PROGRAM);
   const [openingForm, setOpeningForm] = useState(INITIAL_OPENING);
+  const [openingUpdateForm, setOpeningUpdateForm] = useState({ ...INITIAL_OPENING, id: "" });
   const [requirementForm, setRequirementForm] = useState(INITIAL_REQUIREMENT);
 
   const statusCounts = useMemo(() => {
@@ -116,6 +118,48 @@ export default function CareersPanel() {
     setOpeningForm(INITIAL_OPENING);
   }
 
+  async function handleOpeningUpdateSubmit(event) {
+    event.preventDefault();
+    if (!openingUpdateForm.id) return;
+    await updateEntity("opening", {
+      id: openingUpdateForm.id,
+      programId: openingUpdateForm.programId || null,
+      title: openingUpdateForm.title,
+      summary: nullable(openingUpdateForm.summary),
+      department: nullable(openingUpdateForm.department),
+      location: nullable(openingUpdateForm.location),
+      jobType: nullable(openingUpdateForm.jobType),
+      compensation: nullable(openingUpdateForm.compensation),
+      status: openingUpdateForm.status,
+      publishAt: nullable(openingUpdateForm.publishAt),
+      expireAt: nullable(openingUpdateForm.expireAt),
+      applyEmail: nullable(openingUpdateForm.applyEmail),
+      applyUrl: nullable(openingUpdateForm.applyUrl),
+    });
+  }
+
+  function handleOpeningSelectForEdit(openingId) {
+    const opening = openings.find((o) => o.id === openingId);
+    if (!opening) return;
+    setOpeningUpdateForm({
+      id: opening.id,
+      programId: opening.programId || "",
+      title: opening.title,
+      summary: opening.summary || "",
+      department: opening.department || "",
+      location: opening.location || "",
+      jobType: opening.jobType || "",
+      compensation: opening.compensation || "",
+      status: opening.status,
+      publishAt: opening.publishAt ? new Date(opening.publishAt).toISOString().slice(0, 16) : "",
+      expireAt: opening.expireAt ? new Date(opening.expireAt).toISOString().slice(0, 16) : "",
+      applyEmail: opening.applyEmail || "",
+      applyUrl: opening.applyUrl || "",
+    });
+    setFormTab("edit");
+    document.getElementById("careers-form-container")?.scrollIntoView({ behavior: "smooth" });
+  }
+
   async function handleRequirementSubmit(event) {
     event.preventDefault();
     await createEntity("requirement", {
@@ -142,9 +186,9 @@ export default function CareersPanel() {
       {/* Tabs */}
       <div className="flex space-x-1 rounded-xl bg-slate-100 p-1">
         <button
-          onClick={() => setActiveTab("OPENINGS")}
+          onClick={() => setViewMode("OPENINGS")}
           className={`flex items-center gap-2 w-full justify-center rounded-lg py-2.5 text-sm font-medium leading-5 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
-            activeTab === "OPENINGS"
+            viewMode === "OPENINGS"
               ? "bg-white text-blue-700 shadow"
               : "text-slate-600 hover:bg-white/[0.12] hover:text-slate-800"
           }`}
@@ -153,9 +197,9 @@ export default function CareersPanel() {
           Openings
         </button>
         <button
-          onClick={() => setActiveTab("PROGRAMS")}
+          onClick={() => setViewMode("PROGRAMS")}
           className={`flex items-center gap-2 w-full justify-center rounded-lg py-2.5 text-sm font-medium leading-5 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
-            activeTab === "PROGRAMS"
+            viewMode === "PROGRAMS"
               ? "bg-white text-blue-700 shadow"
               : "text-slate-600 hover:bg-white/[0.12] hover:text-slate-800"
           }`}
@@ -164,9 +208,9 @@ export default function CareersPanel() {
           Programs
         </button>
         <button
-          onClick={() => setActiveTab("APPLICATIONS")}
+          onClick={() => setViewMode("APPLICATIONS")}
           className={`flex items-center gap-2 w-full justify-center rounded-lg py-2.5 text-sm font-medium leading-5 ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2 ${
-            activeTab === "APPLICATIONS"
+            viewMode === "APPLICATIONS"
               ? "bg-white text-blue-700 shadow"
               : "text-slate-600 hover:bg-white/[0.12] hover:text-slate-800"
           }`}
@@ -176,7 +220,7 @@ export default function CareersPanel() {
         </button>
       </div>
 
-      {activeTab === "APPLICATIONS" ? (
+      {viewMode === "APPLICATIONS" ? (
         <ApplicationsList />
       ) : (
         <>
@@ -265,6 +309,13 @@ export default function CareersPanel() {
                     </div>
 
                     <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => handleOpeningSelectForEdit(opening)}
+                        className="rounded-lg p-2 text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition"
+                        title="Edit Opening"
+                      >
+                        <Pencil size={16} />
+                      </button>
                       <select
                         value={opening.status}
                         onChange={(event) => handleStatusChange(opening.id, event.target.value)}
@@ -329,61 +380,120 @@ export default function CareersPanel() {
           </div>
         </section>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6" id="careers-form-container">
           <div className="sticky top-6 space-y-6">
-            <ActionForm
-              title="Create Program"
-              description="Add a new career program"
-              onSubmit={handleProgramSubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Title" value={programForm.title} onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })} required />
-              <Input label="Hero Title" value={programForm.heroTitle} onChange={(e) => setProgramForm({ ...programForm, heroTitle: e.target.value })} />
-              <TextArea label="Hero Body" value={programForm.heroBody} onChange={(e) => setProgramForm({ ...programForm, heroBody: e.target.value })} />
-              <TextArea label="Eligibility (one per line)" rows={3} value={programForm.eligibility} onChange={(e) => setProgramForm({ ...programForm, eligibility: e.target.value })} />
-            </ActionForm>
+            {/* Form Tabs */}
+            <div className="flex rounded-lg bg-slate-100 p-1">
+              <button
+                onClick={() => {
+                  setFormTab("create");
+                  setOpeningForm(INITIAL_OPENING);
+                }}
+                className={`flex-1 rounded-md py-2 text-xs font-medium transition-all ${
+                  formTab === "create"
+                    ? "bg-white text-slate-900 shadow-sm"
+                    : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Create New
+              </button>
+              <button
+                onClick={() => setFormTab("edit")}
+                disabled={formTab === "create" && !openingForm.id}
+                className={`flex-1 rounded-md py-2 text-xs font-medium transition-all ${
+                  formTab === "edit"
+                    ? "bg-white text-slate-900 shadow-sm"
+                    : "text-slate-500 hover:text-slate-700 disabled:opacity-50"
+                }`}
+              >
+                Edit Existing
+              </button>
+            </div>
 
-            <ActionForm
-              title="Create Opening"
-              description="Add a new job opening"
-              onSubmit={handleOpeningSubmit}
-              disabled={actionState.pending}
-            >
-              <Select label="Program" value={openingForm.programId} onChange={(e) => setOpeningForm({ ...openingForm, programId: e.target.value })}>
-                 <option value="">General</option>
-                 {programs.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
-              </Select>
-              <Input label="Title" value={openingForm.title} onChange={(e) => setOpeningForm({ ...openingForm, title: e.target.value })} required />
-              <TextArea label="Summary" value={openingForm.summary} onChange={(e) => setOpeningForm({ ...openingForm, summary: e.target.value })} />
-              <Input label="Department" value={openingForm.department} onChange={(e) => setOpeningForm({ ...openingForm, department: e.target.value })} />
-              <Input label="Location" value={openingForm.location} onChange={(e) => setOpeningForm({ ...openingForm, location: e.target.value })} />
-              <Input label="Job Type" value={openingForm.jobType} onChange={(e) => setOpeningForm({ ...openingForm, jobType: e.target.value })} />
-              <Input label="Compensation" value={openingForm.compensation} onChange={(e) => setOpeningForm({ ...openingForm, compensation: e.target.value })} />
-              <Select label="Status" value={openingForm.status} onChange={(e) => setOpeningForm({ ...openingForm, status: e.target.value })}>
-                 {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-              </Select>
-              <Input label="Publish At" type="datetime-local" value={openingForm.publishAt} onChange={(e) => setOpeningForm({ ...openingForm, publishAt: e.target.value })} />
-              <Input label="Expire At" type="datetime-local" value={openingForm.expireAt} onChange={(e) => setOpeningForm({ ...openingForm, expireAt: e.target.value })} />
-              <Input label="Apply Email" type="email" value={openingForm.applyEmail} onChange={(e) => setOpeningForm({ ...openingForm, applyEmail: e.target.value })} />
-              <Input label="Apply URL" type="url" value={openingForm.applyUrl} onChange={(e) => setOpeningForm({ ...openingForm, applyUrl: e.target.value })} />
-            </ActionForm>
+            {formTab === "create" ? (
+              <>
+                <ActionForm
+                  title="Create Program"
+                  description="Add a new career program"
+                  onSubmit={handleProgramSubmit}
+                  disabled={actionState.pending}
+                >
+                  <Input label="Title" value={programForm.title} onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })} required />
+                  <Input label="Hero Title" value={programForm.heroTitle} onChange={(e) => setProgramForm({ ...programForm, heroTitle: e.target.value })} />
+                  <TextArea label="Hero Body" value={programForm.heroBody} onChange={(e) => setProgramForm({ ...programForm, heroBody: e.target.value })} />
+                  <TextArea label="Eligibility (one per line)" rows={3} value={programForm.eligibility} onChange={(e) => setProgramForm({ ...programForm, eligibility: e.target.value })} />
+                </ActionForm>
 
-            <ActionForm
-              title="Add Requirement"
-              description="Add a requirement to an opening"
-              onSubmit={handleRequirementSubmit}
-              disabled={actionState.pending || !openings.length}
-            >
-              <Select label="Opening" value={requirementForm.careerOpeningId} onChange={(e) => setRequirementForm({ ...requirementForm, careerOpeningId: e.target.value })} required>
-                 <option value="" disabled>Select Opening</option>
-                 {openings.map((o) => <option key={o.id} value={o.id}>{o.title}</option>)}
-              </Select>
-              <Select label="Type" value={requirementForm.type} onChange={(e) => setRequirementForm({ ...requirementForm, type: e.target.value })}>
-                 {REQUIREMENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-              </Select>
-              <TextArea label="Content" value={requirementForm.content} onChange={(e) => setRequirementForm({ ...requirementForm, content: e.target.value })} required />
-              <Input label="Order" type="number" value={requirementForm.order} onChange={(e) => setRequirementForm({ ...requirementForm, order: e.target.value })} />
-            </ActionForm>
+                <ActionForm
+                  title="Create Opening"
+                  description="Add a new job opening"
+                  onSubmit={handleOpeningSubmit}
+                  disabled={actionState.pending}
+                >
+                  <Select label="Program" value={openingForm.programId} onChange={(e) => setOpeningForm({ ...openingForm, programId: e.target.value })}>
+                     <option value="">General</option>
+                     {programs.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
+                  </Select>
+                  <Input label="Title" value={openingForm.title} onChange={(e) => setOpeningForm({ ...openingForm, title: e.target.value })} required />
+                  <TextArea label="Summary" value={openingForm.summary} onChange={(e) => setOpeningForm({ ...openingForm, summary: e.target.value })} />
+                  <Input label="Department" value={openingForm.department} onChange={(e) => setOpeningForm({ ...openingForm, department: e.target.value })} />
+                  <Input label="Location" value={openingForm.location} onChange={(e) => setOpeningForm({ ...openingForm, location: e.target.value })} />
+                  <Input label="Job Type" value={openingForm.jobType} onChange={(e) => setOpeningForm({ ...openingForm, jobType: e.target.value })} />
+                  <Input label="Compensation" value={openingForm.compensation} onChange={(e) => setOpeningForm({ ...openingForm, compensation: e.target.value })} />
+                  <Select label="Status" value={openingForm.status} onChange={(e) => setOpeningForm({ ...openingForm, status: e.target.value })}>
+                     {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </Select>
+                  <Input label="Publish At" type="datetime-local" value={openingForm.publishAt} onChange={(e) => setOpeningForm({ ...openingForm, publishAt: e.target.value })} />
+                  <Input label="Expire At" type="datetime-local" value={openingForm.expireAt} onChange={(e) => setOpeningForm({ ...openingForm, expireAt: e.target.value })} />
+                  <Input label="Apply Email" type="email" value={openingForm.applyEmail} onChange={(e) => setOpeningForm({ ...openingForm, applyEmail: e.target.value })} />
+                  <Input label="Apply URL" type="url" value={openingForm.applyUrl} onChange={(e) => setOpeningForm({ ...openingForm, applyUrl: e.target.value })} />
+                </ActionForm>
+              </>
+            ) : (
+              <>
+                <ActionForm
+                  title="Update Opening"
+                  description="Edit existing job opening"
+                  onSubmit={handleOpeningUpdateSubmit}
+                  disabled={actionState.pending}
+                >
+                  <Select label="Program" value={openingForm.programId} onChange={(e) => setOpeningForm({ ...openingForm, programId: e.target.value })}>
+                     <option value="">General</option>
+                     {programs.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
+                  </Select>
+                  <Input label="Title" value={openingForm.title} onChange={(e) => setOpeningForm({ ...openingForm, title: e.target.value })} required />
+                  <TextArea label="Summary" value={openingForm.summary} onChange={(e) => setOpeningForm({ ...openingForm, summary: e.target.value })} />
+                  <Input label="Department" value={openingForm.department} onChange={(e) => setOpeningForm({ ...openingForm, department: e.target.value })} />
+                  <Input label="Location" value={openingForm.location} onChange={(e) => setOpeningForm({ ...openingForm, location: e.target.value })} />
+                  <Input label="Job Type" value={openingForm.jobType} onChange={(e) => setOpeningForm({ ...openingForm, jobType: e.target.value })} />
+                  <Input label="Compensation" value={openingForm.compensation} onChange={(e) => setOpeningForm({ ...openingForm, compensation: e.target.value })} />
+                  <Select label="Status" value={openingForm.status} onChange={(e) => setOpeningForm({ ...openingForm, status: e.target.value })}>
+                     {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </Select>
+                  <Input label="Publish At" type="datetime-local" value={openingForm.publishAt} onChange={(e) => setOpeningForm({ ...openingForm, publishAt: e.target.value })} />
+                  <Input label="Expire At" type="datetime-local" value={openingForm.expireAt} onChange={(e) => setOpeningForm({ ...openingForm, expireAt: e.target.value })} />
+                  <Input label="Apply Email" type="email" value={openingForm.applyEmail} onChange={(e) => setOpeningForm({ ...openingForm, applyEmail: e.target.value })} />
+                  <Input label="Apply URL" type="url" value={openingForm.applyUrl} onChange={(e) => setOpeningForm({ ...openingForm, applyUrl: e.target.value })} />
+                </ActionForm>
+
+                <ActionForm
+                  title="Add Requirement"
+                  description="Add a requirement to an opening"
+                  onSubmit={handleRequirementSubmit}
+                  disabled={actionState.pending || !openings.length}
+                >
+                  <Select label="Opening" value={requirementForm.careerOpeningId} onChange={(e) => setRequirementForm({ ...requirementForm, careerOpeningId: e.target.value })} required>
+                     <option value="" disabled>Select Opening</option>
+                     {openings.map((o) => <option key={o.id} value={o.id}>{o.title}</option>)}
+                  </Select>
+                  <Select label="Type" value={requirementForm.type} onChange={(e) => setRequirementForm({ ...requirementForm, type: e.target.value })}>
+                     {REQUIREMENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </Select>
+                  <TextArea label="Content" value={requirementForm.content} onChange={(e) => setRequirementForm({ ...requirementForm, content: e.target.value })} required />
+                  <Input label="Order" type="number" value={requirementForm.order} onChange={(e) => setRequirementForm({ ...requirementForm, order: e.target.value })} />
+                </ActionForm>
+              </>
+            )}
           </div>
         </aside>
       </div>

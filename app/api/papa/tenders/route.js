@@ -387,7 +387,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("tenders:write");
+    const session = await ensureAdminSession("tenders:delete");
     const { type, data } = await parseActionPayload(request, deleteSchemas);
     const { record, diff } = await handleDelete(type, data);
     await purgeTenderSnapshot();

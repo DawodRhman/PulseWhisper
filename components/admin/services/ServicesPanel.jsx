@@ -80,6 +80,7 @@ export default function ServicesPanel() {
   const [cardUpdateForm, setCardUpdateForm] = useState(() => createInitialCardUpdate());
   const [detailUpdateForm, setDetailUpdateForm] = useState(() => createInitialDetailUpdate());
   const [resourceUpdateForm, setResourceUpdateForm] = useState(() => createInitialResourceUpdate());
+  const [activeTab, setActiveTab] = useState("create"); // "create" | "edit"
 
   const cards = useMemo(() => categories.flatMap((category) => category.cards || []), [categories]);
   const totalDetails = useMemo(() => cards.reduce((sum, card) => sum + (card.details?.length || 0), 0), [cards]);
@@ -165,6 +166,8 @@ export default function ServicesPanel() {
       heroCopy: category.heroCopy || "",
       order: category.order?.toString() ?? "",
     });
+    setActiveTab("edit");
+    scrollToForm();
   }
 
   function handleCardSelectForEdit(cardId) {
@@ -184,6 +187,8 @@ export default function ServicesPanel() {
       gradientClass: card.gradientClass || "from-blue-100 to-blue-300",
       order: card.order?.toString() ?? "",
     });
+    setActiveTab("edit");
+    scrollToForm();
   }
 
   function handleDetailSelectForEdit(detailId) {
@@ -200,6 +205,8 @@ export default function ServicesPanel() {
       bulletPoints: bulletArrayToString(detail.bulletPoints),
       order: detail.order?.toString() ?? "",
     });
+    setActiveTab("edit");
+    scrollToForm();
   }
 
   function handleResourceSelectForEdit(resourceId) {
@@ -217,6 +224,15 @@ export default function ServicesPanel() {
       externalUrl: resource.externalUrl || "",
       mediaUrl: (resource.media && resource.media.url) || resource.mediaUrl || "",
     });
+    setActiveTab("edit");
+    scrollToForm();
+  }
+
+  function scrollToForm() {
+    const formElement = document.getElementById("services-form-container");
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   async function handleCategoryUpdateSubmit(event) {
@@ -230,6 +246,7 @@ export default function ServicesPanel() {
       order: toNumber(categoryUpdateForm.order),
     });
     setCategoryUpdateForm(createInitialCategoryUpdate());
+    setActiveTab("create");
   }
 
   async function handleCardUpdateSubmit(event) {
@@ -246,6 +263,7 @@ export default function ServicesPanel() {
       order: toNumber(cardUpdateForm.order),
     });
     setCardUpdateForm(createInitialCardUpdate());
+    setActiveTab("create");
   }
 
   async function handleDetailUpdateSubmit(event) {
@@ -259,6 +277,7 @@ export default function ServicesPanel() {
       order: toNumber(detailUpdateForm.order),
     });
     setDetailUpdateForm(createInitialDetailUpdate());
+    setActiveTab("create");
   }
 
   async function handleResourceUpdateSubmit(event) {
@@ -273,6 +292,7 @@ export default function ServicesPanel() {
       mediaUrl: optionalString(resourceUpdateForm.mediaUrl),
     });
     setResourceUpdateForm(createInitialResourceUpdate());
+    setActiveTab("create");
   }
 
   async function handleDelete(type, id, label) {
@@ -472,201 +492,229 @@ export default function ServicesPanel() {
           </div>
         </section>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6" id="services-form-container">
           <div className="sticky top-6 space-y-6">
-            <ActionForm
-              title="New Category"
-              description="Create a main service category"
-              onSubmit={handleCategorySubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Title" value={categoryForm.title} onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })} required />
-              <TextArea label="Summary" value={categoryForm.summary} onChange={(e) => setCategoryForm({ ...categoryForm, summary: e.target.value })} />
-              <TextArea label="Hero Copy" value={categoryForm.heroCopy} onChange={(e) => setCategoryForm({ ...categoryForm, heroCopy: e.target.value })} />
-              <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
-            </ActionForm>
+            {/* Tab Navigation */}
+            <div className="flex rounded-lg bg-slate-100 p-1">
+              <button
+                onClick={() => setActiveTab("create")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Create
+              </button>
+              <button
+                onClick={() => setActiveTab("edit")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Edit
+              </button>
+            </div>
 
-            <ActionForm
-              title="New Service Card"
-              description="Add a card to a category"
-              onSubmit={handleCardSubmit}
-              disabled={actionState.pending || !categories.length}
-            >
-              <Select
-                label="Category"
-                value={cardForm.categoryId}
-                onChange={(e) => setCardForm({ ...cardForm, categoryId: e.target.value })}
-                required
-              >
-                <option value="" disabled>Select Category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-              <Input label="Title" value={cardForm.title} onChange={(e) => setCardForm({ ...cardForm, title: e.target.value })} required />
-              <TextArea label="Summary" value={cardForm.summary} onChange={(e) => setCardForm({ ...cardForm, summary: e.target.value })} />
-              <Input label="Icon Key (e.g. FaTint)" value={cardForm.iconKey} onChange={(e) => setCardForm({ ...cardForm, iconKey: e.target.value })} />
-              <Input label="Gradient Class" value={cardForm.gradientClass} onChange={(e) => setCardForm({ ...cardForm, gradientClass: e.target.value })} placeholder="from-blue-100 to-blue-300" />
-              <Input label="Order" type="number" value={cardForm.order} onChange={(e) => setCardForm({ ...cardForm, order: e.target.value })} />
-            </ActionForm>
+            {activeTab === "create" && (
+              <>
+                <ActionForm
+                  title="New Category"
+                  description="Create a main service category"
+                  onSubmit={handleCategorySubmit}
+                  disabled={actionState.pending}
+                >
+                  <Input label="Title" value={categoryForm.title} onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })} required />
+                  <TextArea label="Summary" value={categoryForm.summary} onChange={(e) => setCategoryForm({ ...categoryForm, summary: e.target.value })} />
+                  <TextArea label="Hero Copy" value={categoryForm.heroCopy} onChange={(e) => setCategoryForm({ ...categoryForm, heroCopy: e.target.value })} />
+                  <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
+                </ActionForm>
 
-            <ActionForm
-              title="Add Detail Bullet"
-              description="Add details to a service card"
-              onSubmit={handleDetailSubmit}
-              disabled={actionState.pending || !cards.length}
-            >
-              <Select
-                label="Service Card"
-                value={detailForm.serviceCardId}
-                onChange={(e) => setDetailForm({ ...detailForm, serviceCardId: e.target.value })}
-                required
-              >
-                <option value="" disabled>Select Card</option>
-                {cards.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-              <Input label="Heading" value={detailForm.heading} onChange={(e) => setDetailForm({ ...detailForm, heading: e.target.value })} required />
-              <TextArea label="Body" value={detailForm.body} onChange={(e) => setDetailForm({ ...detailForm, body: e.target.value })} />
-              <TextArea label="Bullet Points (one per line)" value={detailForm.bulletPoints} onChange={(e) => setDetailForm({ ...detailForm, bulletPoints: e.target.value })} rows={3} />
-              <Input label="Order" type="number" value={detailForm.order} onChange={(e) => setDetailForm({ ...detailForm, order: e.target.value })} />
-            </ActionForm>
+                <ActionForm
+                  title="New Service Card"
+                  description="Add a card to a category"
+                  onSubmit={handleCardSubmit}
+                  disabled={actionState.pending || !categories.length}
+                >
+                  <Select
+                    label="Category"
+                    value={cardForm.categoryId}
+                    onChange={(e) => setCardForm({ ...cardForm, categoryId: e.target.value })}
+                    required
+                  >
+                    <option value="" disabled>Select Category</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+                  <Input label="Title" value={cardForm.title} onChange={(e) => setCardForm({ ...cardForm, title: e.target.value })} required />
+                  <TextArea label="Summary" value={cardForm.summary} onChange={(e) => setCardForm({ ...cardForm, summary: e.target.value })} />
+                  <Input label="Icon Key (e.g. FaTint)" value={cardForm.iconKey} onChange={(e) => setCardForm({ ...cardForm, iconKey: e.target.value })} />
+                  <Input label="Gradient Class" value={cardForm.gradientClass} onChange={(e) => setCardForm({ ...cardForm, gradientClass: e.target.value })} placeholder="from-blue-100 to-blue-300" />
+                  <Input label="Order" type="number" value={cardForm.order} onChange={(e) => setCardForm({ ...cardForm, order: e.target.value })} />
+                </ActionForm>
 
-            <ActionForm
-              title="Add Resource"
-              description="Link a downloadable resource"
-              onSubmit={handleResourceSubmit}
-              disabled={actionState.pending || !categories.length}
-            >
-              <Select
-                label="Category"
-                value={resourceForm.categoryId}
-                onChange={(e) => setResourceForm({ ...resourceForm, categoryId: e.target.value })}
-                required
-              >
-                <option value="" disabled>Select Category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-              <Input label="Title" value={resourceForm.title} onChange={(e) => setResourceForm({ ...resourceForm, title: e.target.value })} required />
-              <TextArea label="Description" value={resourceForm.description} onChange={(e) => setResourceForm({ ...resourceForm, description: e.target.value })} />
-              <Input label="External URL" type="url" value={resourceForm.externalUrl} onChange={(e) => setResourceForm({ ...resourceForm, externalUrl: e.target.value })} />
-              <Input label="Media URL" type="url" value={resourceForm.mediaUrl} onChange={(e) => setResourceForm({ ...resourceForm, mediaUrl: e.target.value })} />
-            </ActionForm>
+                <ActionForm
+                  title="Add Detail Bullet"
+                  description="Add details to a service card"
+                  onSubmit={handleDetailSubmit}
+                  disabled={actionState.pending || !cards.length}
+                >
+                  <Select
+                    label="Service Card"
+                    value={detailForm.serviceCardId}
+                    onChange={(e) => setDetailForm({ ...detailForm, serviceCardId: e.target.value })}
+                    required
+                  >
+                    <option value="" disabled>Select Card</option>
+                    {cards.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+                  <Input label="Heading" value={detailForm.heading} onChange={(e) => setDetailForm({ ...detailForm, heading: e.target.value })} required />
+                  <TextArea label="Body" value={detailForm.body} onChange={(e) => setDetailForm({ ...detailForm, body: e.target.value })} />
+                  <TextArea label="Bullet Points (one per line)" value={detailForm.bulletPoints} onChange={(e) => setDetailForm({ ...detailForm, bulletPoints: e.target.value })} rows={3} />
+                  <Input label="Order" type="number" value={detailForm.order} onChange={(e) => setDetailForm({ ...detailForm, order: e.target.value })} />
+                </ActionForm>
 
-            <ActionForm
-              title="Update Category"
-              description="Edit titles, copy, or ordering for an existing category"
-              onSubmit={handleCategoryUpdateSubmit}
-              disabled={actionState.pending || !categories.length}
-              submitLabel="Save Changes"
-            >
-              <Select
-                label="Category"
-                value={categoryUpdateForm.id}
-                onChange={(e) => handleCategorySelectForEdit(e.target.value)}
-                required
-              >
-                <option value="" disabled>Select Category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-              <Input label="Title" value={categoryUpdateForm.title} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, title: e.target.value })} required disabled={!categoryUpdateForm.id} />
-              <TextArea label="Summary" value={categoryUpdateForm.summary} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, summary: e.target.value })} disabled={!categoryUpdateForm.id} />
-              <TextArea label="Hero Copy" value={categoryUpdateForm.heroCopy} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, heroCopy: e.target.value })} disabled={!categoryUpdateForm.id} />
-              <Input label="Order" type="number" value={categoryUpdateForm.order} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, order: e.target.value })} disabled={!categoryUpdateForm.id} />
-            </ActionForm>
+                <ActionForm
+                  title="Add Resource"
+                  description="Link a downloadable resource"
+                  onSubmit={handleResourceSubmit}
+                  disabled={actionState.pending || !categories.length}
+                >
+                  <Select
+                    label="Category"
+                    value={resourceForm.categoryId}
+                    onChange={(e) => setResourceForm({ ...resourceForm, categoryId: e.target.value })}
+                    required
+                  >
+                    <option value="" disabled>Select Category</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+                  <Input label="Title" value={resourceForm.title} onChange={(e) => setResourceForm({ ...resourceForm, title: e.target.value })} required />
+                  <TextArea label="Description" value={resourceForm.description} onChange={(e) => setResourceForm({ ...resourceForm, description: e.target.value })} />
+                  <Input label="External URL" type="url" value={resourceForm.externalUrl} onChange={(e) => setResourceForm({ ...resourceForm, externalUrl: e.target.value })} />
+                  <Input label="Media URL" type="url" value={resourceForm.mediaUrl} onChange={(e) => setResourceForm({ ...resourceForm, mediaUrl: e.target.value })} />
+                </ActionForm>
+              </>
+            )}
 
-            <ActionForm
-              title="Update Service Card"
-              description="Retitle, recolor, or reorder a card"
-              onSubmit={handleCardUpdateSubmit}
-              disabled={actionState.pending || !cards.length}
-              submitLabel="Save Changes"
-            >
-              <Select
-                label="Service Card"
-                value={cardUpdateForm.id}
-                onChange={(e) => handleCardSelectForEdit(e.target.value)}
-                required
-              >
-                <option value="" disabled>Select Card</option>
-                {cards.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-              <Select
-                label="Category"
-                value={cardUpdateForm.categoryId}
-                onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, categoryId: e.target.value })}
-                disabled={!cardUpdateForm.id}
-                required
-              >
-                <option value="" disabled>Select Category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-              <Input label="Title" value={cardUpdateForm.title} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, title: e.target.value })} required disabled={!cardUpdateForm.id} />
-              <TextArea label="Summary" value={cardUpdateForm.summary} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, summary: e.target.value })} disabled={!cardUpdateForm.id} />
-              <TextArea label="Description" value={cardUpdateForm.description} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, description: e.target.value })} disabled={!cardUpdateForm.id} />
-              <Input label="Icon Key" value={cardUpdateForm.iconKey} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, iconKey: e.target.value })} disabled={!cardUpdateForm.id} />
-              <Input label="Gradient Class" value={cardUpdateForm.gradientClass} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, gradientClass: e.target.value })} placeholder="from-blue-100 to-blue-300" disabled={!cardUpdateForm.id} />
-              <Input label="Order" type="number" value={cardUpdateForm.order} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, order: e.target.value })} disabled={!cardUpdateForm.id} />
-            </ActionForm>
+            {activeTab === "edit" && (
+              <>
+                <ActionForm
+                  title="Update Category"
+                  description="Edit titles, copy, or ordering for an existing category"
+                  onSubmit={handleCategoryUpdateSubmit}
+                  disabled={actionState.pending || !categories.length}
+                  submitLabel="Save Changes"
+                >
+                  <Select
+                    label="Category"
+                    value={categoryUpdateForm.id}
+                    onChange={(e) => handleCategorySelectForEdit(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>Select Category</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+                  <Input label="Title" value={categoryUpdateForm.title} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, title: e.target.value })} required disabled={!categoryUpdateForm.id} />
+                  <TextArea label="Summary" value={categoryUpdateForm.summary} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, summary: e.target.value })} disabled={!categoryUpdateForm.id} />
+                  <TextArea label="Hero Copy" value={categoryUpdateForm.heroCopy} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, heroCopy: e.target.value })} disabled={!categoryUpdateForm.id} />
+                  <Input label="Order" type="number" value={categoryUpdateForm.order} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, order: e.target.value })} disabled={!categoryUpdateForm.id} />
+                </ActionForm>
 
-            <ActionForm
-              title="Update Detail Bullet"
-              description="Edit detail text or bullet points"
-              onSubmit={handleDetailUpdateSubmit}
-              disabled={actionState.pending || !detailOptions.length}
-              submitLabel="Save Changes"
-            >
-              <Select
-                label="Detail"
-                value={detailUpdateForm.id}
-                onChange={(e) => handleDetailSelectForEdit(e.target.value)}
-                required
-              >
-                <option value="" disabled>Select Detail</option>
-                {detailOptions.map((detail) => (
-                  <option key={detail.id} value={detail.id}>
-                    {detail.cardTitle ? `${detail.cardTitle} > ${detail.heading}` : detail.heading}
-                  </option>
-                ))}
-              </Select>
-              <Input label="Heading" value={detailUpdateForm.heading} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, heading: e.target.value })} required disabled={!detailUpdateForm.id} />
-              <TextArea label="Body" value={detailUpdateForm.body} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, body: e.target.value })} disabled={!detailUpdateForm.id} />
-              <TextArea label="Bullet Points (one per line)" value={detailUpdateForm.bulletPoints} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, bulletPoints: e.target.value })} rows={3} disabled={!detailUpdateForm.id} />
-              <Input label="Order" type="number" value={detailUpdateForm.order} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, order: e.target.value })} disabled={!detailUpdateForm.id} />
-            </ActionForm>
+                <ActionForm
+                  title="Update Service Card"
+                  description="Retitle, recolor, or reorder a card"
+                  onSubmit={handleCardUpdateSubmit}
+                  disabled={actionState.pending || !cards.length}
+                  submitLabel="Save Changes"
+                >
+                  <Select
+                    label="Service Card"
+                    value={cardUpdateForm.id}
+                    onChange={(e) => handleCardSelectForEdit(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>Select Card</option>
+                    {cards.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+                  <Select
+                    label="Category"
+                    value={cardUpdateForm.categoryId}
+                    onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, categoryId: e.target.value })}
+                    disabled={!cardUpdateForm.id}
+                    required
+                  >
+                    <option value="" disabled>Select Category</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+                  <Input label="Title" value={cardUpdateForm.title} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, title: e.target.value })} required disabled={!cardUpdateForm.id} />
+                  <TextArea label="Summary" value={cardUpdateForm.summary} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, summary: e.target.value })} disabled={!cardUpdateForm.id} />
+                  <TextArea label="Description" value={cardUpdateForm.description} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, description: e.target.value })} disabled={!cardUpdateForm.id} />
+                  <Input label="Icon Key" value={cardUpdateForm.iconKey} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, iconKey: e.target.value })} disabled={!cardUpdateForm.id} />
+                  <Input label="Gradient Class" value={cardUpdateForm.gradientClass} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, gradientClass: e.target.value })} placeholder="from-blue-100 to-blue-300" disabled={!cardUpdateForm.id} />
+                  <Input label="Order" type="number" value={cardUpdateForm.order} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, order: e.target.value })} disabled={!cardUpdateForm.id} />
+                </ActionForm>
 
-            <ActionForm
-              title="Update Resource"
-              description="Retitle or re-link a download"
-              onSubmit={handleResourceUpdateSubmit}
-              disabled={actionState.pending || !resourceOptions.length}
-              submitLabel="Save Changes"
-            >
-              <Select
-                label="Resource"
-                value={resourceUpdateForm.id}
-                onChange={(e) => handleResourceSelectForEdit(e.target.value)}
-                required
-              >
-                <option value="" disabled>Select Resource</option>
-                {resourceOptions.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.categoryTitle ? `${r.categoryTitle} > ${r.title}` : r.title}
-                  </option>
-                ))}
-              </Select>
-              <Select
-                label="Category"
-                value={resourceUpdateForm.categoryId}
-                onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, categoryId: e.target.value })}
-                disabled={!resourceUpdateForm.id}
-                required
-              >
-                <option value="" disabled>Select Category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-              </Select>
-              <Input label="Title" value={resourceUpdateForm.title} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, title: e.target.value })} required disabled={!resourceUpdateForm.id} />
-              <TextArea label="Description" value={resourceUpdateForm.description} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, description: e.target.value })} disabled={!resourceUpdateForm.id} />
-              <Input label="External URL" type="url" value={resourceUpdateForm.externalUrl} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, externalUrl: e.target.value })} disabled={!resourceUpdateForm.id} />
-              <Input label="Media URL" type="url" value={resourceUpdateForm.mediaUrl} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, mediaUrl: e.target.value })} disabled={!resourceUpdateForm.id} />
-            </ActionForm>
+                <ActionForm
+                  title="Update Detail Bullet"
+                  description="Edit detail text or bullet points"
+                  onSubmit={handleDetailUpdateSubmit}
+                  disabled={actionState.pending || !detailOptions.length}
+                  submitLabel="Save Changes"
+                >
+                  <Select
+                    label="Detail"
+                    value={detailUpdateForm.id}
+                    onChange={(e) => handleDetailSelectForEdit(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>Select Detail</option>
+                    {detailOptions.map((detail) => (
+                      <option key={detail.id} value={detail.id}>
+                        {detail.cardTitle ? `${detail.cardTitle} > ${detail.heading}` : detail.heading}
+                      </option>
+                    ))}
+                  </Select>
+                  <Input label="Heading" value={detailUpdateForm.heading} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, heading: e.target.value })} required disabled={!detailUpdateForm.id} />
+                  <TextArea label="Body" value={detailUpdateForm.body} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, body: e.target.value })} disabled={!detailUpdateForm.id} />
+                  <TextArea label="Bullet Points (one per line)" value={detailUpdateForm.bulletPoints} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, bulletPoints: e.target.value })} rows={3} disabled={!detailUpdateForm.id} />
+                  <Input label="Order" type="number" value={detailUpdateForm.order} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, order: e.target.value })} disabled={!detailUpdateForm.id} />
+                </ActionForm>
+
+                <ActionForm
+                  title="Update Resource"
+                  description="Retitle or re-link a download"
+                  onSubmit={handleResourceUpdateSubmit}
+                  disabled={actionState.pending || !resourceOptions.length}
+                  submitLabel="Save Changes"
+                >
+                  <Select
+                    label="Resource"
+                    value={resourceUpdateForm.id}
+                    onChange={(e) => handleResourceSelectForEdit(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>Select Resource</option>
+                    {resourceOptions.map((r) => (
+                      <option key={r.id} value={r.id}>
+                        {r.categoryTitle ? `${r.categoryTitle} > ${r.title}` : r.title}
+                      </option>
+                    ))}
+                  </Select>
+                  <Select
+                    label="Category"
+                    value={resourceUpdateForm.categoryId}
+                    onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, categoryId: e.target.value })}
+                    disabled={!resourceUpdateForm.id}
+                    required
+                  >
+                    <option value="" disabled>Select Category</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                  </Select>
+                  <Input label="Title" value={resourceUpdateForm.title} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, title: e.target.value })} required disabled={!resourceUpdateForm.id} />
+                  <TextArea label="Description" value={resourceUpdateForm.description} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, description: e.target.value })} disabled={!resourceUpdateForm.id} />
+                  <Input label="External URL" type="url" value={resourceUpdateForm.externalUrl} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, externalUrl: e.target.value })} disabled={!resourceUpdateForm.id} />
+                  <Input label="Media URL" type="url" value={resourceUpdateForm.mediaUrl} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, mediaUrl: e.target.value })} disabled={!resourceUpdateForm.id} />
+                </ActionForm>
+              </>
+            )}
           </div>
         </aside>
       </div>

@@ -360,7 +360,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("careers:write");
+    const session = await ensureAdminSession("careers:delete");
     const { type, data } = await parseActionPayload(request, deleteSchemas);
     const { record } = await handleDelete(type, data);
     await purgeCareerSnapshot();

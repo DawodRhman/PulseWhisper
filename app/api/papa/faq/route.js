@@ -41,9 +41,9 @@ export async function POST(request) {
     const data = createSchema.parse(body);
 
     const record = await prisma.faq.create({ data });
-    
+
     await purgeSnapshot(SnapshotModule.FAQ).catch(() => null);
-    
+
     await prisma.auditLog.create({
       data: {
         module: AuditModule.FAQ,
@@ -90,7 +90,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("faq:write");
+    const session = await ensureAdminSession("faq:delete");
     const body = await request.json();
     const { id } = deleteSchema.parse(body);
 

@@ -76,6 +76,7 @@ export default function ProjectsPanel() {
 
   const [projectForm, setProjectForm] = useState(() => createInitialProjectForm());
   const [seoForm, setSeoForm] = useState(() => createInitialSeoForm());
+  const [activeTab, setActiveTab] = useState("create"); // "create" | "seo"
 
   const statusBuckets = useMemo(() => {
     return STATUS_OPTIONS.reduce((acc, status) => {
@@ -119,6 +120,7 @@ export default function ProjectsPanel() {
       seo: seoPayload,
     });
     setSeoForm(createInitialSeoForm());
+    setActiveTab("create");
   }
 
   function prefillSeoForm(project) {
@@ -126,6 +128,11 @@ export default function ProjectsPanel() {
       projectId: project.id,
       seo: hydrateSeoForm(project.seo),
     });
+    setActiveTab("seo");
+    const formElement = document.getElementById("projects-form-container");
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   return (
@@ -259,70 +266,94 @@ export default function ProjectsPanel() {
           </div>
         </section>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6" id="projects-form-container">
           <div className="sticky top-6 space-y-6">
-            <ActionForm
-              title="New Project"
-              description="Add a project highlight"
-              onSubmit={handleProjectSubmit}
-              disabled={actionState.pending}
-            >
-              <Input label="Title" value={projectForm.title} onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })} required />
-              <TextArea label="Summary" value={projectForm.summary} onChange={(e) => setProjectForm({ ...projectForm, summary: e.target.value })} />
-              <Select label="Status" value={projectForm.status} onChange={(e) => setProjectForm({ ...projectForm, status: e.target.value })}>
-                 {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
-              </Select>
-              <Input label="Order" type="number" value={projectForm.order} onChange={(e) => setProjectForm({ ...projectForm, order: e.target.value })} />
-              <Input label="Link URL" type="url" value={projectForm.linkUrl} onChange={(e) => setProjectForm({ ...projectForm, linkUrl: e.target.value })} />
-              <Input label="Hero Media URL" type="url" value={projectForm.mediaUrl} onChange={(e) => setProjectForm({ ...projectForm, mediaUrl: e.target.value })} placeholder="https://..." />
-              
-              <div className="space-y-1.5">
-                <MediaPicker
-                  label="Hero Media Asset"
-                  category="projects"
-                  value={projectForm.mediaId}
-                  onChange={(assetId, asset) =>
-                    setProjectForm((prev) => ({
-                      ...prev,
-                      mediaId: assetId || "",
-                      mediaUrl: asset ? asset.url : prev.mediaUrl,
-                    }))
-                  }
-                  disabled={actionState.pending}
-                />
-              </div>
-              
-              <div className="pt-2 border-t border-slate-100">
-                 <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
-                 <SeoFields
-                    value={projectForm.seo}
-                    onChange={(seo) => setProjectForm((prev) => ({ ...prev, seo }))}
+            {/* Tab Navigation */}
+            <div className="flex rounded-lg bg-slate-100 p-1">
+              <button
+                onClick={() => setActiveTab("create")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                Create
+              </button>
+              <button
+                onClick={() => setActiveTab("seo")}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
+                  activeTab === "seo" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                SEO
+              </button>
+            </div>
+
+            {activeTab === "create" && (
+              <ActionForm
+                title="New Project"
+                description="Add a project highlight"
+                onSubmit={handleProjectSubmit}
+                disabled={actionState.pending}
+              >
+                <Input label="Title" value={projectForm.title} onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })} required />
+                <TextArea label="Summary" value={projectForm.summary} onChange={(e) => setProjectForm({ ...projectForm, summary: e.target.value })} />
+                <Select label="Status" value={projectForm.status} onChange={(e) => setProjectForm({ ...projectForm, status: e.target.value })}>
+                   {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+                </Select>
+                <Input label="Order" type="number" value={projectForm.order} onChange={(e) => setProjectForm({ ...projectForm, order: e.target.value })} />
+                <Input label="Link URL" type="url" value={projectForm.linkUrl} onChange={(e) => setProjectForm({ ...projectForm, linkUrl: e.target.value })} />
+                <Input label="Hero Media URL" type="url" value={projectForm.mediaUrl} onChange={(e) => setProjectForm({ ...projectForm, mediaUrl: e.target.value })} placeholder="https://..." />
+                
+                <div className="space-y-1.5">
+                  <MediaPicker
+                    label="Hero Media Asset"
+                    category="projects"
+                    value={projectForm.mediaId}
+                    onChange={(assetId, asset) =>
+                      setProjectForm((prev) => ({
+                        ...prev,
+                        mediaId: assetId || "",
+                        mediaUrl: asset ? asset.url : prev.mediaUrl,
+                      }))
+                    }
                     disabled={actionState.pending}
                   />
-              </div>
-            </ActionForm>
+                </div>
+                
+                <div className="pt-2 border-t border-slate-100">
+                   <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
+                   <SeoFields
+                      value={projectForm.seo}
+                      onChange={(seo) => setProjectForm((prev) => ({ ...prev, seo }))}
+                      disabled={actionState.pending}
+                    />
+                </div>
+              </ActionForm>
+            )}
 
-            <ActionForm
-              title="Update SEO"
-              description="Edit SEO metadata for existing project"
-              onSubmit={handleSeoSubmit}
-              disabled={actionState.pending || !projects.length}
-            >
-              <Select
-                label="Select Project"
-                value={seoForm.projectId}
-                onChange={(e) => setSeoForm({ ...seoForm, projectId: e.target.value })}
-                required
+            {activeTab === "seo" && (
+              <ActionForm
+                title="Update SEO"
+                description="Edit SEO metadata for existing project"
+                onSubmit={handleSeoSubmit}
+                disabled={actionState.pending || !projects.length}
               >
-                <option value="" disabled>Select Project</option>
-                {projects.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
-              </Select>
-              <SeoFields
-                value={seoForm.seo}
-                onChange={(seo) => setSeoForm((prev) => ({ ...prev, seo }))}
-                disabled={actionState.pending || !seoForm.projectId}
-              />
-            </ActionForm>
+                <Select
+                  label="Select Project"
+                  value={seoForm.projectId}
+                  onChange={(e) => setSeoForm({ ...seoForm, projectId: e.target.value })}
+                  required
+                >
+                  <option value="" disabled>Select Project</option>
+                  {projects.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
+                </Select>
+                <SeoFields
+                  value={seoForm.seo}
+                  onChange={(seo) => setSeoForm((prev) => ({ ...prev, seo }))}
+                  disabled={actionState.pending || !seoForm.projectId}
+                />
+              </ActionForm>
+            )}
           </div>
         </aside>
       </div>
