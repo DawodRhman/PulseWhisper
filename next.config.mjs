@@ -6,6 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const nextConfig = {
+  output: "standalone",
   // Image optimization settings
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -15,11 +16,11 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  
+
   // Compression and optimization
   compress: true,
   poweredByHeader: false,
-  
+
   // Experimental features for better performance
   experimental: {
     optimizePackageImports: ['gsap', 'react-awesome-reveal'],

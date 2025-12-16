@@ -63,3 +63,9 @@ _netrc
 # editor local history
 .history
 .vscode/settings.json
+
+# scripts
+scripts/
+
+# seeds
+prisma/seed*.js
