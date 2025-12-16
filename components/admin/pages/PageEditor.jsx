@@ -32,6 +32,7 @@ const SECTION_TYPES = [
   { value: "CAREERS", label: "Careers" },
   { value: "RTI", label: "RTI" },
   { value: "WATER_TODAY", label: "Water Today" },
+  { value: "HERITAGE", label: "Heritage" },
   { value: "DYNAMIC_CONTENT", label: "Dynamic Code & Data" },
 ];
 
@@ -354,7 +355,10 @@ function getDefaultContent(type) {
     case "CARD_GRID":
       return { heading: "Grid Heading", description: "Description", cards: [] };
     case "SERVICES":
-      return { title: "Our Services", subtitle: "Comprehensive water and sewerage services for the city." };
+      return {
+        title: "Our Services",
+        subtitle: "Comprehensive water and sewerage services for the city.",
+      };
     case "FAQ":
     case "LEADERSHIP":
     case "PROJECTS":
@@ -373,6 +377,8 @@ function getDefaultContent(type) {
     case "CAREERS":
     case "RTI":
     case "WATER_TODAY":
+      return {}; // These components manage their own data or don't need config yet
+    case "HERITAGE":
       return {}; // These components manage their own data or don't need config yet
     default:
       return {};
@@ -538,6 +544,7 @@ function SectionForm({ type, content, onChange, idPrefix }) {
     case "TENDERS":
     case "CAREERS":
     case "RTI":
+    case "HERITAGE":
     case "WATER_TODAY":
       return (
         <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200">
@@ -570,21 +577,23 @@ function SectionForm({ type, content, onChange, idPrefix }) {
                 <option value="custom">Custom URL...</option>
               </select>
             </div>
-            {(!KNOWN_APIS.find(a => a.value === content.apiEndpoint) && content.apiEndpoint) && (
-               <Input
-                 className="mt-2"
-                 placeholder="Enter custom API URL (e.g., /api/my-custom-route)"
-                 value={content.apiEndpoint || ""}
-                 onChange={(e) => onChange("apiEndpoint", e.target.value)}
-               />
-            )}
+            {!KNOWN_APIS.find((a) => a.value === content.apiEndpoint) &&
+              content.apiEndpoint && (
+                <Input
+                  className="mt-2"
+                  placeholder="Enter custom API URL (e.g., /api/my-custom-route)"
+                  value={content.apiEndpoint || ""}
+                  onChange={(e) => onChange("apiEndpoint", e.target.value)}
+                />
+              )}
           </div>
 
           <div>
             <Label htmlFor={fieldId("template")}>Item Template (HTML)</Label>
             <p className="text-xs text-muted-foreground mb-2">
-              Use <code>{"{{fieldName}}"}</code> to insert data. Example: <code>{"<h3>{{title}}</h3>"}</code>.
-              This HTML will be repeated for every item in the API response.
+              Use <code>{"{{fieldName}}"}</code> to insert data. Example:{" "}
+              <code>{"<h3>{{title}}</h3>"}</code>. This HTML will be repeated
+              for every item in the API response.
             </p>
             <Textarea
               id={fieldId("template")}
@@ -599,7 +608,9 @@ function SectionForm({ type, content, onChange, idPrefix }) {
           </div>
 
           <div>
-            <Label htmlFor={fieldId("containerClass")}>Container CSS Classes</Label>
+            <Label htmlFor={fieldId("containerClass")}>
+              Container CSS Classes
+            </Label>
             <Input
               id={fieldId("containerClass")}
               value={content.containerClass || ""}
@@ -607,9 +618,11 @@ function SectionForm({ type, content, onChange, idPrefix }) {
               placeholder="grid grid-cols-1 md:grid-cols-3 gap-6"
             />
           </div>
-          
+
           <div>
-            <Label htmlFor={fieldId("itemClass")}>Item Wrapper CSS Classes</Label>
+            <Label htmlFor={fieldId("itemClass")}>
+              Item Wrapper CSS Classes
+            </Label>
             <Input
               id={fieldId("itemClass")}
               value={content.itemClass || ""}

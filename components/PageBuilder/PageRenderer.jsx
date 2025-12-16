@@ -85,6 +85,7 @@ const COMPONENT_MAP = {
   FAQ: Faqs,
   MEDIA_GALLERY: MediaGallery,
   SUBSCRIBE: Subscribe,
+  HERITAGE: Heritage,
   ACHIEVEMENTS: Achievement,
   WORKWITHUS: WorkWithUs,
   CAREERS: Career,
