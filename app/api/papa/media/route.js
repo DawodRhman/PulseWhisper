@@ -298,9 +298,9 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("media:write");
+    const session = await ensureAdminSession("media:delete");
     const { type, data } = await parseJsonPayload(request, deleteSchemas);
-    
+
     if (type === "asset") {
       const existing = await prisma.mediaAsset.findUnique({ where: { id: data.id } });
       if (!existing) {

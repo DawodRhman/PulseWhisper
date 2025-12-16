@@ -205,8 +205,8 @@ export async function POST(request) {
           } : undefined,
           sections: sectionData.length
             ? {
-                create: sectionData,
-              }
+              create: sectionData,
+            }
             : undefined,
         },
         include: { sections: true, seo: true },
@@ -217,7 +217,7 @@ export async function POST(request) {
     await logAudit({ session, action: "PAGE_CREATE", recordId: page.id, diff: { after: page }, request });
     await invalidatePageCache(page.slug);
     revalidatePath("/"); // Revalidate everything for now, or specific paths
-    
+
     return applyRateLimitHeaders(jsonResponse({ data: page }, { status: 201 }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "POST /api/admin/pages");
@@ -239,7 +239,7 @@ export async function PATCH(request) {
     const body = await request.json();
     const data = updatePageSchema.parse(body);
 
-    const existing = await prisma.page.findUnique({ 
+    const existing = await prisma.page.findUnique({
       where: { id: data.id },
       include: { sections: true, seo: true }
     });
@@ -298,7 +298,7 @@ export async function PATCH(request) {
     if (page.slug && page.slug !== existing.slug) {
       await invalidatePageCache(page.slug);
     }
-    
+
     // If this is the home page, purge the home snapshot and revalidate root
     if (page.slug === "home" || existing.slug === "home") {
       await purgeSnapshot(SnapshotModule.HOME);
@@ -306,7 +306,7 @@ export async function PATCH(request) {
     }
 
     revalidatePath(`/${page.slug}`);
-    
+
     return applyRateLimitHeaders(jsonResponse({ data: page }), limited?.headers);
   } catch (error) {
     return handleKnownErrors(error, "PATCH /api/admin/pages");
@@ -315,7 +315,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("pages:write");
+    const session = await ensureAdminSession("pages:delete");
 
     const limited = rateLimit(request, {
       keyPrefix: "admin:pages:write",

@@ -622,6 +622,7 @@ model SocialLink {
 model OfficeLocation {
   id        String   @id @default(uuid())
   label     String
+  locationType String?
   address   String
   latitude  Float?
   longitude Float?

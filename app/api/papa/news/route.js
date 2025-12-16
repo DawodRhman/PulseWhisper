@@ -368,7 +368,7 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    const session = await ensureAdminSession("news:write");
+    const session = await ensureAdminSession("news:delete");
     const { type, data } = await parseActionPayload(request, deleteSchemas);
     const { record } = await handleDelete(type, data);
     await purgeNewsSnapshot();

@@ -14,6 +14,7 @@ export default function LocationsPanel() {
 
   const [formData, setFormData] = useState({
     label: "",
+    locationType: "",
     address: "",
     phone: "",
     email: "",
@@ -45,6 +46,7 @@ export default function LocationsPanel() {
     setEditingItem(null);
     setFormData({
       label: "",
+      locationType: "",
       address: "",
       phone: "",
       email: "",
@@ -62,6 +64,7 @@ export default function LocationsPanel() {
     setEditingItem(item);
     setFormData({
       label: item.label,
+      locationType: item.locationType || "",
       address: item.address,
       phone: item.phone || "",
       email: item.email || "",
@@ -101,6 +104,7 @@ export default function LocationsPanel() {
       const payload = {
         ...formData,
         label: formData.label.trim(),
+        locationType: formData.locationType?.trim() || null,
         address: formData.address.trim(),
         phone: formData.phone?.trim() || null,
         email: formData.email?.trim() || null,
@@ -140,6 +144,7 @@ export default function LocationsPanel() {
 
   const columns = [
     { key: "label", label: "Label" },
+    { key: "locationType", label: "Type" },
     { key: "address", label: "Address" },
     { key: "phone", label: "Phone" },
     { key: "email", label: "Email" },
@@ -173,6 +178,14 @@ export default function LocationsPanel() {
               onChange={(e) => setFormData({ ...formData, label: e.target.value })}
               placeholder="e.g. Head Office"
               required
+            />
+          </FormField>
+
+          <FormField label="Location Type">
+            <Input
+              value={formData.locationType}
+              onChange={(e) => setFormData({ ...formData, locationType: e.target.value })}
+              placeholder="e.g. Head Office, Branch, etc."
             />
           </FormField>
 

@@ -208,7 +208,10 @@ export default function UserManagementPanel() {
                       <div className="flex gap-2">
                         <button
                           type="button"
-                          onClick={() => setPasswordForm((prev) => ({ ...prev, userId: user.id }))}
+                          onClick={() => {
+                            setPasswordForm((prev) => ({ ...prev, userId: user.id }));
+                            document.getElementById("user-password-form")?.scrollIntoView({ behavior: "smooth" });
+                          }}
                           className="flex-1 rounded-lg border border-slate-200 bg-slate-50 p-1.5 text-slate-500 hover:bg-slate-100 hover:text-blue-600"
                           title="Reset Password"
                         >
@@ -216,7 +219,10 @@ export default function UserManagementPanel() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setRolesForm({ userId: user.id, roles: user.roles })}
+                          onClick={() => {
+                            setRolesForm({ userId: user.id, roles: user.roles });
+                            document.getElementById("user-roles-form")?.scrollIntoView({ behavior: "smooth" });
+                          }}
                           className="flex-1 rounded-lg border border-slate-200 bg-slate-50 p-1.5 text-slate-500 hover:bg-slate-100 hover:text-blue-600"
                           title="Edit Roles"
                         >
@@ -285,68 +291,72 @@ export default function UserManagementPanel() {
               </div>
             </ActionForm>
 
-            <ActionForm
-              title="Update Roles"
-              description="Assign or revoke permissions"
-              icon={<ShieldHalf size={16} />}
-              onSubmit={handleRolesSubmit}
-              disabled={actionState.pending || !users.length}
-            >
-              <Select
-                label="Select Operator"
-                value={rolesForm.userId}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  const selectedUser = users.find((u) => u.id === value);
-                  setRolesForm({ userId: value, roles: selectedUser?.roles || [] });
-                }}
-                required
+            <div id="user-roles-form">
+              <ActionForm
+                title="Update Roles"
+                description="Assign or revoke permissions"
+                icon={<ShieldHalf size={16} />}
+                onSubmit={handleRolesSubmit}
+                disabled={actionState.pending || !users.length}
               >
-                <option value="" disabled>Select Operator</option>
-                {users.map((u) => <option key={u.id} value={u.id}>{u.email}</option>)}
-              </Select>
+                <Select
+                  label="Select Operator"
+                  value={rolesForm.userId}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const selectedUser = users.find((u) => u.id === value);
+                    setRolesForm({ userId: value, roles: selectedUser?.roles || [] });
+                  }}
+                  required
+                >
+                  <option value="" disabled>Select Operator</option>
+                  {users.map((u) => <option key={u.id} value={u.id}>{u.email}</option>)}
+                </Select>
 
-              <div className={`rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2 ${!rolesForm.userId ? 'opacity-50 pointer-events-none' : ''}`}>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Roles</p>
-                <div className="space-y-2">
-                  {ROLE_OPTIONS.map((role) => (
-                    <label key={role.value} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-blue-600">
-                      <input
-                        type="checkbox"
-                        checked={rolesForm.roles.includes(role.value)}
-                        onChange={() =>
-                          setRolesForm((prev) => {
-                            const exists = prev.roles.includes(role.value);
-                            return {
-                              ...prev,
-                              roles: exists
-                                ? prev.roles.filter((r) => r !== role.value)
-                                : [...prev.roles, role.value],
-                            };
-                          })
-                        }
-                        className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="font-medium">{role.label}</span>
-                    </label>
-                  ))}
+                <div className={`rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2 ${!rolesForm.userId ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Roles</p>
+                  <div className="space-y-2">
+                    {ROLE_OPTIONS.map((role) => (
+                      <label key={role.value} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-blue-600">
+                        <input
+                          type="checkbox"
+                          checked={rolesForm.roles.includes(role.value)}
+                          onChange={() =>
+                            setRolesForm((prev) => {
+                              const exists = prev.roles.includes(role.value);
+                              return {
+                                ...prev,
+                                roles: exists
+                                  ? prev.roles.filter((r) => r !== role.value)
+                                  : [...prev.roles, role.value],
+                              };
+                            })
+                          }
+                          className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="font-medium">{role.label}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </ActionForm>
+              </ActionForm>
+            </div>
 
-            <ActionForm
-              title="Reset Password"
-              description="Issue a new temporary secret"
-              icon={<KeyRound size={16} />}
-              onSubmit={handlePasswordReset}
-              disabled={actionState.pending || !users.length}
-            >
-              <Select label="Select Operator" value={passwordForm.userId} onChange={(e) => setPasswordForm({ ...passwordForm, userId: e.target.value })} required>
-                <option value="" disabled>Select Operator</option>
-                {users.map((u) => <option key={u.id} value={u.id}>{u.email}</option>)}
-              </Select>
-              <Input label="Custom Temp Password (Optional)" value={passwordForm.temporaryPassword} onChange={(e) => setPasswordForm({ ...passwordForm, temporaryPassword: e.target.value })} />
-            </ActionForm>
+            <div id="user-password-form">
+              <ActionForm
+                title="Reset Password"
+                description="Issue a new temporary secret"
+                icon={<KeyRound size={16} />}
+                onSubmit={handlePasswordReset}
+                disabled={actionState.pending || !users.length}
+              >
+                <Select label="Select Operator" value={passwordForm.userId} onChange={(e) => setPasswordForm({ ...passwordForm, userId: e.target.value })} required>
+                  <option value="" disabled>Select Operator</option>
+                  {users.map((u) => <option key={u.id} value={u.id}>{u.email}</option>)}
+                </Select>
+                <Input label="Custom Temp Password (Optional)" value={passwordForm.temporaryPassword} onChange={(e) => setPasswordForm({ ...passwordForm, temporaryPassword: e.target.value })} />
+              </ActionForm>
+            </div>
           </div>
         </aside>
       </div>

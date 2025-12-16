@@ -94,6 +94,7 @@ export default function MediaLibraryPanel() {
 
   function prefillMetadataForm(asset) {
     setMetadataForm({ id: asset.id, label: asset.label || "", category: asset.category || "", altText: asset.altText || "" });
+    document.getElementById("media-metadata-form")?.scrollIntoView({ behavior: "smooth" });
   }
 
   async function handleUploadSubmit(event) {
@@ -411,22 +412,24 @@ export default function MediaLibraryPanel() {
                 <Input label="Alt Text" value={externalForm.altText} onChange={(e) => setExternalForm({ ...externalForm, altText: e.target.value })} />
               </ActionForm>
 
-              <ActionForm
-                title="Edit Metadata"
-                description="Update asset details"
-                icon={<Tag size={16} />}
-                onSubmit={handleMetadataSubmit}
-                disabled={actionState.pending || !assets.length}
-              >
-                <Select label="Select Asset" value={metadataForm.id} onChange={(e) => setMetadataForm({ ...metadataForm, id: e.target.value })} required>
-                  <option value="" disabled>Select Asset</option>
-                  {assets.map((a) => <option key={a.id} value={a.id}>{a.label || a.url}</option>)}
-                </Select>
-                
-                <Input label="Label" value={metadataForm.label} onChange={(e) => setMetadataForm({ ...metadataForm, label: e.target.value })} disabled={!metadataForm.id} />
-                <Input label="Category" value={metadataForm.category} onChange={(e) => setMetadataForm({ ...metadataForm, category: e.target.value })} disabled={!metadataForm.id} />
-                <Input label="Alt Text" value={metadataForm.altText} onChange={(e) => setMetadataForm({ ...metadataForm, altText: e.target.value })} disabled={!metadataForm.id} />
-              </ActionForm>
+              <div id="media-metadata-form">
+                <ActionForm
+                  title="Edit Metadata"
+                  description="Update asset details"
+                  icon={<Tag size={16} />}
+                  onSubmit={handleMetadataSubmit}
+                  disabled={actionState.pending || !assets.length}
+                >
+                  <Select label="Select Asset" value={metadataForm.id} onChange={(e) => setMetadataForm({ ...metadataForm, id: e.target.value })} required>
+                    <option value="" disabled>Select Asset</option>
+                    {assets.map((a) => <option key={a.id} value={a.id}>{a.label || a.url}</option>)}
+                  </Select>
+                  
+                  <Input label="Label" value={metadataForm.label} onChange={(e) => setMetadataForm({ ...metadataForm, label: e.target.value })} disabled={!metadataForm.id} />
+                  <Input label="Category" value={metadataForm.category} onChange={(e) => setMetadataForm({ ...metadataForm, category: e.target.value })} disabled={!metadataForm.id} />
+                  <Input label="Alt Text" value={metadataForm.altText} onChange={(e) => setMetadataForm({ ...metadataForm, altText: e.target.value })} disabled={!metadataForm.id} />
+                </ActionForm>
+              </div>
             </div>
           </aside>
         </div>
