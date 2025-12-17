@@ -170,7 +170,12 @@ export default function AdminShell({ session, dashboardStats }) {
   const secondaryMetrics = dashboardStats?.secondaryMetrics ?? SECONDARY_METRICS;
   const highlights = dashboardStats?.highlights ?? {};
   const displayName = session?.user?.name || session?.user?.email?.split("@")[0];
-
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
   const handleSignOut = async () => {
     try {
       await fetch("/api/papa/auth/logout", { method: "POST" });
@@ -182,8 +187,8 @@ export default function AdminShell({ session, dashboardStats }) {
   return (
     <div className="admin-shell grid min-h-screen lg:grid-cols-[280px_1fr] bg-slate-50/50">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col border-r border-slate-200 bg-white">
-        <div className="p-6 border-b border-slate-100">
+      <aside className="hidden lg:flex flex-col h-screen overflow-hidden border-r border-slate-200 bg-white">
+        <div className="p-6 border-b border-slate-100 flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white font-bold shadow-lg shadow-blue-500/20">
               KW
@@ -221,7 +226,7 @@ export default function AdminShell({ session, dashboardStats }) {
           </ul>
         </div>
 
-        <div className="p-4 border-t border-slate-100">
+        <div className="p-4 border-t border-slate-100 flex-shrink-0">
            <div className="rounded-xl bg-slate-50 p-4">
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
                 <Sparkles size={14} className="text-amber-500" /> Pro Tip
