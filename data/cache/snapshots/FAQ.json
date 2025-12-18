@@ -3,6 +3,7 @@
     {
       "id": "d4aa16fa-825a-440b-b48a-1291ae0515eb",
       "title": "New Connection",
+      "titleUr": null,
       "order": 0,
       "createdAt": "2025-11-25T10:27:59.011Z",
       "updatedAt": "2025-11-25T10:27:59.011Z",
@@ -11,7 +12,9 @@
           "id": "1656fe45-759a-4df7-a54c-1a7d155adf03",
           "categoryId": "d4aa16fa-825a-440b-b48a-1291ae0515eb",
           "question": "How can I get a new water connection?",
+          "questionUr": null,
           "answer": "For residential, commercial, bulk, or industrial connections, submit an application with required documents at the nearest KW&SC office. The process includes site inspection, approval, and installation.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-11-25T10:27:59.065Z",
           "updatedAt": "2025-11-25T10:27:59.065Z"
@@ -21,6 +24,7 @@
     {
       "id": "a041c5ab-74fd-46e0-84a0-4cf9d93066f6",
       "title": "New Connection",
+      "titleUr": null,
       "order": 0,
       "createdAt": "2025-12-04T17:08:58.756Z",
       "updatedAt": "2025-12-04T17:08:58.756Z",
@@ -29,7 +33,9 @@
           "id": "753c770d-ddb2-472a-a2f7-210ef3a4b9d0",
           "categoryId": "a041c5ab-74fd-46e0-84a0-4cf9d93066f6",
           "question": "How can I get a new water connection?",
+          "questionUr": null,
           "answer": "For residential, commercial, bulk, or industrial connections, submit an application with required documents at the nearest KW&SC office. The process includes site inspection, approval, and installation.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-12-04T17:08:59.225Z",
           "updatedAt": "2025-12-04T17:08:59.225Z"
@@ -39,6 +45,7 @@
     {
       "id": "4c452956-1291-46dd-9f47-74f0ea3c8598",
       "title": "Billing",
+      "titleUr": null,
       "order": 1,
       "createdAt": "2025-11-25T10:27:59.123Z",
       "updatedAt": "2025-11-25T10:27:59.123Z",
@@ -47,7 +54,9 @@
           "id": "ca72ffc4-bf9d-482f-99a6-2fe31ff55f8e",
           "categoryId": "4c452956-1291-46dd-9f47-74f0ea3c8598",
           "question": "How can I get a duplicate bill?",
+          "questionUr": null,
           "answer": "Visit web.kwsb.crdc.biz or the nearest KW&SC office with your account number and CNIC to get a duplicate bill.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-11-25T10:27:59.154Z",
           "updatedAt": "2025-11-25T10:27:59.154Z"
@@ -57,6 +66,7 @@
     {
       "id": "21d2018c-7629-4101-9f4c-e6ab73e5e804",
       "title": "Billing",
+      "titleUr": null,
       "order": 1,
       "createdAt": "2025-12-04T17:08:59.743Z",
       "updatedAt": "2025-12-04T17:08:59.743Z",
@@ -65,7 +75,9 @@
           "id": "9fc33e96-8f6b-470f-b251-07c46205a7b9",
           "categoryId": "21d2018c-7629-4101-9f4c-e6ab73e5e804",
           "question": "How can I get a duplicate bill?",
+          "questionUr": null,
           "answer": "Visit web.kwsb.crdc.biz or the nearest KW&SC office with your account number and CNIC to get a duplicate bill.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-12-04T17:08:59.972Z",
           "updatedAt": "2025-12-04T17:08:59.972Z"
@@ -75,6 +87,7 @@
     {
       "id": "1361768b-0cf1-4670-b7e1-5fe3c9d58db6",
       "title": "Complaints",
+      "titleUr": null,
       "order": 2,
       "createdAt": "2025-11-25T10:27:59.183Z",
       "updatedAt": "2025-11-25T10:27:59.183Z",
@@ -83,7 +96,9 @@
           "id": "051d63b1-d92b-4daf-9ae0-445452e55bc7",
           "categoryId": "1361768b-0cf1-4670-b7e1-5fe3c9d58db6",
           "question": "Where can I complain about sewerage?",
+          "questionUr": null,
           "answer": "Use complain.kwsc.gos.pk or call (+92) 021 111 597 200 to log sewerage complaints.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-11-25T10:27:59.211Z",
           "updatedAt": "2025-11-25T10:27:59.211Z"
@@ -93,6 +108,7 @@
     {
       "id": "8103d22f-9de6-4e7b-80bb-62f2218241d9",
       "title": "Complaints",
+      "titleUr": null,
       "order": 2,
       "createdAt": "2025-12-04T17:09:00.187Z",
       "updatedAt": "2025-12-04T17:09:00.187Z",
@@ -101,7 +117,9 @@
           "id": "3f5c2683-3677-4e0e-9e42-0293928085f3",
           "categoryId": "8103d22f-9de6-4e7b-80bb-62f2218241d9",
           "question": "Where can I complain about sewerage?",
+          "questionUr": null,
           "answer": "Use complain.kwsc.gos.pk or call (+92) 021 111 597 200 to log sewerage complaints.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-12-04T17:09:00.410Z",
           "updatedAt": "2025-12-04T17:09:00.410Z"
@@ -111,6 +129,7 @@
     {
       "id": "b3bb8c58-92ac-4896-a76b-df6cec2144b4",
       "title": "Tanker Service",
+      "titleUr": null,
       "order": 3,
       "createdAt": "2025-12-04T17:09:00.704Z",
       "updatedAt": "2025-12-04T17:09:00.704Z",
@@ -119,7 +138,9 @@
           "id": "c346afab-88e7-498c-a93f-9df322dd16bb",
           "categoryId": "b3bb8c58-92ac-4896-a76b-df6cec2144b4",
           "question": "How can I order a water tanker?",
+          "questionUr": null,
           "answer": "Book through campaign.kwsc.gos.pk or by calling our customer service helpline.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-12-04T17:09:00.931Z",
           "updatedAt": "2025-12-04T17:09:00.931Z"
@@ -129,6 +150,7 @@
     {
       "id": "8fd3209c-d2a9-4f2c-8f10-5b8eb8abe181",
       "title": "Tanker Service",
+      "titleUr": null,
       "order": 3,
       "createdAt": "2025-11-25T10:27:59.239Z",
       "updatedAt": "2025-11-25T10:27:59.239Z",
@@ -137,7 +159,9 @@
           "id": "3509bd80-8c01-40b1-8338-b0d2f6a738a0",
           "categoryId": "8fd3209c-d2a9-4f2c-8f10-5b8eb8abe181",
           "question": "How can I order a water tanker?",
+          "questionUr": null,
           "answer": "Book through campaign.kwsc.gos.pk or by calling our customer service helpline.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-11-25T10:27:59.268Z",
           "updatedAt": "2025-11-25T10:27:59.268Z"
@@ -147,6 +171,7 @@
     {
       "id": "9c7fa6d7-8443-4034-9b69-02288f1b099f",
       "title": "Water Theft",
+      "titleUr": null,
       "order": 4,
       "createdAt": "2025-11-25T10:27:59.295Z",
       "updatedAt": "2025-11-25T10:27:59.295Z",
@@ -155,7 +180,9 @@
           "id": "70ce47ed-d801-43e6-a164-d6156e59c9d5",
           "categoryId": "9c7fa6d7-8443-4034-9b69-02288f1b099f",
           "question": "How can I report water theft?",
+          "questionUr": null,
           "answer": "Call (+92) 021 111 597 200 or contact the Hydrant Management Cell to report illegal connections.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-11-25T10:27:59.323Z",
           "updatedAt": "2025-11-25T10:27:59.323Z"
@@ -165,6 +192,7 @@
     {
       "id": "cfefcbc7-0530-4c7f-87d8-42161118ed75",
       "title": "Water Theft",
+      "titleUr": null,
       "order": 4,
       "createdAt": "2025-12-04T17:09:01.147Z",
       "updatedAt": "2025-12-04T17:09:01.147Z",
@@ -173,7 +201,9 @@
           "id": "0808a4ea-bb6b-4a18-8430-e3c297f2eec8",
           "categoryId": "cfefcbc7-0530-4c7f-87d8-42161118ed75",
           "question": "How can I report water theft?",
+          "questionUr": null,
           "answer": "Call (+92) 021 111 597 200 or contact the Hydrant Management Cell to report illegal connections.",
+          "answerUr": null,
           "order": 0,
           "createdAt": "2025-12-04T17:09:01.371Z",
           "updatedAt": "2025-12-04T17:09:01.371Z"

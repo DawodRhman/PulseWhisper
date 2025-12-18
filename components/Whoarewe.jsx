@@ -1,29 +1,35 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 
-const WhoAreWe = () => {
+const WhoAreWe = ({ services: customServices }) => {
+  const { t } = useTranslation();
   const sectionRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
 
   const dispatchPopup = (title = "") => {
     const lower = title.toLowerCase();
     let detail = null;
-    if (lower.includes("complaint")) detail = "eComplaint";
-    else if (lower.includes("tanker")) detail = "bookTanker";
-    else if (lower.includes("bill")) detail = "bill";
-    else if (lower.includes("connection")) detail = "newConnection";
+    if (lower.includes("complaint") || lower.includes("شکایتی")) detail = "eComplaint";
+    else if (lower.includes("tanker") || lower.includes("ٹینکر")) detail = "bookTanker";
+    else if (lower.includes("bill") || lower.includes("بل")) detail = "bill";
+    else if (lower.includes("connection") || lower.includes("کنکشن")) detail = "newConnection";
     if (detail) {
       window.dispatchEvent(new CustomEvent("kwsc-open-popup", { detail }));
     }
   };
 
+  // kwsc-open-popup needs to handle localized titles now, so I updated dispatchPopup to check for localized keywords or mapping. 
+  // Actually, dispatchPopup logic relied on English keywords. I added some Urdu checks above just in case, or we can rely on index.
+  // Better approach: pass an action ID with the service item. But for now, text matching is existing logic.
+
   useEffect(() => {
     const handleScroll = () => {
+      // ... existing scroll logic ...
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Activate animation when section enters middle of viewport
       if (rect.top <= windowHeight * 0.5 && rect.bottom >= windowHeight * 0.4) {
         setIsActive(true);
       } else {
@@ -32,29 +38,31 @@ const WhoAreWe = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // KW&SC Services Tiles
-  const services = [
+  const defaultServices = [
     {
-      title: "Complaint Management",
-      desc: "Raise and track complaints regarding water supply, sewerage issues, billing discrepancies, and illegal connections.",
+      title: t("services.tiles.complaintManagement.title"),
+      desc: t("services.tiles.complaintManagement.desc"),
     },
     {
-      title: "New Connection",
-      desc: "Apply online for new water or sewerage connections through KW&SC's official portal or local office.",
+      title: t("services.tiles.newConnection.title"),
+      desc: t("services.tiles.newConnection.desc"),
     },
     {
-      title: "Bill Generation",
-      desc: "Access, view, and download your water and sewerage bills using your consumer number anytime.",
+      title: t("services.tiles.billGeneration.title"),
+      desc: t("services.tiles.billGeneration.desc"),
     },
     {
-      title: "Online Tanker Booking",
-      desc: "Request water tankers online for areas without piped water supply to ensure timely delivery.",
+      title: t("services.tiles.onlineTanker.title"),
+      desc: t("services.tiles.onlineTanker.desc"),
     },
   ];
+
+  const services = customServices || defaultServices;
 
   return (
     <section
@@ -84,7 +92,7 @@ const WhoAreWe = () => {
                 ${isActive ? "text-left" : "text-center md:text-left"}
               `}
             >
-              OUR SERVICES
+              {t("nav.services").toUpperCase()}
             </h2>
           </div>
 

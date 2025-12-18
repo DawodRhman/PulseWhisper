@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { Fade } from "react-awesome-reveal";
 import Link from "next/link";
 import { useLanguageStore } from "@/lib/stores/languageStore";
+import { useTranslation } from 'react-i18next';
 // --- New Lucide Icon Imports ---
 import {
   Briefcase,
@@ -22,6 +23,7 @@ export default function Careers() {
   const [careersData, setCareersData] = useState(null);
   const [dataError, setDataError] = useState(null);
   const { language } = useLanguageStore();
+  const { t } = useTranslation();
 
   // GSAP Loader Effect (Kept as is)
   useEffect(() => {
@@ -214,7 +216,7 @@ export default function Careers() {
                                bg-blue-600 text-white font-semibold text-sm sm:text-base rounded-lg transition-all 
                                hover:bg-blue-700 hover:shadow-lg shadow-blue-500/30 group"
                   >
-                    View Details
+                    {t('viewDetails')}
                     <ArrowUpRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </Link>
                 </div>
@@ -258,7 +260,7 @@ export default function Careers() {
 
                     {/* Apply Button */}
                     <button className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 bg-blue-600 text-white font-semibold text-xs sm:text-sm rounded-lg hover:bg-blue-700 transition-colors shadow-sm sm:shadow-md">
-                      Apply Now
+                      {t('applyNow')}
                     </button>
                   </div>
                 </Fade>

@@ -5,8 +5,11 @@ import { MapPin, Clock, Briefcase, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import JobApplicationForm from "./JobApplicationForm";
 import { format } from "date-fns";
+import { useTranslation } from 'react-i18next';
 
 export default function CareerDetailsClient({ job }) {
+  const { t } = useTranslation();
+  
   if (!job) return null;
 
   const fadeInUp = {
@@ -134,7 +137,7 @@ export default function CareerDetailsClient({ job }) {
                     rel="noopener noreferrer"
                     className="block w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
                   >
-                    Apply Now
+                    {t('applyNow')}
                   </a>
                 </div>
               ) : (
@@ -142,9 +145,9 @@ export default function CareerDetailsClient({ job }) {
               )}
               
               <div className="mt-6 bg-blue-50 rounded-xl p-6 border border-blue-100">
-                <h4 className="font-bold text-blue-900 mb-2">Have questions?</h4>
+                <h4 className="font-bold text-blue-900 mb-2">{t('careers.haveQuestions')}</h4>
                 <p className="text-sm text-blue-700 mb-4">
-                  If you have any questions about this role or the application process, please contact our HR department.
+                  {t('careers.questionsDesc')}
                 </p>
                 <a href="mailto:careers@kwsc.gos.pk" className="text-sm font-medium text-blue-600 hover:text-blue-800 underline">
                   careers@kwsc.gos.pk

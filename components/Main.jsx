@@ -13,15 +13,21 @@ import BookTankerPopup from "@/components/BookTankerPopup";
 
 export default function Home({ hero }) {
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
+
   const {
     eyebrow = t("hero.eyebrow"),
-    title = t("hero.title"),
-    subtitle = t("hero.subtitle"),
+    title: rawTitle = t("hero.title"),
+    subtitle: rawSubtitle = t("hero.subtitle"),
     ctaLabel = t("hero.cta"),
     ctaHref = "/aboutus",
     backgroundImage = "/karachicharminar.gif"
   } = hero || {};
+  
+  const displayTitle = (isUrdu && hero?.titleUr) ? hero.titleUr : rawTitle;
+  const displaySubtitle = (isUrdu && hero?.subtitleUr) ? hero.subtitleUr : rawSubtitle;
+
   const [language, setLanguage] = useState("en");
   const [chatOpen, setChatOpen] = useState(false);
   const [showBillPopup, setShowBillPopup] = useState(false);
@@ -184,11 +190,11 @@ export default function Home({ hero }) {
           <h1
             className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white"
           >
-            {title.toUpperCase()}
+            {displayTitle?.toUpperCase()}
           </h1>
 
           <p className="mt-3 sm:mt-4 md:mt-5 text-xs sm:text-base md:text-lg text-slate-200 max-w-2xl mx-auto font-light leading-relaxed">
-            {subtitle}
+            {displaySubtitle}
           </p>
 
           <div className="mt-6 sm:mt-8 md:mt-10">

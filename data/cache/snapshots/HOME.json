@@ -9,7 +9,7 @@
   },
   "sections": [
     {
-      "id": "cdb52a23-5cbb-48dd-8f94-7823e5180230",
+      "id": "8a68624c-de3e-4989-8b1c-da90343237f3",
       "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
       "type": "HERO",
       "order": 0,
@@ -20,76 +20,62 @@
         "subtitle": "Ensuring clean, safe water supply and efficient sewerage services for Karachi.",
         "backgroundImage": "/karachicharminar.gif"
       },
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
+      "createdAt": "2025-12-18T10:50:49.635Z",
+      "updatedAt": "2025-12-18T10:50:49.635Z"
     },
     {
-      "id": "2ffe35c4-e8d2-48ac-9b3e-456caa0d244e",
+      "id": "ff33d637-eeb5-4846-a2b6-0de7b3c17c4c",
       "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
       "type": "WHO_ARE_WE",
       "order": 2,
       "content": {},
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
+      "createdAt": "2025-12-18T10:50:49.635Z",
+      "updatedAt": "2025-12-18T10:50:49.635Z"
     },
     {
-      "id": "33163cc0-d7e3-4319-aedb-b20bf25a56a0",
+      "id": "0d9a5188-e871-48aa-8430-9c508e71ea21",
       "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
       "type": "NEWS",
       "order": 3,
       "content": {},
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
+      "createdAt": "2025-12-18T10:50:49.635Z",
+      "updatedAt": "2025-12-18T10:50:49.635Z"
     },
     {
-      "id": "a0e91377-07f1-4e7c-b29a-4ebfc99a212b",
+      "id": "8c5f1bd3-8ed9-48aa-a0c0-c0b64bfbe822",
       "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
       "type": "PROJECTS",
       "order": 4,
       "content": {},
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
+      "createdAt": "2025-12-18T10:50:49.635Z",
+      "updatedAt": "2025-12-18T10:50:49.635Z"
     },
     {
-      "id": "2e212540-3eb9-4fcc-84af-1c7d8f3d1167",
+      "id": "523b92e5-a551-4d3b-9bbe-fee9bd4191b1",
       "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
       "type": "MAP",
       "order": 5,
       "content": {},
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
+      "createdAt": "2025-12-18T10:50:49.635Z",
+      "updatedAt": "2025-12-18T10:50:49.635Z"
     },
     {
-      "id": "5465a531-3a38-425b-8e51-31e9824e13f0",
+      "id": "e163a092-6448-4fe2-8ee5-27bc754c187f",
       "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
       "type": "WORKFLOW",
       "order": 6,
       "content": {},
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
+      "createdAt": "2025-12-18T10:50:49.635Z",
+      "updatedAt": "2025-12-18T10:50:49.635Z"
     },
     {
-      "id": "adb0e0b1-bb54-4e5c-bcef-12e4a4ccfef7",
+      "id": "f1745785-b405-45de-a8fd-f879089c9c56",
       "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
       "type": "COUNTER",
       "order": 7,
       "content": {},
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
-    },
-    {
-      "id": "a6bb0522-227d-48a8-ba9b-c640762237d7",
-      "pageId": "8fcb0678-31b7-418b-a20c-e2bc41054bf1",
-      "type": "DYNAMIC_CONTENT",
-      "order": 7,
-      "content": {
-        "template": "<div\n  class=\"bg-white p-4 rounded shadow\"\n  style=\"\n    animation: fadeInUp 0.6s ease-out forwards;\n    animation-delay: calc({{index}} * 0.15s);\n    opacity: 0;\n    transform: translateY(20px);\n  \"\n>\n\n  <!-- Image -->\n  <img\n    src=\"{{image}}\"\n    alt=\"{{title}}\"\n    class=\"w-full h-48 object-cover rounded mb-3\"\n  />\n\n  <!-- Status -->\n  <span class=\"inline-block text-xs font-bold uppercase mb-1\">\n    {{status}}\n  </span>\n\n  <!-- Category -->\n  <span class=\"block text-xs uppercase text-gray-500 mb-2\">\n    {{category}}\n  </span>\n\n  <!-- Title -->\n  <h3 class=\"text-lg font-extrabold text-gray-900 mb-2\">\n    {{title}}\n  </h3>\n\n  <!-- Description -->\n  <p class=\"text-sm text-gray-600 mb-4\">\n    {{scope}}\n  </p>\n\n  <!-- Progress -->\n  <div class=\"text-sm font-semibold mb-1\">\n    Physical Progress: {{progress}}%\n  </div>\n\n  <div class=\"w-full bg-gray-200 rounded-full h-2 mb-4\">\n    <div\n      class=\"h-2 bg-blue-500 rounded-full\"\n      style=\"width: {{progress}}%;\"\n    ></div>\n  </div>\n\n  <!-- Link -->\n  <a href=\"#project-{{id}}\" class=\"text-sm font-bold text-blue-600\">\n    View Details\n  </a>\n\n</div>\n",
-        "itemClass": "relative bg-white rounded-xl overflow-hidden border shadow-lg flex flex-col h-full cursor-pointer transition-all duration-500 hover:shadow-xl hover:-translate-y-1",
-        "apiEndpoint": "/api/projects",
-        "containerClass": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8"
-      },
-      "createdAt": "2025-12-18T10:29:38.590Z",
-      "updatedAt": "2025-12-18T10:29:38.590Z"
+      "createdAt": "2025-12-18T10:50:49.635Z",
+      "updatedAt": "2025-12-18T10:50:49.635Z"
     }
   ],
   "projects": [
@@ -612,7 +598,7 @@
       "title": "Water Today – Daily Water Supply Status",
       "summary": "Today's water distribution across Karachi remains stable, with major pumping stations operating at optimal capacity.",
       "status": "PUBLISHED",
-      "publishedAt": "2025-12-18T10:44:40.455Z",
+      "publishedAt": "2025-12-18T12:17:58.650Z",
       "media": {
         "url": "/downtownkarachi.gif"
       }

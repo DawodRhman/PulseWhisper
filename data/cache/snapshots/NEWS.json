@@ -51,9 +51,12 @@
       "id": "e0b7a6c4-2cbc-4427-ab85-939d3cfdb88e",
       "categoryId": "a1d972f6-0319-4e54-b593-aac761f29ad0",
       "title": "K-IV Project: Phase I Operational Status Confirmed",
+      "titleUr": null,
       "slug": "k-iv-project-phase-i-operational-status-confirmed",
       "subtitle": null,
+      "subtitleUr": null,
       "summary": "System diagnostics confirm Phase I of the K-IV water supply grid is fully operational, injecting 260 MGD into the primary distribution network. Pressure levels are stable.",
+      "summaryUr": null,
       "content": {
         "body": "System diagnostics confirm Phase I of the K-IV water supply grid is fully operational, injecting 260 MGD into the primary distribution network. Pressure levels are stable."
       },
@@ -92,9 +95,12 @@
       "id": "42246e6c-5c7a-438e-be55-702f9e3fb966",
       "categoryId": "12bc0b71-b511-4220-b7f4-0a9fea744b97",
       "title": "E-Billing Portal V2.0 Deployed",
+      "titleUr": null,
       "slug": "e-billing-portal-v2-0-deployed",
       "subtitle": null,
+      "subtitleUr": null,
       "summary": "The upgraded digital payment gateway is live. New features include real-time consumption analytics, instant ledger updates, and biometric login support for verified consumers.",
+      "summaryUr": null,
       "content": {
         "body": "The upgraded digital payment gateway is live. New features include real-time consumption analytics, instant ledger updates, and biometric login support for verified consumers."
       },
@@ -133,9 +139,12 @@
       "id": "a0503c08-8d66-4cf3-a2af-ef672f5b8eb6",
       "categoryId": "5e61ac27-15c4-4883-8b43-e0b4c8d99a0d",
       "title": "Sewerage Network Overhaul: Sector 4 & 7",
+      "titleUr": null,
       "slug": "sewerage-network-overhaul-sector-4-7",
       "subtitle": null,
+      "subtitleUr": null,
       "summary": "Automated dredging units have been deployed in Lyari and Gadap. Predictive AI modeling suggests a 40% efficiency increase in flow rates post-rehabilitation.",
+      "summaryUr": null,
       "content": {
         "body": "Automated dredging units have been deployed in Lyari and Gadap. Predictive AI modeling suggests a 40% efficiency increase in flow rates post-rehabilitation."
       },
@@ -174,9 +183,12 @@
       "id": "b63f00ab-7825-4ab0-8a8e-e0db175e53bd",
       "categoryId": "3cce8eff-7934-4b3d-9a03-953517e22e6c",
       "title": "Industrial Water Conservation Protocol",
+      "titleUr": null,
       "slug": "industrial-water-conservation-protocol",
       "subtitle": null,
+      "subtitleUr": null,
       "summary": "Smart metering mandates are now in effect for all industrial zones. Real-time monitoring will detect unauthorized usage patterns and optimize resource allocation.",
+      "summaryUr": null,
       "content": {
         "body": "Smart metering mandates are now in effect for all industrial zones. Real-time monitoring will detect unauthorized usage patterns and optimize resource allocation."
       },
@@ -215,9 +227,12 @@
       "id": "67a76b95-3c94-4923-a1af-ac5d28d1d57a",
       "categoryId": "8966a7b0-a609-4233-8b01-de232d9e64e0",
       "title": "Community Outreach: Clean Water Initiative",
+      "titleUr": null,
       "slug": "community-outreach-clean-water-initiative",
       "subtitle": null,
+      "subtitleUr": null,
       "summary": "KW&SC technical teams conducted a seminar on next-gen filtration methods. Attendees were briefed on smart-home leak detection systems and water quality standards.",
+      "summaryUr": null,
       "content": {
         "body": "KW&SC technical teams conducted a seminar on next-gen filtration methods. Attendees were briefed on smart-home leak detection systems and water quality standards."
       },

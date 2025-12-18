@@ -83,6 +83,13 @@ const statusBadges = {
   PAUSED: "bg-red-500 text-white",
 };
 
+// Helper function to translate status
+const translateStatus = (status, t) => {
+  const statusKey = status?.toLowerCase().replace('_', '');
+  return t(`projects.status.${statusKey}`) || status;
+};
+
+// ...existing backend normalization function...
 // ...existing backend normalization function...
 function normalizeProjects(sourceProjects) {
   const list = Array.isArray(sourceProjects) && sourceProjects.length > 0 ? sourceProjects : fallbackProjects;
@@ -91,7 +98,9 @@ function normalizeProjects(sourceProjects) {
     return {
       id: project.id || project.code || `project-${index}`,
       title: project.title || "Strategic Initiative",
+      titleUr: project.titleUr, // Preserve Urdu Title
       category: project.category || project.status || "Strategic",
+      // categoryUr: project.categoryUr, // If needed
       status: project.status || "PLANNING",
       progress:
         typeof project.progress === "number"
@@ -100,6 +109,7 @@ function normalizeProjects(sourceProjects) {
             ? project.metric
             : null,
       scope: project.summary || project.scope || project.description || "",
+      scopeUr: project.summaryUr || project.scopeUr || project.descriptionUr, // Preserve Urdu Scope/Summary
       image: project.media?.url || project.image || project.imageUrl || "https://placehold.co/800x450/f0f0f0/6b7280?text=Image+Unavailable",
       icon: <Icon />,
       color: COLOR_KEYS[index % COLOR_KEYS.length],
@@ -109,9 +119,12 @@ function normalizeProjects(sourceProjects) {
 }
 
 // ...new UI component...
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = ({ project, index, t, isUrdu }) => {
   const currentClasses = colorClasses[project.color] || colorClasses.cyan;
   const currentStatusBadge = statusBadges[project.status?.toUpperCase()] || "bg-gray-500 text-white";
+
+  const displayTitle = (isUrdu && project.titleUr) ? project.titleUr : project.title;
+  const displayScope = (isUrdu && project.scopeUr) ? project.scopeUr : project.scope;
 
   return (
     <div
@@ -127,7 +140,7 @@ const ProjectCard = ({ project, index }) => {
       <div className="relative h-32 sm:h-40 md:h-48 overflow-hidden">
         <img
           src={project.image}
-          alt={project.title}
+          alt={displayTitle}
           className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 opacity-90"
           onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/800x450/f0f0f0/6b7280?text=Image+Unavailable" }}
         />
@@ -136,7 +149,7 @@ const ProjectCard = ({ project, index }) => {
         {/* Status Badge */}
         <div className="absolute top-2 sm:top-3 right-2 sm:right-3 z-10">
           <span className={`px-2 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-xs font-bold uppercase rounded-full ${currentStatusBadge} shadow`}>
-            {project.status}
+            {translateStatus(project.status, t)}
           </span>
         </div>
 
@@ -155,12 +168,12 @@ const ProjectCard = ({ project, index }) => {
             {project.icon}
           </div>
           <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-extrabold text-gray-900 leading-snug line-clamp-2">
-            {project.title}
+            {displayTitle}
           </h3>
         </div>
 
         <p className="text-gray-600 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 line-clamp-3 flex-grow">
-          {project.scope}
+          {displayScope}
         </p>
 
         {typeof project.progress === "number" ? (
@@ -168,7 +181,7 @@ const ProjectCard = ({ project, index }) => {
             <div className="flex items-center justify-between text-gray-700 text-xs sm:text-sm">
               <div className="flex items-center gap-1.5 sm:gap-2 text-green-600 font-semibold">
                 <TrendingUp className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
-                <span>Physical Progress:</span>
+                <span>{t('projects.physicalProgress')}</span>
               </div>
               <span className="font-bold text-gray-900">{project.progress}%</span>
             </div>
@@ -187,7 +200,7 @@ const ProjectCard = ({ project, index }) => {
       {/* Footer Link */}
       <div className="p-3 sm:p-4 border-t border-gray-100 flex justify-end">
         <a href={`#project-${project.id}`} className={`flex items-center gap-0.5 sm:gap-1 text-xs sm:text-sm font-bold ${currentClasses.text} hover:text-opacity-80 transition-colors group/link`}>
-          VIEW DETAILS
+          {t('projects.viewDetails')}
           <CheckCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform group-hover/link:translate-x-1" />
         </a>
       </div>
@@ -196,9 +209,10 @@ const ProjectCard = ({ project, index }) => {
 };
 
 export default function Projects({ projects: incomingProjects }) {
+  const { t, i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
   const [projectCards, setProjectCards] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
 
   useEffect(() => {
     // ...existing animation styles...
@@ -285,13 +299,13 @@ export default function Projects({ projects: incomingProjects }) {
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-ping"></div>
               </div>
             </div>
-            <p className="mt-4 sm:mt-6 text-blue-600 font-medium text-xs sm:text-sm md:text-base tracking-wider animate-pulse">LOADING PROJECT DATA...</p>
+            <p className="mt-4 sm:mt-6 text-blue-600 font-medium text-xs sm:text-sm md:text-base tracking-wider animate-pulse">{t('projects.loading')}</p>
           </div>
         ) : (
           /* Projects Grid */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
             {projectCards.map((item, index) => (
-              <ProjectCard key={item.id || index} project={item} index={index} />
+              <ProjectCard key={item.id || index} project={item} index={index} t={t} isUrdu={isUrdu} />
             ))}
           </div>
         )}

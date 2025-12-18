@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useNewsData } from "@/hooks/useNewsData";
+import { useTranslation } from 'react-i18next';
 import Loader from "@/components/Loader";
 import gsap from "gsap";
 import { Fade } from "react-awesome-reveal";
@@ -99,7 +100,10 @@ const mockArticles = [
   },
 ];
 
-const NewsCard = ({ news, index }) => {
+const NewsCard = ({ news, index, t, isUrdu }) => {
+  const displayTitle = (isUrdu && news.titleUr) ? news.titleUr : news.title;
+  const displaySummary = (isUrdu && news.descriptionUr) ? news.descriptionUr : news.summary;
+
   return (
     <div
       className="relative bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col h-full hover:shadow-lg transition-shadow duration-300"
@@ -114,7 +118,7 @@ const NewsCard = ({ news, index }) => {
       <div className="relative h-40 sm:h-48 md:h-56 overflow-hidden">
         <img
           src={news.imagePlaceholder}
-          alt={news.title}
+          alt={displayTitle}
           className="w-full h-full object-cover"
         />
         {/* Status Badge */}
@@ -134,10 +138,10 @@ const NewsCard = ({ news, index }) => {
           </span>
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
-          {news.title}
+          {displayTitle}
         </h3>
         <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-          {news.summary}
+          {displaySummary}
         </p>
 
         {/* Footer */}
@@ -150,7 +154,7 @@ const NewsCard = ({ news, index }) => {
             href="#"
             className="text-sm font-medium text-blue-700 hover:text-blue-900 flex items-center gap-1"
           >
-            Read More
+            {t('readMore')}
             <ChevronRight className="w-4 h-4" />
           </a>
         </div>
@@ -165,11 +169,14 @@ function normalizeNews(articles) {
   return articles.map((article, index) => ({
     id: article.id || index,
     title: article.title,
+    titleUr: article.titleUr, // Add ur props
     date: article.publishedAt
       ? new Date(article.publishedAt).toLocaleDateString()
       : article.date || new Date().toLocaleDateString(),
     category: article.category?.title || article.type || "GENERAL",
     description: article.summary || article.description || "",
+    descriptionUr: article.summaryUr || article.descriptionUr, // Add ur props
+    summary: article.summary || article.description || "", // Keep summary for listing
     icon: <Activity className="w-6 h-6 text-cyan-400" />,
     img:
       article.heroMedia?.url ||
@@ -178,6 +185,7 @@ function normalizeNews(articles) {
         article.title || "News"
       )}`,
     status: article.status || "PUBLISHED",
+    imagePlaceholder: article.heroMedia?.url || article.img || `https://placehold.co/800x450/0f172a/06b6d4?text=${encodeURIComponent(article.title || "News")}`
   }));
 }
 
@@ -197,11 +205,14 @@ function categorizNews(articles) {
   const latestUpdates = articles.slice(0, 5).map((article, index) => ({
     id: article.id || index,
     title: article.title,
+    titleUr: article.titleUr,
     date: article.publishedAt
       ? new Date(article.publishedAt).toLocaleDateString()
       : article.date || new Date().toLocaleDateString(),
     category: article.category?.title || article.type || "GENERAL",
     description: article.summary || article.description || "",
+    descriptionUr: article.summaryUr || article.descriptionUr,
+    summary: article.summary || article.description || "",
     img:
       article.heroMedia?.url ||
       article.img ||
@@ -209,6 +220,7 @@ function categorizNews(articles) {
         article.title || "News"
       )}`,
     status: article.status || "PUBLISHED",
+    imagePlaceholder: article.heroMedia?.url || article.img || `https://placehold.co/800x450/0f172a/06b6d4?text=${encodeURIComponent(article.title || "News")}`
   }));
 
   const pressReleases = articles
@@ -216,10 +228,12 @@ function categorizNews(articles) {
     .map((article, index) => ({
       id: article.id || index,
       title: article.title,
+      titleUr: article.titleUr,
       date: article.publishedAt
         ? new Date(article.publishedAt).toLocaleDateString()
         : article.date || new Date().toLocaleDateString(),
       description: article.summary || article.description || "",
+      descriptionUr: article.summaryUr || article.descriptionUr,
       link: article.link || `/news/${article.slug || article.id}`,
       category: article.category?.title || "PRESS RELEASE",
     }));
@@ -229,7 +243,9 @@ function categorizNews(articles) {
     .map((article, index) => ({
       id: article.id || index,
       title: article.title,
+      titleUr: article.titleUr,
       description: article.summary || article.description || "",
+      descriptionUr: article.summaryUr || article.descriptionUr,
       type: article.category?.title || article.type || "MEDIA",
       img:
         article.heroMedia?.url ||
@@ -237,6 +253,7 @@ function categorizNews(articles) {
         `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(
           article.title || "Media"
         )}`,
+      imagePlaceholder: article.heroMedia?.url || article.img || `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(article.title || "Media")}`
     }));
 
   return { latestUpdates, pressReleases, mediaGallery };
@@ -244,6 +261,8 @@ function categorizNews(articles) {
 
 export default function NewsUpdates() {
   const { data, loading: hookLoading, error } = useNewsData();
+  const { t, i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
   const [news, setNews] = useState([]);
   const [pressReleases, setPressReleases] = useState([]);
   const [mediaGallery, setMediaGallery] = useState([]);
@@ -272,7 +291,7 @@ export default function NewsUpdates() {
   }, [data, hookLoading, error]);
 
   if (loading) {
-    return <div className="flex justify-center items-center min-h-[50vh]">Loading...</div>;
+    return <div className="flex justify-center items-center min-h-[50vh]">{t('loading')}</div>;
   }
 
   return (
@@ -280,7 +299,7 @@ export default function NewsUpdates() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            LATEST NEWS
+            {t('news.latestNews')}
           </h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
         </div>
@@ -289,9 +308,9 @@ export default function NewsUpdates() {
         <div className="flex justify-center mb-10">
           <div className="bg-gray-100 p-1 rounded-lg inline-flex gap-1">
             {[
-              { id: "updates", label: "Latest News", icon: <Activity size={16} /> },
-              { id: "press", label: "Press Releases", icon: <FileText size={16} /> },
-              { id: "media", label: "Gallery", icon: <Camera size={16} /> },
+              { id: "updates", label: t("news.latestNews"), icon: <Activity size={16} /> },
+              { id: "press", label: t("news.pressReleases"), icon: <FileText size={16} /> },
+              { id: "media", label: t("news.gallery"), icon: <Camera size={16} /> },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -310,82 +329,91 @@ export default function NewsUpdates() {
           {/* Latest News */}
           {activeTab === "updates" && (
             <div className="grid grid-cols-1 gap-6">
-              {news.map((item, index) => (
-                <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
-                        {item.type}
-                      </span>
-                      <span className="text-gray-500 text-sm flex items-center gap-1">
-                        <Calendar size={14} /> {item.date}
-                      </span>
+              {news.map((item, index) => {
+                 const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
+                 const displaySummary = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.summary;
+                 return (
+                  <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
+                          {item.type}
+                        </span>
+                        <span className="text-gray-500 text-sm flex items-center gap-1">
+                          <Calendar size={14} /> {item.date}
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        {displayTitle}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {displaySummary}
+                      </p>
+                      <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
+                        {t('news.readMore')} <ChevronRight size={16} />
+                      </a>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      {item.summary}
-                    </p>
-                    <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
-                      Read more <ChevronRight size={16} />
-                    </a>
                   </div>
-                </div>
-              ))}
+              )})}
             </div>
           )}
 
           {/* Press Releases */}
           {activeTab === "press" && (
             <div className="grid grid-cols-1 gap-6">
-              {pressReleases.map((item, index) => (
-                <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-3">
-                    <span className="text-gray-500 text-sm">{item.date}</span>
-                    <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
-                      Press Release
-                    </span>
+              {pressReleases.map((item, index) => {
+                 const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
+                 const displayDesc = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.description;
+                 return (
+                  <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <div className="flex justify-between items-start mb-3">
+                      <span className="text-gray-500 text-sm">{item.date}</span>
+                      <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
+                        Press Release
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {displayTitle}
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      {displayDesc}
+                    </p>
+                    <a 
+                      href={item.link || '#'} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
+                    >
+                      {t('news.readMore')} <ChevronRight size={16} />
+                    </a>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    {item.description}
-                  </p>
-                  <a 
-                    href={item.link || '#'} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
-                  >
-                    Read more <ChevronRight size={16} />
-                  </a>
-                </div>
-              ))}
+              )})}
             </div>
           )}
 
           {/* Media Gallery */}
           {activeTab === "media" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mediaGallery.map((item, index) => (
-                <div key={index} className="group relative rounded-lg overflow-hidden bg-gray-100">
-                  <div className="aspect-w-16 aspect-h-9">
-                    <img
-                      src={item.img || item.imagePlaceholder}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <div>
-                      <h4 className="text-white font-medium">{item.title}</h4>
-                      <p className="text-gray-200 text-sm">{item.description}</p>
+              {mediaGallery.map((item, index) => {
+                 const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
+                 const displayDesc = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.description;
+                 return (
+                  <div key={index} className="group relative rounded-lg overflow-hidden bg-gray-100">
+                    <div className="aspect-w-16 aspect-h-9">
+                      <img
+                        src={item.img || item.imagePlaceholder}
+                        alt={displayTitle}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                      <div>
+                        <h4 className="text-white font-medium">{displayTitle}</h4>
+                        <p className="text-gray-200 text-sm">{displayDesc}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+              )})}
             </div>
           )}
         </div>

@@ -6,7 +6,11 @@ import { Fade } from "react-awesome-reveal";
 import Link from "next/link";
 import { useRtiData } from "@/hooks/useRtiData";
 
+import { useTranslation } from "react-i18next";
+
 export default function Rti() {
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
   const { data, loading, error } = useRtiData();
 
   if (loading) return <Loader />;
@@ -30,7 +34,10 @@ export default function Rti() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14">
-            {documents.map((doc, index) => (
+            {documents.map((doc, index) => {
+              const displayTitle = (isUrdu && doc.titleUr) ? doc.titleUr : doc.title;
+              const displayDesc = (isUrdu && doc.descriptionUr) ? doc.descriptionUr : doc.description;
+              return (
               <Fade key={index} direction="up" triggerOnce duration={1000} delay={index * 100}>
                 <div className="bg-white rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -44,10 +51,10 @@ export default function Rti() {
                     </div>
                   </div>
                   <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
-                    {doc.title}
+                    {displayTitle}
                   </h3>
                   <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-base text-gray-600 mb-3 sm:mb-4 leading-relaxed">
-                    {doc.description}
+                    {displayDesc}
                   </p>
                   <Link
                     href={doc.link}
@@ -62,7 +69,7 @@ export default function Rti() {
                   </Link>
                 </div>
               </Fade>
-            ))}
+            )})}
           </div>
 
           <div className="mt-12 sm:mt-16 md:mt-20 lg:mt-24 bg-white rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14">

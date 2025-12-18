@@ -477,7 +477,7 @@ const Navbar = () => {
                 </button>
               </div>
               <div className="text-white px-2 sm:px-4">
-                <p className="text-xs sm:text-sm leading-relaxed">9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan</p>
+                <p className="text-xs sm:text-sm leading-relaxed">{t("footer.location")}</p>
               </div>
               <nav className="flex flex-col items-start gap-6 sm:gap-10 mt-6 sm:mt-8 w-full px-2">
                 {getNavLinks().map((link, index) => (

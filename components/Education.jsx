@@ -4,7 +4,11 @@ import Loader from "@/components/Loader";
 import { Fade } from "react-awesome-reveal";
 import { useEducationData } from "@/hooks/useEducationData";
 
+import { useTranslation } from "react-i18next";
+
 export default function Education() {
+  const { t, i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
   const { data, loading, error } = useEducationData();
 
   if (loading) return <Loader />;
@@ -12,23 +16,23 @@ export default function Education() {
 
   const defaultResources = [
     {
-      title: "Water Conservation Basics",
-      description: "Practical tips for households to reduce daily water consumption, detect leaks early, and use fixtures efficiently.",
+      title: t("education.waterConservation.title"),
+      description: t("education.waterConservation.desc"),
       image: "/bg-1.jpg",
     },
     {
-      title: "Safe Drinking Water Guide",
-      description: "Learn how KW&SC treats and monitors water quality, and how you can store and handle drinking water safely at home.",
+      title: t("education.drinkingWater.title"),
+      description: t("education.drinkingWater.desc"),
       image: "/bg-2.jpg",
     },
     {
-      title: "Sewerage Do’s & Don’ts",
-      description: "What NOT to flush or drain, and how proper disposal helps prevent blockages, overflows, and environmental damage.",
+      title: t("education.sewerage.title"),
+      description: t("education.sewerage.desc"),
       image: "/downtownkarachi.gif",
     },
     {
-      title: "Emergency Preparedness",
-      description: "Steps to prepare your household for water supply interruptions, including safe storage, hygiene, and tanker coordination.",
+      title: t("education.emergency.title"),
+      description: t("education.emergency.desc"),
       image: "/teentalwarkarachi.gif",
     },
   ];
@@ -38,19 +42,24 @@ export default function Education() {
   return (
     <section className="bg-[#020617] text-white py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 2xl:py-32">
         <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl lg:max-w-7xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12 space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-16 xl:space-y-20 2xl:space-y-24">
-          {resources.length > 0 ? resources.map((post, i) => (
-            <Fade key={i} direction="up" triggerOnce duration={800} delay={i * 150}>
-              <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14">
-                <div className="md:flex-1">
-                  <img src={post.image} alt={post.title} className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto" />
+          {resources.length > 0 ? resources.map((post, i) => {
+             const displayTitle = (isUrdu && post.titleUr) ? post.titleUr : post.title;
+             const displayDesc = (isUrdu && post.descriptionUr) ? post.descriptionUr : post.description;
+
+             return (
+              <Fade key={i} direction="up" triggerOnce duration={800} delay={i * 150}>
+                <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14">
+                  <div className="md:flex-1">
+                    <img src={post.image} alt={displayTitle} className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto" />
+                  </div>
+                  <div className="md:flex-1">
+                    <h3 className="text-xl font-bold text-cyan-400 mb-3">{displayTitle}</h3>
+                    <p className="text-base text-slate-300 leading-relaxed">{displayDesc}</p>
+                  </div>
                 </div>
-                <div className="md:flex-1">
-                  <h3 className="text-xl font-bold text-cyan-400 mb-3">{post.title}</h3>
-                  <p className="text-base text-slate-300 leading-relaxed">{post.description}</p>
-                </div>
-              </div>
-            </Fade>
-         ))
+              </Fade>
+           )
+          })
         : (
           <div className="col-span-full text-center py-12 text-gray-500">
             No education resources available at the moment.

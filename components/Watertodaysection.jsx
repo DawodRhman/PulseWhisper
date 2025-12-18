@@ -2,6 +2,7 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { useWaterTodayData } from "@/hooks/useWaterTodayData";
+import { useTranslation } from 'react-i18next';
 import Loader from "@/components/Loader";
 
 const FALLBACK_UPDATE = {
@@ -13,6 +14,7 @@ const FALLBACK_UPDATE = {
 
 export default function WaterTodaySection({ updates: propUpdates }) {
   const { data, loading } = useWaterTodayData();
+  const { t } = useTranslation();
   
   const updates = propUpdates || data?.updates || [];
   
@@ -55,10 +57,10 @@ export default function WaterTodaySection({ updates: propUpdates }) {
             </p>
             <div className="mt-4 sm:mt-5 md:mt-6 lg:mt-8 flex items-center justify-between">
               <span className="text-xs sm:text-sm md:text-base lg:text-sm xl:text-sm 2xl:text-sm text-gray-500">
-                Updated: {new Date(latestUpdate.publishedAt).toLocaleDateString()}
+                {t('updated')} {new Date(latestUpdate.publishedAt).toLocaleDateString()}
               </span>
               <Link href="/watertodaysection" className="inline-block text-xs sm:text-sm md:text-base lg:text-lg text-blue-600 hover:text-blue-800 font-semibold hover:underline transition-all">
-                Read More
+                {t('readMore')}
               </Link>
             </div>
           </div>

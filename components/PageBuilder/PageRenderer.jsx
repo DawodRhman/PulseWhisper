@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import GenericHero from "./GenericHero";
 import Services from "@/components/Services";
@@ -24,19 +26,28 @@ import Counter from "@/components/Counter";
 import Workflow from "@/components/Workflow";
 
 
+import { useTranslation } from "react-i18next";
+
 // A simple generic text block component
-const TextBlock = ({ heading, body }) => {
+const TextBlock = ({ heading, headingUr, body, bodyUr }) => {
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
+
+  const displayHeading = (isUrdu && headingUr) ? headingUr : heading;
+  // Fallback to body if bodyUr is empty
+  const rawBody = (isUrdu && bodyUr) ? bodyUr : body;
+
   // Use Heritage component for heritage sections
-  if (heading && heading.toLowerCase().includes("heritage")) {
-    return <Heritage heading={heading} body={body} />;
+  if (displayHeading && displayHeading.toLowerCase().includes("heritage")) {
+    return <Heritage heading={displayHeading} body={rawBody} />;
   }
 
   const normalizedBody = React.useMemo(() => {
-    if (!body || typeof body !== "string") return body;
+    if (!rawBody || typeof rawBody !== "string") return rawBody;
 
     // Backend content may contain React-only tags (e.g., <Fade>, <Image>) inside stored HTML.
     // Strip/convert them so the layout still renders in the browser.
-    let html = body;
+    let html = rawBody;
 
     // Remove <Fade ...> wrappers.
     html = html.replace(/<\s*Fade[^>]*>/gi, "");
@@ -47,7 +58,7 @@ const TextBlock = ({ heading, body }) => {
     html = html.replace(/<\s*Image\b([^>]*)>(.*?)<\s*\/\s*Image\s*>/gis, "<img$1 />");
 
     return html;
-  }, [body]);
+  }, [rawBody]);
 
   const looksLikeFullSectionMarkup = typeof normalizedBody === "string" && /<\s*section\b/i.test(normalizedBody);
 
@@ -63,9 +74,9 @@ const TextBlock = ({ heading, body }) => {
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
-        {heading && (
+        {displayHeading && (
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-900 text-center">
-            {heading}
+            {displayHeading}
           </h2>
         )}
         {normalizedBody && (

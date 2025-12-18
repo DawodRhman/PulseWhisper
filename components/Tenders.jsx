@@ -8,7 +8,8 @@ import gsap from "gsap";
 import { useLanguageStore } from "@/lib/stores/languageStore";
 
 
-const SearchFilter = React.memo(({ onFilterChange, allTenders }) => {
+// SearchFilter component
+const SearchFilter = React.memo(({ onFilterChange, allTenders, t }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("All");
@@ -35,7 +36,7 @@ const SearchFilter = React.memo(({ onFilterChange, allTenders }) => {
         >
           <h3 className="text-xl font-bold text-blue-900 flex items-center">
             <FiSearch className="mr-2 text-blue-600 w-5 h-5" />
-            Search & Filter Open Tenders
+            {t("tenders.search")}
           </h3>
           {isExpanded ? <FiChevronUp className="w-4 sm:w-4.5 md:w-5 lg:w-5 h-4 sm:h-4.5 md:h-5 lg:h-5 text-blue-600" /> : <FiChevronDown className="w-4 sm:w-4.5 md:w-5 lg:w-5 h-4 sm:h-4.5 md:h-5 lg:h-5 text-blue-600" />}
         </button>
@@ -45,11 +46,11 @@ const SearchFilter = React.memo(({ onFilterChange, allTenders }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
               {/* Search Bar */}
               <div>
-                <label htmlFor="search" className="block text-base font-medium text-gray-700 mb-2">Search by Title/Description</label>
+                <label htmlFor="search" className="block text-base font-medium text-gray-700 mb-2">{t("tenders.searchPlaceholder")}</label>
                 <input
                   type="text"
                   id="search"
-                  placeholder="e.g. Water, Pipeline, IT"
+                  placeholder={t("tenders.searchPlaceholder")}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-base"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -58,7 +59,7 @@ const SearchFilter = React.memo(({ onFilterChange, allTenders }) => {
 
               {/* Type Filter */}
               <div>
-                <label htmlFor="type-filter" className="block text-base font-medium text-gray-700 mb-2">Filter by Type</label>
+                <label htmlFor="type-filter" className="block text-base font-medium text-gray-700 mb-2">{t("tenders.filterByType")}</label>
                 <select
                   id="type-filter"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-base"
@@ -80,7 +81,12 @@ const SearchFilter = React.memo(({ onFilterChange, allTenders }) => {
 
 SearchFilter.displayName = "SearchFilter";
 
+import { useTranslation } from "react-i18next";
+
 export default function Tenders() {
+  const { i18n, t } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
+
   const [openTenders, setOpenTenders] = useState([]);
   const [closedTenders, setClosedTenders] = useState([]);
   const [cancelledTenders, setCancelledTenders] = useState([]);
@@ -177,6 +183,11 @@ export default function Tenders() {
     const isExpanded = tabName === "open" && openId === item.id;
     const status = tabName === "open" ? (item.category?.label || item.type || "Tender") : (tabName === "closed" ? "Closed" : "Cancelled");
 
+    const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
+    const displayDesc = (isUrdu && (item.summaryUr || item.descriptionUr)) 
+                        ? (item.summaryUr || item.descriptionUr) 
+                        : (item.summary || item.description || "No description available.");
+
     const typeClasses = {
       Procurement: "bg-green-100 text-green-800 border-green-400",
       Construction: "bg-orange-100 text-orange-800 border-orange-400",
@@ -198,9 +209,12 @@ export default function Tenders() {
             <span className={`px-4 py-2 rounded-full text-base font-semibold ${chipColor} mb-4 inline-block`}>
               {status}
             </span>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2" title={item.title}>{item.title}</h3>
-            <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-1">{item.summary || item.description || "No description available."}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2" title={displayTitle}>{displayTitle}</h3>
+            <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-1">{displayDesc}</p>
           </div>
+          
+          {/* ... (rest of TenderCard, make sure to use displayDesc in expanded area too if needed) */}
+
 
           {/* Footer/Actions */}
           <div className="mt-auto pt-4">
@@ -217,18 +231,18 @@ export default function Tenders() {
                   aria-expanded={isExpanded}
                   aria-controls={`details-${item.id}`}
                 >
-                  {isExpanded ? "Hide Details" : "View More"}
+                  {isExpanded ? t("tenders.hideDetails") : t("tenders.viewMore")}
                   {isExpanded ? <FiChevronUp className="w-4 h-4 ml-1" /> : <FiChevronDown className="w-4 h-4 ml-1" />}
                 </button>
               ) : (
                 <span className="text-base text-gray-500 italic">
-                  {tabName === "closed" ? "Tender Closed" : "Tender Cancelled"}
+                  {tabName === "closed" ? t("tenders.closed") : t("tenders.cancelled")}
                 </span>
               )}
 
               {/* Download button only for open tenders with attachments */}
               {tabName === "open" && item.attachments && item.attachments.length > 0 && (
-                <a href={item.attachments[0].url || item.attachments[0].mediaUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-600 transition-colors ml-2" title="Download Tender Documents">
+                <a href={item.attachments[0].url || item.attachments[0].mediaUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-600 transition-colors ml-2" title={t("tenders.download")}>
                   <FiDownload className="w-5 h-5" />
                 </a>
               )}
@@ -238,7 +252,7 @@ export default function Tenders() {
           {/* Expanded Details (For Open Tenders Only) */}
           {isExpanded && (
             <div id={`details-${item.id}`} className="mt-5 pt-5 border-t border-blue-200">
-              <p className="text-base text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg font-medium">{item.description || item.summary}</p>
+              <p className="text-base text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg font-medium">{displayDesc}</p>
               {item.attachments && item.attachments.length > 0 && (
                 <div className="mt-5">
                   <h4 className="text-base font-semibold text-gray-700 mb-2">Documents:</h4>
@@ -294,7 +308,7 @@ export default function Tenders() {
                   : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
                   }`}
               >
-                Open Tenders
+                {t("tenders.open")}
               </button>
               <button
                 onClick={() => {
@@ -306,7 +320,7 @@ export default function Tenders() {
                   : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
                   }`}
               >
-                Closed Tenders
+                {t("tenders.closed")}
               </button>
               <button
                 onClick={() => {
@@ -318,7 +332,7 @@ export default function Tenders() {
                   : "text-gray-600 hover:text-blue-700 hover:bg-blue-50"
                   }`}
               >
-                Cancelled Tenders
+                {t("tenders.cancelled")}
               </button>
             </div>
           </div>
@@ -328,6 +342,7 @@ export default function Tenders() {
             <SearchFilter
               onFilterChange={handleFilterChange}
               allTenders={openTenders}
+              t={t}
             />
           )}
 
@@ -343,7 +358,7 @@ export default function Tenders() {
                 ))
               ) : (
                 <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
-                  <p className="text-xl text-gray-500">No Open Tenders match your current search criteria.</p>
+                  <p className="text-xl text-gray-500">{t("tenders.noOpen")}</p>
                 </div>
               )}
             </div>
@@ -359,7 +374,7 @@ export default function Tenders() {
                 ))
               ) : (
                 <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
-                  <p className="text-xl text-gray-500">No Closed Tenders found.</p>
+                  <p className="text-xl text-gray-500">{t("tenders.noClosed")}</p>
                 </div>
               )}
             </div>
@@ -375,7 +390,7 @@ export default function Tenders() {
                 ))
               ) : (
                 <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
-                  <p className="text-xl text-gray-500">No Cancelled Tenders found.</p>
+                  <p className="text-xl text-gray-500">{t("tenders.noCancelled")}</p>
                 </div>
               )}
             </div>

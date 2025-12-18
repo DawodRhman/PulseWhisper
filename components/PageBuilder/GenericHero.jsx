@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 
 const fadeInUp = {
@@ -8,13 +9,18 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-export default function GenericHero({ title, subtitle, backgroundImage, backgroundMeta }) {
+export default function GenericHero({ title, titleUr, subtitle, subtitleUr, backgroundImage, backgroundMeta }) {
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
 
   // Use uploaded asset (GIF/image) when available, otherwise fall back
   const bgImage = backgroundMeta?.url || backgroundImage || "/9.gif";
   const isVideo =
     backgroundMeta?.mimeType?.startsWith("video/") ||
     (typeof bgImage === "string" && bgImage.match(/\.(mp4)(\?|#|$)/i));
+
+  const displayTitle = (isUrdu && titleUr) ? titleUr : title;
+  const displaySubtitle = (isUrdu && subtitleUr) ? subtitleUr : subtitle;
 
   return (
     <section
@@ -43,17 +49,17 @@ export default function GenericHero({ title, subtitle, backgroundImage, backgrou
       <div className="relative z-[1] w-full max-w-3xl mx-auto text-center px-4 py-4">
 
 
-        {title && (
+        {displayTitle && (
           <h2
             className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white"
           >
-            {title?.toUpperCase()}
+            {displayTitle?.toUpperCase()}
           </h2>
         )}
 
-        {subtitle && (
+        {displaySubtitle && (
           <p className="mt-2 sm:mt-3 md:mt-4 text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
-            {subtitle}
+            {displaySubtitle}
           </p>
         )}
       </div>
