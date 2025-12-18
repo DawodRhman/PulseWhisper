@@ -27,7 +27,10 @@ function serializeDocument(doc) {
   return {
     id: doc.id,
     title: doc.title,
+    // safe access if they exist in future or dynamic usage
+    titleUr: doc.titleUr, 
     description: doc.summary,
+    descriptionUr: doc.summaryUr,
     type: doc.docType || "Document",
     link: doc.externalUrl || (doc.media ? doc.media.url : "#"),
     order: doc.order,
@@ -39,11 +42,10 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
-    const { data, stale } = await resolveWithSnapshot(
+    const { data: snapshotData, stale } = await resolveWithSnapshot(
       SnapshotModule.RIGHT_TO_INFORMATION,
       async () => {
         let documents = [];
-
         try {
           documents = await prisma.rtiDocument.findMany({
             orderBy: { order: "asc" },
@@ -52,25 +54,35 @@ export async function GET(request) {
         } catch (dbError) {
           console.warn("⚠️ Database unreachable in RTI API. Using empty list.");
         }
-
-        const hero = getHeroContent(lang);
-
-        const seo = await resolvePageSeo({
-          canonicalUrl: "/right-to-information",
-          fallback: {
-            title: `${hero.title} | Karachi Water & Sewerage Corporation`,
-            description: hero.subtitle,
-            ogImageUrl: hero.backgroundImage,
-          },
-        });
-
-        return {
-          hero,
-          documents: documents.map(serializeDocument),
-          seo,
-        };
+        return { documents: documents.map(serializeDocument) };
       }
     );
+
+    const hero = getHeroContent(lang);
+
+    const seo = await resolvePageSeo({
+      canonicalUrl: "/right-to-information",
+      fallback: {
+        title: `${hero.title} | Karachi Water & Sewerage Corporation`,
+        description: hero.subtitle,
+        ogImageUrl: hero.backgroundImage,
+      },
+    });
+
+    const translatedDocuments = snapshotData.documents.map(doc => ({
+      ...doc,
+      title: lang === 'ur' && doc.titleUr ? doc.titleUr : doc.title,
+      description: lang === 'ur' && doc.descriptionUr ? doc.descriptionUr : doc.description,
+    }));
+
+    return NextResponse.json({
+      data: {
+        hero,
+        documents: translatedDocuments,
+        seo
+      },
+      meta: { stale }
+    });
 
     return NextResponse.json({ data, meta: { stale } });
   } catch (error) {

@@ -15,22 +15,35 @@ import {
 import Loader from "@/components/Loader";
 import gsap from "gsap";
 import { useTranslation } from "react-i18next";
+import { useServicesData } from "@/hooks/useServicesData";
 
-// ... (existing helper function remain same) ...
+const IconMap = {
+  FaTint,
+  FaWater,
+  FaTruck,
+  FaWrench,
+  FaHandHoldingWater,
+  FaFileInvoiceDollar,
+  FaBuilding,
+  FaLeaf,
+};
+
+function getPopupAction(title) {
+  if (!title) return null;
+  const t = title.toLowerCase();
+  if (t.includes("new connection") || t.includes("نیا کنکشن")) return "newConnection";
+  if (t.includes("complaint") || t.includes("شکایات")) return "eComplaint";
+  if (t.includes("tanker") || t.includes("ٹینکر")) return "bookTanker";
+  if (t.includes("bill") || t.includes("بل")) return "bill";
+  return null;
+}
 
 function ServiceCardItem({ card }) {
-  const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
-
   const [isOpen, setIsOpen] = useState(false);
   const Icon = IconMap[card.iconKey] || FaTint;
   const hasDetails = card.details && card.details.length > 0;
-  
-  const displayTitle = (isUrdu && card.titleUr) ? card.titleUr : card.title;
-  const displaySummary = (isUrdu && card.summaryUr) ? card.summaryUr : card.summary;
-  const displayDescription = (isUrdu && card.descriptionUr) ? card.descriptionUr : card.description;
 
-  const popupAction = getPopupAction(card.title || ""); // Keep logical check on English title for stability
+  const popupAction = getPopupAction(card.title || ""); 
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
@@ -53,10 +66,10 @@ function ServiceCardItem({ card }) {
             
             <div>
               <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
-                {displayTitle}
+                {card.title}
               </h3>
               <p className="text-lg text-gray-600 leading-relaxed">
-                {displaySummary || displayDescription}
+                {card.summary || card.description}
               </p>
               {popupAction && (
                 <button
@@ -91,16 +104,14 @@ function ServiceCardItem({ card }) {
           {hasDetails ? (
             <div className="p-6 sm:p-8 md:p-10 grid gap-8 md:grid-cols-2 lg:grid-cols-2 border-t border-gray-100">
               {card.details.map((detail) => {
-                  const detailHeading = (isUrdu && detail.headingUr) ? detail.headingUr : detail.heading;
-                  const detailBody = (isUrdu && detail.bodyUr) ? detail.bodyUr : detail.body;
                   return (
                     <div key={detail.id} className="space-y-3">
                       <h4 className="text-xl font-semibold text-gray-800">
-                        {detailHeading}
+                        {detail.heading}
                       </h4>
                       <div 
                         className="text-gray-600 leading-relaxed prose prose-blue prose-sm max-w-none"
-                        dangerouslySetInnerHTML={{ __html: detailBody }}
+                        dangerouslySetInnerHTML={{ __html: detail.body }}
                       />
                       {detail.bulletPoints && detail.bulletPoints.length > 0 && (
                         <ul className="space-y-2 mt-3">
@@ -117,9 +128,9 @@ function ServiceCardItem({ card }) {
               })}
             </div>
           ) : (
-            displayDescription && displayDescription !== displaySummary && (
+            card.description && card.description !== card.summary && (
                <div className="p-6 sm:p-8 md:p-10 border-t border-gray-100">
-                  <p className="text-gray-600">{displayDescription}</p>
+                  <p className="text-gray-600">{card.description}</p>
                </div>
             )
           )}
@@ -130,13 +141,7 @@ function ServiceCardItem({ card }) {
 }
 
 function ServiceCategoryItem({ category }) {
-  const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
-
   const [isOpen, setIsOpen] = useState(true);
-
-  const displayTitle = (isUrdu && category.titleUr) ? category.titleUr : category.title;
-  const displaySummary = (isUrdu && category.summaryUr) ? category.summaryUr : category.summary;
 
   return (
     <div className="space-y-6">
@@ -146,10 +151,10 @@ function ServiceCategoryItem({ category }) {
       >
         <div className="space-y-1">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-            {displayTitle}
+            {category.title}
           </h2>
-          {displaySummary && (
-            <p className="text-gray-600 max-w-2xl">{displaySummary}</p>
+          {category.summary && (
+            <p className="text-gray-600 max-w-2xl">{category.summary}</p>
           )}
         </div>
         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
@@ -174,8 +179,6 @@ function ServiceCategoryItem({ category }) {
 
 export default function Services(props) {
   const [animationDone, setAnimationDone] = useState(false);
-  const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
   
   const { data, loading: dataLoading, error, stale } = useServicesData();
   const loading = !animationDone || dataLoading;
@@ -190,23 +193,16 @@ export default function Services(props) {
 
   if (loading) return <Loader />;
 
-  // Logic: 
-  // 1. If explicit props are passed (e.g. from PageBuilder), use them. 
-  //    Check for Ur props if isUrdu is true.
-  // 2. If no props, fallback to 'data.hero' (from API).
-  //    Check for Ur fields in data.hero if isUrdu is true.
-  // 3. Fallback to hardcoded English strings.
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
 
   const propTitle = (isUrdu && props.titleUr) ? props.titleUr : props.title;
-  const dataTitle = (isUrdu && data?.hero?.titleUr) ? data.hero.titleUr : data?.hero?.title;
-  
+  const dataTitle = data?.hero?.title;
   const displayTitle = propTitle || dataTitle || "Our Services";
 
   const propSubtitle = (isUrdu && props.subtitleUr) ? props.subtitleUr : props.subtitle;
-  const dataSubtitle = (isUrdu && data?.hero?.subtitleUr) ? data.hero.subtitleUr : data?.hero?.subtitle;
-
+  const dataSubtitle = data?.hero?.subtitle;
   const displaySubtitle = propSubtitle || dataSubtitle || "KW&SC provides essential services to the citizens of Karachi, ensuring efficient water supply, sewerage management, and digital accessibility.";
-
 
   return (
     <>

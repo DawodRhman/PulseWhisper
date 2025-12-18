@@ -1,9 +1,4 @@
 {
-  "hero": {
-    "title": "تازہ ترین خبریں",
-    "subtitle": "انفراسٹرکچر کی ترقی، ڈیجیٹل تبدیلی، اور افادیت کے میٹرکس کو ریئل ٹائم میں ٹریک کرنا۔",
-    "backgroundImage": "/media/hero/news-desk.svg"
-  },
   "categories": [
     {
       "id": "a1d972f6-0319-4e54-b593-aac761f29ad0",
@@ -267,18 +262,5 @@
       },
       "seo": null
     }
-  ],
-  "seo": {
-    "id": null,
-    "title": "تازہ ترین خبریں | Karachi Water & Sewerage Corporation",
-    "description": "انفراسٹرکچر کی ترقی، ڈیجیٹل تبدیلی، اور افادیت کے میٹرکس کو ریئل ٹائم میں ٹریک کرنا۔",
-    "keywords": null,
-    "canonicalUrl": "/news",
-    "ogTitle": "تازہ ترین خبریں | Karachi Water & Sewerage Corporation",
-    "ogDescription": "انفراسٹرکچر کی ترقی، ڈیجیٹل تبدیلی، اور افادیت کے میٹرکس کو ریئل ٹائم میں ٹریک کرنا۔",
-    "ogImageUrl": "/media/hero/news-desk.svg",
-    "twitterCard": "summary_large_image",
-    "structuredData": null,
-    "allowIndexing": true
-  }
+  ]
 }

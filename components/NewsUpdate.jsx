@@ -330,8 +330,6 @@ export default function NewsUpdates() {
           {activeTab === "updates" && (
             <div className="grid grid-cols-1 gap-6">
               {news.map((item, index) => {
-                 const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
-                 const displaySummary = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.summary;
                  return (
                   <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                     <div className="p-6">
@@ -344,10 +342,10 @@ export default function NewsUpdates() {
                         </span>
                       </div>
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                        {displayTitle}
+                        {item.title}
                       </h3>
                       <p className="text-gray-600 mb-4">
-                        {displaySummary}
+                        {item.summary}
                       </p>
                       <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
                         {t('news.readMore')} <ChevronRight size={16} />
@@ -395,21 +393,19 @@ export default function NewsUpdates() {
           {activeTab === "media" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {mediaGallery.map((item, index) => {
-                 const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
-                 const displayDesc = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.description;
                  return (
                   <div key={index} className="group relative rounded-lg overflow-hidden bg-gray-100">
                     <div className="aspect-w-16 aspect-h-9">
                       <img
                         src={item.img || item.imagePlaceholder}
-                        alt={displayTitle}
+                        alt={item.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                       <div>
-                        <h4 className="text-white font-medium">{displayTitle}</h4>
-                        <p className="text-gray-200 text-sm">{displayDesc}</p>
+                        <h4 className="text-white font-medium">{item.title}</h4>
+                        <p className="text-gray-200 text-sm">{item.description}</p>
                       </div>
                     </div>
                   </div>

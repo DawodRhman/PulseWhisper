@@ -27,7 +27,9 @@ function serializeResource(resource) {
   return {
     id: resource.id,
     title: resource.title,
+    titleUr: resource.titleUr,
     description: resource.summary,
+    descriptionUr: resource.summaryUr,
     image: resource.media ? resource.media.url : "/images/placeholder.jpg",
     content: resource.content,
   };
@@ -38,11 +40,10 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
-    const { data, stale } = await resolveWithSnapshot(
+    const { data: snapshotData, stale } = await resolveWithSnapshot(
       SnapshotModule.EDUCATION,
       async () => {
         let resources = [];
-
         try {
           resources = await prisma.educationResource.findMany({
             orderBy: { createdAt: "desc" },
@@ -51,25 +52,35 @@ export async function GET(request) {
         } catch (dbError) {
           console.warn("⚠️ Database unreachable in Education API. Using empty list.");
         }
-
-        const hero = getHeroContent(lang);
-
-        const seo = await resolvePageSeo({
-          canonicalUrl: "/education",
-          fallback: {
-            title: `${hero.title} | Karachi Water & Sewerage Corporation`,
-            description: hero.subtitle,
-            ogImageUrl: hero.backgroundImage,
-          },
-        });
-
-        return {
-          hero,
-          resources: resources.map(serializeResource),
-          seo,
-        };
+        return { resources: resources.map(serializeResource) };
       }
     );
+
+    const hero = getHeroContent(lang);
+
+    const seo = await resolvePageSeo({
+      canonicalUrl: "/education",
+      fallback: {
+        title: `${hero.title} | Karachi Water & Sewerage Corporation`,
+        description: hero.subtitle,
+        ogImageUrl: hero.backgroundImage,
+      },
+    });
+
+    const translatedResources = snapshotData.resources.map(resource => ({
+      ...resource,
+      title: lang === 'ur' && resource.titleUr ? resource.titleUr : resource.title,
+      description: lang === 'ur' && resource.descriptionUr ? resource.descriptionUr : resource.description,
+    }));
+
+    return NextResponse.json({
+      data: {
+        hero,
+        resources: translatedResources,
+        seo
+      },
+      meta: { stale }
+    });
 
     return NextResponse.json({ data, meta: { stale } });
   } catch (error) {

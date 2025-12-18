@@ -128,7 +128,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
-    const { data, stale } = await resolveWithSnapshot(
+    const { data: snapshotData, stale } = await resolveWithSnapshot(
       SnapshotModule.SERVICES,
       async () => {
         let categories = [];
@@ -157,11 +157,25 @@ export async function GET(request) {
           });
         } catch (dbError) {
           console.warn("Database unreachable in services API, using fallback data.", dbError?.message);
-          categories = mapServicesFallback(lang);
+          // Return empty or fallback? better to return empty here and handle fallback outside if caching matches
+          // But mapServicesFallback relies on content... 
+          // Let's return raw fallback if db fails
+           categories = mapServicesFallback('en'); // Always cache 'en' or raw
         }
+        return { categories };
+      }
+    );
 
-        // Translate database categories if they exist
-        if (Array.isArray(categories) && categories.length > 0) {
+    // Contextualize data based on lang
+    let { categories } = snapshotData;
+
+    // Handle Fallback if empty (double check logic)
+    if (!categories || categories.length === 0) {
+         categories = mapServicesFallback(lang);
+    }
+
+    // Translate
+    if (Array.isArray(categories)) {
           categories = categories.map(category => ({
             ...category,
             title: lang === 'ur' && category.titleUr ? category.titleUr : category.title,
@@ -179,22 +193,19 @@ export async function GET(request) {
               })),
             })),
           }));
-        } else if (!Array.isArray(categories) || categories.length === 0) {
-          categories = mapServicesFallback(lang);
-        }
+    }
 
-        const hero = getFallbackHero(lang);
-        const seo = await buildSeoPayload(hero);
+    const hero = getFallbackHero(lang);
+    const seo = await buildSeoPayload(hero);
 
-        return {
-          hero,
-          categories,
-          seo,
-        };
-      }
-    );
-
-    return jsonResponse({ data, meta: { stale } });
+    return jsonResponse({ 
+      data: {
+        hero,
+        categories,
+        seo
+      }, 
+      meta: { stale } 
+    });
   } catch (error) {
     console.error("GET /api/services", error);
     const fallbackPayload = {

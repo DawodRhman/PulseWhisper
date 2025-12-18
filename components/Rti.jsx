@@ -35,8 +35,6 @@ export default function Rti() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14">
             {documents.map((doc, index) => {
-              const displayTitle = (isUrdu && doc.titleUr) ? doc.titleUr : doc.title;
-              const displayDesc = (isUrdu && doc.descriptionUr) ? doc.descriptionUr : doc.description;
               return (
               <Fade key={index} direction="up" triggerOnce duration={1000} delay={index * 100}>
                 <div className="bg-white rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-14 hover:shadow-xl transition-shadow duration-300">
@@ -51,10 +49,10 @@ export default function Rti() {
                     </div>
                   </div>
                   <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
-                    {displayTitle}
+                    {doc.title}
                   </h3>
                   <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-base text-gray-600 mb-3 sm:mb-4 leading-relaxed">
-                    {displayDesc}
+                    {doc.description}
                   </p>
                   <Link
                     href={doc.link}

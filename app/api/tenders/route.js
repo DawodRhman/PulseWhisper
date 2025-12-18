@@ -28,7 +28,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
-    const { data, stale } = await resolveWithSnapshot(
+    const { data: snapshotData, stale } = await resolveWithSnapshot(
       SnapshotModule.TENDERS,
       async () => {
         const tenders = await prisma.tender.findMany({
@@ -52,7 +52,11 @@ export async function GET(request) {
               id: tender.id,
               tenderNumber: tender.tenderNumber,
               title: tender.title,
+              titleUr: tender.titleUr,
               summary: tender.summary,
+              summaryUr: tender.summaryUr,
+              description: tender.description,
+              descriptionUr: tender.descriptionUr,
               status: tender.status,
               publishedAt: tender.publishedAt,
               closingAt: tender.closingAt,
@@ -64,28 +68,42 @@ export async function GET(request) {
               })),
             }));
 
-        const hero = getHeroContent(lang);
-
-        const seo = await resolvePageSeo({
-          canonicalUrl: "/tenders",
-          fallback: {
-            title: `${hero.title} | Karachi Water & Sewerage Corporation`,
-            description: hero.subtitle,
-            ogImageUrl: hero.backgroundImage,
-          },
-        });
-
         return {
-          hero,
           open: serialize(TenderStatus.OPEN),
           closed: serialize(TenderStatus.CLOSED),
           cancelled: serialize(TenderStatus.CANCELLED),
-          seo,
         };
       }
     );
 
-    return NextResponse.json({ data, meta: { stale } });
+    const hero = getHeroContent(lang);
+    
+    const seo = await resolvePageSeo({
+      canonicalUrl: "/tenders",
+      fallback: {
+        title: `${hero.title} | Karachi Water & Sewerage Corporation`,
+        description: hero.subtitle,
+        ogImageUrl: hero.backgroundImage,
+      },
+    });
+
+    const localizeTenders = (list) => list.map(item => ({
+      ...item,
+      title: lang === 'ur' && item.titleUr ? item.titleUr : item.title,
+      summary: lang === 'ur' && item.summaryUr ? item.summaryUr : item.summary,
+      description: lang === 'ur' && item.descriptionUr ? item.descriptionUr : item.description,
+    }));
+
+    return NextResponse.json({ 
+      data: {
+        hero,
+        open: localizeTenders(snapshotData.open),
+        closed: localizeTenders(snapshotData.closed),
+        cancelled: localizeTenders(snapshotData.cancelled),
+        seo
+      }, 
+      meta: { stale } 
+    });
   } catch (error) {
     console.error("GET /api/tenders", error);
     return NextResponse.json(

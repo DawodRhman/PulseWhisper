@@ -1,9 +1,4 @@
 {
-  "hero": {
-    "title": "تعلیم اور آگاہی",
-    "subtitle": "پانی کی حفاظت اور حفظان صحت کے بارے میں علم کے ساتھ کمیونٹی کو بااختیار بنانا۔",
-    "backgroundImage": "/karachicharminar.gif"
-  },
   "resources": [
     {
       "id": "7a466ef2-da85-418c-971e-9c0ff11412ca",
@@ -23,18 +18,5 @@
         "body": "Turn off the tap while brushing teeth. Fix leaks immediately."
       }
     }
-  ],
-  "seo": {
-    "id": null,
-    "title": "تعلیم اور آگاہی | Karachi Water & Sewerage Corporation",
-    "description": "پانی کی حفاظت اور حفظان صحت کے بارے میں علم کے ساتھ کمیونٹی کو بااختیار بنانا۔",
-    "keywords": null,
-    "canonicalUrl": "/education",
-    "ogTitle": "تعلیم اور آگاہی | Karachi Water & Sewerage Corporation",
-    "ogDescription": "پانی کی حفاظت اور حفظان صحت کے بارے میں علم کے ساتھ کمیونٹی کو بااختیار بنانا۔",
-    "ogImageUrl": "/karachicharminar.gif",
-    "twitterCard": "summary_large_image",
-    "structuredData": null,
-    "allowIndexing": true
-  }
+  ]
 }

@@ -183,11 +183,6 @@ export default function Tenders() {
     const isExpanded = tabName === "open" && openId === item.id;
     const status = tabName === "open" ? (item.category?.label || item.type || "Tender") : (tabName === "closed" ? "Closed" : "Cancelled");
 
-    const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
-    const displayDesc = (isUrdu && (item.summaryUr || item.descriptionUr)) 
-                        ? (item.summaryUr || item.descriptionUr) 
-                        : (item.summary || item.description || "No description available.");
-
     const typeClasses = {
       Procurement: "bg-green-100 text-green-800 border-green-400",
       Construction: "bg-orange-100 text-orange-800 border-orange-400",
@@ -209,8 +204,8 @@ export default function Tenders() {
             <span className={`px-4 py-2 rounded-full text-base font-semibold ${chipColor} mb-4 inline-block`}>
               {status}
             </span>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2" title={displayTitle}>{displayTitle}</h3>
-            <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-1">{displayDesc}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2" title={item.title}>{item.title}</h3>
+            <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-1">{item.summary || item.description || "No description available."}</p>
           </div>
           
           {/* ... (rest of TenderCard, make sure to use displayDesc in expanded area too if needed) */}
@@ -219,7 +214,7 @@ export default function Tenders() {
           {/* Footer/Actions */}
           <div className="mt-auto pt-4">
             <span className="text-gray-500 text-base block mb-3">
-              {tabName === "open" ? "Due Date:" : "Closed/Cancelled Date:"} {item.closingAt ? new Date(item.closingAt).toLocaleDateString() : "N/A"}
+              {tabName === "open" ? t("tenders.dueDate") : t("tenders.closedDate")} {item.closingAt ? new Date(item.closingAt).toLocaleDateString() : "N/A"}
             </span>
 
             {/* Action Buttons */}
@@ -252,7 +247,7 @@ export default function Tenders() {
           {/* Expanded Details (For Open Tenders Only) */}
           {isExpanded && (
             <div id={`details-${item.id}`} className="mt-5 pt-5 border-t border-blue-200">
-              <p className="text-base text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg font-medium">{displayDesc}</p>
+              <p className="text-base text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg font-medium">{item.summary || item.description || "No description available."}</p>
               {item.attachments && item.attachments.length > 0 && (
                 <div className="mt-5">
                   <h4 className="text-base font-semibold text-gray-700 mb-2">Documents:</h4>

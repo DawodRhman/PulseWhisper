@@ -28,7 +28,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
-    const { data, stale } = await resolveWithSnapshot(
+    const { data: snapshotData, stale } = await resolveWithSnapshot(
       SnapshotModule.NEWS,
       async () => {
         const [categories, articles] = await Promise.all([
@@ -47,31 +47,43 @@ export async function GET(request) {
           }),
         ]);
 
-        const hero = getHeroContent(lang);
-
-        const seo = await resolvePageSeo({
-          canonicalUrl: "/news",
-          fallback: {
-            title: `${hero.title} | Karachi Water & Sewerage Corporation`,
-            description: hero.subtitle,
-            ogImageUrl: hero.backgroundImage,
-          },
-        });
-
         return {
-          hero,
           categories,
           articles: articles.map((article) => ({
             ...article,
-            title: lang === 'ur' && article.titleUr ? article.titleUr : article.title,
-            subtitle: lang === 'ur' && article.subtitleUr ? article.subtitleUr : article.subtitle,
-            summary: lang === 'ur' && article.summaryUr ? article.summaryUr : article.summary,
             tags: article.tags.map((map) => map.tag),
           })),
-          seo,
         };
       }
     );
+
+    const hero = getHeroContent(lang);
+
+    const seo = await resolvePageSeo({
+      canonicalUrl: "/news",
+      fallback: {
+        title: `${hero.title} | Karachi Water & Sewerage Corporation`,
+        description: hero.subtitle,
+        ogImageUrl: hero.backgroundImage,
+      },
+    });
+
+    const translatedArticles = snapshotData.articles.map((article) => ({
+      ...article,
+      title: lang === 'ur' && article.titleUr ? article.titleUr : article.title,
+      subtitle: lang === 'ur' && article.subtitleUr ? article.subtitleUr : article.subtitle,
+      summary: lang === 'ur' && article.summaryUr ? article.summaryUr : article.summary,
+    }));
+
+    return NextResponse.json({
+      data: {
+        hero,
+        categories: snapshotData.categories,
+        articles: translatedArticles,
+        seo,
+      },
+      meta: { stale }
+    });
 
     return NextResponse.json({ data, meta: { stale } });
   } catch (error) {

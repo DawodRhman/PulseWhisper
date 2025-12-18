@@ -1,9 +1,13 @@
 {
   "hero": {
     "eyebrow": "Karachi Water & Sewerage Corporation",
+    "eyebrowUr": "کراچی واٹر اینڈ سیوریج کارپوریشن",
     "title": "Committed to Deliver",
+    "titleUr": "پہنچانے کے لیے پرعزم",
     "subtitle": "Ensuring clean, safe water supply and efficient sewerage services for Karachi.",
+    "subtitleUr": "کراچی کے لیے صاف اور محفوظ پانی کی فراہمی اور موثر سیوریج خدمات کو یقینی بنانا۔",
     "ctaLabel": "Learn About KW&SC",
+    "ctaLabelUr": "KW&SC کے بارے میں جانیں",
     "ctaHref": "/aboutus",
     "backgroundImage": "/karachicharminar.gif"
   },
@@ -82,7 +86,9 @@
     {
       "id": "733a1a7f-43cb-4b1d-a1e0-6133e263e842",
       "title": "K-IV Water Supply Project (Phase-I)",
+      "titleUr": null,
       "summary": "Add 260 MGD of water to the Karachi system, including bulk conveyance, pumping stations, and distribution upgrades.",
+      "summaryUr": null,
       "status": "COMPLETED",
       "category": null,
       "progress": null,
@@ -101,7 +107,9 @@
     {
       "id": "01413fdf-6715-4931-a7cc-98d6387c3d33",
       "title": "One",
+      "titleUr": null,
       "summary": "aa",
+      "summaryUr": null,
       "status": "PLANNED",
       "category": null,
       "progress": null,
@@ -120,7 +128,9 @@
     {
       "id": "91832dff-0ca5-4c45-b041-0072ddc3e530",
       "title": "Dhabeji Pumping Station Rehabilitation",
+      "titleUr": null,
       "summary": "Rehabilitation and upgrade of pumping machinery at Dhabeji to ensure optimal transmission capacity and reduced downtime.",
+      "summaryUr": null,
       "status": "ONGOING",
       "category": null,
       "progress": null,
@@ -139,7 +149,9 @@
     {
       "id": "0bd7f31a-99d1-441d-95a8-740383856b8d",
       "title": "Sewerage System Overhaul (District East)",
+      "titleUr": null,
       "summary": "Replacement of damaged sewage lines and construction of new disposal structures in District East.",
+      "summaryUr": null,
       "status": "ONGOING",
       "category": null,
       "progress": null,
@@ -158,7 +170,9 @@
     {
       "id": "b06875d7-b92c-4044-8200-58e53ae05b73",
       "title": "Water Tanker Service Digitization",
+      "titleUr": null,
       "summary": "Centralized digital system for managing tanker requests, tracking, and billing to improve transparency.",
+      "summaryUr": null,
       "status": "PLANNING",
       "category": null,
       "progress": null,
@@ -177,7 +191,9 @@
     {
       "id": "a3dcfe6a-d2b6-4835-bea7-5e5299179455",
       "title": "Gadani Bulk Water Supply Scheme",
+      "titleUr": null,
       "summary": "Construction of a new bulk water line to connect Gadani to the main KW&SC network.",
+      "summaryUr": null,
       "status": "PAUSED",
       "category": null,
       "progress": null,
@@ -282,84 +298,108 @@
     {
       "id": "ff5b39e6-13f1-47ad-bab7-6170016cc6d3",
       "title": "Hydrant Management Cell",
+      "titleUr": null,
       "summary": "Established comprehensive hydrant management system to combat illegal water connections.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/airdrop.png"
     },
     {
       "id": "e93fbadd-c6b5-44b8-8327-1298ce4f6169",
       "title": "Hydrant Management Cell",
+      "titleUr": null,
       "summary": "Established comprehensive hydrant management system to combat illegal water connections.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/airdrop.png"
     },
     {
       "id": "740ccad0-8b01-4f3a-a353-ecb3f3cff7e6",
       "title": "Global Water Summit 2024",
+      "titleUr": null,
       "summary": "Represented Pakistan at the prestigious Global Water Summit in London.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/people.png"
     },
     {
       "id": "39b94eed-35c4-40eb-aed0-3a578121a780",
       "title": "Global Water Summit 2024",
+      "titleUr": null,
       "summary": "Represented Pakistan at the prestigious Global Water Summit in London.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/people.png"
     },
     {
       "id": "2dbda31c-ac33-4f38-87f5-40aaa0e454c5",
       "title": "Rangers Partnership",
+      "titleUr": null,
       "summary": "Joined forces with Pakistan Rangers to combat illegal hydrants and water theft.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/microphone.png"
     },
     {
       "id": "73eab873-32f6-499b-99ea-8363e63c9f3d",
       "title": "Rangers Partnership",
+      "titleUr": null,
       "summary": "Joined forces with Pakistan Rangers to combat illegal hydrants and water theft.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/microphone.png"
     },
     {
       "id": "0ae0d490-b58d-4a3b-9c00-da1e1a833271",
       "title": "Fareeda Salam Center",
+      "titleUr": null,
       "summary": "Established community development center to engage with local communities.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/user-icon.png"
     },
     {
       "id": "64bc2bfd-c582-41c8-b74a-aad48547db37",
       "title": "Fareeda Salam Center",
+      "titleUr": null,
       "summary": "Established community development center to engage with local communities.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/user-icon.png"
     },
     {
       "id": "a617288d-c85d-4c96-93fa-e129db25571a",
       "title": "Grievance Redressal",
+      "titleUr": null,
       "summary": "Introduced comprehensive GRM cell to address customer complaints.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/clipboar02.svg"
     },
     {
       "id": "56917932-21aa-4d68-b498-a32e39341e5a",
       "title": "Grievance Redressal",
+      "titleUr": null,
       "summary": "Introduced comprehensive GRM cell to address customer complaints.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/clipboar02.svg"
     },
     {
       "id": "5ca2e5eb-6a78-4400-af99-8292f9b1910c",
       "title": "Digital Transformation",
+      "titleUr": null,
       "summary": "Implemented online billing, mobile apps, and automated systems.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/medal-star.svg"
     },
     {
       "id": "e52e6ca4-b926-4981-9a17-e2413c9c54f5",
       "title": "Digital Transformation",
+      "titleUr": null,
       "summary": "Implemented online billing, mobile apps, and automated systems.",
+      "summaryUr": null,
       "metric": "2024",
       "icon": "/icon/medal-star.svg"
     }
@@ -368,24 +408,28 @@
     {
       "id": "a438fda9-8a19-4c4b-a972-e91c47378978",
       "label": "Water Connections",
+      "labelUr": null,
       "value": 12,
       "suffix": "M"
     },
     {
       "id": "15babf04-5d4d-4d2e-be96-b056a5cc9af7",
       "label": "Sewerage Connections",
+      "labelUr": null,
       "value": 8,
       "suffix": "M"
     },
     {
       "id": "c850afb9-13be-40ea-9b1e-15ce38447e01",
       "label": "Years of Service",
+      "labelUr": null,
       "value": 22,
       "suffix": ""
     },
     {
       "id": "b41cd5ab-0fa5-4f05-accf-2544f4d5bf43",
       "label": "Water Treatment Plants",
+      "labelUr": null,
       "value": 12,
       "suffix": ""
     }
@@ -395,7 +439,9 @@
       "id": "01",
       "originalId": "4355f518-1383-48a3-aff1-e951e8d7000c",
       "title": "Bulk Water Supply & Treatment",
+      "titleUr": null,
       "summary": "Managing abstraction of raw water, pumping systems, and treatment operations across Karachi.",
+      "summaryUr": null,
       "theme": null,
       "order": 0
     },
@@ -403,7 +449,9 @@
       "id": "02",
       "originalId": "06bbe035-15b9-498e-9188-6da4bfc93483",
       "title": "Bulk Water Supply & Treatment",
+      "titleUr": null,
       "summary": "Managing abstraction of raw water, pumping systems, and treatment operations across Karachi.",
+      "summaryUr": null,
       "theme": null,
       "order": 0
     },
@@ -411,7 +459,9 @@
       "id": "03",
       "originalId": "047373d2-a232-4443-ad82-de3f3ec1b53a",
       "title": "Sewerage Infrastructure Management",
+      "titleUr": null,
       "summary": "Planning, operating, and maintaining the sewerage network, pumping stations, and treatment of wastewater.",
+      "summaryUr": null,
       "theme": null,
       "order": 1
     },
@@ -419,7 +469,9 @@
       "id": "04",
       "originalId": "dd1cfa40-8934-4b15-bd1e-2af3c1b7e0bd",
       "title": "Sewerage Infrastructure Management",
+      "titleUr": null,
       "summary": "Planning, operating, and maintaining the sewerage network, pumping stations, and treatment of wastewater.",
+      "summaryUr": null,
       "theme": null,
       "order": 1
     },
@@ -427,7 +479,9 @@
       "id": "05",
       "originalId": "17e3b43e-b50b-4085-b69f-8e48334ad708",
       "title": "Distribution & Network Integrity",
+      "titleUr": null,
       "summary": "Managing the distribution network, reducing NRW, and minimizing illegal connections through asset rehabilitation.",
+      "summaryUr": null,
       "theme": null,
       "order": 2
     },
@@ -435,7 +489,9 @@
       "id": "06",
       "originalId": "949ceb2a-990a-4fc9-a4b5-aaf9243b49c5",
       "title": "Distribution & Network Integrity",
+      "titleUr": null,
       "summary": "Managing the distribution network, reducing NRW, and minimizing illegal connections through asset rehabilitation.",
+      "summaryUr": null,
       "theme": null,
       "order": 2
     },
@@ -443,7 +499,9 @@
       "id": "07",
       "originalId": "b33cb3f5-77d0-4f3a-bbcb-126598bbd277",
       "title": "Revenue, Customer & Governance",
+      "titleUr": null,
       "summary": "Driving financial sustainability, accurate metering, billing, grievance redressal, and governance.",
+      "summaryUr": null,
       "theme": null,
       "order": 3
     },
@@ -451,7 +509,9 @@
       "id": "08",
       "originalId": "4b551c6a-a25d-4308-8c71-b1a5fd9f97c3",
       "title": "Revenue, Customer & Governance",
+      "titleUr": null,
       "summary": "Driving financial sustainability, accurate metering, billing, grievance redressal, and governance.",
+      "summaryUr": null,
       "theme": null,
       "order": 3
     }
@@ -534,71 +594,103 @@
     {
       "id": "1656fe45-759a-4df7-a54c-1a7d155adf03",
       "question": "How can I get a new water connection?",
+      "questionUr": null,
       "answer": "For residential, commercial, bulk, or industrial connections, submit an application with required documents at the nearest KW&SC office. The process includes site inspection, approval, and installation.",
-      "category": "New Connection"
+      "answerUr": null,
+      "category": "New Connection",
+      "categoryUr": null
     },
     {
       "id": "ca72ffc4-bf9d-482f-99a6-2fe31ff55f8e",
       "question": "How can I get a duplicate bill?",
+      "questionUr": null,
       "answer": "Visit web.kwsb.crdc.biz or the nearest KW&SC office with your account number and CNIC to get a duplicate bill.",
-      "category": "Billing"
+      "answerUr": null,
+      "category": "Billing",
+      "categoryUr": null
     },
     {
       "id": "051d63b1-d92b-4daf-9ae0-445452e55bc7",
       "question": "Where can I complain about sewerage?",
+      "questionUr": null,
       "answer": "Use complain.kwsc.gos.pk or call (+92) 021 111 597 200 to log sewerage complaints.",
-      "category": "Complaints"
+      "answerUr": null,
+      "category": "Complaints",
+      "categoryUr": null
     },
     {
       "id": "3509bd80-8c01-40b1-8338-b0d2f6a738a0",
       "question": "How can I order a water tanker?",
+      "questionUr": null,
       "answer": "Book through campaign.kwsc.gos.pk or by calling our customer service helpline.",
-      "category": "Tanker Service"
+      "answerUr": null,
+      "category": "Tanker Service",
+      "categoryUr": null
     },
     {
       "id": "70ce47ed-d801-43e6-a164-d6156e59c9d5",
       "question": "How can I report water theft?",
+      "questionUr": null,
       "answer": "Call (+92) 021 111 597 200 or contact the Hydrant Management Cell to report illegal connections.",
-      "category": "Water Theft"
+      "answerUr": null,
+      "category": "Water Theft",
+      "categoryUr": null
     },
     {
       "id": "753c770d-ddb2-472a-a2f7-210ef3a4b9d0",
       "question": "How can I get a new water connection?",
+      "questionUr": null,
       "answer": "For residential, commercial, bulk, or industrial connections, submit an application with required documents at the nearest KW&SC office. The process includes site inspection, approval, and installation.",
-      "category": "New Connection"
+      "answerUr": null,
+      "category": "New Connection",
+      "categoryUr": null
     },
     {
       "id": "9fc33e96-8f6b-470f-b251-07c46205a7b9",
       "question": "How can I get a duplicate bill?",
+      "questionUr": null,
       "answer": "Visit web.kwsb.crdc.biz or the nearest KW&SC office with your account number and CNIC to get a duplicate bill.",
-      "category": "Billing"
+      "answerUr": null,
+      "category": "Billing",
+      "categoryUr": null
     },
     {
       "id": "3f5c2683-3677-4e0e-9e42-0293928085f3",
       "question": "Where can I complain about sewerage?",
+      "questionUr": null,
       "answer": "Use complain.kwsc.gos.pk or call (+92) 021 111 597 200 to log sewerage complaints.",
-      "category": "Complaints"
+      "answerUr": null,
+      "category": "Complaints",
+      "categoryUr": null
     },
     {
       "id": "c346afab-88e7-498c-a93f-9df322dd16bb",
       "question": "How can I order a water tanker?",
+      "questionUr": null,
       "answer": "Book through campaign.kwsc.gos.pk or by calling our customer service helpline.",
-      "category": "Tanker Service"
+      "answerUr": null,
+      "category": "Tanker Service",
+      "categoryUr": null
     },
     {
       "id": "0808a4ea-bb6b-4a18-8430-e3c297f2eec8",
       "question": "How can I report water theft?",
+      "questionUr": null,
       "answer": "Call (+92) 021 111 597 200 or contact the Hydrant Management Cell to report illegal connections.",
-      "category": "Water Theft"
+      "answerUr": null,
+      "category": "Water Theft",
+      "categoryUr": null
     }
   ],
   "waterToday": [
     {
       "id": "fallback-update",
       "title": "Water Today – Daily Water Supply Status",
+      "titleUr": "آج کا پانی – روزانہ پانی کی فراہمی کی حیثیت",
       "summary": "Today's water distribution across Karachi remains stable, with major pumping stations operating at optimal capacity.",
+      "summaryUr": "کراچی میں آج کی پانی کی تقسیم مستحکم رہی، بڑے پمپنگ اسٹیشنز بہترین صلاحیت سے کام کر رہے ہیں۔",
       "status": "PUBLISHED",
-      "publishedAt": "2025-12-18T12:17:58.650Z",
+      "publishedAt": "2025-12-18T12:49:29.228Z",
       "media": {
         "url": "/downtownkarachi.gif"
       }
