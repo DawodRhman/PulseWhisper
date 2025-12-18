@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import ThemeProvider from "@/components/ThemeProvider";
 import I18nProvider from "@/components/I18nProvider";
+import GoogleTranslate from "@/components/GoogleTranslate";
 
 
 
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
             {children}
             <Footer />
             <CookieConsent />
+            <GoogleTranslate />
           </I18nProvider>
         </ThemeProvider>
       </body>

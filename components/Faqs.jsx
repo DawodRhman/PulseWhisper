@@ -49,12 +49,13 @@ export default function FAQs({ items }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [fetchedFaqs, setFetchedFaqs] = useState(null);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isUrdu = i18n.language === 'ur';
 
   useEffect(() => {
     if (!items || items.length === 0) {
-      fetch('/api/faqs')
+      const langParam = isUrdu ? '?lang=ur' : '?lang=en';
+      fetch(`/api/faqs${langParam}`)
         .then(res => res.json())
         .then(data => {
           if (data.data) {
@@ -82,7 +83,7 @@ export default function FAQs({ items }) {
         })
         .catch(err => console.error("Failed to fetch FAQs:", err));
     }
-  }, [items]);
+  }, [items, isUrdu]);
 
   const faqs = useMemo(() => normalizeFaqs(items || fetchedFaqs), [items, fetchedFaqs]);
   const localizedFaqs = useMemo(() => {
@@ -149,10 +150,10 @@ export default function FAQs({ items }) {
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 xl:mb-14 2xl:mb-16">
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900">
-            {isUrdu ? "عمومی سوالات" : "Common Questions"}
+            {t("Common Questions")}
           </h2>
           <p className="text-gray-500 mt-2 sm:mt-3 md:mt-4 text-xs sm:text-sm md:text-base lg:text-lg">
-            {isUrdu ? "ہمارے صارفین کے عام سوالات کے فوری جوابات۔" : "Quick answers to our most frequent inquiries."}
+            {t("faqs.description") || "Quick answers to our most frequent inquiries."}
           </p>
         </div>
 
@@ -178,7 +179,7 @@ export default function FAQs({ items }) {
                 className="w-full text-center"
               >
                 {/* Category Badge */}
-                  <span className="inline-block px-2 sm:px-3 md:px-4 lg:px-4 py-1 sm:py-1.5 md:py-2 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 md:mb-4 lg:mb-4">
+                <span className="inline-block px-2 sm:px-3 md:px-4 lg:px-4 py-1 sm:py-1.5 md:py-2 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 md:mb-4 lg:mb-4">
                   {localizedFaqs[currentIndex].category}
                 </span>
 
@@ -220,8 +221,8 @@ export default function FAQs({ items }) {
                   setCurrentIndex(index);
                 }}
                 className={`h-1.5 sm:h-2 md:h-2 lg:h-2.5 transition-all duration-300 ${index === currentIndex
-                    ? "w-4 sm:w-5 md:w-6 lg:w-7 xl:w-8 bg-blue-600 rounded-full"
-                    : "w-1.5 sm:w-2 md:w-2.5 lg:w-3 bg-gray-300 hover:bg-blue-300 rounded-full"
+                  ? "w-4 sm:w-5 md:w-6 lg:w-7 xl:w-8 bg-blue-600 rounded-full"
+                  : "w-1.5 sm:w-2 md:w-2.5 lg:w-3 bg-gray-300 hover:bg-blue-300 rounded-full"
                   }`}
                 aria-label={`Go to slide ${index + 1}`}
               />

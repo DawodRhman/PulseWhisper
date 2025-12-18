@@ -1,8 +1,4 @@
 {
-  "hero": {
-    "title": "KW&SC سے رابطہ کریں",
-    "subtitle": "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔"
-  },
   "channels": [
     {
       "id": "87f0ca87-b0fe-4a8c-ac1f-6a227026a5f4",
@@ -131,18 +127,5 @@
       "hours": null,
       "mapEmbedUrl": "https://www.google.com/maps?q=24.8733%2C66.997869&z=14&output=embed"
     }
-  ],
-  "seo": {
-    "id": null,
-    "title": "KW&SC سے رابطہ کریں | Karachi Water & Sewerage Corporation",
-    "description": "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔",
-    "keywords": null,
-    "canonicalUrl": "/contact",
-    "ogTitle": "KW&SC سے رابطہ کریں | Karachi Water & Sewerage Corporation",
-    "ogDescription": "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔",
-    "ogImageUrl": null,
-    "twitterCard": "summary_large_image",
-    "structuredData": null,
-    "allowIndexing": true
-  }
+  ]
 }

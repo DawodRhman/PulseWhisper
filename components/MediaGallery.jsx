@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { ChevronRight, Sun, Moon } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 
 const FALLBACK_MEDIA = [
     { name: "Water Treatment", title: "Hub Filtration Plant", imageUrl: "/bg-1.jpg" },
@@ -39,6 +40,7 @@ export default function MediaGallery({ items = [] }) {
             carouselBg: "bg-gradient-to-r from-gray-50 via-transparent to-gray-50",
         }
     };
+    const { t: i18n_t } = useTranslation();
     const t = isDarkTheme ? themeClasses.dark : themeClasses.light;
 
     // ...existing code...
@@ -81,10 +83,10 @@ export default function MediaGallery({ items = [] }) {
                 {/* Section Header */}
                 <div className="text-center mb-6 sm:mb-10 md:mb-12 lg:mb-16 pt-4 sm:pt-6 md:pt-8">
                     <p className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold ${t.headerText} transition-colors duration-500`}>
-                        KW&SC <span className={`${t.headerAccent}`}>GALLERY</span>
+                        {i18n_t("media.gallery.title") || "KW&SC GALLERY"}
                     </p>
                     <p className={`mt-2 sm:mt-3 md:mt-4 text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto ${t.subtitleText} transition-colors duration-500`}>
-                        Meet the dedicated individuals steering KW&SC towards a prosperous future for Karachi.
+                        {i18n_t("media.gallery.desc") || "Meet the dedicated individuals steering KW&SC towards a prosperous future for Karachi."}
                     </p>
                 </div>
             </div>
@@ -123,7 +125,7 @@ export default function MediaGallery({ items = [] }) {
                     href="/aboutus/leadership"
                     className={`inline-flex items-center gap-2 px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full text-sm sm:text-base md:text-lg font-semibold ${isDarkTheme ? 'bg-cyan-600 text-white hover:bg-cyan-700 shadow-xl' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-xl'} transition-all duration-300 hover:scale-105`}
                 >
-                    View All Leaders
+                    {i18n_t("media.gallery.viewAll") || "View All Leaders"}
                     <ChevronRight size={20} />
                 </a>
             </div>

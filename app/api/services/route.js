@@ -35,37 +35,68 @@ const FALLBACK_HERO = {
   }
 };
 
+/**
+ * Resolves localized content for an object.
+ * Checks for `[key]Ur` if lang is 'ur', otherwise falls back to `[key]`.
+ */
+function resolveLocalizedContent(item, lang, keys = ['title', 'summary', 'description', 'heading', 'body']) {
+  if (!item) return item;
+  const isUrdu = lang === 'ur';
+  const resolved = { ...item };
+
+  keys.forEach(key => {
+    const urKey = `${key}Ur`;
+    if (isUrdu && item[urKey]) {
+      resolved[key] = item[urKey];
+    }
+  });
+
+  return resolved;
+}
+
 function getFallbackHero(lang = 'en') {
   return FALLBACK_HERO[lang] || FALLBACK_HERO.en;
 }
 
 function mapServicesFallback(lang = 'en') {
+  // Use the new resolve logic even for fallback mapping if possible, 
+  // but here we just need to return the correct structure.
   const hero = getFallbackHero(lang);
+
+  // Note: content.services is static data, assuming it might have Ur keys or just be English defaults.
+  // For safety, we just use it as base.
   const services = content?.services || {};
   const cards = Array.isArray(services.cards) ? services.cards : [];
   const sections = Array.isArray(services.sections) ? services.sections : [];
 
-  const mappedCards = cards.map((card, index) => ({
-    id: `fallback-card-${index}`,
-    categoryId: "fallback-category",
-    title: card.title || `Service ${index + 1}`,
-    summary: card.description || null,
-    description: card.description || null,
-    iconKey: card.iconKey || "FaTint",
-    gradientClass: card.gradient || "from-blue-100 to-blue-300",
-    order: index,
-    seo: null,
-    media: null,
-    details: [],
-  }));
+  const mappedCards = cards.map((card, index) => {
+    // Resolve static content if it has keys
+    const resolvedCard = resolveLocalizedContent(card, lang);
+    return {
+      id: `fallback-card-${index}`,
+      categoryId: "fallback-category",
+      title: resolvedCard.title || `Service ${index + 1}`,
+      summary: resolvedCard.description || null,
+      description: resolvedCard.description || null, // API uses description/summary
+      iconKey: card.iconKey || "FaTint",
+      gradientClass: card.gradient || "from-blue-100 to-blue-300",
+      order: index,
+      seo: null,
+      media: null,
+      details: [],
+    };
+  });
 
-  const mappedDetails = sections.map((section, index) => ({
-    id: `fallback-detail-${index}`,
-    heading: section.heading || `Detail ${index + 1}`,
-    body: section.body || null,
-    bulletPoints: Array.isArray(section.bulletPoints) ? section.bulletPoints : [],
-    order: index,
-  }));
+  const mappedDetails = sections.map((section, index) => {
+    const resolvedSection = resolveLocalizedContent(section, lang);
+    return {
+      id: `fallback-detail-${index}`,
+      heading: resolvedSection.heading || `Detail ${index + 1}`,
+      body: resolvedSection.body || null,
+      bulletPoints: Array.isArray(section.bulletPoints) ? section.bulletPoints : [],
+      order: index,
+    };
+  });
 
   if (mappedCards.length && mappedDetails.length) {
     mappedCards[0].details = mappedDetails;
@@ -73,7 +104,7 @@ function mapServicesFallback(lang = 'en') {
     mappedCards.push({
       id: "fallback-card-details",
       categoryId: "fallback-category",
-      title: "Our Services",
+      title: hero.title, // Use hero title as fallback card title
       summary: null,
       description: null,
       iconKey: "FaTint",
@@ -85,19 +116,6 @@ function mapServicesFallback(lang = 'en') {
     });
   }
 
-  const mappedResources = [];
-  sections.forEach((section, sectionIndex) => {
-    (section.resources || []).forEach((resource, resourceIndex) => {
-      mappedResources.push({
-        id: `fallback-resource-${sectionIndex}-${resourceIndex}`,
-        title: resource.title || "Resource",
-        description: resource.description || null,
-        externalUrl: resource.url || null,
-        media: resource.url ? { url: resource.url } : null,
-      });
-    });
-  });
-
   return [
     {
       id: "fallback-category",
@@ -107,7 +125,7 @@ function mapServicesFallback(lang = 'en') {
       order: 0,
       seo: null,
       cards: mappedCards,
-      resources: mappedResources,
+      resources: [], // Simplified for fallback
     },
   ];
 }
@@ -123,11 +141,30 @@ function buildSeoPayload(hero) {
   });
 }
 
+function normalizeCategory(category, lang) {
+  const resolvedCat = resolveLocalizedContent(category, lang);
+
+  if (resolvedCat.cards) {
+    resolvedCat.cards = resolvedCat.cards.map(card => {
+      const resolvedCard = resolveLocalizedContent(card, lang);
+
+      if (resolvedCard.details) {
+        resolvedCard.details = resolvedCard.details.map(detail =>
+          resolveLocalizedContent(detail, lang)
+        );
+      }
+      return resolvedCard;
+    });
+  }
+  return resolvedCat;
+}
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
+    // 1. Fetch Data (Snapshot or DB) - Raw Data (contains both En and Ur fields)
     const { data: snapshotData, stale } = await resolveWithSnapshot(
       SnapshotModule.SERVICES,
       async () => {
@@ -157,26 +194,20 @@ export async function GET(request) {
           });
         } catch (dbError) {
           console.warn("Database unreachable in services API, using fallback data.", dbError?.message);
-          // Return empty or fallback? better to return empty here and handle fallback outside if caching matches
-          // But mapServicesFallback relies on content... 
-          // Let's return raw fallback if db fails
-          categories = mapServicesFallback('en'); // Always cache 'en' or raw
+          return { categories: [] }; // Handle fallback below
         }
         return { categories };
       }
     );
 
-    // Contextualize data based on lang
     let { categories } = snapshotData;
 
-    // Handle Fallback if empty (double check logic)
+    // 2. Handle Empty Data with Fallback
     if (!categories || categories.length === 0) {
       categories = mapServicesFallback(lang);
-    }
-
-    // Return raw category data for client-side localization
-    if (Array.isArray(categories)) {
-      // No server-side mapping needed
+    } else {
+      // 3. Normalize Data for Client (Server-Side Translation Resolution)
+      categories = categories.map(cat => normalizeCategory(cat, lang));
     }
 
     const hero = getFallbackHero(lang);
@@ -188,15 +219,18 @@ export async function GET(request) {
         categories,
         seo
       },
-      meta: { stale }
+      meta: { stale, lang }
     });
   } catch (error) {
     console.error("GET /api/services", error);
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const fallbackPayload = {
-      hero: FALLBACK_HERO,
-      categories: mapServicesFallback(),
+      hero: getFallbackHero(lang),
+      categories: mapServicesFallback(lang),
       seo: null,
     };
-    return jsonResponse({ data: fallbackPayload, meta: { stale: true } });
+    return jsonResponse({ data: fallbackPayload, meta: { stale: true, error: error.message } });
   }
 }

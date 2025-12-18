@@ -10,7 +10,7 @@ const fadeInUp = {
 };
 
 export default function GenericHero({ title, titleUr, subtitle, subtitleUr, backgroundImage, backgroundMeta }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isUrdu = i18n.language === 'ur';
 
   // Use uploaded asset (GIF/image) when available, otherwise fall back
@@ -19,8 +19,8 @@ export default function GenericHero({ title, titleUr, subtitle, subtitleUr, back
     backgroundMeta?.mimeType?.startsWith("video/") ||
     (typeof bgImage === "string" && bgImage.match(/\.(mp4)(\?|#|$)/i));
 
-  const displayTitle = (isUrdu && titleUr) ? titleUr : title;
-  const displaySubtitle = (isUrdu && subtitleUr) ? subtitleUr : subtitle;
+  const displayTitle = (isUrdu && titleUr) ? titleUr : t(title);
+  const displaySubtitle = (isUrdu && subtitleUr) ? subtitleUr : t(subtitle);
 
   return (
     <section
@@ -39,7 +39,7 @@ export default function GenericHero({ title, titleUr, subtitle, subtitleUr, back
           preload="metadata"
         />
       )}
-      
+
 
       <div className="absolute inset-0 bg-slate-900/80 z-0"></div>
 

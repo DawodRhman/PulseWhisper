@@ -100,9 +100,9 @@ const mockArticles = [
   },
 ];
 
-const NewsCard = ({ news, index, t, isUrdu }) => {
-  const displayTitle = (isUrdu && news.titleUr) ? news.titleUr : news.title;
-  const displaySummary = (isUrdu && news.descriptionUr) ? news.descriptionUr : news.summary;
+const NewsCard = ({ news, index, t }) => {
+  const displayTitle = news.title;
+  const displaySummary = news.description || news.summary;
 
   return (
     <div
@@ -169,14 +169,12 @@ function normalizeNews(articles) {
   return articles.map((article, index) => ({
     id: article.id || index,
     title: article.title,
-    titleUr: article.titleUr, // Add ur props
     date: article.publishedAt
       ? new Date(article.publishedAt).toLocaleDateString()
       : article.date || new Date().toLocaleDateString(),
     category: article.category?.title || article.type || "GENERAL",
     description: article.summary || article.description || "",
-    descriptionUr: article.summaryUr || article.descriptionUr, // Add ur props
-    summary: article.summary || article.description || "", // Keep summary for listing
+    summary: article.summary || article.description || "",
     icon: <Activity className="w-6 h-6 text-cyan-400" />,
     img:
       article.heroMedia?.url ||
@@ -205,13 +203,11 @@ function categorizNews(articles) {
   const latestUpdates = articles.slice(0, 5).map((article, index) => ({
     id: article.id || index,
     title: article.title,
-    titleUr: article.titleUr,
     date: article.publishedAt
       ? new Date(article.publishedAt).toLocaleDateString()
       : article.date || new Date().toLocaleDateString(),
     category: article.category?.title || article.type || "GENERAL",
     description: article.summary || article.description || "",
-    descriptionUr: article.summaryUr || article.descriptionUr,
     summary: article.summary || article.description || "",
     img:
       article.heroMedia?.url ||
@@ -228,12 +224,10 @@ function categorizNews(articles) {
     .map((article, index) => ({
       id: article.id || index,
       title: article.title,
-      titleUr: article.titleUr,
       date: article.publishedAt
         ? new Date(article.publishedAt).toLocaleDateString()
         : article.date || new Date().toLocaleDateString(),
       description: article.summary || article.description || "",
-      descriptionUr: article.summaryUr || article.descriptionUr,
       link: article.link || `/news/${article.slug || article.id}`,
       category: article.category?.title || "PRESS RELEASE",
     }));
@@ -243,9 +237,7 @@ function categorizNews(articles) {
     .map((article, index) => ({
       id: article.id || index,
       title: article.title,
-      titleUr: article.titleUr,
       description: article.summary || article.description || "",
-      descriptionUr: article.summaryUr || article.descriptionUr,
       type: article.category?.title || article.type || "MEDIA",
       img:
         article.heroMedia?.url ||
@@ -261,8 +253,7 @@ function categorizNews(articles) {
 
 export default function NewsUpdates() {
   const { data, loading: hookLoading, error } = useNewsData();
-  const { t, i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
+  const { t } = useTranslation();
   const [news, setNews] = useState([]);
   const [pressReleases, setPressReleases] = useState([]);
   const [mediaGallery, setMediaGallery] = useState([]);
@@ -342,10 +333,10 @@ export default function NewsUpdates() {
                         </span>
                       </div>
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                        {(isUrdu && item.titleUr) ? item.titleUr : item.title}
+                        {item.title}
                       </h3>
                       <p className="text-gray-600 mb-4">
-                        {(isUrdu && item.descriptionUr) ? item.descriptionUr : item.summary}
+                        {item.description || item.summary}
                       </p>
                       <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
                         {t('news.readMore')} <ChevronRight size={16} />
@@ -361,8 +352,8 @@ export default function NewsUpdates() {
           {activeTab === "press" && (
             <div className="grid grid-cols-1 gap-6">
               {pressReleases.map((item, index) => {
-                const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
-                const displayDesc = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.description;
+                const displayTitle = item.title;
+                const displayDesc = item.description;
                 return (
                   <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start mb-3">
@@ -406,8 +397,8 @@ export default function NewsUpdates() {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                       <div>
-                        <h4 className="text-white font-medium">{(isUrdu && item.titleUr) ? item.titleUr : item.title}</h4>
-                        <p className="text-gray-200 text-sm">{(isUrdu && item.descriptionUr) ? item.descriptionUr : item.description}</p>
+                        <h4 className="text-white font-medium">{item.title}</h4>
+                        <p className="text-gray-200 text-sm">{item.description}</p>
                       </div>
                     </div>
                   </div>

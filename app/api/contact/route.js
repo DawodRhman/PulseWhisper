@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
 import content from "@/data/static/content";
+import { resolveLocalizedContent } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +65,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
-    const { data, stale } = await resolveWithSnapshot(
+    const { data: snapshotData, stale } = await resolveWithSnapshot(
       SnapshotModule.CONTACT,
       async () => {
         let channels = [];
@@ -81,40 +82,53 @@ export async function GET(request) {
           offices = content.contact?.offices || [];
         }
 
-        const hero = getHeroContent(lang);
-
-        const seo = await resolvePageSeo({
-          canonicalUrl: "/contact",
-          fallback: {
-            title: `${hero.title} | Karachi Water & Sewerage Corporation`,
-            description: hero.subtitle,
-            ogImageUrl: hero.backgroundImage,
-          },
-        });
-
         return {
-          hero,
           channels: channels.map(channel => serializeChannel(channel)),
           offices: offices.map(office => serializeOffice(office)),
-          seo,
         };
       }
     );
 
-    return NextResponse.json({ data, meta: { stale } });
+    const hero = getHeroContent(lang);
+
+    const seo = await resolvePageSeo({
+      canonicalUrl: "/contact",
+      fallback: {
+        title: `${hero.title} | Karachi Water & Sewerage Corporation`,
+        description: hero.subtitle,
+        ogImageUrl: hero.backgroundImage,
+      },
+    });
+
+    const normalizedChannels = (snapshotData.channels || []).map(c => resolveLocalizedContent(c, lang));
+    const normalizedOffices = (snapshotData.offices || []).map(o => resolveLocalizedContent(o, lang, ['label', 'address']));
+
+    return NextResponse.json({
+      data: {
+        hero,
+        channels: normalizedChannels,
+        offices: normalizedOffices,
+        seo,
+      },
+      meta: { stale }
+    });
   } catch (error) {
     console.error("GET /api/contact", error);
     // Return fallback on total failure
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
     const hero = getHeroContent(lang);
+
+    // Fallback logic
     const channels = content.contact?.channels || [];
     const offices = content.contact?.offices || [];
+
+    // We should normalize fallbacks too if possible, but keep it simple for catch block
     return NextResponse.json({
       data: {
         hero,
-        channels: channels.map(channel => serializeChannel(channel, lang)),
-        offices: offices.map(office => serializeOffice(office, lang)),
+        channels: channels.map(c => resolveLocalizedContent({ ...c, ...serializeChannel(c) }, lang)), // Attempt to serialize then normalize
+        offices: offices.map(o => resolveLocalizedContent({ ...o, ...serializeOffice(o) }, lang)),
         seo: null
       },
       meta: { stale: true }

@@ -1,10 +1,12 @@
 'use client'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,20 +24,21 @@ const Subscribe = () => {
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || "Failed to subscribe");
+      if (!res.ok) throw new Error(data.error || t("subscribe.failed"));
 
-      setMessage(data.message || "Thank you for subscribing!");
+      setMessage(data.message || t("subscribe.success"));
       setEmail("");
     } catch (error) {
       console.error(error);
-      setMessage(error.message || "Something went wrong.");
+      setMessage(error.message || t("subscribe.error"));
     } finally {
       setLoading(false);
     }
   }
   return (
-   <>
-   <section className="relative bg-blue-900 overflow-hidden max-w-[85%] mx-auto py-14 my-10 rounded-xl">
+    <>
+      <section className="relative bg-blue-900 overflow-hidden max-w-[85%] mx-auto py-14 my-10 rounded-xl">
+        {/* ... (svgs) ... */}
         <div className="absolute top-8 left-10 pointer-events-none">
           <svg
             width="149"
@@ -57,7 +60,7 @@ const Subscribe = () => {
           </svg>
         </div>
 
-       
+
         <div className="absolute bottom-10 right-10 pointer-events-none">
           <svg
             width="149"
@@ -87,7 +90,7 @@ const Subscribe = () => {
           <div className="text-center">
             <div className="mb-4">
               <h2 className="text-5xl font-black text-white animate-textUpAndDowns">
-                Stay Connected With KW&SC <br />Water & Sewerage Services
+                {t("subscribe.title") || "Stay Connected With KW&SC Water & Sewerage Services"}
               </h2>
             </div>
           </div>
@@ -99,7 +102,7 @@ const Subscribe = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter Your Email"
+                placeholder={t("subscribe.placeholder") || "Enter Your Email"}
                 className=" placeholder:text-white w-full h-[80px] px-[30px] text-[18px] border border-white bg-transparent outline-none text-white focus:border-blue-400"
                 required
               />
@@ -136,7 +139,7 @@ const Subscribe = () => {
         {/* Bottom Spacer */}
         <div className="h-[150px] lg:h-[60px]"></div>
       </section>
-   </>
+    </>
   )
 }
 

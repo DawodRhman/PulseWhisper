@@ -31,6 +31,11 @@ const IconMap = {
 function getPopupAction(title) {
   if (!title) return null;
   const t = title.toLowerCase();
+  // Matching phrases in English or Urdu might still be needed if the logic depends on specific strings.
+  // Ideally this should use an ID or key, but for now we keep string matching.
+  // Since 'title' is now localized, we might need to match Urdu strings too if the API returns Urdu titles.
+  // The original code did: checks for "new connection" OR "نیا کنکشن"
+  // So existing logic is actually fine if 'title' is passed in as the localized string!
   if (t.includes("new connection") || t.includes("نیا کنکشن")) return "newConnection";
   if (t.includes("complaint") || t.includes("شکایات")) return "eComplaint";
   if (t.includes("tanker") || t.includes("ٹینکر")) return "bookTanker";
@@ -40,15 +45,17 @@ function getPopupAction(title) {
 
 function ServiceCardItem({ card }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
+  // useTranslation hook removed for data logic
 
   const Icon = IconMap[card.iconKey] || FaTint;
   const hasDetails = card.details && card.details.length > 0;
 
-  const displayTitle = (isUrdu && card.titleUr) ? card.titleUr : card.title;
-  const displaySummary = (isUrdu && (card.summaryUr || card.descriptionUr)) ? (card.summaryUr || card.descriptionUr) : (card.summary || card.description);
-  const displayDescription = (isUrdu && card.descriptionUr) ? card.descriptionUr : card.description;
+  // Direct access to normalized fields
+  const displayTitle = card.title;
+  // API should return 'summary' or 'description'. 
+  // We prefer 'summary' if available, else 'description'.
+  const displaySummary = card.summary || card.description;
+  const displayDescription = card.description;
 
   const popupAction = getPopupAction(displayTitle || "");
 
@@ -113,11 +120,11 @@ function ServiceCardItem({ card }) {
                 return (
                   <div key={detail.id} className="space-y-3">
                     <h4 className="text-xl font-semibold text-gray-800">
-                      {(isUrdu && detail.headingUr) ? detail.headingUr : detail.heading}
+                      {detail.heading}
                     </h4>
                     <div
                       className="text-gray-600 leading-relaxed prose prose-blue prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: (isUrdu && detail.bodyUr) ? detail.bodyUr : detail.body }}
+                      dangerouslySetInnerHTML={{ __html: detail.body }}
                     />
                     {detail.bulletPoints && detail.bulletPoints.length > 0 && (
                       <ul className="space-y-2 mt-3">
@@ -148,8 +155,6 @@ function ServiceCardItem({ card }) {
 
 function ServiceCategoryItem({ category }) {
   const [isOpen, setIsOpen] = useState(true);
-  const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
 
   return (
     <div className="space-y-6">
@@ -159,10 +164,10 @@ function ServiceCategoryItem({ category }) {
       >
         <div className="space-y-1">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-            {(isUrdu && category.titleUr) ? category.titleUr : category.title}
+            {category.title}
           </h2>
-          {(category.summary || category.summaryUr) && (
-            <p className="text-gray-600 max-w-2xl">{(isUrdu && category.summaryUr) ? category.summaryUr : category.summary}</p>
+          {category.summary && (
+            <p className="text-gray-600 max-w-2xl">{category.summary}</p>
           )}
         </div>
         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
@@ -190,9 +195,6 @@ export default function Services(props) {
   const { data, loading: dataLoading, error, stale } = useServicesData();
   const loading = !animationDone || dataLoading;
 
-  const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
-
   useEffect(() => {
     const loaderTimeline = gsap.timeline({ onComplete: () => setAnimationDone(true) });
     loaderTimeline
@@ -203,13 +205,10 @@ export default function Services(props) {
 
   if (loading) return <Loader />;
 
-  const propTitle = (isUrdu && props.titleUr) ? props.titleUr : props.title;
-  const dataTitle = data?.hero?.title;
-  const displayTitle = propTitle || dataTitle || "Our Services";
-
-  const propSubtitle = (isUrdu && props.subtitleUr) ? props.subtitleUr : props.subtitle;
-  const dataSubtitle = data?.hero?.subtitle;
-  const displaySubtitle = propSubtitle || dataSubtitle || "KW&SC provides essential services to the citizens of Karachi, ensuring efficient water supply, sewerage management, and digital accessibility.";
+  // Prefer data from hook as it's correctly localized now.
+  // Properties are used as fallback if data is missing, or if explicitly provided (though we prefer data for dynamic content)
+  const displayTitle = data?.hero?.title || props.title || "Our Services";
+  const displaySubtitle = data?.hero?.subtitle || props.subtitle || "KW&SC provides essential services to the citizens of Karachi, ensuring efficient water supply, sewerage management, and digital accessibility.";
 
   return (
     <>

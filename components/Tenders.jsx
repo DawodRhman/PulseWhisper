@@ -5,8 +5,8 @@ import { FiSearch, FiChevronUp, FiChevronDown, FiDownload } from "react-icons/fi
 import Link from "next/link";
 import { Fade } from "react-awesome-reveal";
 import gsap from "gsap";
-import { useLanguageStore } from "@/lib/stores/languageStore";
-
+import { useTranslation } from "react-i18next";
+import { useTendersData } from "@/hooks/useTendersData";
 
 // SearchFilter component
 const SearchFilter = React.memo(({ onFilterChange, allTenders, t }) => {
@@ -81,52 +81,22 @@ const SearchFilter = React.memo(({ onFilterChange, allTenders, t }) => {
 
 SearchFilter.displayName = "SearchFilter";
 
-import { useTranslation } from "react-i18next";
-
 export default function Tenders() {
-  const { i18n, t } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
+  const { t } = useTranslation();
 
-  const [openTenders, setOpenTenders] = useState([]);
-  const [closedTenders, setClosedTenders] = useState([]);
-  const [cancelledTenders, setCancelledTenders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Use custom hook for localized data
+  const { openTenders, closedTenders, cancelledTenders, loading, error } = useTendersData();
+
   const [openId, setOpenId] = useState(null);
   const [activeTab, setActiveTab] = useState("open");
   const [filters, setFilters] = useState({ searchTerm: "", filterType: "All" });
-  const { language } = useLanguageStore();
-
-  useEffect(() => {
-    async function fetchTenders() {
-      try {
-        const response = await fetch(`/api/tenders?lang=${language}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch tenders");
-        }
-        const json = await response.json();
-        const data = json.data || {};
-
-        setOpenTenders(data.open || []);
-        setClosedTenders(data.closed || []);
-        setCancelledTenders(data.cancelled || []);
-      } catch (err) {
-        console.error("Error fetching tenders:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchTenders();
-  }, [language]);
 
   // GSAP Loader Effect
   useEffect(() => {
     if (!loading) return;
 
     const loaderTimeline = gsap.timeline({
-      onComplete: () => setLoading(false),
+      // onComplete: () => setLoading(false), // Handled by hook
     });
 
     loaderTimeline
@@ -159,6 +129,7 @@ export default function Tenders() {
     const lowerSearchTerm = searchTerm.toLowerCase();
 
     return openTenders.filter(tender => {
+      // Data is already localized, so we search on 'title', 'summary', 'description'
       const matchesSearch =
         (tender.title?.toLowerCase().includes(lowerSearchTerm) || false) ||
         (tender.summary?.toLowerCase().includes(lowerSearchTerm) || false) ||
@@ -183,8 +154,9 @@ export default function Tenders() {
     const isExpanded = tabName === "open" && openId === item.id;
     const status = tabName === "open" ? (item.category?.label || item.type || "Tender") : (tabName === "closed" ? "Closed" : "Cancelled");
 
-    const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
-    const displayDesc = (isUrdu && (item.summaryUr || item.descriptionUr)) ? (item.summaryUr || item.descriptionUr) : (item.summary || item.description || "No description available.");
+    // Simplified data access
+    const displayTitle = item.title;
+    const displayDesc = (item.summary || item.description) || "No description available.";
 
     const typeClasses = {
       Procurement: "bg-green-100 text-green-800 border-green-400",
@@ -210,9 +182,6 @@ export default function Tenders() {
             <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2" title={displayTitle}>{displayTitle}</h3>
             <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-1">{displayDesc}</p>
           </div>
-
-          {/* ... (rest of TenderCard, make sure to use displayDesc in expanded area too if needed) */}
-
 
           {/* Footer/Actions */}
           <div className="mt-auto pt-4">
@@ -285,10 +254,10 @@ export default function Tenders() {
           <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24">
             <Fade direction="down" triggerOnce duration={1000}>
               <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-blue-900">
-                Tenders
+                {t("Tenders")}
               </h2>
               <p className="mt-4 text-slate-300 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto">
-                Official tender notices, procurement opportunities, and bidding documents
+                {t("tenders.subtitle") || "Official tender notices, procurement opportunities, and bidding documents"}
               </p>
             </Fade>
           </div>

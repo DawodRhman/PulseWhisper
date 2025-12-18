@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide Google Translate Toolbar & Widget */
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+body {
+    top: 0px !important;
+}
+#google_translate_element {
+    display: none !important;
+}
+.skiptranslate {
+    display: none !important;
+}
+iframe.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

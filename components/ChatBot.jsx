@@ -14,7 +14,7 @@ export default function ChatBot() {
 
     useEffect(() => {
         setMessages([
-            { from: "bot", text: t("services.assistantGreeting") || "How can I help you today?" }
+            { from: "bot", text: t("services.assistantGreeting") }
         ]);
 
         // Warm up backend
@@ -77,7 +77,7 @@ export default function ChatBot() {
             <button
                 onClick={() => setIsOpen(prev => !prev)}
                 className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full overflow-hidden shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.7)] hover:scale-110"
-                title={t("services.kwscAssistant") || "Chat with KWSC Assistant"}
+                title={t("services.kwscAssistant")}
             >
                 <img
                     src="/Ai_Bot.png"
@@ -94,7 +94,7 @@ export default function ChatBot() {
                             <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
                                 <img src="/Ai_Bot.png" alt="Assistant" className="w-full h-full object-cover" />
                             </div>
-                            <span className="text-sm sm:text-base truncate">{t("services.kwscAssistant") || "KWSC Assistant"}</span>
+                            <span className="text-sm sm:text-base truncate">{t("services.kwscAssistant")}</span>
                         </div>
                         <button onClick={() => setIsOpen(false)} className="text-gray-600 font-normal text-3xl leading-none flex-shrink-0 ml-2">&times;</button>
                     </div>

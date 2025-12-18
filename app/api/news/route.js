@@ -3,7 +3,7 @@ import { SnapshotModule } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
-import { autoTranslatePayload } from "@/lib/i18n/autoTranslate";
+import { resolveLocalizedContent } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -69,19 +69,24 @@ export async function GET(request) {
       },
     });
 
-    const payload = await autoTranslatePayload({
-      hero,
-      categories: snapshotData.categories,
-      articles: snapshotData.articles,
-      seo,
-    }, lang);
+    // Normalize categories and articles
+    const normalizedCategories = (snapshotData.categories || []).map(cat =>
+      resolveLocalizedContent(cat, lang)
+    );
+    const normalizedArticles = (snapshotData.articles || []).map(article =>
+      resolveLocalizedContent(article, lang)
+    );
 
     return NextResponse.json({
-      data: payload,
+      data: {
+        hero,
+        categories: normalizedCategories,
+        articles: normalizedArticles,
+        seo
+      },
       meta: { stale }
     });
 
-    return NextResponse.json({ data, meta: { stale } });
   } catch (error) {
     console.error("GET /api/news", error);
     return NextResponse.json(

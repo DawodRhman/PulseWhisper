@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Fade } from "react-awesome-reveal";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 const FALLBACK_ACHIEVEMENTS = [
   {
@@ -56,7 +57,9 @@ function normalizeAchievements(items) {
 }
 
 export default function AchievementComponent({ items }) {
+  const { i18n } = useTranslation();
   const [fetched, setFetched] = useState(null);
+
   const achievements = useMemo(
     () => normalizeAchievements(items && items.length ? items : fetched),
     [items, fetched]
@@ -66,7 +69,8 @@ export default function AchievementComponent({ items }) {
     let canceled = false;
     (async () => {
       try {
-        const res = await fetch("/api/papa/achievements");
+        const langParam = i18n.language === 'ur' ? '?lang=ur' : '?lang=en';
+        const res = await fetch(`/api/papa/achievements${langParam}`);
         if (!res.ok) return;
         const json = await res.json().catch(() => null);
         if (!json?.data) return;
@@ -78,7 +82,7 @@ export default function AchievementComponent({ items }) {
     return () => {
       canceled = true;
     };
-  }, []);
+  }, [i18n.language]);
 
   return (
     <section className="min-h-screen bg-[#020617] py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden font-sans selection:bg-cyan-500/30 selection:text-cyan-200">

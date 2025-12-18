@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from 'react-i18next';
 import {
   Waves,
@@ -12,59 +12,12 @@ import {
   CheckCircle,
   Activity
 } from "lucide-react";
-import { useLanguageStore } from "@/lib/stores/languageStore";
+// import { useLanguageStore } from "@/lib/stores/languageStore"; // Not needed if using hook that handles it
+import { useProjectsData } from "@/hooks/useProjectsData";
 
 // ...existing backend constants...
 const ICON_SET = [Waves, Zap, Droplet, Cpu, HardHat, TrendingUp];
 const COLOR_KEYS = ["cyan", "yellow", "blue", "purple", "red", "emerald"];
-
-const fallbackProjects = [
-  {
-    id: "PSDP-1",
-    title: "K-IV Water Supply Project (Phase-I)",
-    category: "Federal PSDP",
-    status: "COMPLETED",
-    progress: 100,
-    scope: "Add 260 MGD of water to the Karachi system. Includes components like bulk water conveyance, pumping stations, and distribution network improvements.",
-    image: "https://placehold.co/800x450/e0f7fa/0891b2?text=K-IV+COMPLETION"
-  },
-  {
-    id: "PSDP-2",
-    title: "Dhabeji Pumping Station Rehabilitation",
-    category: "Federal PSDP",
-    status: "ONGOING",
-    progress: 85,
-    scope: "Rehabilitation and upgrade of pumping machinery at Dhabeji to ensure optimal transmission capacity and reduce downtime.",
-    image: "https://placehold.co/800x450/fffbe5/d97706?text=DHABEJI+UPGRADE"
-  },
-  {
-    id: "ADP-1",
-    title: "Sewerage System Overhaul (District East)",
-    category: "Provincial ADP",
-    status: "ONGOING",
-    progress: 55,
-    scope: "Replacement of old and damaged sewage lines and construction of new disposal structures in District East.",
-    image: "https://placehold.co/800x450/eff6ff/1d4ed8?text=SEWERAGE+REHAB"
-  },
-  {
-    id: "ADP-2",
-    title: "Water Tanker Service Digitization",
-    category: "Provincial ADP",
-    status: "PLANNING",
-    progress: 5,
-    scope: "Develop a centralized digital system for managing tanker requests, tracking, and billing to enhance transparency and efficiency.",
-    image: "https://placehold.co/800x450/f5f3ff/7c3aed?text=DIGITIZATION+PLAN"
-  },
-  {
-    id: "ADP-3",
-    title: "Gadani Bulk Water Supply Scheme",
-    category: "Provincial ADP",
-    status: "PAUSED",
-    progress: 20,
-    scope: "Construction of a new bulk water line to connect Gadani to the main KW&SC network.",
-    image: "https://placehold.co/800x450/fef2f2/dc2626?text=GADANI+SCHEME"
-  }
-];
 
 // ...existing backend color configuration...
 const colorClasses = {
@@ -90,18 +43,19 @@ const translateStatus = (status, t) => {
   return t(`projects.status.${statusKey}`) || status;
 };
 
-// ...existing backend normalization function...
-// ...existing backend normalization function...
-function normalizeProjects(sourceProjects) {
-  const list = Array.isArray(sourceProjects) && sourceProjects.length > 0 ? sourceProjects : fallbackProjects;
-  return list.map((project, index) => {
+// Map raw project data to UI components (Icons, Colors)
+// No language logic here!
+function mapProjectsToUI(sourceProjects) {
+  if (!Array.isArray(sourceProjects) || sourceProjects.length === 0) return [];
+
+  return sourceProjects.map((project, index) => {
     const Icon = ICON_SET[index % ICON_SET.length];
     return {
-      id: project.id || project.code || `project-${index}`,
+      ...project,
+      // Ensure essential fields exist
+      id: project.id || `project-${index}`,
       title: project.title || "Strategic Initiative",
-      titleUr: project.titleUr, // Preserve Urdu Title
       category: project.category || project.status || "Strategic",
-      // categoryUr: project.categoryUr, // If needed
       status: project.status || "PLANNING",
       progress:
         typeof project.progress === "number"
@@ -110,22 +64,22 @@ function normalizeProjects(sourceProjects) {
             ? project.metric
             : null,
       scope: project.summary || project.scope || project.description || "",
-      scopeUr: project.summaryUr || project.scopeUr || project.descriptionUr, // Preserve Urdu Scope/Summary
       image: project.media?.url || project.image || project.imageUrl || "https://placehold.co/800x450/f0f0f0/6b7280?text=Image+Unavailable",
+      // UI Additions
       icon: <Icon />,
       color: COLOR_KEYS[index % COLOR_KEYS.length],
-      linkUrl: project.linkUrl || null,
     };
   });
 }
 
 // ...new UI component...
-const ProjectCard = ({ project, index, t, isUrdu }) => {
+const ProjectCard = ({ project, index, t }) => {
   const currentClasses = colorClasses[project.color] || colorClasses.cyan;
   const currentStatusBadge = statusBadges[project.status?.toUpperCase()] || "bg-gray-500 text-white";
 
-  const displayTitle = (isUrdu && project.titleUr) ? project.titleUr : project.title;
-  const displayScope = (isUrdu && project.scopeUr) ? project.scopeUr : project.scope;
+  // Data is already localized
+  const displayTitle = project.title;
+  const displayScope = project.scope;
 
   return (
     <div
@@ -210,14 +164,26 @@ const ProjectCard = ({ project, index, t, isUrdu }) => {
 };
 
 export default function Projects({ projects: incomingProjects }) {
-  const { t, i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
-  const language = useLanguageStore((state) => state.language);
-  const [projectCards, setProjectCards] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
+
+  // Use HOC/Hook for data if no incoming data
+  const { projects: fetchedProjects, loading: hookLoading } = useProjectsData();
+
+  // Decide which data to use. 
+  // If incoming component is used (e.g. from a parent), we might need to normalize it manually if parent didn't.
+  // BUT the architecture goal is to have the data normalized from source. 
+  // If 'incomingProjects' comes from a server component fetching from the new API, it's already normalized!
+  // If it comes from static props... we assume static props are also fixed.
+
+  const displayProjects = useMemo(() => {
+    // Priority: incoming > fetched
+    const raw = (incomingProjects && incomingProjects.length > 0) ? incomingProjects : fetchedProjects;
+    return mapProjectsToUI(raw);
+  }, [incomingProjects, fetchedProjects]);
+
+  const loading = (incomingProjects && incomingProjects.length > 0) ? false : hookLoading;
 
   useEffect(() => {
-    // ...existing animation styles...
     const style = document.createElement("style");
     style.innerHTML = `
       @keyframes fadeInUp {
@@ -230,42 +196,6 @@ export default function Projects({ projects: incomingProjects }) {
       document.head.removeChild(style);
     };
   }, []);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      if (incomingProjects && incomingProjects.length > 0) {
-        // Use provided projects
-        const normalized = normalizeProjects(incomingProjects);
-        setProjectCards(normalized);
-        setLoading(false);
-        return;
-      }
-
-      // Fetch from API if no projects provided
-      try {
-        const response = await fetch(`/api/projects?lang=${language}`);
-        if (response.ok) {
-          const data = await response.json();
-          const projects = data?.projects || [];
-          const normalized = normalizeProjects(projects);
-          setProjectCards(normalized);
-        } else {
-          // Use fallback
-          const normalized = normalizeProjects([]);
-          setProjectCards(normalized);
-        }
-      } catch (error) {
-        console.error('Failed to fetch projects:', error);
-        // Use fallback
-        const normalized = normalizeProjects([]);
-        setProjectCards(normalized);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, [incomingProjects, language]);
 
   return (
     <section className="min-h-screen bg-gray-50 py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 relative overflow-hidden font-sans selection:bg-blue-100 selection:text-gray-800">
@@ -306,8 +236,8 @@ export default function Projects({ projects: incomingProjects }) {
         ) : (
           /* Projects Grid */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
-            {projectCards.map((item, index) => (
-              <ProjectCard key={item.id || index} project={item} index={index} t={t} isUrdu={isUrdu} />
+            {displayProjects.map((item, index) => (
+              <ProjectCard key={item.id || index} project={item} index={index} t={t} />
             ))}
           </div>
         )}

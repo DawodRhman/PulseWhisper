@@ -111,10 +111,23 @@ const Navbar = () => {
     }
   };
 
-  // Toggle language
+  // Toggle language and update URL + Google Translate Cookie
   const toggleLanguage = () => {
-    setLanguage(language === "en" ? "ur" : "en");
-    // You can add language switching logic here
+    const newLang = language === "en" ? "ur" : "en";
+    setLanguage(newLang);
+
+    // Set Google Translate Cookie
+    // Format: /source_lang/target_lang
+    const cookieValue = newLang === "ur" ? "/en/ur" : "/en/en";
+    document.cookie = `googtrans=${cookieValue}; path=/; domain=${window.location.hostname}`;
+    document.cookie = `googtrans=${cookieValue}; path=/;`; // Fallback
+
+    // Update URL to trigger server-side re-render (for metadata/SEO)
+    const currentParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+    currentParams.set('lang', newLang);
+
+    // Force reload to apply Google Translation cleanly
+    window.location.href = `${pathname}?${currentParams.toString()}`;
   };
 
   const getNavLinks = () => [
@@ -309,21 +322,19 @@ const Navbar = () => {
               </ul>
             </nav>
           </div>
-          
+
           {/* Right Side: Search Bar and Language Toggle - Desktop */}
           <div className="hidden md:flex items-center gap-3">
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="flex items-center">
-              <div className={`relative flex items-center rounded-md border transition-all duration-300 ${
-                isScrolled
-                  ? "bg-white border-gray-300"
-                  : "bg-white/90 border-white/50 backdrop-blur-sm"
-              }`}>
-                <Search 
-                  size={18} 
-                  className={`absolute left-3 ${
-                    isScrolled ? "text-gray-500" : "text-gray-600"
-                  }`} 
+              <div className={`relative flex items-center rounded-md border transition-all duration-300 ${isScrolled
+                ? "bg-white border-gray-300"
+                : "bg-white/90 border-white/50 backdrop-blur-sm"
+                }`}>
+                <Search
+                  size={18}
+                  className={`absolute left-3 ${isScrolled ? "text-gray-500" : "text-gray-600"
+                    }`}
                 />
                 <input
                   ref={searchInputRef}
@@ -331,11 +342,10 @@ const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t("nav.search")}
-                  className={`pl-10 pr-4 py-2 w-48 lg:w-56 xl:w-64 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    isScrolled
-                      ? "bg-white text-gray-900 placeholder-gray-500"
-                      : "bg-transparent text-gray-900 placeholder-gray-500"
-                  }`}
+                  className={`pl-10 pr-4 py-2 w-48 lg:w-56 xl:w-64 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${isScrolled
+                    ? "bg-white text-gray-900 placeholder-gray-500"
+                    : "bg-transparent text-gray-900 placeholder-gray-500"
+                    }`}
                 />
               </div>
             </form>
@@ -344,11 +354,10 @@ const Navbar = () => {
             <div className="relative settings-dropdown">
               <button
                 onClick={() => setShowSettingsDropdown(!showSettingsDropdown)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 border font-medium text-sm ${
-                  isScrolled
-                    ? "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-blue-500"
-                    : "bg-white/90 text-gray-700 border-white/50 hover:bg-white backdrop-blur-sm"
-                }`}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 border font-medium text-sm ${isScrolled
+                  ? "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-blue-500"
+                  : "bg-white/90 text-gray-700 border-white/50 hover:bg-white backdrop-blur-sm"
+                  }`}
                 title="Settings"
               >
                 <Globe size={16} />
@@ -357,9 +366,8 @@ const Navbar = () => {
               </button>
 
               {showSettingsDropdown && (
-                <div className={`absolute top-full right-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] ${
-                  isScrolled ? "bg-white" : "bg-white/95 backdrop-blur-sm"
-                }`}>
+                <div className={`absolute top-full right-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] ${isScrolled ? "bg-white" : "bg-white/95 backdrop-blur-sm"
+                  }`}>
                   <div className="py-2">
                     {/* Theme Toggle */}
                     <button

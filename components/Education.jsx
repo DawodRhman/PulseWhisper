@@ -8,31 +8,33 @@ import { useTranslation } from "react-i18next";
 
 export default function Education() {
   const { t, i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
   const { data, loading, error } = useEducationData();
+  const currentDir = i18n.dir(i18n.language);
+  const currentLang = i18n.language;
 
   if (loading) return <Loader />;
-  if (error) return <div className="text-center py-10 text-red-500">Failed to load education resources.</div>;
+  if (error) return <div className="text-center py-10 text-red-500">{t("education.error", "Failed to load education resources.")}</div>;
 
+  // Default resources using standard i18n keys for static client-side fallback
   const defaultResources = [
     {
-      title: t("education.waterConservation.title"),
-      description: t("education.waterConservation.desc"),
+      title: t("education.waterConservation.title", { lng: currentLang }), // Force current lang if needed, or just t()
+      description: t("education.waterConservation.desc", { lng: currentLang }),
       image: "/bg-1.jpg",
     },
     {
-      title: t("education.drinkingWater.title"),
-      description: t("education.drinkingWater.desc"),
+      title: t("education.drinkingWater.title", { lng: currentLang }),
+      description: t("education.drinkingWater.desc", { lng: currentLang }),
       image: "/bg-2.jpg",
     },
     {
-      title: t("education.sewerage.title"),
-      description: t("education.sewerage.desc"),
+      title: t("education.sewerage.title", { lng: currentLang }),
+      description: t("education.sewerage.desc", { lng: currentLang }),
       image: "/downtownkarachi.gif",
     },
     {
-      title: t("education.emergency.title"),
-      description: t("education.emergency.desc"),
+      title: t("education.emergency.title", { lng: currentLang }),
+      description: t("education.emergency.desc", { lng: currentLang }),
       image: "/teentalwarkarachi.gif",
     },
   ];
@@ -40,18 +42,23 @@ export default function Education() {
   const resources = (data?.resources && data.resources.length > 0) ? data.resources : defaultResources;
 
   return (
-    <section className="bg-[#020617] text-white py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 2xl:py-32">
+    <section className="bg-[#020617] text-white py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 2xl:py-32" dir={currentDir} lang={currentLang}>
       <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl lg:max-w-7xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12 space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-16 xl:space-y-20 2xl:space-y-24">
         {resources.length > 0 ? resources.map((post, i) => {
+          // Data is already localized from API or above defaultResources
+          const title = post.title;
+          const description = post.description || post.summary;
+          const imageAlt = post.imageAlt || title;
+
           return (
-            <Fade key={i} direction="up" triggerOnce duration={800} delay={i * 150}>
+            <Fade key={post.id || i} direction="up" triggerOnce duration={800} delay={i * 150}>
               <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14">
                 <div className="md:flex-1">
-                  <img src={post.image} alt={post.title} className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto" />
+                  <img src={post.image} alt={imageAlt} className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto" />
                 </div>
                 <div className="md:flex-1">
-                  <h3 className="text-xl font-bold text-cyan-400 mb-3">{(isUrdu && post.titleUr) ? post.titleUr : post.title}</h3>
-                  <p className="text-base text-slate-300 leading-relaxed">{(isUrdu && post.descriptionUr) ? post.descriptionUr : post.description}</p>
+                  <h3 className="text-xl font-bold text-cyan-400 mb-3">{title}</h3>
+                  <p className="text-base text-slate-300 leading-relaxed">{description}</p>
                 </div>
               </div>
             </Fade>
@@ -59,7 +66,7 @@ export default function Education() {
         })
           : (
             <div className="col-span-full text-center py-12 text-gray-500">
-              No education resources available at the moment.
+              {t("education.empty", "No education resources available at the moment.")}
             </div>
           )}
       </div>

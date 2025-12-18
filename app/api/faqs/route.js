@@ -2,11 +2,15 @@ import { NextResponse } from "next/server";
 import { SnapshotModule } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
+import { resolveLocalizedContent } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const { data, stale } = await resolveWithSnapshot(
       SnapshotModule.FAQ,
       async () => {
@@ -25,9 +29,17 @@ export async function GET() {
           orderBy: { order: "asc" },
         });
 
+        // Localize categories and their nested FAQs
+        const localizedCategories = categories.map(cat => ({
+          ...resolveLocalizedContent(cat, lang),
+          faqs: (cat.faqs || []).map(f => resolveLocalizedContent(f, lang))
+        }));
+
+        const localizedUncategorized = uncategorizedFaqs.map(f => resolveLocalizedContent(f, lang));
+
         return {
-          categories,
-          uncategorized: uncategorizedFaqs,
+          categories: localizedCategories,
+          uncategorized: localizedUncategorized,
         };
       }
     );

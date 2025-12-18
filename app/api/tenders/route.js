@@ -3,6 +3,7 @@ import { SnapshotModule, TenderStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
+import { resolveLocalizedContent } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -87,15 +88,17 @@ export async function GET(request) {
       },
     });
 
-    // Raw data returned for client-side localization
-    // const localizeTenders = ... (removed)
+    // Resolve localized content for each list
+    const open = (snapshotData.open || []).map(item => resolveLocalizedContent(item, lang));
+    const closed = (snapshotData.closed || []).map(item => resolveLocalizedContent(item, lang));
+    const cancelled = (snapshotData.cancelled || []).map(item => resolveLocalizedContent(item, lang));
 
     return NextResponse.json({
       data: {
         hero,
-        open: snapshotData.open,
-        closed: snapshotData.closed,
-        cancelled: snapshotData.cancelled,
+        open,
+        closed,
+        cancelled,
         seo
       },
       meta: { stale }

@@ -30,7 +30,7 @@ const FALLBACK_TEAM = [
 const PLACEHOLDER_PORTRAIT = "/leaders/placeholder.svg";
 
 export default function OurLeadership({ team, insights }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [fetchedTeam, setFetchedTeam] = useState(null);
 
   const FALLBACK_INSIGHTS = [
@@ -51,7 +51,8 @@ export default function OurLeadership({ team, insights }) {
   useEffect(() => {
     async function fetchLeadership() {
       try {
-        const res = await fetch("/api/leadership");
+        const langParam = i18n.language === 'ur' ? '?lang=ur' : '?lang=en';
+        const res = await fetch(`/api/leadership${langParam}`);
         if (res.ok) {
           const data = await res.json();
           if (data.members && Array.isArray(data.members) && data.members.length > 0) {
@@ -88,19 +89,17 @@ export default function OurLeadership({ team, insights }) {
         {/* --- Section Header --- */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24 max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto">
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-blue-900 mb-4">
-            Leadership & Management
+            {t("Leadership & Management")}
           </h2>
           <p className="text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-lg">
-            KW&SC has evolved under the guidance of exceptional leaders. Meet
-            the visionaries guiding the corporation toward a sustainable and
-            efficient future.
+            {t("leadership.description") || "KW&SC has evolved under the guidance of exceptional leaders. Meet the visionaries guiding the corporation toward a sustainable and efficient future."}
           </p>
         </div>
 
         {/* --- Current Management Team --- */}
         <div className="mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-28 2xl:mb-32">
           <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8 md:mb-10 lg:mb-12 uppercase tracking-wider border-b-2 border-blue-200 pb-2 px-3 sm:px-4 md:px-5 lg:px-6 w-fit mx-auto">
-            Management Team
+            {t("Management Team")}
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8 2xl:gap-10">
