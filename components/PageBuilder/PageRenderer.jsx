@@ -115,6 +115,39 @@ const COMPONENT_MAP = {
 };
 
 export default function PageRenderer({ sections, contextData }) {
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
+
+  // Client-side localization so language toggle instantly switches API-driven page builder sections.
+  const localizedSections = React.useMemo(() => {
+    if (!sections) return [];
+
+    const localizeContent = (content) => {
+      if (!isUrdu || !content || typeof content !== 'object') return content;
+
+      if (Array.isArray(content)) {
+        return content.map(item => localizeContent(item));
+      }
+
+      const newContent = { ...content };
+      Object.keys(newContent).forEach((key) => {
+        if (key.endsWith('Ur') && newContent[key]) {
+          const baseKey = key.slice(0, -2);
+          newContent[baseKey] = newContent[key];
+        }
+        if (newContent[key] && typeof newContent[key] === 'object') {
+          newContent[key] = localizeContent(newContent[key]);
+        }
+      });
+      return newContent;
+    };
+
+    return sections.map((section) => ({
+      ...section,
+      content: localizeContent(section.content),
+    }));
+  }, [sections, isUrdu]);
+
   if (!sections || sections.length === 0) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
@@ -126,7 +159,7 @@ export default function PageRenderer({ sections, contextData }) {
 
   return (
     <div className="flex flex-col w-full">
-      {sections.map((section) => {
+      {localizedSections.map((section) => {
         const Component = COMPONENT_MAP[section.type];
         if (!Component) {
           console.warn(`Unknown section type: ${section.type}`);

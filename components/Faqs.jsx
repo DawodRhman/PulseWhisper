@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, HelpCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const FALLBACK_FAQS = [
   {
@@ -36,8 +37,11 @@ function normalizeFaqs(items) {
   return source.map((item) => ({
     id: item.id || item.question,
     question: item.question,
+    questionUr: item.questionUr,
     answer: item.answer,
+    answerUr: item.answerUr,
     category: item.category?.title || item.category || "General",
+    categoryUr: item.categoryUr || item.category,
   }));
 }
 
@@ -45,6 +49,8 @@ export default function FAQs({ items }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [fetchedFaqs, setFetchedFaqs] = useState(null);
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
 
   useEffect(() => {
     if (!items || items.length === 0) {
@@ -79,6 +85,14 @@ export default function FAQs({ items }) {
   }, [items]);
 
   const faqs = useMemo(() => normalizeFaqs(items || fetchedFaqs), [items, fetchedFaqs]);
+  const localizedFaqs = useMemo(() => {
+    return faqs.map((faq) => ({
+      ...faq,
+      question: (isUrdu && faq.questionUr) ? faq.questionUr : faq.question,
+      answer: (isUrdu && faq.answerUr) ? faq.answerUr : faq.answer,
+      category: (isUrdu && faq.categoryUr) ? faq.categoryUr : faq.category,
+    }));
+  }, [faqs, isUrdu]);
 
   // Auto-slide logic
   useEffect(() => {
@@ -87,16 +101,16 @@ export default function FAQs({ items }) {
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(timer);
-  }, [currentIndex, faqs.length]);
+  }, [currentIndex, localizedFaqs.length]);
 
   const nextSlide = () => {
     setDirection(1);
-    setCurrentIndex((prev) => (prev === faqs.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === localizedFaqs.length - 1 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
     setDirection(-1);
-    setCurrentIndex((prev) => (prev === 0 ? faqs.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? localizedFaqs.length - 1 : prev - 1));
   };
 
 
@@ -135,10 +149,10 @@ export default function FAQs({ items }) {
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 xl:mb-14 2xl:mb-16">
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900">
-            Common Questions
+            {isUrdu ? "عمومی سوالات" : "Common Questions"}
           </h2>
           <p className="text-gray-500 mt-2 sm:mt-3 md:mt-4 text-xs sm:text-sm md:text-base lg:text-lg">
-            Quick answers to our most frequent inquiries.
+            {isUrdu ? "ہمارے صارفین کے عام سوالات کے فوری جوابات۔" : "Quick answers to our most frequent inquiries."}
           </p>
         </div>
 
@@ -164,18 +178,18 @@ export default function FAQs({ items }) {
                 className="w-full text-center"
               >
                 {/* Category Badge */}
-                <span className="inline-block px-2 sm:px-3 md:px-4 lg:px-4 py-1 sm:py-1.5 md:py-2 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 md:mb-4 lg:mb-4">
-                  {faqs[currentIndex].category}
+                  <span className="inline-block px-2 sm:px-3 md:px-4 lg:px-4 py-1 sm:py-1.5 md:py-2 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 md:mb-4 lg:mb-4">
+                  {localizedFaqs[currentIndex].category}
                 </span>
 
                 {/* Question */}
                 <h3 className="text-sm sm:text-base md:text-lg lg:text-2xl xl:text-3xl 2xl:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 md:mb-4 lg:mb-5 leading-snug">
-                  "{faqs[currentIndex].question}"
+                  "{localizedFaqs[currentIndex].question}"
                 </h3>
 
                 {/* Answer */}
                 <p className="text-xs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-base text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                  {faqs[currentIndex].answer}
+                  {localizedFaqs[currentIndex].answer}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -198,7 +212,7 @@ export default function FAQs({ items }) {
 
           {/* Dots Indicator */}
           <div className="flex justify-center gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-3 mt-3 sm:mt-4 md:mt-5 lg:mt-6 xl:mt-7 2xl:mt-8">
-            {faqs.map((_, index) => (
+            {localizedFaqs.map((_, index) => (
               <button
                 key={index}
                 onClick={() => {

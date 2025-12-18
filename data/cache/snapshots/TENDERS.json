@@ -1,12 +1,7 @@
 {
-  "hero": {
-    "title": "Tenders",
-    "subtitle": "Official tender notices, procurement opportunities, and bidding documents",
-    "backgroundImage": "/karachicharminar.gif"
-  },
   "open": [
     {
-      "id": "f4f6430d-057d-46ff-a564-7696e46ebbf1",
+      "id": "9073b192-300c-4f0e-bac4-e9713b5dce23",
       "tenderNumber": "TND-001",
       "title": "Supply of Water Treatment Chemicals",
       "summary": "KW&SC invites suppliers for the provision of high-grade water treatment chemicals.",
@@ -17,7 +12,7 @@
       "attachments": []
     },
     {
-      "id": "a8b9a2d9-b1ea-48e1-bf3f-170c93e88227",
+      "id": "760165fe-914c-483a-b8d0-ed44c3b469cb",
       "tenderNumber": "TND-002",
       "title": "Pipeline Rehabilitation Works - Zone B",
       "summary": "Tender for pipeline repair and rehabilitation in designated Zone B.",
@@ -28,7 +23,7 @@
       "attachments": []
     },
     {
-      "id": "6786f486-37f6-4e16-aba2-dc14708f3a7c",
+      "id": "3eb96c83-dc30-4cf6-9112-8b98bf16dedf",
       "tenderNumber": "TND-003",
       "title": "IT System Upgrade & Maintenance",
       "summary": "Upgrade of central billing and customer management software.",
@@ -39,7 +34,7 @@
       "attachments": []
     },
     {
-      "id": "fcbb3f5e-e328-4602-8a9e-7b90690ff072",
+      "id": "70eac559-6246-4888-bca6-41e3cda0a6de",
       "tenderNumber": "TND-004",
       "title": "Bulk Meter Supply & Installation",
       "summary": "Procurement and installation of 500 industrial-grade flow meters.",
@@ -50,7 +45,7 @@
       "attachments": []
     },
     {
-      "id": "dc84eba6-91bc-4f64-ab28-b2e5c04d2642",
+      "id": "0623f70b-2ff9-43b7-ab53-7a52a2e1a509",
       "tenderNumber": "TND-005",
       "title": "Security & Guard Services Contract",
       "summary": "Contract for armed and unarmed security personnel for all facilities.",
@@ -61,7 +56,7 @@
       "attachments": []
     },
     {
-      "id": "735016f1-1882-433e-988b-2e6e026eff4b",
+      "id": "251a9bcd-6c23-4fcd-84a5-2c0293a5f1c3",
       "tenderNumber": "TND-006",
       "title": "Office Stationery and Supplies",
       "summary": "Annual supply tender for all general office consumables.",
@@ -72,7 +67,7 @@
       "attachments": []
     },
     {
-      "id": "d755dc80-9948-4473-a2a9-131423f07688",
+      "id": "a731f957-9a44-4225-a3c1-cf4bb44156c0",
       "tenderNumber": "TND-007",
       "title": "Vehicle Fleet Maintenance",
       "summary": "Maintenance and repair contract for KW&SC's vehicle fleet (light and heavy vehicles).",
@@ -83,7 +78,7 @@
       "attachments": []
     },
     {
-      "id": "fe4f6418-3923-4a4b-98be-2a784c4bf37e",
+      "id": "81e622f9-25dd-4ca7-9ec7-0c2630f91dd2",
       "tenderNumber": "TND-008",
       "title": "Reservoir Cleaning and Desilting",
       "summary": "Specialized services for cleaning and desilting two main water reservoirs.",
@@ -94,7 +89,7 @@
       "attachments": []
     },
     {
-      "id": "ca830b92-a63c-4663-b2da-f2e72015b96a",
+      "id": "498cfbd2-3a29-44d6-8618-36d35cb43725",
       "tenderNumber": "TND-009",
       "title": "HR Consultancy for Training",
       "summary": "Consultancy services for staff development and professional training programs.",
@@ -105,7 +100,7 @@
       "attachments": []
     },
     {
-      "id": "2ae64b88-3fe0-4295-85be-e8a2070fd92d",
+      "id": "923d0da4-6698-4cfc-bb63-13f7bf0885cd",
       "tenderNumber": "TND-010",
       "title": "Civil Works for New Office Block",
       "summary": "Tender for the foundation and structural civil works of a new administrative building.",
@@ -118,7 +113,7 @@
   ],
   "closed": [
     {
-      "id": "8fa346b1-7866-4c95-aaae-8d097aa7bebf",
+      "id": "4ac564c6-935b-4cbd-8953-f8dd967b6786",
       "tenderNumber": "TND-011",
       "title": "Electrical Maintenance Services",
       "summary": "Closed tender for maintenance of electrical systems across facilities.",
@@ -129,7 +124,7 @@
       "attachments": []
     },
     {
-      "id": "5f5ac465-b325-49d5-9d8d-61a2746ce29b",
+      "id": "d5eb047f-eb64-474a-b18b-7e1fc2755fff",
       "tenderNumber": "TND-012",
       "title": "Machinery Equipment Supply",
       "summary": "Closed tender for industrial machinery procurement.",
@@ -142,7 +137,7 @@
   ],
   "cancelled": [
     {
-      "id": "102dc397-71bd-44e0-afcb-f47d7a678627",
+      "id": "cd3472fc-98bc-4047-a90e-e73ab1f576ea",
       "tenderNumber": "TND-013",
       "title": "Drilling Equipment Purchase",
       "summary": "Tender cancelled due to revised project scope and budgetary constraints.",
@@ -153,7 +148,7 @@
       "attachments": []
     },
     {
-      "id": "e56aeac2-56bd-4f7a-8035-04d1ef23e0d6",
+      "id": "20ac2063-f1c0-4d65-8451-812ff75f995a",
       "tenderNumber": "TND-014",
       "title": "Water Quality Lab Upgrade",
       "summary": "Tender cancelled; process will be re-initiated later with new specifications.",
@@ -163,18 +158,5 @@
       "category": "Cancelled",
       "attachments": []
     }
-  ],
-  "seo": {
-    "id": null,
-    "title": "Tenders | Karachi Water & Sewerage Corporation",
-    "description": "Official tender notices, procurement opportunities, and bidding documents",
-    "keywords": null,
-    "canonicalUrl": "/tenders",
-    "ogTitle": "Tenders | Karachi Water & Sewerage Corporation",
-    "ogDescription": "Official tender notices, procurement opportunities, and bidding documents",
-    "ogImageUrl": "/karachicharminar.gif",
-    "twitterCard": "summary_large_image",
-    "structuredData": null,
-    "allowIndexing": true
-  }
+  ]
 }

@@ -5,6 +5,7 @@ import { Mail, MapPin, Phone, ExternalLink } from "lucide-react";
 import { SocialLinks, CopyRight } from "@/components/SocialLinks";
 import { useContactData } from "@/hooks/useContactData";
 import { useTranslation } from 'react-i18next';
+import { useLanguageStore } from "@/lib/stores/languageStore";
 
 const footer_data = {
   email: "info@kwsc.gos.pk",
@@ -15,11 +16,16 @@ const Footer = () => {
   const pathname = usePathname();
   const { data } = useContactData();
   const { t } = useTranslation();
+  const language = useLanguageStore((state) => state.language);
 
   const contactInfo = {
     email: data?.channels?.find(c => c.label === "Email")?.email || data?.channels?.[0]?.email || footer_data.email,
     phone: data?.channels?.find(c => c.label === "Helpline")?.phone || data?.channels?.[0]?.phone || footer_data.phone,
-    location: data?.offices?.find(o => o.id === "hq")?.address || data?.offices?.[0]?.address || t("footer.location"),
+    location: (() => {
+      const office = data?.offices?.find(o => o.id === "hq") || data?.offices?.[0];
+      if (!office) return t("footer.location");
+      return (language === "ur" && office.addressUr) ? office.addressUr : (office.address || t("footer.location"));
+    })(),
     footer_info: t("footer.info"),
   };
 

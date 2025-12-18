@@ -10,9 +10,12 @@ import Loader from "@/components/Loader";
 import { useContactData } from "@/hooks/useContactData";
 import { useLanguageStore } from "@/lib/stores/languageStore";
 import { UI_TRANSLATIONS } from "@/lib/translations";
+import { useTranslation } from "react-i18next";
 export default function Contact() {
   const { data, loading, error } = useContactData();
   const language = useLanguageStore((state) => state.language);
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === "ur";
   const t = (key) => UI_TRANSLATIONS[language]?.[key] || UI_TRANSLATIONS.en[key] || key;
 
   if (loading) return <Loader />;
@@ -121,10 +124,14 @@ export default function Contact() {
   // ...existing code... Fallback data and data extraction
   const defaultHero = {
     title: "CONTACT KW&SC",
+    titleUr: "KW&SC سے رابطہ کریں",
     subtitle: "Reach out to us for inquiries, complaints, or service requests. We are here to help.",
+    subtitleUr: "سوالات، شکایات یا خدمت کی درخواست کے لیے ہم سے رابطہ کریں، ہماری ٹیم مدد کے لیے تیار ہے۔",
     backgroundImage: "/teentalwarkarachi.gif",
   };
   const hero = data?.hero || defaultHero;
+  const displayHeroTitle = (isUrdu && hero.titleUr) ? hero.titleUr : hero.title;
+  const displayHeroSubtitle = (isUrdu && hero.subtitleUr) ? hero.subtitleUr : hero.subtitle;
   const helplineChannel = channels.find((channel) => channel.phone);
   const emailChannel = channels.find((channel) => channel.email);
   const primaryOffice = offices[0];
@@ -138,6 +145,7 @@ export default function Contact() {
   };
   const helplineDisplayPhone = helplineChannel?.phone || fallbackPhone;
   const helplineTel = sanitizeTel(helplineDisplayPhone);
+  const displayAddress = (language === "ur" && primaryOffice?.addressUr) ? primaryOffice.addressUr : (primaryOffice?.address || fallbackAddress);
 
   // ...existing code... Animation variants
   const containerVariants = {
@@ -250,6 +258,23 @@ export default function Contact() {
 
     <>
       <div className="bg-white min-h-screen">
+        {/* Hero */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.15),transparent_45%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.15),transparent_45%)]"></div>
+          <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-12 sm:py-14 md:py-16 lg:py-20 relative z-10 text-center">
+            <p className="text-xs sm:text-sm md:text-base font-semibold text-blue-700 tracking-widest uppercase mb-2">
+              {isUrdu ? "ہمارے ساتھ رابطہ میں رہیں" : "Stay Connected"}
+            </p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-3 sm:mb-4">
+              {displayHeroTitle}
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-3xl mx-auto">
+              {displayHeroSubtitle}
+            </p>
+          </div>
+        </section>
+
         {/* Main Content: Info & Form */}
         <motion.section
           className="max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl 2xl:max-w-6xl mx-auto mt-10  px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12 pb-12 sm:pb-16 md:pb-20 lg:pb-24 xl:pb-28 2xl:pb-32"
@@ -303,12 +328,12 @@ export default function Contact() {
                         <h3 className="font-semibold text-sm sm:text-base md:text-lg lg:text-xl">{t("Head Office")}</h3>
                         <p className="text-xs sm:text-sm md:text-base lg:text-lg text-blue-100">
                           <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(primaryOffice?.address || fallbackAddress)}`}
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayAddress)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:underline hover:text-white transition-colors"
                           >
-                            {(language === 'ur' && primaryOffice?.addressUr) ? primaryOffice.addressUr : (primaryOffice?.address || fallbackAddress)}
+                            {displayAddress}
                           </a>
                         </p>
                       </div>

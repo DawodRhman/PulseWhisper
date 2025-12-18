@@ -3,6 +3,7 @@ import { SnapshotModule } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
+import { autoTranslatePayload } from "@/lib/i18n/autoTranslate";
 
 export const dynamic = "force-dynamic";
 
@@ -53,13 +54,13 @@ export async function GET(request) {
       },
     });
 
-    return NextResponse.json({
-      data: {
-        hero,
-        updates,
-        seo,
-      },
-    });
+    const payload = await autoTranslatePayload({
+      hero,
+      updates,
+      seo,
+    }, lang);
+
+    return NextResponse.json({ data: payload });
   } catch (error) {
     console.error("/api/watertoday", error);
     return NextResponse.json({ error: "Unable to load Water Today data" }, { status: 500 });

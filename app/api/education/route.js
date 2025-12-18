@@ -3,6 +3,7 @@ import { SnapshotModule } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
+import { autoTranslatePayload } from "@/lib/i18n/autoTranslate";
 
 export const dynamic = "force-dynamic";
 
@@ -67,14 +68,14 @@ export async function GET(request) {
       },
     });
 
-    const translatedResources = snapshotData.resources;
+    const payload = await autoTranslatePayload({
+      hero,
+      resources: snapshotData.resources,
+      seo
+    }, lang);
 
     return NextResponse.json({
-      data: {
-        hero,
-        resources: translatedResources,
-        seo
-      },
+      data: payload,
       meta: { stale }
     });
 
