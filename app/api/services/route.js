@@ -22,15 +22,25 @@ function jsonResponse(body, init = {}) {
   return response;
 }
 
-const FALLBACK_HERO =
-  content?.services?.hero || {
+const FALLBACK_HERO = {
+  en: {
     title: "What We Do",
-    subtitle:
-      "Comprehensive water and sewerage services ensuring clean water supply and efficient wastewater management for Karachi.",
+    subtitle: "Comprehensive water and sewerage services ensuring clean water supply and efficient wastewater management for Karachi.",
     backgroundImage: "/teentalwarkarachi.gif",
-  };
+  },
+  ur: {
+    title: "ہم کیا کرتے ہیں",
+    subtitle: "کراچی کے لیے صاف پانی کی فراہمی اور موثر فضلہ پانی کے انتظام کو یقینی بنانے والی جامع پانی اور سیوریج خدمات۔",
+    backgroundImage: "/teentalwarkarachi.gif",
+  }
+};
 
-function mapServicesFallback() {
+function getFallbackHero(lang = 'en') {
+  return FALLBACK_HERO[lang] || FALLBACK_HERO.en;
+}
+
+function mapServicesFallback(lang = 'en') {
+  const hero = getFallbackHero(lang);
   const services = content?.services || {};
   const cards = Array.isArray(services.cards) ? services.cards : [];
   const sections = Array.isArray(services.sections) ? services.sections : [];
@@ -91,8 +101,8 @@ function mapServicesFallback() {
   return [
     {
       id: "fallback-category",
-      title: services.hero?.title || FALLBACK_HERO.title,
-      summary: services.hero?.subtitle || FALLBACK_HERO.subtitle,
+      title: hero.title,
+      summary: hero.subtitle,
       heroCopy: null,
       order: 0,
       seo: null,
@@ -113,8 +123,11 @@ function buildSeoPayload(hero) {
   });
 }
 
-export async function GET() {
+export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const { data, stale } = await resolveWithSnapshot(
       SnapshotModule.SERVICES,
       async () => {
@@ -144,14 +157,14 @@ export async function GET() {
           });
         } catch (dbError) {
           console.warn("Database unreachable in services API, using fallback data.", dbError?.message);
-          categories = mapServicesFallback();
+          categories = mapServicesFallback(lang);
         }
 
         if (!Array.isArray(categories) || categories.length === 0) {
-          categories = mapServicesFallback();
+          categories = mapServicesFallback(lang);
         }
 
-        const hero = FALLBACK_HERO;
+        const hero = getFallbackHero(lang);
         const seo = await buildSeoPayload(hero);
 
         return {

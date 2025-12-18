@@ -4,24 +4,23 @@ import { usePathname } from "next/navigation";
 import { Mail, MapPin, Phone, ExternalLink } from "lucide-react";
 import { SocialLinks, CopyRight } from "@/components/SocialLinks";
 import { useContactData } from "@/hooks/useContactData";
+import { useTranslation } from 'react-i18next';
 
 const footer_data = {
   email: "info@kwsc.gos.pk",
   phone: "(+92) 021 111 597 200",
-  location: "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan",
-  footer_info:
-    "Karachi Water and Sewerage Corporation (KW&SC) is committed to providing reliable water and sewerage services to Karachi, ensuring clean water and efficient sewerage management for all residents.",
 };
 
 const Footer = () => {
   const pathname = usePathname();
   const { data } = useContactData();
+  const { t } = useTranslation();
 
   const contactInfo = {
     email: data?.channels?.find(c => c.label === "Email")?.email || data?.channels?.[0]?.email || footer_data.email,
     phone: data?.channels?.find(c => c.label === "Helpline")?.phone || data?.channels?.[0]?.phone || footer_data.phone,
-    location: data?.offices?.find(o => o.id === "hq")?.address || data?.offices?.[0]?.address || footer_data.location,
-    footer_info: footer_data.footer_info,
+    location: data?.offices?.find(o => o.id === "hq")?.address || data?.offices?.[0]?.address || t("footer.location"),
+    footer_info: t("footer.info"),
   };
 
   if (pathname?.startsWith("/papa")) {
@@ -56,7 +55,7 @@ const Footer = () => {
 
           {/* 2. Contact Information */}
           <div className="lg:col-span-1">
-            <h3 className="text-xl font-extrabold text-gray-900 mb-6">Get In Touch</h3>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-6">{t("footer.getInTouch")}</h3>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <MapPin className="text-cyan-500 mt-1 flex-shrink-0" size={20} />
@@ -81,16 +80,16 @@ const Footer = () => {
 
           {/* 3. Quick Links (Simplified) */}
           <div className="lg:col-span-1">
-            <h3 className="text-xl font-extrabold text-gray-900 mb-6">Quick Navigation</h3>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-6">{t("footer.quickNavigation")}</h3>
             <div className="space-y-3">
               {/* Using standard <a> tag */}
               {[
-                { label: "About Us", href: "/aboutus" },
-                { label: "What We Do", href: "/ourservices" },
-                { label: "Our Projects", href: "/portfolio" },
-                { label: "Careers", href: "/careers" },
-                { label: "News & Updates", href: "/news" },
-                { label: "Contact Us", href: "/contact" },
+                { label: t("footer.links.aboutUs"), href: "/aboutus" },
+                { label: t("footer.links.whatWeDo"), href: "/ourservices" },
+                { label: t("footer.links.ourProjects"), href: "/portfolio" },
+                { label: t("footer.links.careers"), href: "/careers" },
+                { label: t("footer.links.newsUpdates"), href: "/news" },
+                { label: t("footer.links.contactUs"), href: "/contact" },
               ].map((item, index) => (
                 <a key={index} href={item.href} className="block text-gray-600 hover:text-blue-600 transition-colors text-base font-medium group">
                     <span className="group-hover:translate-x-1 transition-transform inline-block text-cyan-500">→</span> {item.label}
@@ -101,18 +100,18 @@ const Footer = () => {
 
           {/* 4. Social Media & External Resources */}
           <div className="lg:col-span-1">
-            <h3 className="text-xl font-extrabold text-gray-900 mb-6">Stay Connected</h3>
+            <h3 className="text-xl font-extrabold text-gray-900 mb-6">{t("footer.stayConnected")}</h3>
             
             {/* Social Icons Section - Adjusted background/border for light theme */}
             <SocialLinks variant="icons" className="mb-8" />
 
             {/* External Links */}
-            <h4 className="text-lg font-bold text-gray-900 mb-4">Official Portals</h4>
+            <h4 className="text-lg font-bold text-gray-900 mb-4">{t("footer.officialPortals")}</h4>
             <div className="space-y-3">
                 {[
-                    { label: "Online Complaint System", href: "https://complain.kwsc.gos.pk" },
-                    { label: "Tanker Booking System", href: "https://campaign.kwsc.gos.pk/" },
-                    { label: "Sindh Government Portal", href: "https://www.sindh.gov.pk/" },
+                    { label: t("footer.complaintSystem"), href: "https://complain.kwsc.gos.pk" },
+                    { label: t("footer.tankerBooking"), href: "https://campaign.kwsc.gos.pk/" },
+                    { label: t("footer.sindhPortal"), href: "https://www.sindh.gov.pk/" },
                 ].map((item, index) => (
                     <a
                         key={index}

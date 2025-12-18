@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useLanguageStore } from "@/lib/stores/languageStore";
 
 export function useRtiData() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { language } = useLanguageStore();
 
   useEffect(() => {
     let isMounted = true;
@@ -13,7 +15,7 @@ export function useRtiData() {
     async function fetchData() {
       try {
         setLoading(true);
-        const response = await fetch("/api/rti", {
+        const response = await fetch(`/api/rti?lang=${language}`, {
           signal: controller.signal,
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +47,7 @@ export function useRtiData() {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [language]);
 
   return {
     data,

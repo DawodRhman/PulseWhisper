@@ -8,11 +8,21 @@ import content from "@/data/static/content";
 export const dynamic = "force-dynamic";
 
 const HERO_CONTENT = {
-  title: "Contact KW&SC",
-  subtitle:
-    "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
-  backgroundImage: "/teentalwarkarachi.gif",
+  en: {
+    title: "Contact KW&SC",
+    subtitle: "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
+    backgroundImage: "/teentalwarkarachi.gif",
+  },
+  ur: {
+    title: "KW&SC سے رابطہ کریں",
+    subtitle: "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔",
+    backgroundImage: "/teentalwarkarachi.gif",
+  }
 };
+
+function getHeroContent(lang = 'en') {
+  return HERO_CONTENT[lang] || HERO_CONTENT.en;
+}
 
 function buildMapEmbedUrl(latitude, longitude) {
   if (typeof latitude !== "number" || typeof longitude !== "number") {
@@ -23,22 +33,80 @@ function buildMapEmbedUrl(latitude, longitude) {
   return `https://www.google.com/maps?q=${encodeURIComponent(coords)}&z=14&output=embed`;
 }
 
-function serializeChannel(channel) {
+function serializeChannel(channel, lang = 'en') {
+  const translations = {
+    en: {
+      labels: {
+        "Helpline": "Helpline",
+        "Email": "Email",
+        "WhatsApp": "WhatsApp",
+        "Emergency": "Emergency"
+      },
+      descriptions: {
+        "Helpline": "24/7 customer support for water and sewerage services",
+        "Email": "Send us your queries and feedback",
+        "WhatsApp": "Quick assistance via WhatsApp",
+        "Emergency": "For urgent water and sewerage emergencies"
+      }
+    },
+    ur: {
+      labels: {
+        "Helpline": "ہیلپ لائن",
+        "Email": "ای میل",
+        "WhatsApp": "واٹس ایپ",
+        "Emergency": "ہنگامی صورتحال"
+      },
+      descriptions: {
+        "Helpline": "پانی اور سیوریج خدمات کے لیے 24/7 کسٹمر سپورٹ",
+        "Email": "ہمیں اپنے سوالات اور تاثرات بھیجیں",
+        "WhatsApp": "واٹس ایپ کے ذریعے فوری مدد",
+        "Emergency": "پانی اور سیوریج کی ہنگامی صورتحال کے لیے"
+      }
+    }
+  };
+
+  const langData = translations[lang] || translations.en;
+
   return {
     id: channel.id || channel.label,
-    label: channel.label,
-    description: channel.description,
+    label: langData.labels[channel.label] || channel.label,
+    description: langData.descriptions[channel.label] || channel.description,
     phone: channel.phone,
     email: channel.email,
     availability: channel.availability,
   };
 }
 
-function serializeOffice(office) {
+function serializeOffice(office, lang = 'en') {
+  const translations = {
+    en: {
+      labels: {
+        "Headquarters": "Headquarters",
+        "Regional Office": "Regional Office",
+        "Customer Service Center": "Customer Service Center"
+      },
+      addresses: {
+        "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan": "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan"
+      }
+    },
+    ur: {
+      labels: {
+        "Headquarters": "ہیڈ کوارٹر",
+        "Regional Office": "ریجنل آفس",
+        "Customer Service Center": "کسٹمر سروس سینٹر"
+      },
+      addresses: {
+        "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan": "9ویں میل کرساز، مین شاہراہ فیصل، کراچی-75350، پاکستان"
+      }
+    }
+  };
+
+  const langData = translations[lang] || translations.en;
+
   return {
     id: office.id || office.label,
-    label: office.label,
-    address: office.address,
+    label: langData.labels[office.label] || office.label,
+    address: langData.addresses[office.address] || office.address,
     latitude: office.latitude,
     longitude: office.longitude,
     phone: office.phone,
@@ -48,26 +116,29 @@ function serializeOffice(office) {
   };
 }
 
-export async function GET() {
+export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const { data, stale } = await resolveWithSnapshot(
       SnapshotModule.CONTACT,
       async () => {
         let channels = [];
         let offices = [];
-        
+
         try {
           [channels, offices] = await Promise.all([
             prisma.contactChannel.findMany({ orderBy: { createdAt: "asc" } }),
             prisma.officeLocation.findMany({ orderBy: { createdAt: "asc" } }),
           ]);
         } catch (dbError) {
-           console.warn("⚠️ Database unreachable in contact API. Using fallback data.");
-           channels = content.contact?.channels || [];
-           offices = content.contact?.offices || [];
+          console.warn("⚠️ Database unreachable in contact API. Using fallback data.");
+          channels = content.contact?.channels || [];
+          offices = content.contact?.offices || [];
         }
 
-        const hero = HERO_CONTENT;
+        const hero = getHeroContent(lang);
 
         const seo = await resolvePageSeo({
           canonicalUrl: "/contact",
@@ -80,8 +151,8 @@ export async function GET() {
 
         return {
           hero,
-          channels: channels.map(serializeChannel),
-          offices: offices.map(serializeOffice),
+          channels: channels.map(channel => serializeChannel(channel, lang)),
+          offices: offices.map(office => serializeOffice(office, lang)),
           seo,
         };
       }
@@ -91,17 +162,19 @@ export async function GET() {
   } catch (error) {
     console.error("GET /api/contact", error);
     // Return fallback on total failure
-    const hero = HERO_CONTENT;
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+    const hero = getHeroContent(lang);
     const channels = content.contact?.channels || [];
     const offices = content.contact?.offices || [];
-    return NextResponse.json({ 
-        data: {
-          hero,
-          channels: channels.map(serializeChannel),
-          offices: offices.map(serializeOffice),
-          seo: null
-        }, 
-        meta: { stale: true } 
+    return NextResponse.json({
+      data: {
+        hero,
+        channels: channels.map(channel => serializeChannel(channel, lang)),
+        offices: offices.map(office => serializeOffice(office, lang)),
+        seo: null
+      },
+      meta: { stale: true }
     });
   }
 }

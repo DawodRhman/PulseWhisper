@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
     try {
-        const snapshot = await resolveWithSnapshot(SnapshotModule.HOME, buildHomePayload);
+        const snapshot = await resolveWithSnapshot(SnapshotModule.HOME, () => buildHomePayload('en'));
         const projects = snapshot?.data?.projects || [];
         return NextResponse.json({ projects });
     } catch (error) {

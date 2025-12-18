@@ -6,8 +6,28 @@ import { resolvePageSeo } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+const HERO_CONTENT = {
+  en: {
+    title: "Tenders",
+    subtitle: "Official tender notices, procurement opportunities, and bidding documents",
+    backgroundImage: "/karachicharminar.gif",
+  },
+  ur: {
+    title: "ٹینڈرز",
+    subtitle: "سرکاری ٹینڈر نوٹس، خریداری کے مواقع، اور بڈنگ دستاویزات",
+    backgroundImage: "/karachicharminar.gif",
+  }
+};
+
+function getHeroContent(lang = 'en') {
+  return HERO_CONTENT[lang] || HERO_CONTENT.en;
+}
+
+export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const { data, stale } = await resolveWithSnapshot(
       SnapshotModule.TENDERS,
       async () => {
@@ -44,11 +64,7 @@ export async function GET() {
               })),
             }));
 
-        const hero = {
-          title: "Tenders",
-          subtitle: "Official tender notices, procurement opportunities, and bidding documents",
-          backgroundImage: "/karachicharminar.gif",
-        };
+        const hero = getHeroContent(lang);
 
         const seo = await resolvePageSeo({
           canonicalUrl: "/tenders",

@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useLanguageStore } from "@/lib/stores/languageStore";
 
 export function useNewsData() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const language = useLanguageStore((state) => state.language);
 
   useEffect(() => {
     let isMounted = true;
@@ -13,7 +15,7 @@ export function useNewsData() {
     async function fetchData() {
       try {
         setLoading(true);
-        const response = await fetch("/api/news", {
+        const response = await fetch(`/api/news?lang=${language}`, {
           signal: controller.signal,
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +47,7 @@ export function useNewsData() {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [language]);
 
   return {
     data,

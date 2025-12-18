@@ -30,7 +30,7 @@ export default function Home({ hero }) {
   const [showBookTankerPopup, setShowBookTankerPopup] = useState(false);
 
   const [messages, setMessages] = useState([
-    { from: "bot", text: "Hello! I am KWSC Assistant. How can I help you today?" },
+    { from: "bot", text: t("services.assistantGreeting") },
   ]);
 
   const [inputText, setInputText] = useState("");
@@ -120,40 +120,40 @@ export default function Home({ hero }) {
           <button
             onClick={() => setShowNewConnectionPopup(true)}
             className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
-            title="New Connection"
+            title={t("services.newConnection")}
           >
             <Plug size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
-            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">New Connection</span>
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{t("services.newConnection")}</span>
           </button>
 
           {/* E-Complaint */}
           <button
             onClick={() => setShowEComplaintPopup(true)}
             className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
-            title="E-Complaint"
+            title={t("services.eComplaint")}
           >
             <AlertCircle size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
-            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">E-Complaint</span>
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{t("services.eComplaint")}</span>
           </button>
 
           {/* Book Tanker */}
           <button
             onClick={() => setShowBookTankerPopup(true)}
             className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
-            title="Book Tanker"
+            title={t("services.bookTanker")}
           >
             <Truck size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
-            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Book Tanker</span>
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{t("services.bookTanker")}</span>
           </button>
 
           {/* Get Your Bill */}
           <button
             onClick={() => setShowBillPopup(true)}
             className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
-            title="Get Your Bill"
+            title={t("services.getYourBill")}
           >
             <Receipt size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
-            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Get Your Bill</span>
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{t("services.getYourBill")}</span>
           </button>
         </div>
 
@@ -212,11 +212,11 @@ export default function Home({ hero }) {
           <button
             onClick={() => setChatOpen(prev => !prev)}
             className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full overflow-hidden shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.7)] hover:scale-110"
-            title="Chat with KWSC Assistant"
+            title={`Chat with ${t("services.kwscAssistant")}`}
           >
             <img
               src="/Ai_Bot.png"
-              alt="KWSC Assistant"
+              alt={t("services.kwscAssistant")}
               className="w-full h-full object-cover"
             />
           </button>
@@ -226,9 +226,9 @@ export default function Home({ hero }) {
               <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-200 text-gray-800 font-semibold flex justify-between items-center border-b border-gray-300">
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
-                    <img src="/Ai_Bot.png" alt="KWSC Assistant" className="w-full h-full object-cover" />
+                    <img src="/Ai_Bot.png" alt={t("services.kwscAssistant")} className="w-full h-full object-cover" />
                   </div>
-                  <span className="text-sm sm:text-base truncate">KWSC Assistant</span>
+                  <span className="text-sm sm:text-base truncate">{t("services.kwscAssistant")}</span>
                 </div>
                 <button onClick={() => setChatOpen(false)} className="text-gray-600 font-normal  text-5xl flex-shrink-0 ml-2">&times;</button>
               </div>

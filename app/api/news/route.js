@@ -6,8 +6,28 @@ import { resolvePageSeo } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+const HERO_CONTENT = {
+  en: {
+    title: "Latest News",
+    subtitle: "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
+    backgroundImage: "/media/hero/news-desk.svg",
+  },
+  ur: {
+    title: "تازہ ترین خبریں",
+    subtitle: "انفراسٹرکچر کی ترقی، ڈیجیٹل تبدیلی، اور افادیت کے میٹرکس کو ریئل ٹائم میں ٹریک کرنا۔",
+    backgroundImage: "/media/hero/news-desk.svg",
+  }
+};
+
+function getHeroContent(lang = 'en') {
+  return HERO_CONTENT[lang] || HERO_CONTENT.en;
+}
+
+export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const { data, stale } = await resolveWithSnapshot(
       SnapshotModule.NEWS,
       async () => {
@@ -27,11 +47,7 @@ export async function GET() {
           }),
         ]);
 
-        const hero = {
-          title: "Latest News",
-          subtitle: "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
-           backgroundImage: "/media/hero/news-desk.svg",
-        };
+        const hero = getHeroContent(lang);
 
         const seo = await resolvePageSeo({
           canonicalUrl: "/news",

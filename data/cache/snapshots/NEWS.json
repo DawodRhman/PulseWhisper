@@ -1,7 +1,7 @@
 {
   "hero": {
-    "title": "Latest News",
-    "subtitle": "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
+    "title": "تازہ ترین خبریں",
+    "subtitle": "انفراسٹرکچر کی ترقی، ڈیجیٹل تبدیلی، اور افادیت کے میٹرکس کو ریئل ٹائم میں ٹریک کرنا۔",
     "backgroundImage": "/media/hero/news-desk.svg"
   },
   "categories": [
@@ -255,12 +255,12 @@
   ],
   "seo": {
     "id": null,
-    "title": "Latest News | Karachi Water & Sewerage Corporation",
-    "description": "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
+    "title": "تازہ ترین خبریں | Karachi Water & Sewerage Corporation",
+    "description": "انفراسٹرکچر کی ترقی، ڈیجیٹل تبدیلی، اور افادیت کے میٹرکس کو ریئل ٹائم میں ٹریک کرنا۔",
     "keywords": null,
     "canonicalUrl": "/news",
-    "ogTitle": "Latest News | Karachi Water & Sewerage Corporation",
-    "ogDescription": "Tracking infrastructure developments, digital transformation, and utility metrics in real time.",
+    "ogTitle": "تازہ ترین خبریں | Karachi Water & Sewerage Corporation",
+    "ogDescription": "انفراسٹرکچر کی ترقی، ڈیجیٹل تبدیلی، اور افادیت کے میٹرکس کو ریئل ٹائم میں ٹریک کرنا۔",
     "ogImageUrl": "/media/hero/news-desk.svg",
     "twitterCard": "summary_large_image",
     "structuredData": null,

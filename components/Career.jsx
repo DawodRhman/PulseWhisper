@@ -4,6 +4,7 @@ import Loader from "@/components/Loader";
 import gsap from "gsap";
 import { Fade } from "react-awesome-reveal";
 import Link from "next/link";
+import { useLanguageStore } from "@/lib/stores/languageStore";
 // --- New Lucide Icon Imports ---
 import {
   Briefcase,
@@ -20,6 +21,7 @@ export default function Careers() {
   const [loading, setLoading] = useState(true);
   const [careersData, setCareersData] = useState(null);
   const [dataError, setDataError] = useState(null);
+  const { language } = useLanguageStore();
 
   // GSAP Loader Effect (Kept as is)
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function Careers() {
     let isMounted = true;
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/careers");
+        const response = await fetch(`/api/careers?lang=${language}`);
         if (!response.ok) throw new Error("Failed to fetch Careers data");
         const payload = await response.json();
         if (isMounted) {
@@ -65,7 +67,7 @@ export default function Careers() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [language]);
 
   const defaultOpportunities = [
     {

@@ -14,6 +14,7 @@ const Navbar = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [expandedMobileSubmenu, setExpandedMobileSubmenu] = useState(null);
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const menuRef = useRef(null);
   const linksRef = useRef([]);
   const submenuRefs = useRef([]);
@@ -121,25 +122,25 @@ const Navbar = () => {
 
     {
       href: "/whatwedo",
-      text: t("nav.services"),
+      text: t("nav.whatWeDo"),
       submenu: [
         { href: "/ourservices", text: t("nav.services") },
         { href: "/portfolio", text: t("nav.projects") },
-        { href: "/workwithus", text: "Work With Us" },
-        { href: "/news", text: "News & Updates" },
-        { href: "/right-to-information", text: "Right to Information" },
+        { href: "/workwithus", text: t("nav.workWithUs") },
+        { href: "/news", text: t("nav.newsUpdates") },
+        { href: "/right-to-information", text: t("nav.rightToInformation") },
       ]
     },
     {
       href: "/aboutus",
       text: t("nav.about"),
       submenu: [
-        { href: "/aboutus", text: "Our Heritage" },
-        { href: "/watertodaysection", text: "Water Today" },
-        { href: "/achievements", text: "Achievements" },
-        { href: "/ourleadership", text: "Our Leadership" },
+        { href: "/aboutus", text: t("nav.ourHeritage") },
+        { href: "/watertodaysection", text: t("nav.waterToday") },
+        { href: "/achievements", text: t("nav.achievements") },
+        { href: "/ourleadership", text: t("nav.ourLeadership") },
         { href: "/careers", text: t("nav.careers") },
-        { href: "/faqs", text: "FAQs" },
+        { href: "/faqs", text: t("nav.faqs") },
       ]
     },
 
@@ -150,7 +151,7 @@ const Navbar = () => {
     },
     {
       href: "/education",
-      text: "Education",
+      text: t("nav.education"),
 
     },
     {
@@ -250,25 +251,25 @@ const Navbar = () => {
               <ul className="flex gap-4 lg:gap-8 xl:gap-10 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold uppercase">
                 {getNavLinks().map((link, index) => (
                   <li
-                    key={loop.href}
+                    key={link.href}
                     className="relative group"
-                    onMouseEnter={() => loop.submenu && setHoveredIndex(index)}
+                    onMouseEnter={() => link.submenu && setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                   >
                     <Link
-                      href={loop.href}
+                      href={link.href}
                       className={`transition-colors flex items-center gap-0.5 md:gap-1 text-xs md:text-sm lg:text-base ${isScrolled
-                        ? pathname === loop.href
+                        ? pathname === link.href
                           ? "text-blue-300"
                           : "text-black hover:text-blue-300"
-                        : pathname === loop.href
+                        : pathname === link.href
                           ? "text-blue-300"
                           : "text-white hover:text-blue-300"
                         }`}
                       onClick={() => setIsOpen(false)}
                     >
-                      {loop.text}
-                      {loop.submenu && (
+                      {link.text}
+                      {link.submenu && (
                         <ChevronDown
                           size={14}
                           className={`transition-transform duration-300 md:w-4 md:h-4 ${hoveredIndex === index ? 'rotate-180' : ''
@@ -276,7 +277,7 @@ const Navbar = () => {
                         />
                       )}
                     </Link>
-                    {loop.submenu && (
+                    {link.submenu && (
                       <div
                         ref={(el) => (submenuRefs.current[index] = el)}
                         className={`absolute top-full left-0 mt-1 md:mt-2 min-w-max md:min-w-[200px] lg:min-w-[240px] shadow-xl rounded-lg overflow-hidden z-[120] backdrop-blur-sm ${isScrolled ? "bg-white" : "bg-white/95"
@@ -286,7 +287,7 @@ const Navbar = () => {
                         onMouseLeave={() => setHoveredIndex(null)}
                       >
                         <ul className="py-1 md:py-2">
-                          {loop.submenu.map((subItem) => (
+                          {link.submenu.map((subItem) => (
                             <li key={subItem.href}>
                               <Link
                                 href={subItem.href}
@@ -369,7 +370,7 @@ const Navbar = () => {
                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
                     >
                       {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
-                      <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+                      <span>{theme === "light" ? t("settings.darkMode") : t("settings.lightMode")}</span>
                     </button>
 
                     {/* Language Toggle */}
@@ -381,7 +382,7 @@ const Navbar = () => {
                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
                     >
                       <Globe size={16} />
-                      <span>{language === "en" ? "اردو" : "English"}</span>
+                      <span>{language === "en" ? t("settings.urdu") : t("settings.english")}</span>
                     </button>
                   </div>
                 </div>
@@ -448,7 +449,7 @@ const Navbar = () => {
                           className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
                         >
                           {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
-                          <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+                          <span>{theme === "light" ? t("settings.darkMode") : t("settings.lightMode")}</span>
                         </button>
 
                         {/* Mobile Language Toggle */}
@@ -460,7 +461,7 @@ const Navbar = () => {
                           className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
                         >
                           <Globe size={16} />
-                          <span>{language === "en" ? "اردو" : "English"}</span>
+                          <span>{language === "en" ? t("settings.urdu") : t("settings.english")}</span>
                         </button>
                       </div>
                     </div>
@@ -479,7 +480,7 @@ const Navbar = () => {
                 <p className="text-xs sm:text-sm leading-relaxed">9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan</p>
               </div>
               <nav className="flex flex-col items-start gap-6 sm:gap-10 mt-6 sm:mt-8 w-full px-2">
-                {NavLinks.map((link, index) => (
+                {getNavLinks().map((link, index) => (
                   <div key={link.text} className="w-full">
                     {/* Row: main link + 'Open Sub Menu' button (if submenu) */}
                     <div className="flex items-center gap-3 w-full">

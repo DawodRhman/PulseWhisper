@@ -1,7 +1,7 @@
 {
   "hero": {
-    "title": "Education & Awareness",
-    "subtitle": "Empowering the community with knowledge about water conservation and hygiene.",
+    "title": "تعلیم اور آگاہی",
+    "subtitle": "پانی کی حفاظت اور حفظان صحت کے بارے میں علم کے ساتھ کمیونٹی کو بااختیار بنانا۔",
     "backgroundImage": "/karachicharminar.gif"
   },
   "resources": [
@@ -26,12 +26,12 @@
   ],
   "seo": {
     "id": null,
-    "title": "Education & Awareness | Karachi Water & Sewerage Corporation",
-    "description": "Empowering the community with knowledge about water conservation and hygiene.",
+    "title": "تعلیم اور آگاہی | Karachi Water & Sewerage Corporation",
+    "description": "پانی کی حفاظت اور حفظان صحت کے بارے میں علم کے ساتھ کمیونٹی کو بااختیار بنانا۔",
     "keywords": null,
     "canonicalUrl": "/education",
-    "ogTitle": "Education & Awareness | Karachi Water & Sewerage Corporation",
-    "ogDescription": "Empowering the community with knowledge about water conservation and hygiene.",
+    "ogTitle": "تعلیم اور آگاہی | Karachi Water & Sewerage Corporation",
+    "ogDescription": "پانی کی حفاظت اور حفظان صحت کے بارے میں علم کے ساتھ کمیونٹی کو بااختیار بنانا۔",
     "ogImageUrl": "/karachicharminar.gif",
     "twitterCard": "summary_large_image",
     "structuredData": null,

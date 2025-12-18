@@ -6,13 +6,15 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, User, Tag, MessageSquare } from "lucide-react";
+import Loader from "@/components/Loader";
+import { useContactData } from "@/hooks/useContactData";
 export default function Contact() {
-  // const { data, loading, error } = useContactData();
+  const { data, loading, error } = useContactData();
 
-  // if (loading) return <Loader />;
-  // if (error) return <div className="text-center py-10 text-red-500">Failed to load contact data.</div>;
+  if (loading) return <Loader />;
+  if (error) return <div className="text-center py-10 text-red-500">Failed to load contact data.</div>;
 
-  // const { channels = [], offices = [] } = data || {};
+  const { channels = [], offices = [] } = data || {};
 
   const [formData, setFormData] = useState({
     name: "",
@@ -24,9 +26,9 @@ export default function Contact() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState(null);
-  const [contactData, setContactData] = useState(null);
-  const [dataLoading, setDataLoading] = useState(true);
-  const [dataError, setDataError] = useState(null);
+  // const [contactData, setContactData] = useState(null);
+  // const [dataLoading, setDataLoading] = useState(true);
+  // const [dataError, setDataError] = useState(null);
 
   const inquiryCategories = [
     "Select Inquiry Category",
@@ -80,37 +82,37 @@ export default function Contact() {
   };
 
   // ...existing code... API fetch for contact data
-  useEffect(() => {
-    let isMounted = true;
+  // useEffect(() => {
+  //   let isMounted = true;
 
-    const fetchContactData = async () => {
-      try {
-        const response = await fetch("/api/contact");
-        if (!response.ok) {
-          throw new Error("Unable to load contact data");
-        }
-        const payload = await response.json();
-        if (isMounted) {
-          setContactData(payload?.data || null);
-        }
-      } catch (error) {
-        console.error("contact-page:fetch", error);
-        if (isMounted) {
-          setDataError("Live contact information is temporarily unavailable. Showing default details.");
-        }
-      } finally {
-        if (isMounted) {
-          setDataLoading(false);
-        }
-      }
-    };
+  //   const fetchContactData = async () => {
+  //     try {
+  //       const response = await fetch("/api/contact");
+  //       if (!response.ok) {
+  //         throw new Error("Unable to load contact data");
+  //       }
+  //       const payload = await response.json();
+  //       if (isMounted) {
+  //         setContactData(payload?.data || null);
+  //       }
+  //     } catch (error) {
+  //       console.error("contact-page:fetch", error);
+  //       if (isMounted) {
+  //         setDataError("Live contact information is temporarily unavailable. Showing default details.");
+  //       }
+  //     } finally {
+  //       if (isMounted) {
+  //         setDataLoading(false);
+  //       }
+  //     }
+  //   };
 
-    fetchContactData();
+  //   fetchContactData();
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
 
   // ...existing code... Fallback data and data extraction
   const defaultHero = {
@@ -118,9 +120,7 @@ export default function Contact() {
     subtitle: "Reach out to us for inquiries, complaints, or service requests. We are here to help.",
     backgroundImage: "/teentalwarkarachi.gif",
   };
-  const hero = contactData?.hero || defaultHero;
-  const channels = contactData?.channels || [];
-  const offices = contactData?.offices || [];
+  const hero = data?.hero || defaultHero;
   const helplineChannel = channels.find((channel) => channel.phone);
   const emailChannel = channels.find((channel) => channel.email);
   const primaryOffice = offices[0];

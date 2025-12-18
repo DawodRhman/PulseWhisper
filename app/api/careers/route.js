@@ -6,8 +6,28 @@ import { resolvePageSeo } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+const HERO_CONTENT = {
+  en: {
+    title: "Careers at KW&SC",
+    subtitle: "Join our mission to provide clean water and efficient sewerage services to Karachi.",
+    backgroundImage: "/teentalwarkarachi.gif",
+  },
+  ur: {
+    title: "KW&SC میں کیریئرز",
+    subtitle: "کراچی کو صاف پانی اور موثر سیوریج خدمات فراہم کرنے کے ہمارے مشن میں شامل ہوں۔",
+    backgroundImage: "/teentalwarkarachi.gif",
+  }
+};
+
+function getHeroContent(lang = 'en') {
+  return HERO_CONTENT[lang] || HERO_CONTENT.en;
+}
+
+export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const { data, stale } = await resolveWithSnapshot(
       SnapshotModule.CAREERS,
       async () => {
@@ -42,11 +62,7 @@ export async function GET() {
             .map((req) => req.content),
         });
 
-        const hero = {
-          title: "Careers at KW&SC",
-          subtitle: "Join our mission to provide clean water and efficient sewerage services to Karachi.",
-          backgroundImage: "/teentalwarkarachi.gif",
-        };
+        const hero = getHeroContent(lang);
 
         const seo = await resolvePageSeo({
           canonicalUrl: "/careers",

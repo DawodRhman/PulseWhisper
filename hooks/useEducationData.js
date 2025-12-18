@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useLanguageStore } from "@/lib/stores/languageStore";
 
 export function useEducationData() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const language = useLanguageStore((state) => state.language);
 
   useEffect(() => {
     let isMounted = true;
@@ -13,7 +15,7 @@ export function useEducationData() {
     async function fetchData() {
       try {
         setLoading(true);
-        const response = await fetch("/api/education", {
+        const response = await fetch(`/api/education?lang=${language}`, {
           signal: controller.signal,
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +47,7 @@ export function useEducationData() {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [language]);
 
   return {
     data,

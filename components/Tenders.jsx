@@ -5,6 +5,7 @@ import { FiSearch, FiChevronUp, FiChevronDown, FiDownload } from "react-icons/fi
 import Link from "next/link";
 import { Fade } from "react-awesome-reveal";
 import gsap from "gsap";
+import { useLanguageStore } from "@/lib/stores/languageStore";
 
 
 const SearchFilter = React.memo(({ onFilterChange, allTenders }) => {
@@ -88,11 +89,12 @@ export default function Tenders() {
   const [openId, setOpenId] = useState(null);
   const [activeTab, setActiveTab] = useState("open");
   const [filters, setFilters] = useState({ searchTerm: "", filterType: "All" });
+  const { language } = useLanguageStore();
 
   useEffect(() => {
     async function fetchTenders() {
       try {
-        const response = await fetch("/api/tenders");
+        const response = await fetch(`/api/tenders?lang=${language}`);
         if (!response.ok) {
           throw new Error("Failed to fetch tenders");
         }
@@ -111,7 +113,7 @@ export default function Tenders() {
     }
 
     fetchTenders();
-  }, []);
+  }, [language]);
 
   // GSAP Loader Effect
   useEffect(() => {

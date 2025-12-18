@@ -3,8 +3,11 @@ import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') || 'en';
+
     const pages = await prisma.page.findMany({
       where: { isPublished: true },
       select: {
