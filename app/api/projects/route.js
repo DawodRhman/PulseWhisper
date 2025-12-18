@@ -5,10 +5,17 @@ import { buildHomePayload } from "@/lib/home/payload";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request) {
     try {
-        const snapshot = await resolveWithSnapshot(SnapshotModule.HOME, () => buildHomePayload('en'));
-        const projects = snapshot?.data?.projects || [];
+        const { searchParams } = new URL(request.url);
+        const lang = searchParams.get('lang') || 'en';
+
+        const snapshot = await resolveWithSnapshot(SnapshotModule.HOME, () => buildHomePayload(lang));
+        const projects = (snapshot?.data?.projects || []).map(project => ({
+            ...project,
+            title: lang === 'ur' && project.titleUr ? project.titleUr : project.title,
+            summary: lang === 'ur' && project.summaryUr ? project.summaryUr : project.summary,
+        }));
         return NextResponse.json({ projects });
     } catch (error) {
         console.error("/api/projects", error);

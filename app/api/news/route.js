@@ -63,6 +63,9 @@ export async function GET(request) {
           categories,
           articles: articles.map((article) => ({
             ...article,
+            title: lang === 'ur' && article.titleUr ? article.titleUr : article.title,
+            subtitle: lang === 'ur' && article.subtitleUr ? article.subtitleUr : article.subtitle,
+            summary: lang === 'ur' && article.summaryUr ? article.summaryUr : article.summary,
             tags: article.tags.map((map) => map.tag),
           })),
           seo,

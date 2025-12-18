@@ -160,7 +160,26 @@ export async function GET(request) {
           categories = mapServicesFallback(lang);
         }
 
-        if (!Array.isArray(categories) || categories.length === 0) {
+        // Translate database categories if they exist
+        if (Array.isArray(categories) && categories.length > 0) {
+          categories = categories.map(category => ({
+            ...category,
+            title: lang === 'ur' && category.titleUr ? category.titleUr : category.title,
+            summary: lang === 'ur' && category.summaryUr ? category.summaryUr : category.summary,
+            heroCopy: lang === 'ur' && category.heroCopyUr ? category.heroCopyUr : category.heroCopy,
+            cards: category.cards?.map(card => ({
+              ...card,
+              title: lang === 'ur' && card.titleUr ? card.titleUr : card.title,
+              summary: lang === 'ur' && card.summaryUr ? card.summaryUr : card.summary,
+              description: lang === 'ur' && card.descriptionUr ? card.descriptionUr : card.description,
+              details: card.details?.map(detail => ({
+                ...detail,
+                heading: lang === 'ur' && detail.headingUr ? detail.headingUr : detail.heading,
+                body: lang === 'ur' && detail.bodyUr ? detail.bodyUr : detail.body,
+              })),
+            })),
+          }));
+        } else if (!Array.isArray(categories) || categories.length === 0) {
           categories = mapServicesFallback(lang);
         }
 

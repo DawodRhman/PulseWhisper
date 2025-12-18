@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useLanguageStore } from "@/lib/stores/languageStore";
 
 export function useCareerDetails(slug) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const language = useLanguageStore((state) => state.language);
 
   useEffect(() => {
     if (!slug) return;
@@ -11,8 +13,8 @@ export function useCareerDetails(slug) {
     async function fetchData() {
       try {
         setLoading(true);
-        const response = await fetch(`/api/careers/${slug}`);
-        
+        const response = await fetch(`/api/careers/${slug}?lang=${language}`);
+
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error("Job not found");
@@ -31,7 +33,7 @@ export function useCareerDetails(slug) {
     }
 
     fetchData();
-  }, [slug]);
+  }, [slug, language]);
 
   return { data, loading, error };
 }

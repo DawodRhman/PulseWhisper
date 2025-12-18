@@ -54,6 +54,12 @@ export async function GET(request) {
 
         const groupRequirements = (opening) => ({
           ...opening,
+          title: lang === 'ur' && opening.titleUr ? opening.titleUr : opening.title,
+          department: lang === 'ur' && opening.departmentUr ? opening.departmentUr : opening.department,
+          location: lang === 'ur' && opening.locationUr ? opening.locationUr : opening.location,
+          jobType: lang === 'ur' && opening.jobTypeUr ? opening.jobTypeUr : opening.jobType,
+          summary: lang === 'ur' && opening.summaryUr ? opening.summaryUr : opening.summary,
+          description: lang === 'ur' && opening.descriptionUr ? opening.descriptionUr : opening.description,
           qualifications: opening.requirements
             .filter((req) => req.type === "QUALIFICATION")
             .map((req) => req.content),

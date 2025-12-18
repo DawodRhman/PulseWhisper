@@ -255,9 +255,12 @@ model CachedSnapshot {
 model ServiceCategory {
   id        String             @id @default(uuid())
   title     String
+  titleUr   String?
   slug      String             @unique
   summary   String?
+  summaryUr String?
   heroCopy  String?
+  heroCopyUr String?
   order     Int                @default(0)
   seoId     String?
   createdAt DateTime           @default(now())
@@ -272,8 +275,11 @@ model ServiceCard {
   id            String          @id @default(uuid())
   categoryId    String
   title         String
+  titleUr       String?
   summary       String?
+  summaryUr     String?
   description   String?
+  descriptionUr String?
   iconKey       String?
   gradientClass String?
   order         Int             @default(0)
@@ -292,7 +298,9 @@ model ServiceDetail {
   id            String   @id @default(uuid())
   serviceCardId String
   heading       String
+  headingUr     String?
   body          String?
+  bodyUr        String?
   bulletPoints  Json?
   order         Int      @default(0)
   createdAt     DateTime @default(now())
@@ -378,10 +386,14 @@ model CareerOpening {
   id           String              @id @default(uuid())
   programId    String?
   title        String
+  titleUr      String?
   slug         String              @unique
   department   String?
+  departmentUr String?
   location     String?
+  locationUr   String?
   jobType      String?
+  jobTypeUr    String?
   compensation String?
   status       PublicationStatus   @default(DRAFT)
   publishAt    DateTime?
@@ -471,9 +483,12 @@ model NewsArticle {
   id          String            @id @default(uuid())
   categoryId  String?
   title       String
+  titleUr     String?
   slug        String            @unique
   subtitle    String?
+  subtitleUr  String?
   summary     String?
+  summaryUr   String?
   content     Json
   status      PublicationStatus @default(DRAFT)
   publishedAt DateTime?
@@ -544,7 +559,9 @@ model LeadershipMember {
 model Achievement {
   id        String   @id @default(uuid())
   title     String
+  titleUr   String?
   summary   String?
+  summaryUr String?
   metric    String?
   iconKey   String?
   order     Int      @default(0)
@@ -555,6 +572,7 @@ model Achievement {
 model FaqCategory {
   id        String   @id @default(uuid())
   title     String
+  titleUr   String?
   order     Int      @default(0)
   faqs      Faq[]
   createdAt DateTime @default(now())
@@ -565,7 +583,9 @@ model Faq {
   id         String   @id @default(uuid())
   categoryId String?
   question   String
+  questionUr String?
   answer     String
+  answerUr   String?
   order      Int      @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -576,7 +596,9 @@ model Faq {
 model WorkflowStep {
   id        String   @id @default(uuid())
   title     String
+  titleUr   String?
   summary   String?
+  summaryUr String?
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -585,6 +607,7 @@ model WorkflowStep {
 model CounterStat {
   id        String   @id @default(uuid())
   label     String
+  labelUr   String?
   value     Int
   suffix    String?
   order     Int      @default(0)
@@ -595,7 +618,9 @@ model CounterStat {
 model ProjectHighlight {
   id        String   @id @default(uuid())
   title     String
+  titleUr   String?
   summary   String?
+  summaryUr String?
   status    String?
   order     Int      @default(0)
   mediaId   String?
