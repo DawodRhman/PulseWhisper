@@ -6,50 +6,50 @@
   },
   "categories": [
     {
-      "id": "7e454512-08d2-4ca6-99b6-d607e4d6425e",
+      "id": "a1d972f6-0319-4e54-b593-aac761f29ad0",
       "title": "INFRASTRUCTURE",
       "slug": "infrastructure",
       "order": 0,
-      "createdAt": "2025-12-04T17:08:54.616Z",
-      "updatedAt": "2025-12-04T17:08:54.616Z"
+      "createdAt": "2025-11-25T10:27:58.454Z",
+      "updatedAt": "2025-11-25T10:27:58.454Z"
     },
     {
-      "id": "11572baf-fec5-406b-999c-20ec80e18574",
+      "id": "12bc0b71-b511-4220-b7f4-0a9fea744b97",
       "title": "DIGITAL SERVICES",
       "slug": "digital-services",
       "order": 0,
-      "createdAt": "2025-12-04T17:08:55.745Z",
-      "updatedAt": "2025-12-04T17:08:55.745Z"
+      "createdAt": "2025-11-25T10:27:58.627Z",
+      "updatedAt": "2025-11-25T10:27:58.627Z"
     },
     {
-      "id": "d337b400-784c-474e-8007-16d976e0f2fb",
+      "id": "5e61ac27-15c4-4883-8b43-e0b4c8d99a0d",
       "title": "MAINTENANCE",
       "slug": "maintenance",
       "order": 0,
-      "createdAt": "2025-12-04T17:08:56.640Z",
-      "updatedAt": "2025-12-04T17:08:56.640Z"
+      "createdAt": "2025-11-25T10:27:58.720Z",
+      "updatedAt": "2025-11-25T10:27:58.720Z"
     },
     {
-      "id": "76b89c92-a124-406b-a456-71215376e059",
+      "id": "3cce8eff-7934-4b3d-9a03-953517e22e6c",
       "title": "SUSTAINABILITY",
       "slug": "sustainability",
       "order": 0,
-      "createdAt": "2025-12-04T17:08:57.300Z",
-      "updatedAt": "2025-12-04T17:08:57.300Z"
+      "createdAt": "2025-11-25T10:27:58.816Z",
+      "updatedAt": "2025-11-25T10:27:58.816Z"
     },
     {
-      "id": "69b81b48-ba5f-4e90-a4fa-63c2b54b5b3f",
+      "id": "8966a7b0-a609-4233-8b01-de232d9e64e0",
       "title": "PUBLIC RELATIONS",
       "slug": "public-relations",
       "order": 0,
-      "createdAt": "2025-12-04T17:08:58.030Z",
-      "updatedAt": "2025-12-04T17:08:58.030Z"
+      "createdAt": "2025-11-25T10:27:58.914Z",
+      "updatedAt": "2025-11-25T10:27:58.914Z"
     }
   ],
   "articles": [
     {
-      "id": "df101203-6334-4066-987b-85d589870006",
-      "categoryId": "7e454512-08d2-4ca6-99b6-d607e4d6425e",
+      "id": "e0b7a6c4-2cbc-4427-ab85-939d3cfdb88e",
+      "categoryId": "a1d972f6-0319-4e54-b593-aac761f29ad0",
       "title": "K-IV Project: Phase I Operational Status Confirmed",
       "slug": "k-iv-project-phase-i-operational-status-confirmed",
       "subtitle": null,
@@ -59,21 +59,21 @@
       },
       "status": "PUBLISHED",
       "publishedAt": "2025-11-15T00:00:00.000Z",
-      "heroMediaId": "8ef0e2a0-b1fd-47c0-bc42-8f2058c57b14",
+      "heroMediaId": "ae57c01a-1bf0-4ef4-9898-3b61aa92f9a6",
       "seoId": null,
-      "createdAt": "2025-12-04T17:08:55.303Z",
-      "updatedAt": "2025-12-04T17:08:55.303Z",
+      "createdAt": "2025-11-25T10:27:58.571Z",
+      "updatedAt": "2025-11-25T10:27:58.571Z",
       "category": {
-        "id": "7e454512-08d2-4ca6-99b6-d607e4d6425e",
+        "id": "a1d972f6-0319-4e54-b593-aac761f29ad0",
         "title": "INFRASTRUCTURE",
         "slug": "infrastructure",
         "order": 0,
-        "createdAt": "2025-12-04T17:08:54.616Z",
-        "updatedAt": "2025-12-04T17:08:54.616Z"
+        "createdAt": "2025-11-25T10:27:58.454Z",
+        "updatedAt": "2025-11-25T10:27:58.454Z"
       },
       "tags": [],
       "heroMedia": {
-        "id": "8ef0e2a0-b1fd-47c0-bc42-8f2058c57b14",
+        "id": "ae57c01a-1bf0-4ef4-9898-3b61aa92f9a6",
         "url": "/media/news/kiv-operational.svg",
         "label": "K-IV Project: Phase I Operational Status Confirmed",
         "mimeType": "image/svg+xml",
@@ -83,14 +83,14 @@
         "checksum": "03e0d079c00b9a66652777dc3666494c",
         "category": "news",
         "altText": null,
-        "createdAt": "2025-12-04T17:08:55.089Z",
-        "updatedAt": "2025-12-04T17:08:55.089Z"
+        "createdAt": "2025-11-25T10:27:58.542Z",
+        "updatedAt": "2025-11-25T10:27:58.542Z"
       },
       "seo": null
     },
     {
-      "id": "ec60a782-c4b7-46c7-90c3-58e90802c4fa",
-      "categoryId": "11572baf-fec5-406b-999c-20ec80e18574",
+      "id": "42246e6c-5c7a-438e-be55-702f9e3fb966",
+      "categoryId": "12bc0b71-b511-4220-b7f4-0a9fea744b97",
       "title": "E-Billing Portal V2.0 Deployed",
       "slug": "e-billing-portal-v2-0-deployed",
       "subtitle": null,
@@ -100,21 +100,21 @@
       },
       "status": "PUBLISHED",
       "publishedAt": "2025-10-28T00:00:00.000Z",
-      "heroMediaId": "c8690727-9f3f-45aa-b7f5-3b4577c1425b",
+      "heroMediaId": "81c386cc-b3ab-44ca-bfa8-da8e80e6634c",
       "seoId": null,
-      "createdAt": "2025-12-04T17:08:56.184Z",
-      "updatedAt": "2025-12-04T17:08:56.184Z",
+      "createdAt": "2025-11-25T10:27:58.688Z",
+      "updatedAt": "2025-11-25T10:27:58.688Z",
       "category": {
-        "id": "11572baf-fec5-406b-999c-20ec80e18574",
+        "id": "12bc0b71-b511-4220-b7f4-0a9fea744b97",
         "title": "DIGITAL SERVICES",
         "slug": "digital-services",
         "order": 0,
-        "createdAt": "2025-12-04T17:08:55.745Z",
-        "updatedAt": "2025-12-04T17:08:55.745Z"
+        "createdAt": "2025-11-25T10:27:58.627Z",
+        "updatedAt": "2025-11-25T10:27:58.627Z"
       },
       "tags": [],
       "heroMedia": {
-        "id": "c8690727-9f3f-45aa-b7f5-3b4577c1425b",
+        "id": "81c386cc-b3ab-44ca-bfa8-da8e80e6634c",
         "url": "/media/news/digital-billing.svg",
         "label": "E-Billing Portal V2.0 Deployed",
         "mimeType": "image/svg+xml",
@@ -124,14 +124,14 @@
         "checksum": "b390570bd8aafdfd286bf13c700d1c22",
         "category": "news",
         "altText": null,
-        "createdAt": "2025-12-04T17:08:55.963Z",
-        "updatedAt": "2025-12-04T17:08:55.963Z"
+        "createdAt": "2025-11-25T10:27:58.659Z",
+        "updatedAt": "2025-11-25T10:27:58.659Z"
       },
       "seo": null
     },
     {
-      "id": "9b43bd71-d6ce-49e4-87d0-b5d39a2bf87f",
-      "categoryId": "d337b400-784c-474e-8007-16d976e0f2fb",
+      "id": "a0503c08-8d66-4cf3-a2af-ef672f5b8eb6",
+      "categoryId": "5e61ac27-15c4-4883-8b43-e0b4c8d99a0d",
       "title": "Sewerage Network Overhaul: Sector 4 & 7",
       "slug": "sewerage-network-overhaul-sector-4-7",
       "subtitle": null,
@@ -141,21 +141,21 @@
       },
       "status": "PUBLISHED",
       "publishedAt": "2025-10-10T00:00:00.000Z",
-      "heroMediaId": "851a0b98-3cbb-425a-a928-c2e6ae587623",
+      "heroMediaId": "5ab4d493-06de-4da4-8d53-d3a440cb5f2d",
       "seoId": null,
-      "createdAt": "2025-12-04T17:08:57.083Z",
-      "updatedAt": "2025-12-04T17:08:57.083Z",
+      "createdAt": "2025-11-25T10:27:58.785Z",
+      "updatedAt": "2025-11-25T10:27:58.785Z",
       "category": {
-        "id": "d337b400-784c-474e-8007-16d976e0f2fb",
+        "id": "5e61ac27-15c4-4883-8b43-e0b4c8d99a0d",
         "title": "MAINTENANCE",
         "slug": "maintenance",
         "order": 0,
-        "createdAt": "2025-12-04T17:08:56.640Z",
-        "updatedAt": "2025-12-04T17:08:56.640Z"
+        "createdAt": "2025-11-25T10:27:58.720Z",
+        "updatedAt": "2025-11-25T10:27:58.720Z"
       },
       "tags": [],
       "heroMedia": {
-        "id": "851a0b98-3cbb-425a-a928-c2e6ae587623",
+        "id": "5ab4d493-06de-4da4-8d53-d3a440cb5f2d",
         "url": "/media/news/hydro-testing.svg",
         "label": "Sewerage Network Overhaul: Sector 4 & 7",
         "mimeType": "image/svg+xml",
@@ -165,14 +165,14 @@
         "checksum": "aa8dc6772ffd7c78e335f8b8025bad29",
         "category": "news",
         "altText": null,
-        "createdAt": "2025-12-04T17:08:56.862Z",
-        "updatedAt": "2025-12-04T17:08:56.862Z"
+        "createdAt": "2025-11-25T10:27:58.753Z",
+        "updatedAt": "2025-11-25T10:27:58.753Z"
       },
       "seo": null
     },
     {
-      "id": "51b91d6a-772d-4537-85e1-ecda2cbbbda3",
-      "categoryId": "76b89c92-a124-406b-a456-71215376e059",
+      "id": "b63f00ab-7825-4ab0-8a8e-e0db175e53bd",
+      "categoryId": "3cce8eff-7934-4b3d-9a03-953517e22e6c",
       "title": "Industrial Water Conservation Protocol",
       "slug": "industrial-water-conservation-protocol",
       "subtitle": null,
@@ -182,21 +182,21 @@
       },
       "status": "PUBLISHED",
       "publishedAt": "2025-09-22T00:00:00.000Z",
-      "heroMediaId": "3eb19375-6b2e-478c-90a8-742dce9d6cd7",
+      "heroMediaId": "3f07076b-d79a-499e-b4f9-59c54d1ecc61",
       "seoId": null,
-      "createdAt": "2025-12-04T17:08:57.814Z",
-      "updatedAt": "2025-12-04T17:08:57.814Z",
+      "createdAt": "2025-11-25T10:27:58.882Z",
+      "updatedAt": "2025-11-25T10:27:58.882Z",
       "category": {
-        "id": "76b89c92-a124-406b-a456-71215376e059",
+        "id": "3cce8eff-7934-4b3d-9a03-953517e22e6c",
         "title": "SUSTAINABILITY",
         "slug": "sustainability",
         "order": 0,
-        "createdAt": "2025-12-04T17:08:57.300Z",
-        "updatedAt": "2025-12-04T17:08:57.300Z"
+        "createdAt": "2025-11-25T10:27:58.816Z",
+        "updatedAt": "2025-11-25T10:27:58.816Z"
       },
       "tags": [],
       "heroMedia": {
-        "id": "3eb19375-6b2e-478c-90a8-742dce9d6cd7",
+        "id": "3f07076b-d79a-499e-b4f9-59c54d1ecc61",
         "url": "/media/news/smart-meters.svg",
         "label": "Industrial Water Conservation Protocol",
         "mimeType": "image/svg+xml",
@@ -206,14 +206,14 @@
         "checksum": "0e3507fb6c1a3e2ca76b9eff5cb9cf0e",
         "category": "news",
         "altText": null,
-        "createdAt": "2025-12-04T17:08:57.520Z",
-        "updatedAt": "2025-12-04T17:08:57.520Z"
+        "createdAt": "2025-11-25T10:27:58.849Z",
+        "updatedAt": "2025-11-25T10:27:58.849Z"
       },
       "seo": null
     },
     {
-      "id": "5ab87f96-0fd6-4613-baff-edd542a4fc73",
-      "categoryId": "69b81b48-ba5f-4e90-a4fa-63c2b54b5b3f",
+      "id": "67a76b95-3c94-4923-a1af-ac5d28d1d57a",
+      "categoryId": "8966a7b0-a609-4233-8b01-de232d9e64e0",
       "title": "Community Outreach: Clean Water Initiative",
       "slug": "community-outreach-clean-water-initiative",
       "subtitle": null,
@@ -223,21 +223,21 @@
       },
       "status": "PUBLISHED",
       "publishedAt": "2025-09-01T00:00:00.000Z",
-      "heroMediaId": "692e8f3b-8fcd-4ced-8595-fdb352cdb07d",
+      "heroMediaId": "c8b2b09e-b4b9-4ae3-b417-dbdedddc23f8",
       "seoId": null,
-      "createdAt": "2025-12-04T17:08:58.479Z",
-      "updatedAt": "2025-12-04T17:08:58.479Z",
+      "createdAt": "2025-11-25T10:27:58.979Z",
+      "updatedAt": "2025-11-25T10:27:58.979Z",
       "category": {
-        "id": "69b81b48-ba5f-4e90-a4fa-63c2b54b5b3f",
+        "id": "8966a7b0-a609-4233-8b01-de232d9e64e0",
         "title": "PUBLIC RELATIONS",
         "slug": "public-relations",
         "order": 0,
-        "createdAt": "2025-12-04T17:08:58.030Z",
-        "updatedAt": "2025-12-04T17:08:58.030Z"
+        "createdAt": "2025-11-25T10:27:58.914Z",
+        "updatedAt": "2025-11-25T10:27:58.914Z"
       },
       "tags": [],
       "heroMedia": {
-        "id": "692e8f3b-8fcd-4ced-8595-fdb352cdb07d",
+        "id": "c8b2b09e-b4b9-4ae3-b417-dbdedddc23f8",
         "url": "/media/news/storm-response.svg",
         "label": "Community Outreach: Clean Water Initiative",
         "mimeType": "image/svg+xml",
@@ -247,8 +247,8 @@
         "checksum": "e85cd7f6f3d865245b219bb9e90d6f3a",
         "category": "news",
         "altText": null,
-        "createdAt": "2025-12-04T17:08:58.255Z",
-        "updatedAt": "2025-12-04T17:08:58.255Z"
+        "createdAt": "2025-11-25T10:27:58.947Z",
+        "updatedAt": "2025-11-25T10:27:58.947Z"
       },
       "seo": null
     }

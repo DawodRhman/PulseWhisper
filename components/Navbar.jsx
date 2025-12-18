@@ -3,15 +3,17 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { gsap } from "gsap";
-import { X, ChevronDown, Search, Globe } from "lucide-react";
+import { X, ChevronDown, Search, Globe, Sun, Moon } from "lucide-react";
+import { useThemeStore } from "@/lib/stores/themeStore";
+import { useLanguageStore } from "@/lib/stores/languageStore";
+import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [expandedMobileSubmenu, setExpandedMobileSubmenu] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [language, setLanguage] = useState("en");
+  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
   const menuRef = useRef(null);
   const linksRef = useRef([]);
   const submenuRefs = useRef([]);
@@ -21,6 +23,12 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const isAdminView = pathname?.startsWith("/papa");
+
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  const language = useLanguageStore((state) => state.language);
+  const setLanguage = useLanguageStore((state) => state.setLanguage);
+  const { t } = useTranslation();
 
   if (isAdminView) {
     return null;
@@ -81,15 +89,17 @@ const Navbar = () => {
     }
   }, [isOpen]);
 
-  // ✅ Track scroll position for background switch
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80); // Change background after 50px scroll
+    const handleClickOutside = (event) => {
+      if (showSettingsDropdown && !event.target.closest('.settings-dropdown')) {
+        setShowSettingsDropdown(false);
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showSettingsDropdown]);
 
   // Handle search
   const handleSearch = (e) => {
@@ -102,19 +112,19 @@ const Navbar = () => {
 
   // Toggle language
   const toggleLanguage = () => {
-    setLanguage(prev => prev === "en" ? "ur" : "en");
+    setLanguage(language === "en" ? "ur" : "en");
     // You can add language switching logic here
   };
 
-  const NavLinks = [
-    { href: "/", text: "Home" },
+  const getNavLinks = () => [
+    { href: "/", text: t("nav.home") },
 
     {
       href: "/whatwedo",
-      text: "What We Do",
+      text: t("nav.services"),
       submenu: [
-        { href: "/ourservices", text: "Our Services" },
-        { href: "/portfolio", text: "Our Projects" },
+        { href: "/ourservices", text: t("nav.services") },
+        { href: "/portfolio", text: t("nav.projects") },
         { href: "/workwithus", text: "Work With Us" },
         { href: "/news", text: "News & Updates" },
         { href: "/right-to-information", text: "Right to Information" },
@@ -122,28 +132,20 @@ const Navbar = () => {
     },
     {
       href: "/aboutus",
-      text: "About Us",
+      text: t("nav.about"),
       submenu: [
         { href: "/aboutus", text: "Our Heritage" },
         { href: "/watertodaysection", text: "Water Today" },
         { href: "/achievements", text: "Achievements" },
         { href: "/ourleadership", text: "Our Leadership" },
-        { href: "/careers", text: "Careers" },
+        { href: "/careers", text: t("nav.careers") },
         { href: "/faqs", text: "FAQs" },
       ]
     },
-    //{ 
-    //  href: "/portfolio", 
-    //  text: "Our Projects",
-    //  submenu: [
-    //  { href: "/portfolio", text: "All Projects" },
-
-    //  ]
-    //  },
 
     {
       href: "/tenders",
-      text: "Tenders",
+      text: t("nav.tenders"),
 
     },
     {
@@ -151,10 +153,9 @@ const Navbar = () => {
       text: "Education",
 
     },
-
     {
       href: "/contact",
-      text: "Contact",
+      text: t("nav.contact"),
 
     },
   ];
@@ -166,7 +167,7 @@ const Navbar = () => {
       clearTimeout(hoverTimeoutRef.current);
     }
 
-    if (hoveredIndex !== null && NavLinks[hoveredIndex]?.submenu) {
+    if (hoveredIndex !== null && getNavLinks()[hoveredIndex]?.submenu) {
       // First, close all other submenus immediately
       submenuRefs.current.forEach((ref, index) => {
         if (ref && index !== hoveredIndex) {
@@ -247,7 +248,7 @@ const Navbar = () => {
           <div className="flex-1 flex justify-center">
             <nav className="hidden md:block">
               <ul className="flex gap-4 lg:gap-8 xl:gap-10 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold uppercase">
-                {NavLinks.map((loop, index) => (
+                {getNavLinks().map((link, index) => (
                   <li
                     key={loop.href}
                     className="relative group"
@@ -328,7 +329,7 @@ const Navbar = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
+                  placeholder={t("nav.search")}
                   className={`pl-10 pr-4 py-2 w-48 lg:w-56 xl:w-64 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     isScrolled
                       ? "bg-white text-gray-900 placeholder-gray-500"
@@ -338,19 +339,54 @@ const Navbar = () => {
               </div>
             </form>
 
-            {/* Language Toggle */}
-            <button
-              onClick={toggleLanguage}
-              className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 border font-medium text-sm ${
-                isScrolled
-                  ? "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-blue-500"
-                  : "bg-white/90 text-gray-700 border-white/50 hover:bg-white backdrop-blur-sm"
-              }`}
-              title={language === "en" ? "Switch to Urdu" : "Switch to English"}
-            >
-              <Globe size={16} />
-              <span>{language === "en" ? "اردو" : "English"}</span>
-            </button>
+            {/* Settings Dropdown */}
+            <div className="relative settings-dropdown">
+              <button
+                onClick={() => setShowSettingsDropdown(!showSettingsDropdown)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 border font-medium text-sm ${
+                  isScrolled
+                    ? "bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-blue-500"
+                    : "bg-white/90 text-gray-700 border-white/50 hover:bg-white backdrop-blur-sm"
+                }`}
+                title="Settings"
+              >
+                <Globe size={16} />
+                <span>{language === "en" ? "اردو" : "English"}</span>
+                <ChevronDown size={14} className={`transition-transform ${showSettingsDropdown ? 'rotate-180' : ''}`} />
+              </button>
+
+              {showSettingsDropdown && (
+                <div className={`absolute top-full right-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] ${
+                  isScrolled ? "bg-white" : "bg-white/95 backdrop-blur-sm"
+                }`}>
+                  <div className="py-2">
+                    {/* Theme Toggle */}
+                    <button
+                      onClick={() => {
+                        toggleTheme();
+                        setShowSettingsDropdown(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                    >
+                      {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+                      <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+                    </button>
+
+                    {/* Language Toggle */}
+                    <button
+                      onClick={() => {
+                        toggleLanguage();
+                        setShowSettingsDropdown(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                    >
+                      <Globe size={16} />
+                      <span>{language === "en" ? "اردو" : "English"}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -383,20 +419,53 @@ const Navbar = () => {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search..."
+                      placeholder={t("nav.search")}
                       className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </form>
 
-                {/* Mobile Language Toggle */}
-                <button
-                  onClick={toggleLanguage}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/30 text-white hover:bg-white/20 transition-colors"
-                >
-                  <Globe size={18} />
-                  <span className="text-sm font-medium">{language === "en" ? "اردو" : "English"}</span>
-                </button>
+                {/* Mobile Settings Dropdown */}
+                <div className="relative settings-dropdown">
+                  <button
+                    onClick={() => setShowSettingsDropdown(!showSettingsDropdown)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/30 text-white hover:bg-white/20 transition-colors"
+                  >
+                    <Globe size={18} />
+                    <span className="text-sm font-medium">{language === "en" ? "اردو" : "English"}</span>
+                    <ChevronDown size={14} className={`transition-transform ${showSettingsDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {showSettingsDropdown && (
+                    <div className="absolute top-full right-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] bg-white/95 backdrop-blur-sm">
+                      <div className="py-2">
+                        {/* Mobile Theme Toggle */}
+                        <button
+                          onClick={() => {
+                            toggleTheme();
+                            setShowSettingsDropdown(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        >
+                          {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+                          <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+                        </button>
+
+                        {/* Mobile Language Toggle */}
+                        <button
+                          onClick={() => {
+                            toggleLanguage();
+                            setShowSettingsDropdown(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        >
+                          <Globe size={16} />
+                          <span>{language === "en" ? "اردو" : "English"}</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {/* Close Button */}
                 <button

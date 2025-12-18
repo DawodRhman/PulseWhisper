@@ -1,6 +1,24 @@
 {
   "categories": [
     {
+      "id": "d4aa16fa-825a-440b-b48a-1291ae0515eb",
+      "title": "New Connection",
+      "order": 0,
+      "createdAt": "2025-11-25T10:27:59.011Z",
+      "updatedAt": "2025-11-25T10:27:59.011Z",
+      "faqs": [
+        {
+          "id": "1656fe45-759a-4df7-a54c-1a7d155adf03",
+          "categoryId": "d4aa16fa-825a-440b-b48a-1291ae0515eb",
+          "question": "How can I get a new water connection?",
+          "answer": "For residential, commercial, bulk, or industrial connections, submit an application with required documents at the nearest KW&SC office. The process includes site inspection, approval, and installation.",
+          "order": 0,
+          "createdAt": "2025-11-25T10:27:59.065Z",
+          "updatedAt": "2025-11-25T10:27:59.065Z"
+        }
+      ]
+    },
+    {
       "id": "a041c5ab-74fd-46e0-84a0-4cf9d93066f6",
       "title": "New Connection",
       "order": 0,
@@ -19,6 +37,24 @@
       ]
     },
     {
+      "id": "4c452956-1291-46dd-9f47-74f0ea3c8598",
+      "title": "Billing",
+      "order": 1,
+      "createdAt": "2025-11-25T10:27:59.123Z",
+      "updatedAt": "2025-11-25T10:27:59.123Z",
+      "faqs": [
+        {
+          "id": "ca72ffc4-bf9d-482f-99a6-2fe31ff55f8e",
+          "categoryId": "4c452956-1291-46dd-9f47-74f0ea3c8598",
+          "question": "How can I get a duplicate bill?",
+          "answer": "Visit web.kwsb.crdc.biz or the nearest KW&SC office with your account number and CNIC to get a duplicate bill.",
+          "order": 0,
+          "createdAt": "2025-11-25T10:27:59.154Z",
+          "updatedAt": "2025-11-25T10:27:59.154Z"
+        }
+      ]
+    },
+    {
       "id": "21d2018c-7629-4101-9f4c-e6ab73e5e804",
       "title": "Billing",
       "order": 1,
@@ -33,6 +69,24 @@
           "order": 0,
           "createdAt": "2025-12-04T17:08:59.972Z",
           "updatedAt": "2025-12-04T17:08:59.972Z"
+        }
+      ]
+    },
+    {
+      "id": "1361768b-0cf1-4670-b7e1-5fe3c9d58db6",
+      "title": "Complaints",
+      "order": 2,
+      "createdAt": "2025-11-25T10:27:59.183Z",
+      "updatedAt": "2025-11-25T10:27:59.183Z",
+      "faqs": [
+        {
+          "id": "051d63b1-d92b-4daf-9ae0-445452e55bc7",
+          "categoryId": "1361768b-0cf1-4670-b7e1-5fe3c9d58db6",
+          "question": "Where can I complain about sewerage?",
+          "answer": "Use complain.kwsc.gos.pk or call (+92) 021 111 597 200 to log sewerage complaints.",
+          "order": 0,
+          "createdAt": "2025-11-25T10:27:59.211Z",
+          "updatedAt": "2025-11-25T10:27:59.211Z"
         }
       ]
     },
@@ -69,6 +123,42 @@
           "order": 0,
           "createdAt": "2025-12-04T17:09:00.931Z",
           "updatedAt": "2025-12-04T17:09:00.931Z"
+        }
+      ]
+    },
+    {
+      "id": "8fd3209c-d2a9-4f2c-8f10-5b8eb8abe181",
+      "title": "Tanker Service",
+      "order": 3,
+      "createdAt": "2025-11-25T10:27:59.239Z",
+      "updatedAt": "2025-11-25T10:27:59.239Z",
+      "faqs": [
+        {
+          "id": "3509bd80-8c01-40b1-8338-b0d2f6a738a0",
+          "categoryId": "8fd3209c-d2a9-4f2c-8f10-5b8eb8abe181",
+          "question": "How can I order a water tanker?",
+          "answer": "Book through campaign.kwsc.gos.pk or by calling our customer service helpline.",
+          "order": 0,
+          "createdAt": "2025-11-25T10:27:59.268Z",
+          "updatedAt": "2025-11-25T10:27:59.268Z"
+        }
+      ]
+    },
+    {
+      "id": "9c7fa6d7-8443-4034-9b69-02288f1b099f",
+      "title": "Water Theft",
+      "order": 4,
+      "createdAt": "2025-11-25T10:27:59.295Z",
+      "updatedAt": "2025-11-25T10:27:59.295Z",
+      "faqs": [
+        {
+          "id": "70ce47ed-d801-43e6-a164-d6156e59c9d5",
+          "categoryId": "9c7fa6d7-8443-4034-9b69-02288f1b099f",
+          "question": "How can I report water theft?",
+          "answer": "Call (+92) 021 111 597 200 or contact the Hydrant Management Cell to report illegal connections.",
+          "order": 0,
+          "createdAt": "2025-11-25T10:27:59.323Z",
+          "updatedAt": "2025-11-25T10:27:59.323Z"
         }
       ]
     },

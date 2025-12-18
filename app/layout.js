@@ -4,18 +4,20 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import ThemeProvider from "@/components/ThemeProvider";
+import I18nProvider from "@/components/I18nProvider";
 
 
 
 const roboto = Montserrat({
-  variable:"--font-roboto",
+  variable: "--font-roboto",
   subsets: ["latin"],
-  weight:['300','400','500','600','700','800']
+  weight: ['300', '400', '500', '600', '700', '800']
 });
 
 const Avg_sans = Barlow_Condensed({
-  variable:"--font-average",
-  subsets:['latin'],
+  variable: "--font-average",
+  subsets: ['latin'],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
@@ -29,12 +31,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${roboto.variable} ${Avg_sans.variable} antialiased`}
+        className={`${roboto.variable} ${Avg_sans.variable} antialiased bg-white text-gray-900 dark:bg-gray-900 dark:text-white transition-colors`}
       >
-        <Navbar />
-        {children}
-        <Footer />
-        <CookieConsent />
+        <ThemeProvider>
+          <I18nProvider>
+            <Navbar />
+            {children}
+            <Footer />
+            <CookieConsent />
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

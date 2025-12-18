@@ -4,6 +4,7 @@ import Loader from "@/components/Loader";
 import gsap from "gsap";
 import Link from "next/link";
 import { Globe, MoveRight, Plug, AlertCircle, Truck, Receipt } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 import GetYourBillPopup from "@/components/GetYourBill";
 import NewConnectionPopup from "@/components/NewConnectionPopup";
@@ -12,11 +13,12 @@ import BookTankerPopup from "@/components/BookTankerPopup";
 
 export default function Home({ hero }) {
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
   const {
-    eyebrow = "Karachi Water & Sewerage Corporation",
-    title = "Committed to Deliver",
-    subtitle = "Ensuring clean, safe water supply and efficient sewerage services for Karachi.",
-    ctaLabel = "Learn About KW&SC",
+    eyebrow = t("hero.eyebrow"),
+    title = t("hero.title"),
+    subtitle = t("hero.subtitle"),
+    ctaLabel = t("hero.cta"),
     ctaHref = "/aboutus",
     backgroundImage = "/karachicharminar.gif"
   } = hero || {};
