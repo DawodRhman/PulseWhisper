@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
+import { useTranslation } from 'react-i18next';
 
 const FALLBACK_TEAM = [
   {
@@ -25,25 +26,27 @@ const FALLBACK_TEAM = [
   },
 ];
 
-const FALLBACK_INSIGHTS = [
-  {
-    title: "Our Vision",
-    desc: "A future where Karachi receives uninterrupted, clean, and safe water through modernized infrastructure and progressive leadership.",
-  },
-  {
-    title: "Our Mission",
-    desc: "To provide efficient water supply and sewerage services through sustainable operations, innovative planning, and skilled leadership.",
-  },
-  {
-    title: "Core Values",
-    desc: "Transparency, accountability, innovation, and public service form the foundation of KW&SC’s leadership principles.",
-  },
-];
 
 const PLACEHOLDER_PORTRAIT = "/leaders/placeholder.svg";
 
 export default function OurLeadership({ team, insights }) {
+  const { t } = useTranslation();
   const [fetchedTeam, setFetchedTeam] = useState(null);
+
+  const FALLBACK_INSIGHTS = [
+    {
+      title: t("leadership.vision.title"),
+      desc: t("leadership.vision.desc"),
+    },
+    {
+      title: t("leadership.mission.title"),
+      desc: t("leadership.mission.desc"),
+    },
+    {
+      title: t("leadership.values.title"),
+      desc: t("leadership.values.desc"),
+    },
+  ];
 
   useEffect(() => {
     async function fetchLeadership() {

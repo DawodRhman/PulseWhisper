@@ -1,0 +1,51 @@
+{
+  "id": "ebf2163a-0d5a-491b-a3b5-631ae97c4f2a",
+  "slug": "achievements",
+  "title": "Achievements",
+  "isPublished": true,
+  "showInNavbar": true,
+  "navLabel": null,
+  "navGroup": "aboutus",
+  "createdAt": "2025-12-04T17:09:26.495Z",
+  "updatedAt": "2025-12-15T13:40:16.438Z",
+  "seoId": "8f4f061a-7088-443c-a509-8b0422b5b1eb",
+  "sections": [
+    {
+      "id": "7181bed4-5414-45b0-bf31-6476ca5b92c7",
+      "pageId": "ebf2163a-0d5a-491b-a3b5-631ae97c4f2a",
+      "type": "HERO",
+      "order": 0,
+      "content": {
+        "title": "Our Achievements",
+        "subtitle": "Milestones in our journey",
+        "backgroundImage": "/uploads/1765800273161-90f568c5.mp4"
+      },
+      "createdAt": "2025-12-15T13:40:18.691Z",
+      "updatedAt": "2025-12-15T13:40:18.691Z"
+    },
+    {
+      "id": "4023b33d-a3a4-4921-b5c3-84ad2ae76a33",
+      "pageId": "ebf2163a-0d5a-491b-a3b5-631ae97c4f2a",
+      "type": "ACHIEVEMENTS",
+      "order": 1,
+      "content": {},
+      "createdAt": "2025-12-15T13:40:18.691Z",
+      "updatedAt": "2025-12-15T13:40:18.691Z"
+    }
+  ],
+  "seo": {
+    "id": "8f4f061a-7088-443c-a509-8b0422b5b1eb",
+    "title": "Achievements | KW&SC",
+    "description": "Learn more about Achievements at Karachi Water & Sewerage Corporation.",
+    "keywords": null,
+    "canonicalUrl": null,
+    "ogTitle": null,
+    "ogDescription": null,
+    "ogImageUrl": null,
+    "twitterCard": "summary_large_image",
+    "structuredData": null,
+    "allowIndexing": true,
+    "createdAt": "2025-12-04T17:09:26.495Z",
+    "updatedAt": "2025-12-15T13:40:16.438Z"
+  }
+}

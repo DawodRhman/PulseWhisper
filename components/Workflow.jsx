@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import { useTranslation } from 'react-i18next';
 import {
     DollarSign,
     Droplets,
@@ -18,43 +19,12 @@ const THEME_CLASSES = {
     blue: { text: "text-blue-700", bg: "bg-blue-700", border: "border-blue-700", shadow: "shadow-blue-700" },
 };
 
-const FALLBACK_STEPS = [
-    {
-        id: "01",
-        title: "Bulk Water Supply & Treatment",
-        subTitle:
-            "Managing the abstraction of raw water from primary sources (Indus River, Hub Dam), operating massive pumping systems, and treating water to potable standards for the entire metropolitan area.",
-        color: "cyan",
-    },
-    {
-        id: "02",
-        title: "Sewerage Infrastructure Management",
-        subTitle:
-            "Planning, operating, and maintaining the vast network of sewerage collectors, trunk mains, lifting/pumping stations, and ensuring proper disposal and treatment of wastewater and industrial effluent.",
-        color: "indigo",
-    },
-    {
-        id: "03",
-        title: "Distribution & Network Integrity",
-        subTitle:
-            "Managing the final distribution network, pipelines, and bulk transfer mains; focusing on reducing Non-Revenue Water (NRW) through leak detection, asset rehabilitation, and minimizing illegal connections.",
-        color: "emerald",
-    },
-    {
-        id: "04",
-        title: "Revenue, Customer & Governance",
-        subTitle:
-            "Ensuring financial sustainability through accurate metering, billing, and revenue collection. This role also includes effective customer grievance redressal and upholding institutional governance standards.",
-        color: "red",
-    },
-];
-
 // ... existing backend normalization function ...
-function normalizeSteps(steps) {
-    const base = Array.isArray(steps) && steps.length ? steps : FALLBACK_STEPS;
+function normalizeSteps(steps, fallbackSteps) {
+    const base = Array.isArray(steps) && steps.length ? steps : fallbackSteps;
     return base.map((step, index) => {
         const Icon = ICON_SET[index % ICON_SET.length];
-        const colorKey = step.color && THEME_CLASSES[step.color] ? step.color : FALLBACK_STEPS[index % FALLBACK_STEPS.length]?.color || "blue";
+        const colorKey = step.color && THEME_CLASSES[step.color] ? step.color : fallbackSteps[index % fallbackSteps.length]?.color || "blue";
         const theme = THEME_CLASSES[colorKey] || THEME_CLASSES.blue;
         return {
             id: String(index + 1).padStart(2, "0"),
@@ -69,7 +39,36 @@ function normalizeSteps(steps) {
 }
 
 const WorkFlow = ({ steps }) => {
-    const processSteps = useMemo(() => normalizeSteps(steps), [steps]);
+    const { t } = useTranslation();
+    
+    const FALLBACK_STEPS = [
+        {
+            id: "01",
+            title: t('workflow.step1.title'),
+            subTitle: t('workflow.step1.subtitle'),
+            color: "cyan",
+        },
+        {
+            id: "02",
+            title: t('workflow.step2.title'),
+            subTitle: t('workflow.step2.subtitle'),
+            color: "indigo",
+        },
+        {
+            id: "03",
+            title: t('workflow.step3.title'),
+            subTitle: t('workflow.step3.subtitle'),
+            color: "emerald",
+        },
+        {
+            id: "04",
+            title: t('workflow.step4.title'),
+            subTitle: t('workflow.step4.subtitle'),
+            color: "red",
+        },
+    ];
+
+    const processSteps = useMemo(() => normalizeSteps(steps, FALLBACK_STEPS), [steps, FALLBACK_STEPS]);
     const [activeStep, setActiveStep] = useState(processSteps[0].id);
     const stepRefs = useRef([]);
     const observerRef = useRef(null);
