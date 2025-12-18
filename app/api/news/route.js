@@ -68,12 +68,7 @@ export async function GET(request) {
       },
     });
 
-    const translatedArticles = snapshotData.articles.map((article) => ({
-      ...article,
-      title: lang === 'ur' && article.titleUr ? article.titleUr : article.title,
-      subtitle: lang === 'ur' && article.subtitleUr ? article.subtitleUr : article.subtitle,
-      summary: lang === 'ur' && article.summaryUr ? article.summaryUr : article.summary,
-    }));
+    const translatedArticles = snapshotData.articles;
 
     return NextResponse.json({
       data: {

@@ -330,7 +330,7 @@ export default function NewsUpdates() {
           {activeTab === "updates" && (
             <div className="grid grid-cols-1 gap-6">
               {news.map((item, index) => {
-                 return (
+                return (
                   <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-3">
@@ -342,17 +342,18 @@ export default function NewsUpdates() {
                         </span>
                       </div>
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                        {item.title}
+                        {(isUrdu && item.titleUr) ? item.titleUr : item.title}
                       </h3>
                       <p className="text-gray-600 mb-4">
-                        {item.summary}
+                        {(isUrdu && item.descriptionUr) ? item.descriptionUr : item.summary}
                       </p>
                       <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
                         {t('news.readMore')} <ChevronRight size={16} />
                       </a>
                     </div>
                   </div>
-              )})}
+                )
+              })}
             </div>
           )}
 
@@ -360,9 +361,9 @@ export default function NewsUpdates() {
           {activeTab === "press" && (
             <div className="grid grid-cols-1 gap-6">
               {pressReleases.map((item, index) => {
-                 const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
-                 const displayDesc = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.description;
-                 return (
+                const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
+                const displayDesc = (isUrdu && item.descriptionUr) ? item.descriptionUr : item.description;
+                return (
                   <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start mb-3">
                       <span className="text-gray-500 text-sm">{item.date}</span>
@@ -376,16 +377,17 @@ export default function NewsUpdates() {
                     <p className="text-gray-600 mb-4">
                       {displayDesc}
                     </p>
-                    <a 
-                      href={item.link || '#'} 
-                      target="_blank" 
+                    <a
+                      href={item.link || '#'}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
                     >
                       {t('news.readMore')} <ChevronRight size={16} />
                     </a>
                   </div>
-              )})}
+                )
+              })}
             </div>
           )}
 
@@ -393,7 +395,7 @@ export default function NewsUpdates() {
           {activeTab === "media" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {mediaGallery.map((item, index) => {
-                 return (
+                return (
                   <div key={index} className="group relative rounded-lg overflow-hidden bg-gray-100">
                     <div className="aspect-w-16 aspect-h-9">
                       <img
@@ -404,12 +406,13 @@ export default function NewsUpdates() {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                       <div>
-                        <h4 className="text-white font-medium">{item.title}</h4>
-                        <p className="text-gray-200 text-sm">{item.description}</p>
+                        <h4 className="text-white font-medium">{(isUrdu && item.titleUr) ? item.titleUr : item.title}</h4>
+                        <p className="text-gray-200 text-sm">{(isUrdu && item.descriptionUr) ? item.descriptionUr : item.description}</p>
                       </div>
                     </div>
                   </div>
-              )})}
+                )
+              })}
             </div>
           )}
         </div>

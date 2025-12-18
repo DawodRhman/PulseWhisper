@@ -3,7 +3,12 @@ import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Zap, Globe, FileText, Handshake, TrendingUp, Cpu } from "lucide-react";
 
+import { useTranslation } from 'react-i18next';
+
 export default function WorkWithUs() {
+  const { t, i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
+
   // --- Inject custom CSS for the sci-fi background grid ---
   useEffect(() => {
     const style = document.createElement("style");
@@ -52,56 +57,53 @@ export default function WorkWithUs() {
     {
       id: "licenses",
       icon: FileText,
-      title: "Licensing & Permits",
-      subtitle: "Regulatory Framework for Water and Sewerage Operations",
-      description:
-        "KW&SC facilitates a streamlined process for obtaining necessary licenses and permits for bulk water usage, commercial water connections, hydrant operations, and effluent discharge. Our digital platform ensures transparency and efficiency, supporting compliant and sustainable operations within Karachi.",
+      title: t('workWithUs.licenses.title'),
+      subtitle: t('workWithUs.licenses.subtitle'),
+      description: t('workWithUs.licenses.desc'),
       details: [
         "Bulk Water Supply Licenses (Industrial/Commercial)",
         "Water Tanker Operation Permits",
         "Sewerage Effluent Discharge NOCs",
         "Public Hydrant Authorization and Management",
       ],
-      cta: "Apply for a License",
+      cta: t('workWithUs.licenses.cta'),
       pdfLink:
         "https://www.kwsc.gos.pk/assets/documents/DOC-20240409-WA0320..pdf",
-      pdfCta: "View Subsoil License PDF",
+      pdfCta: t('workWithUs.licenses.pdfCta'),
     },
     {
       id: "collaborations",
       icon: Handshake,
-      title: "National & International Collaborations",
-      subtitle: "Global Partnerships for Infrastructure Excellence",
-      description:
-        "We actively collaborate with national bodies (e.g., planning commission, local government) and international development banks (e.g., World Bank, ADB) and sister utilities globally. These partnerships drive technology transfer, capacity building, and secure critical funding for major infrastructure projects.",
+      title: t('workWithUs.collaborations.title'),
+      subtitle: t('workWithUs.collaborations.subtitle'),
+      description: t('workWithUs.collaborations.desc'),
       details: [
         "Technology Exchange Programs (Germany, Japan)",
         "Funding and Technical Assistance (ADB, World Bank)",
         "Joint Venture on Desalination Plants",
         "Research and Development with Local Universities",
       ],
-      cta: "View Partnership Portfolio",
+      cta: t('workWithUs.collaborations.cta'),
     },
     {
       id: "investment",
       icon: TrendingUp,
-      title: "Investment Opportunities",
-      subtitle: "Strategic Avenues for Private Sector Investment",
-      description:
-        "KW&SC offers high-impact investment opportunities in vital city infrastructure. Focus areas include the development of Build-Operate-Transfer (BOT) and Public-Private Partnership (PPP) models for wastewater treatment, bulk water transportation, and smart metering systems.",
+      title: t('workWithUs.investment.title'),
+      subtitle: t('workWithUs.investment.subtitle'),
+      description: t('workWithUs.investment.desc'),
       details: [
         "Wastewater Treatment Plant PPP Schemes",
         "K-IV Bulk Water Supply Project Phases",
         "Smart Metering and Billing System Deployment",
         "Pipeline Replacement and Network Rehabilitation",
       ],
-      cta: "Explore Investment Models",
+      cta: t('workWithUs.investment.cta'),
     },
   ];
 
   return (
     <div className="bg-[#020617] min-h-screen font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden">
-     
+
       {/* --- 2. Main Content: Three Sections Grid --- */}
       <section className="py-8 sm:py-12 md:py-20 lg:py-24 xl:py-28 2xl:py-32 bg-[#020617] relative">
         <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12">
@@ -132,7 +134,7 @@ export default function WorkWithUs() {
                   </p>
 
                   <h3 className="text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-lg font-semibold text-gray-200 mb-2 sm:mb-3">
-                    Key Focus Areas:
+                    {t('workWithUs.keyFocus')}
                   </h3>
                   <ul className="space-y-1 sm:space-y-1.5 md:space-y-2 mb-5 sm:mb-6 md:mb-8">
                     {section.details.map((detail, idx) => (
@@ -193,15 +195,13 @@ export default function WorkWithUs() {
             variants={itemVariants}
             className="text-4xl font-bold text-white mb-3"
           >
-            Ready To Initiate With Us?
+            {t('workWithUs.hero.title')}
           </motion.h2>
           <motion.p
             variants={itemVariants}
             className="text-base text-cyan-300 mb-5 max-w-2xl mx-auto"
           >
-            Our team is prepared to receive your proposal for licensing,
-            collaboration, or critical investment. Contact us to schedule a
-            strategic dialogue.
+            {t('workWithUs.hero.desc')}
           </motion.p>
           <motion.a
             variants={itemVariants}
@@ -210,7 +210,7 @@ export default function WorkWithUs() {
                        bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900 
                        hover:from-cyan-300 hover:to-blue-400 shadow-lg sm:shadow-xl hover:shadow-cyan-400/50"
           >
-            Get In Touch
+            {t('workWithUs.hero.cta')}
             <Globe className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 lg:w-6 lg:h-6 ml-2 sm:ml-2.5 md:ml-3 lg:ml-3" />
           </motion.a>
         </motion.div>

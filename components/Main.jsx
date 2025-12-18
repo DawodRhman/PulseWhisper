@@ -10,6 +10,7 @@ import GetYourBillPopup from "@/components/GetYourBill";
 import NewConnectionPopup from "@/components/NewConnectionPopup";
 import EComplaintPopup from "@/components/EComplaintPopup";
 import BookTankerPopup from "@/components/BookTankerPopup";
+import ChatBot from "@/components/ChatBot";
 
 export default function Home({ hero }) {
   const [loading, setLoading] = useState(true);
@@ -24,23 +25,15 @@ export default function Home({ hero }) {
     ctaHref = "/aboutus",
     backgroundImage = "/karachicharminar.gif"
   } = hero || {};
-  
+
   const displayTitle = (isUrdu && hero?.titleUr) ? hero.titleUr : rawTitle;
   const displaySubtitle = (isUrdu && hero?.subtitleUr) ? hero.subtitleUr : rawSubtitle;
 
   const [language, setLanguage] = useState("en");
-  const [chatOpen, setChatOpen] = useState(false);
   const [showBillPopup, setShowBillPopup] = useState(false);
   const [showNewConnectionPopup, setShowNewConnectionPopup] = useState(false);
   const [showEComplaintPopup, setShowEComplaintPopup] = useState(false);
   const [showBookTankerPopup, setShowBookTankerPopup] = useState(false);
-
-  const [messages, setMessages] = useState([
-    { from: "bot", text: t("services.assistantGreeting") },
-  ]);
-
-  const [inputText, setInputText] = useState("");
-  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const loaderTimeline = gsap.timeline({ onComplete: () => setLoading(false) });
@@ -58,12 +51,6 @@ export default function Home({ hero }) {
       })
       .to(".wrapper", { y: "-100%", ease: "power4.inOut", duration: 1 }, "-=0.8");
   }, []);
-
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
 
   // Listen for global popup open events triggered from other components (e.g., Services cards)
   useEffect(() => {
@@ -90,20 +77,6 @@ export default function Home({ hero }) {
     window.addEventListener("kwsc-open-popup", handlePopup);
     return () => window.removeEventListener("kwsc-open-popup", handlePopup);
   }, []);
-
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
-
-    setMessages(prev => [...prev, { from: "user", text: inputText }]);
-    setInputText("");
-
-    setTimeout(() => {
-      setMessages(prev => [
-        ...prev,
-        { from: "bot", text: "Thank you for your message. Our team will get back to you shortly." },
-      ]);
-    }, 1000);
-  };
 
   return (
     <div className="bg-[#020617] min-h-[100vh] font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-hidden relative">
@@ -214,67 +187,7 @@ export default function Home({ hero }) {
         <div className="absolute bottom-0 left-0 w-full h-24 sm:h-32 md:h-36 bg-gradient-to-t from-[#020617] to-transparent z-10"></div>
 
         {/* CHAT BOT */}
-        <div className="fixed bottom-3 sm:bottom-5 right-3 sm:right-5 z-[60] flex flex-col items-center">
-          <button
-            onClick={() => setChatOpen(prev => !prev)}
-            className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full overflow-hidden shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.7)] hover:scale-110"
-            title={`Chat with ${t("services.kwscAssistant")}`}
-          >
-            <img
-              src="/Ai_Bot.png"
-              alt={t("services.kwscAssistant")}
-              className="w-full h-full object-cover"
-            />
-          </button>
-
-          {chatOpen && (
-            <div className="mt-2 sm:mt-3 w-72 sm:w-80 md:w-96 bg-gray-100 rounded-2xl border border-gray-300 shadow-2xl flex flex-col overflow-hidden animate-slide-in max-h-[70vh] sm:max-h-[80vh]">
-              <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-200 text-gray-800 font-semibold flex justify-between items-center border-b border-gray-300">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
-                    <img src="/Ai_Bot.png" alt={t("services.kwscAssistant")} className="w-full h-full object-cover" />
-                  </div>
-                  <span className="text-sm sm:text-base truncate">{t("services.kwscAssistant")}</span>
-                </div>
-                <button onClick={() => setChatOpen(false)} className="text-gray-600 font-normal  text-5xl flex-shrink-0 ml-2">&times;</button>
-              </div>
-
-              <div className="flex-1 p-3 sm:p-4 overflow-y-auto space-y-2 bg-gray-50">
-                {messages.map((msg, idx) => (
-                  <div key={idx} className={`flex ${msg.from === "bot" ? "justify-start" : "justify-end"}`}>
-                    <div
-                      className={`px-3 sm:px-4 py-2 rounded-2xl max-w-xs break-words text-sm ${msg.from === "bot"
-                        ? "bg-gray-300 text-gray-900"
-                        : "bg-cyan-500 text-white"
-                        }`}
-                    >
-                      {msg.text}
-                    </div>
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-
-              <div className="px-3 sm:px-4 py-2 sm:py-3 border-t border-gray-300 flex items-center gap-1.5 sm:gap-2 bg-gray-200">
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={e => setInputText(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleSendMessage()}
-                  placeholder="Type message..."
-                  className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className="bg-cyan-500 hover:bg-cyan-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-white font-semibold transition-all duration-200 text-xs sm:text-sm flex-shrink-0"
-                >
-                  Send
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
+        <ChatBot />
       </section>
     </div>
   );

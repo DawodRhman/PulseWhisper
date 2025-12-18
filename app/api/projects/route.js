@@ -11,11 +11,8 @@ export async function GET(request) {
         const lang = searchParams.get('lang') || 'en';
 
         const snapshot = await resolveWithSnapshot(SnapshotModule.HOME, () => buildHomePayload(lang));
-        const projects = (snapshot?.data?.projects || []).map(project => ({
-            ...project,
-            title: lang === 'ur' && project.titleUr ? project.titleUr : project.title,
-            summary: lang === 'ur' && project.summaryUr ? project.summaryUr : project.summary,
-        }));
+        // Return raw projects data with both English and Urdu fields
+        const projects = snapshot?.data?.projects || [];
         return NextResponse.json({ projects });
     } catch (error) {
         console.error("/api/projects", error);

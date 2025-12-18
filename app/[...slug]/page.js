@@ -17,11 +17,11 @@ async function getPage(slugArray) {
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
-  
+
   if (!slug) return {};
 
   const page = await getPage(slug);
-  
+
   if (!page) return {};
 
   return {
@@ -42,7 +42,7 @@ function localizeContent(content, lang) {
 
   const newContent = { ...content };
   const keys = Object.keys(newContent);
-  
+
   keys.forEach(key => {
     // If we find a key ending in 'Ur' (e.g. titleUr)
     if (key.endsWith('Ur') && key.length > 2) {
@@ -53,7 +53,7 @@ function localizeContent(content, lang) {
         newContent[baseKey] = newContent[key];
       }
     }
-    
+
     // Recursive call for nested objects/arrays
     if (typeof newContent[key] === 'object' && newContent[key] !== null) {
       newContent[key] = localizeContent(newContent[key], lang);
@@ -66,7 +66,7 @@ function localizeContent(content, lang) {
 export default async function DynamicPage({ params, searchParams }) {
   const resolvedParams = await params;
   const { slug } = resolvedParams;
-  
+
   const resolvedSearchParams = await searchParams;
 
   if (!slug) {
@@ -82,10 +82,19 @@ export default async function DynamicPage({ params, searchParams }) {
 
   // Handle localization
   const lang = resolvedSearchParams?.lang || 'en';
-  const localizedSections = page.sections.map(section => ({
-    ...section,
-    content: localizeContent(section.content, lang),
-  }));
+  console.log(`[DynamicPage] Processing slug: ${slug}, lang: ${lang}`);
+
+  const localizedSections = page.sections.map(section => {
+    const localized = localizeContent(section.content, lang);
+    // Log one section just to see if it worked (e.g., if checking the first one)
+    if (section.content?.titleUr && lang === 'ur') {
+      console.log('[DynamicPage] Localized section:', { original: section.content.title, localized: localized.title, ur: section.content.titleUr });
+    }
+    return {
+      ...section,
+      content: localized,
+    };
+  });
 
   return (
     <main className="min-h-screen bg-white">

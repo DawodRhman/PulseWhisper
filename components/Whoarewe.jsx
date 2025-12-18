@@ -3,11 +3,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 
 const WhoAreWe = ({ services: customServices }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
   const sectionRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
 
   const dispatchPopup = (title = "") => {
+    // ... (same as before)
     const lower = title.toLowerCase();
     let detail = null;
     if (lower.includes("complaint") || lower.includes("شکایتی")) detail = "eComplaint";
@@ -19,13 +21,9 @@ const WhoAreWe = ({ services: customServices }) => {
     }
   };
 
-  // kwsc-open-popup needs to handle localized titles now, so I updated dispatchPopup to check for localized keywords or mapping. 
-  // Actually, dispatchPopup logic relied on English keywords. I added some Urdu checks above just in case, or we can rely on index.
-  // Better approach: pass an action ID with the service item. But for now, text matching is existing logic.
-
   useEffect(() => {
+    // ... (same as before)
     const handleScroll = () => {
-      // ... existing scroll logic ...
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
@@ -62,7 +60,17 @@ const WhoAreWe = ({ services: customServices }) => {
     },
   ];
 
-  const services = customServices || defaultServices;
+  let displayedServices = defaultServices;
+
+  if (customServices && customServices.length > 0) {
+    displayedServices = customServices.map(service => ({
+      ...service,
+      title: (isUrdu && service.titleUr) ? service.titleUr : service.title,
+      desc: (isUrdu && service.descUr) ? service.descUr : service.desc,
+      // Handle legacy 'description' field if 'desc' is missing
+      description: (isUrdu && (service.descriptionUr || service.descUr)) ? (service.descriptionUr || service.descUr) : (service.description || service.desc)
+    }));
+  }
 
   return (
     <section
@@ -104,7 +112,7 @@ const WhoAreWe = ({ services: customServices }) => {
               ${isActive ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}
             `}
           >
-            {services.map((item, i) => (
+            {displayedServices.map((item, i) => (
               <div
                 key={i}
                 className={`

@@ -106,7 +106,7 @@ export default function Tenders() {
         }
         const json = await response.json();
         const data = json.data || {};
-        
+
         setOpenTenders(data.open || []);
         setClosedTenders(data.closed || []);
         setCancelledTenders(data.cancelled || []);
@@ -124,7 +124,7 @@ export default function Tenders() {
   // GSAP Loader Effect
   useEffect(() => {
     if (!loading) return;
-    
+
     const loaderTimeline = gsap.timeline({
       onComplete: () => setLoading(false),
     });
@@ -183,6 +183,9 @@ export default function Tenders() {
     const isExpanded = tabName === "open" && openId === item.id;
     const status = tabName === "open" ? (item.category?.label || item.type || "Tender") : (tabName === "closed" ? "Closed" : "Cancelled");
 
+    const displayTitle = (isUrdu && item.titleUr) ? item.titleUr : item.title;
+    const displayDesc = (isUrdu && (item.summaryUr || item.descriptionUr)) ? (item.summaryUr || item.descriptionUr) : (item.summary || item.description || "No description available.");
+
     const typeClasses = {
       Procurement: "bg-green-100 text-green-800 border-green-400",
       Construction: "bg-orange-100 text-orange-800 border-orange-400",
@@ -204,10 +207,10 @@ export default function Tenders() {
             <span className={`px-4 py-2 rounded-full text-base font-semibold ${chipColor} mb-4 inline-block`}>
               {status}
             </span>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2" title={item.title}>{item.title}</h3>
-            <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-1">{item.summary || item.description || "No description available."}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 min-h-[3.5rem] line-clamp-2" title={displayTitle}>{displayTitle}</h3>
+            <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-1">{displayDesc}</p>
           </div>
-          
+
           {/* ... (rest of TenderCard, make sure to use displayDesc in expanded area too if needed) */}
 
 
@@ -247,16 +250,16 @@ export default function Tenders() {
           {/* Expanded Details (For Open Tenders Only) */}
           {isExpanded && (
             <div id={`details-${item.id}`} className="mt-5 pt-5 border-t border-blue-200">
-              <p className="text-base text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg font-medium">{item.summary || item.description || "No description available."}</p>
+              <p className="text-base text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg font-medium">{displayDesc}</p>
               {item.attachments && item.attachments.length > 0 && (
                 <div className="mt-5">
                   <h4 className="text-base font-semibold text-gray-700 mb-2">Documents:</h4>
                   <div className="flex flex-col gap-2">
                     {item.attachments.map((att, idx) => (
-                      <a 
+                      <a
                         key={idx}
-                        href={att.url || att.mediaUrl} 
-                        target="_blank" 
+                        href={att.url || att.mediaUrl}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors text-base font-medium"
                       >
@@ -343,53 +346,53 @@ export default function Tenders() {
 
           {/* Tab Content - Grid Display */}
           <div className="max-w-6xl mx-auto">
-          {activeTab === "open" && (
-            <div className="flex flex-wrap justify-center gap-6">
-              {filteredTenders.length > 0 ? (
-                filteredTenders.map((item, i) => (
-                  <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
-                    <TenderCard item={item} tabName="open" index={i} />
+            {activeTab === "open" && (
+              <div className="flex flex-wrap justify-center gap-6">
+                {filteredTenders.length > 0 ? (
+                  filteredTenders.map((item, i) => (
+                    <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
+                      <TenderCard item={item} tabName="open" index={i} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
+                    <p className="text-xl text-gray-500">{t("tenders.noOpen")}</p>
                   </div>
-                ))
-              ) : (
-                <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
-                  <p className="text-xl text-gray-500">{t("tenders.noOpen")}</p>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
 
-          {activeTab === "closed" && (
-            <div className="flex flex-wrap justify-center gap-6">
-              {closedTenders.length > 0 ? (
-                closedTenders.map((item, i) => (
-                  <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
-                    <TenderCard item={item} tabName="closed" index={i} />
+            {activeTab === "closed" && (
+              <div className="flex flex-wrap justify-center gap-6">
+                {closedTenders.length > 0 ? (
+                  closedTenders.map((item, i) => (
+                    <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
+                      <TenderCard item={item} tabName="closed" index={i} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
+                    <p className="text-xl text-gray-500">{t("tenders.noClosed")}</p>
                   </div>
-                ))
-              ) : (
-                <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
-                  <p className="text-xl text-gray-500">{t("tenders.noClosed")}</p>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
 
-          {activeTab === "cancelled" && (
-            <div className="flex flex-wrap justify-center gap-6">
-              {cancelledTenders.length > 0 ? (
-                cancelledTenders.map((item, i) => (
-                  <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
-                    <TenderCard item={item} tabName="cancelled" index={i} />
+            {activeTab === "cancelled" && (
+              <div className="flex flex-wrap justify-center gap-6">
+                {cancelledTenders.length > 0 ? (
+                  cancelledTenders.map((item, i) => (
+                    <div key={item.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] max-w-md">
+                      <TenderCard item={item} tabName="cancelled" index={i} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
+                    <p className="text-xl text-gray-500">{t("tenders.noCancelled")}</p>
                   </div>
-                ))
-              ) : (
-                <div className="w-full text-center py-10 bg-white rounded-xl shadow-lg">
-                  <p className="text-xl text-gray-500">{t("tenders.noCancelled")}</p>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

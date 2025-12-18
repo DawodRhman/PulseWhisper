@@ -7,14 +7,17 @@ import Loader from "@/components/Loader";
 
 const FALLBACK_UPDATE = {
   title: "Water Today",
+  titleUr: "آج کا پانی",
   summary: "Today’s water distribution across Karachi remains stable, with major pumping stations operating at optimal capacity. Supply to central and western zones is reported as normal, while select southern sectors may experience low-pressure intervals during peak hours. Maintenance teams are deployed to ensure smooth flow and address any temporary disruptions.",
+  summaryUr: "کراچی میں آج کی پانی کی تقسیم مستحکم ہے، اہم پمپنگ اسٹیشنز بہترین صلاحیت کے ساتھ چل رہے ہیں۔ مرکزی اور مغربی زونز میں فراہمی معمول کے مطابق ہے جبکہ کچھ جنوبی علاقوں میں مصروف اوقات میں کم پریشر ہو سکتا ہے۔ ہموار فراہمی کو یقینی بنانے کے لیے ٹیمیں تعینات ہیں۔",
   media: { url: "/downtownkarachi.gif" },
   publishedAt: new Date().toISOString(),
 };
 
 export default function WaterTodaySection({ updates: propUpdates }) {
   const { data, loading } = useWaterTodayData();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
   
   const updates = propUpdates || data?.updates || [];
   
@@ -28,6 +31,8 @@ export default function WaterTodaySection({ updates: propUpdates }) {
   if (loading && !propUpdates) return <Loader />;
 
   const imageUrl = latestUpdate.media?.url || FALLBACK_UPDATE.media.url;
+  const displayTitle = (isUrdu && latestUpdate.titleUr) ? latestUpdate.titleUr : (latestUpdate.title || FALLBACK_UPDATE.title);
+  const displaySummary = (isUrdu && latestUpdate.summaryUr) ? latestUpdate.summaryUr : (latestUpdate.summary || FALLBACK_UPDATE.summary);
 
   return (
     <section className="relative w-full py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 2xl:py-32 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
@@ -37,7 +42,7 @@ export default function WaterTodaySection({ updates: propUpdates }) {
 
       <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl lg:max-w-7xl xl:max-w-7xl 2xl:max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-12 relative z-10">
         <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-gray-800 mb-4 text-center">
-          {latestUpdate.title}
+          {displayTitle}
         </h2>
 
         <div className="rounded-2xl sm:rounded-2xl md:rounded-3xl lg:rounded-3xl bg-white shadow-lg md:shadow-xl lg:shadow-2xl p-4 sm:p-5 md:p-8 lg:p-10 xl:p-12 2xl:p-14 border border-gray-200 flex flex-col lg:flex-row items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 transition-all hover:shadow-2xl">
@@ -53,7 +58,7 @@ export default function WaterTodaySection({ updates: propUpdates }) {
           {/* Text */}
           <div className="w-full lg:w-1/2 text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg lg:text-xl xl:text-lg 2xl:text-lg space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
             <p>
-              {latestUpdate.summary}
+              {displaySummary}
             </p>
             <div className="mt-4 sm:mt-5 md:mt-6 lg:mt-8 flex items-center justify-between">
               <span className="text-xs sm:text-sm md:text-base lg:text-sm xl:text-sm 2xl:text-sm text-gray-500">

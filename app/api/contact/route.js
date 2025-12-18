@@ -7,21 +7,11 @@ import content from "@/data/static/content";
 
 export const dynamic = "force-dynamic";
 
-const HERO_CONTENT = {
-  en: {
-    title: "Contact KW&SC",
-    subtitle: "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
-    backgroundImage: "/teentalwarkarachi.gif",
-  },
-  ur: {
-    title: "KW&SC سے رابطہ کریں",
-    subtitle: "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔",
-    backgroundImage: "/teentalwarkarachi.gif",
-  }
-};
+import { CONTACT_TRANSLATIONS } from "@/lib/translations";
 
 function getHeroContent(lang = 'en') {
-  return HERO_CONTENT[lang] || HERO_CONTENT.en;
+  const translations = CONTACT_TRANSLATIONS[lang] || CONTACT_TRANSLATIONS.en;
+  return translations.hero;
 }
 
 function buildMapEmbedUrl(latitude, longitude) {
@@ -33,80 +23,33 @@ function buildMapEmbedUrl(latitude, longitude) {
   return `https://www.google.com/maps?q=${encodeURIComponent(coords)}&z=14&output=embed`;
 }
 
-function serializeChannel(channel, lang = 'en') {
-  const translations = {
-    en: {
-      labels: {
-        "Helpline": "Helpline",
-        "Email": "Email",
-        "WhatsApp": "WhatsApp",
-        "Emergency": "Emergency"
-      },
-      descriptions: {
-        "Helpline": "24/7 customer support for water and sewerage services",
-        "Email": "Send us your queries and feedback",
-        "WhatsApp": "Quick assistance via WhatsApp",
-        "Emergency": "For urgent water and sewerage emergencies"
-      }
-    },
-    ur: {
-      labels: {
-        "Helpline": "ہیلپ لائن",
-        "Email": "ای میل",
-        "WhatsApp": "واٹس ایپ",
-        "Emergency": "ہنگامی صورتحال"
-      },
-      descriptions: {
-        "Helpline": "پانی اور سیوریج خدمات کے لیے 24/7 کسٹمر سپورٹ",
-        "Email": "ہمیں اپنے سوالات اور تاثرات بھیجیں",
-        "WhatsApp": "واٹس ایپ کے ذریعے فوری مدد",
-        "Emergency": "پانی اور سیوریج کی ہنگامی صورتحال کے لیے"
-      }
-    }
-  };
-
-  const langData = translations[lang] || translations.en;
+function serializeChannel(channel) {
+  // Always use English keys for defaults, but append Urdu
+  const enData = CONTACT_TRANSLATIONS.en;
+  const urData = CONTACT_TRANSLATIONS.ur;
 
   return {
     id: channel.id || channel.label,
-    label: langData.labels[channel.label] || channel.label,
-    description: langData.descriptions[channel.label] || channel.description,
+    label: enData.channels[channel.label] || channel.label,
+    labelUr: urData.channels[channel.label] || channel.label,
+    description: enData.channelDescriptions[channel.label] || channel.description,
+    descriptionUr: urData.channelDescriptions[channel.label] || channel.description,
     phone: channel.phone,
     email: channel.email,
     availability: channel.availability,
   };
 }
 
-function serializeOffice(office, lang = 'en') {
-  const translations = {
-    en: {
-      labels: {
-        "Headquarters": "Headquarters",
-        "Regional Office": "Regional Office",
-        "Customer Service Center": "Customer Service Center"
-      },
-      addresses: {
-        "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan": "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan"
-      }
-    },
-    ur: {
-      labels: {
-        "Headquarters": "ہیڈ کوارٹر",
-        "Regional Office": "ریجنل آفس",
-        "Customer Service Center": "کسٹمر سروس سینٹر"
-      },
-      addresses: {
-        "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350, Pakistan": "9ویں میل کرساز، مین شاہراہ فیصل، کراچی-75350، پاکستان"
-      }
-    }
-  };
-
-  const langData = translations[lang] || translations.en;
+function serializeOffice(office) {
+  const enData = CONTACT_TRANSLATIONS.en;
+  const urData = CONTACT_TRANSLATIONS.ur;
 
   return {
     id: office.id || office.label,
-    label: langData.labels[office.label] || office.label,
-    address: langData.addresses[office.address] || office.address,
+    label: enData.offices[office.label] || office.label,
+    labelUr: urData.offices[office.label] || office.label,
+    address: enData.addresses[office.address] || office.address,
+    addressUr: urData.addresses[office.address] || office.address,
     latitude: office.latitude,
     longitude: office.longitude,
     phone: office.phone,
@@ -151,8 +94,8 @@ export async function GET(request) {
 
         return {
           hero,
-          channels: channels.map(channel => serializeChannel(channel, lang)),
-          offices: offices.map(office => serializeOffice(office, lang)),
+          channels: channels.map(channel => serializeChannel(channel)),
+          offices: offices.map(office => serializeOffice(office)),
           seo,
         };
       }

@@ -160,7 +160,7 @@ export async function GET(request) {
           // Return empty or fallback? better to return empty here and handle fallback outside if caching matches
           // But mapServicesFallback relies on content... 
           // Let's return raw fallback if db fails
-           categories = mapServicesFallback('en'); // Always cache 'en' or raw
+          categories = mapServicesFallback('en'); // Always cache 'en' or raw
         }
         return { categories };
       }
@@ -171,40 +171,24 @@ export async function GET(request) {
 
     // Handle Fallback if empty (double check logic)
     if (!categories || categories.length === 0) {
-         categories = mapServicesFallback(lang);
+      categories = mapServicesFallback(lang);
     }
 
-    // Translate
+    // Return raw category data for client-side localization
     if (Array.isArray(categories)) {
-          categories = categories.map(category => ({
-            ...category,
-            title: lang === 'ur' && category.titleUr ? category.titleUr : category.title,
-            summary: lang === 'ur' && category.summaryUr ? category.summaryUr : category.summary,
-            heroCopy: lang === 'ur' && category.heroCopyUr ? category.heroCopyUr : category.heroCopy,
-            cards: category.cards?.map(card => ({
-              ...card,
-              title: lang === 'ur' && card.titleUr ? card.titleUr : card.title,
-              summary: lang === 'ur' && card.summaryUr ? card.summaryUr : card.summary,
-              description: lang === 'ur' && card.descriptionUr ? card.descriptionUr : card.description,
-              details: card.details?.map(detail => ({
-                ...detail,
-                heading: lang === 'ur' && detail.headingUr ? detail.headingUr : detail.heading,
-                body: lang === 'ur' && detail.bodyUr ? detail.bodyUr : detail.body,
-              })),
-            })),
-          }));
+      // No server-side mapping needed
     }
 
     const hero = getFallbackHero(lang);
     const seo = await buildSeoPayload(hero);
 
-    return jsonResponse({ 
+    return jsonResponse({
       data: {
         hero,
         categories,
         seo
-      }, 
-      meta: { stale } 
+      },
+      meta: { stale }
     });
   } catch (error) {
     console.error("GET /api/services", error);

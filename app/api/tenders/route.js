@@ -77,7 +77,7 @@ export async function GET(request) {
     );
 
     const hero = getHeroContent(lang);
-    
+
     const seo = await resolvePageSeo({
       canonicalUrl: "/tenders",
       fallback: {
@@ -87,22 +87,18 @@ export async function GET(request) {
       },
     });
 
-    const localizeTenders = (list) => list.map(item => ({
-      ...item,
-      title: lang === 'ur' && item.titleUr ? item.titleUr : item.title,
-      summary: lang === 'ur' && item.summaryUr ? item.summaryUr : item.summary,
-      description: lang === 'ur' && item.descriptionUr ? item.descriptionUr : item.description,
-    }));
+    // Raw data returned for client-side localization
+    // const localizeTenders = ... (removed)
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       data: {
         hero,
-        open: localizeTenders(snapshotData.open),
-        closed: localizeTenders(snapshotData.closed),
-        cancelled: localizeTenders(snapshotData.cancelled),
+        open: snapshotData.open,
+        closed: snapshotData.closed,
+        cancelled: snapshotData.cancelled,
         seo
-      }, 
-      meta: { stale } 
+      },
+      meta: { stale }
     });
   } catch (error) {
     console.error("GET /api/tenders", error);

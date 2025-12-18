@@ -1,0 +1,102 @@
+[
+  {
+    "intent": "new_water_connection",
+    "page_route": "/services/new-connection",
+    "cta_label": "Apply for New Connection",
+    "examples": [
+      "new water connection",
+      "apply for water connection",
+      "naya pani ka connection",
+      "مجھ کو نیا پانی کا کنکشن چاہیے"
+    ],
+    "response_en": "You can apply for a new water connection for residential or commercial properties through the New Connection page.",
+    "response_roman": "naya pani ka connection residential ya commercial property ke liye New Connection page se apply kiya ja sakta hai.",
+    "response_ur": "رہائشی یا تجارتی پراپرٹی کے لیے نیا پانی کا کنکشن نیو کنکشن پیج کے ذریعے حاصل کیا جا سکتا ہے۔",
+    "faq_answers": [
+      {
+        "question_en": "How can I get a new water connection?",
+        "answer_en": "Visit the KWSC website, open the New Connection page, fill out the application form, and submit the required documents.",
+        "question_roman": "naya pani ka connection kaise mile ga?",
+        "answer_roman": "KWSC website par New Connection page par ja kar application form fill karein aur documents submit karein.",
+        "question_ur": "نیا پانی کا کنکشن کیسے حاصل کیا جائے؟",
+        "answer_ur": "KWSC کی ویب سائٹ پر نیو کنکشن پیج پر جا کر درخواست فارم پُر کریں اور مطلوبہ دستاویزات جمع کروائیں۔"
+      }
+    ]
+  },
+  {
+    "intent": "billing_and_duplicate_bill",
+    "page_route": "/billing",
+    "cta_label": "Check or Download Bill",
+    "examples": [
+      "duplicate bill",
+      "check water bill",
+      "pani ka duplicate bill",
+      "میرا بل گم ہو گیا ہے"
+    ],
+    "response_en": "You can check or download your current and previous water bills from the Billing section using your consumer number.",
+    "response_roman": "aap apna current ya duplicate pani ka bill Billing section se consumer number ke zariye dekh ya download kar sakte hain.",
+    "response_ur": "آپ کنزیومر نمبر کے ذریعے بلنگ سیکشن سے اپنا موجودہ یا ڈپلیکیٹ پانی کا بل دیکھ یا ڈاؤن لوڈ کر سکتے ہیں۔",
+    "faq_answers": [
+      {
+        "question_en": "How can I get a duplicate bill?",
+        "answer_en": "Visit the KWSC website and enter your consumer number in the billing section to download your duplicate bill.",
+        "question_roman": "duplicate bill kaise mile ga?",
+        "answer_roman": "KWSC website par ja kar billing section mein consumer number enter karein.",
+        "question_ur": "ڈپلیکیٹ بل کیسے حاصل کیا جا سکتا ہے؟",
+        "answer_ur": "KWSC کی ویب سائٹ پر بلنگ سیکشن میں جا کر کنزیومر نمبر درج کریں اور ڈپلیکیٹ بل حاصل کریں۔"
+      }
+    ]
+  },
+  {
+    "intent": "complaint_registration",
+    "page_route": "/complaints",
+    "cta_label": "Register Complaint",
+    "examples": [
+      "water complaint",
+      "sewerage complaint",
+      "pani nahi aa raha",
+      "سیوریج کی شکایت"
+    ],
+    "response_en": "You can register complaints related to water supply, sewerage, leakages, or water theft through the Complaints page or by calling the KWSC helpline.",
+    "response_roman": "aap pani, sewerage, leakage ya water theft se mutaliq complaints Complaints page par register kar sakte hain.",
+    "response_ur": "پانی، سیوریج، لیکیج یا پانی کی چوری سے متعلق شکایات کمپلینٹس پیج پر درج کی جا سکتی ہیں۔",
+    "faq_answers": [
+      {
+        "question_en": "Where can I complain about sewerage?",
+        "answer_en": "You can lodge a sewerage complaint through the KWSC website or by calling the helpline at 111-597-200.",
+        "question_roman": "sewerage ki complaint kahan karein?",
+        "answer_roman": "aap sewerage ki complaint KWSC website par ya helpline 111-597-200 par call kar ke kar sakte hain.",
+        "question_ur": "سیوریج کی شکایت کہاں درج کروائیں؟",
+        "answer_ur": "آپ KWSC کی ویب سائٹ یا 111-597-200 پر ہیلپ لائن کے ذریعے سیوریج کی شکایت درج کروا سکتے ہیں۔"
+      }
+    ]
+  },
+  {
+    "intent": "tanker_booking",
+    "page_route": "/services/tanker-booking",
+    "cta_label": "Book Water Tanker",
+    "examples": [
+      "book water tanker",
+      "tanker booking",
+      "mujhe tanker chahiye",
+      "واٹر ٹینکر بک کریں"
+    ],
+    "response_en": "You can book a water tanker for emergency water supply through the Tanker Booking page.",
+    "response_roman": "emergency pani ke liye water tanker Tanker Booking page se book kiya ja sakta hai.",
+    "response_ur": "ہنگامی پانی کی فراہمی کے لیے واٹر ٹینکر ٹینکر بکنگ پیج کے ذریعے بک کیا جا سکتا ہے۔"
+  },
+  {
+    "intent": "general_faqs",
+    "page_route": "/faqs",
+    "cta_label": "View FAQs",
+    "examples": [
+      "help",
+      "faqs",
+      "madad chahiye",
+      "مدد چاہیے"
+    ],
+    "response_en": "You can find answers to common questions on the FAQs page.",
+    "response_roman": "aam sawalon ke jawab FAQs page par mil sakte hain.",
+    "response_ur": "عام سوالات کے جوابات ایف اے کیوز پیج پر دستیاب ہیں۔"
+  }
+]

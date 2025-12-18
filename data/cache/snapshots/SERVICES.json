@@ -1,9 +1,4 @@
 {
-  "hero": {
-    "title": "ہم کیا کرتے ہیں",
-    "subtitle": "کراچی کے لیے صاف پانی کی فراہمی اور موثر فضلہ پانی کے انتظام کو یقینی بنانے والی جامع پانی اور سیوریج خدمات۔",
-    "backgroundImage": "/teentalwarkarachi.gif"
-  },
   "categories": [
     {
       "id": "25a1c853-c30d-40d3-9d00-74e097afcd67",
@@ -402,18 +397,5 @@
         }
       ]
     }
-  ],
-  "seo": {
-    "id": null,
-    "title": "ہم کیا کرتے ہیں | Karachi Water & Sewerage Corporation",
-    "description": "کراچی کے لیے صاف پانی کی فراہمی اور موثر فضلہ پانی کے انتظام کو یقینی بنانے والی جامع پانی اور سیوریج خدمات۔",
-    "keywords": null,
-    "canonicalUrl": "/ourservices",
-    "ogTitle": "ہم کیا کرتے ہیں | Karachi Water & Sewerage Corporation",
-    "ogDescription": "کراچی کے لیے صاف پانی کی فراہمی اور موثر فضلہ پانی کے انتظام کو یقینی بنانے والی جامع پانی اور سیوریج خدمات۔",
-    "ogImageUrl": "/teentalwarkarachi.gif",
-    "twitterCard": "summary_large_image",
-    "structuredData": null,
-    "allowIndexing": true
-  }
+  ]
 }

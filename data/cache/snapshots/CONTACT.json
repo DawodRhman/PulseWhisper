@@ -1,14 +1,15 @@
 {
   "hero": {
-    "title": "Contact KW&SC",
-    "subtitle": "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
-    "backgroundImage": "/teentalwarkarachi.gif"
+    "title": "KW&SC سے رابطہ کریں",
+    "subtitle": "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔"
   },
   "channels": [
     {
       "id": "87f0ca87-b0fe-4a8c-ac1f-6a227026a5f4",
       "label": "KW&SC Helpline",
+      "labelUr": "KW&SC ہیلپ لائن",
       "description": "24/7 customer facilitation center",
+      "descriptionUr": "24/7 کسٹمر سہولت سینٹر",
       "phone": "(+92) 021 111 597 200",
       "email": null,
       "availability": "24/7"
@@ -16,7 +17,9 @@
     {
       "id": "0d4bfac7-9c37-41fe-b1f7-7c9e4c9fff97",
       "label": "Central Correspondence Cell",
+      "labelUr": "مرکزی خط و کتابت سیل",
       "description": "General inquiries and escalations",
+      "descriptionUr": "عام پوچھ گچھ اور شکایات",
       "phone": null,
       "email": "info@kwsc.gos.pk",
       "availability": "Mon–Fri · 9am – 5pm"
@@ -24,7 +27,9 @@
     {
       "id": "ba559978-9d80-45e5-ae2c-77c141fd3031",
       "label": "Hydrant & Tanker Management",
+      "labelUr": "ہائیڈرینٹ اور ٹینکر مینجمنٹ",
       "description": "Bulk water booking and tanker dispatch",
+      "descriptionUr": "بلک واٹر بکنگ اور ٹینکر ڈسپیچ",
       "phone": "(+92) 021 992 45157",
       "email": "hydrant.cell@kwsc.gos.pk",
       "availability": "Daily · 8am – 10pm"
@@ -32,7 +37,9 @@
     {
       "id": "a8a90bc5-2cac-4981-8b3f-507e3be29af7",
       "label": "KW&SC Helpline",
+      "labelUr": "KW&SC ہیلپ لائن",
       "description": "24/7 customer facilitation center",
+      "descriptionUr": "24/7 کسٹمر سہولت سینٹر",
       "phone": "(+92) 021 111 597 200",
       "email": null,
       "availability": "24/7"
@@ -40,7 +47,9 @@
     {
       "id": "39e22799-b6e6-45b9-a01b-d89717115f2a",
       "label": "Central Correspondence Cell",
+      "labelUr": "مرکزی خط و کتابت سیل",
       "description": "General inquiries and escalations",
+      "descriptionUr": "عام پوچھ گچھ اور شکایات",
       "phone": null,
       "email": "info@kwsc.gos.pk",
       "availability": "Mon–Fri · 9am – 5pm"
@@ -48,7 +57,9 @@
     {
       "id": "2d44ab2b-0d18-415b-96f0-e887df881bcc",
       "label": "Hydrant & Tanker Management",
+      "labelUr": "ہائیڈرینٹ اور ٹینکر مینجمنٹ",
       "description": "Bulk water booking and tanker dispatch",
+      "descriptionUr": "بلک واٹر بکنگ اور ٹینکر ڈسپیچ",
       "phone": "(+92) 021 992 45157",
       "email": "hydrant.cell@kwsc.gos.pk",
       "availability": "Daily · 8am – 10pm"
@@ -58,7 +69,9 @@
     {
       "id": "b98979cd-9633-4fa0-bf0f-9f08a8f4d885",
       "label": "Dhabeji Pumping Station",
+      "labelUr": "دھابیجی پمپنگ اسٹیشن",
       "address": "Dhabeji, Thatta District, Sindh, Pakistan",
+      "addressUr": "دھابیجی، ضلع ٹھٹہ، سندھ، پاکستان",
       "latitude": 25.3265,
       "longitude": 67.5761,
       "phone": "Operations Control Only",
@@ -69,7 +82,9 @@
     {
       "id": "d7f16d1f-a1f1-4d8c-80c9-683e26048ea2",
       "label": "Headquarters (Main Office)",
+      "labelUr": "ہیڈ کوارٹر (مین آفس)",
       "address": "9th Mile Karsaz, Main Shahrah-e-Faisal, Karachi-75350",
+      "addressUr": "9ویں میل کرساز، مین شاہراہ فیصل، کراچی-75350",
       "latitude": 24.8724729779183,
       "longitude": 67.09062367500356,
       "phone": "(+92) 021 111 597 200",
@@ -80,7 +95,9 @@
     {
       "id": "bc2069a9-fcaf-4e21-82d7-020321bd8ef1",
       "label": "North Karachi Customer Center",
+      "labelUr": "نارتھ کراچی کسٹمر سینٹر",
       "address": "Sector 11-A, Near Power House, North Karachi",
+      "addressUr": "سیکٹر 11-اے، نزد پاور ہاؤس، نارتھ کراچی",
       "latitude": 24.97746427741636,
       "longitude": 67.03051407500588,
       "phone": "(+92) 021 992 60001",
@@ -91,7 +108,9 @@
     {
       "id": "523b51dc-4fe2-4813-b74f-ab31e29f1d2e",
       "label": "K-IV Project Site Office",
+      "labelUr": "کے-فور پروجیکٹ سائٹ آفس",
       "address": "Super Highway, near Dhabeji Pumping Station, Thatta",
+      "addressUr": "سپر ہائی وے، نزد دھابیجی پمپنگ اسٹیشن، ٹھٹہ",
       "latitude": 25.32162627745771,
       "longitude": 67.57014697501359,
       "phone": "(+92) 021 993 30301",
@@ -102,7 +121,9 @@
     {
       "id": "eb5b0730-33e6-447c-9bc4-a5ac9feb2479",
       "label": "",
+      "labelUr": "",
       "address": "",
+      "addressUr": "",
       "latitude": 24.8733,
       "longitude": 66.997869,
       "phone": null,
@@ -113,13 +134,13 @@
   ],
   "seo": {
     "id": null,
-    "title": "Contact KW&SC | Karachi Water & Sewerage Corporation",
-    "description": "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
+    "title": "KW&SC سے رابطہ کریں | Karachi Water & Sewerage Corporation",
+    "description": "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔",
     "keywords": null,
     "canonicalUrl": "/contact",
-    "ogTitle": "Contact KW&SC | Karachi Water & Sewerage Corporation",
-    "ogDescription": "Reach our helpline, digital correspondence cell, or the regional teams that keep Karachi supplied every day.",
-    "ogImageUrl": "/teentalwarkarachi.gif",
+    "ogTitle": "KW&SC سے رابطہ کریں | Karachi Water & Sewerage Corporation",
+    "ogDescription": "ہماری ہیلپ لائن، ڈیجیٹل مراسلہ سیل، یا علاقائی ٹیموں تک پہنچیں جو کراچی کو روزانہ فراہم رکھتی ہیں۔",
+    "ogImageUrl": null,
     "twitterCard": "summary_large_image",
     "structuredData": null,
     "allowIndexing": true

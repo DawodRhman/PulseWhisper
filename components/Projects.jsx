@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Activity
 } from "lucide-react";
+import { useLanguageStore } from "@/lib/stores/languageStore";
 
 // ...existing backend constants...
 const ICON_SET = [Waves, Zap, Droplet, Cpu, HardHat, TrendingUp];
@@ -211,6 +212,7 @@ const ProjectCard = ({ project, index, t, isUrdu }) => {
 export default function Projects({ projects: incomingProjects }) {
   const { t, i18n } = useTranslation();
   const isUrdu = i18n.language === 'ur';
+  const language = useLanguageStore((state) => state.language);
   const [projectCards, setProjectCards] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -241,7 +243,7 @@ export default function Projects({ projects: incomingProjects }) {
 
       // Fetch from API if no projects provided
       try {
-        const response = await fetch('/api/projects');
+        const response = await fetch(`/api/projects?lang=${language}`);
         if (response.ok) {
           const data = await response.json();
           const projects = data?.projects || [];
@@ -263,7 +265,7 @@ export default function Projects({ projects: incomingProjects }) {
     };
 
     fetchProjects();
-  }, [incomingProjects]);
+  }, [incomingProjects, language]);
 
   return (
     <section className="min-h-screen bg-gray-50 py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 relative overflow-hidden font-sans selection:bg-blue-100 selection:text-gray-800">

@@ -7,20 +7,29 @@
   "navLabel": null,
   "navGroup": "whatwedo",
   "createdAt": "2025-12-04T17:09:56.004Z",
-  "updatedAt": "2025-12-13T11:25:36.866Z",
+  "updatedAt": "2025-12-14T20:36:02.235Z",
   "seoId": "69a1c3bb-72ae-4a94-8b0a-500d774f0210",
   "sections": [
     {
-      "id": "ae86411d-e668-406a-9b1e-2cf9502db0bb",
+      "id": "32b3fcc5-92ba-4e65-b0cd-c56444d81236",
       "pageId": "69a804bf-5d8a-43b2-a8ab-e61119dbbdef",
       "type": "HERO",
       "order": 0,
       "content": {
-        "title": "Work With Us",
-        "subtitle": "Partner with KW&SC"
+        "title": "Collaborate on Karachi's Infrastructure",
+        "subtitle": "We seek visionary partners for regulatory compliance, funding, and technology transfer to build resilient water and sanitation systems."
       },
-      "createdAt": "2025-12-13T11:25:36.882Z",
-      "updatedAt": "2025-12-13T11:25:36.882Z"
+      "createdAt": "2025-12-14T20:36:02.255Z",
+      "updatedAt": "2025-12-14T20:36:02.255Z"
+    },
+    {
+      "id": "34d49378-735e-471b-af0e-1f289c52bbb7",
+      "pageId": "69a804bf-5d8a-43b2-a8ab-e61119dbbdef",
+      "type": "WORKWITHUS",
+      "order": 1,
+      "content": {},
+      "createdAt": "2025-12-14T20:36:02.255Z",
+      "updatedAt": "2025-12-14T20:36:02.255Z"
     }
   ],
   "seo": {
@@ -36,6 +45,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:56.004Z",
-    "updatedAt": "2025-12-13T11:25:36.866Z"
+    "updatedAt": "2025-12-14T20:36:02.235Z"
   }
 }

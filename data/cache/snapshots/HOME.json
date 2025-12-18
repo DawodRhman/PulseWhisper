@@ -105,27 +105,6 @@
       }
     },
     {
-      "id": "01413fdf-6715-4931-a7cc-98d6387c3d33",
-      "title": "One",
-      "titleUr": null,
-      "summary": "aa",
-      "summaryUr": null,
-      "status": "PLANNED",
-      "category": null,
-      "progress": null,
-      "order": 0,
-      "linkUrl": null,
-      "media": {
-        "id": "074d1ba9-198b-4751-97c0-4ce7934e05fc",
-        "url": "/uploads/1766049410371-44e266e9.jpeg",
-        "label": "WhatsApp Image 2025-12-18 at 10.16.12 AM.jpeg",
-        "altText": null,
-        "width": 1600,
-        "height": 1045,
-        "mimeType": "image/jpeg"
-      }
-    },
-    {
       "id": "91832dff-0ca5-4c45-b041-0072ddc3e530",
       "title": "Dhabeji Pumping Station Rehabilitation",
       "titleUr": null,
@@ -690,7 +669,7 @@
       "summary": "Today's water distribution across Karachi remains stable, with major pumping stations operating at optimal capacity.",
       "summaryUr": "کراچی میں آج کی پانی کی تقسیم مستحکم رہی، بڑے پمپنگ اسٹیشنز بہترین صلاحیت سے کام کر رہے ہیں۔",
       "status": "PUBLISHED",
-      "publishedAt": "2025-12-18T12:49:29.228Z",
+      "publishedAt": "2025-12-18T14:45:22.863Z",
       "media": {
         "url": "/downtownkarachi.gif"
       }

@@ -67,11 +67,7 @@ export async function GET(request) {
       },
     });
 
-    const translatedResources = snapshotData.resources.map(resource => ({
-      ...resource,
-      title: lang === 'ur' && resource.titleUr ? resource.titleUr : resource.title,
-      description: lang === 'ur' && resource.descriptionUr ? resource.descriptionUr : resource.description,
-    }));
+    const translatedResources = snapshotData.resources;
 
     return NextResponse.json({
       data: {

@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { 
-  FaTint, 
-  FaWater, 
-  FaTruck, 
-  FaWrench, 
-  FaHandHoldingWater, 
+import {
+  FaTint,
+  FaWater,
+  FaTruck,
+  FaWrench,
+  FaHandHoldingWater,
   FaFileInvoiceDollar,
   FaBuilding,
   FaLeaf,
@@ -40,15 +40,22 @@ function getPopupAction(title) {
 
 function ServiceCardItem({ card }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
+
   const Icon = IconMap[card.iconKey] || FaTint;
   const hasDetails = card.details && card.details.length > 0;
 
-  const popupAction = getPopupAction(card.title || ""); 
+  const displayTitle = (isUrdu && card.titleUr) ? card.titleUr : card.title;
+  const displaySummary = (isUrdu && (card.summaryUr || card.descriptionUr)) ? (card.summaryUr || card.descriptionUr) : (card.summary || card.description);
+  const displayDescription = (isUrdu && card.descriptionUr) ? card.descriptionUr : card.description;
+
+  const popupAction = getPopupAction(displayTitle || "");
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
       {/* Card Header - Clickable for Toggle */}
-      <div 
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className={`p-6 sm:p-8 md:p-10 bg-gradient-to-br ${card.gradientClass || 'from-blue-50 to-white'} border-b border-gray-100 cursor-pointer group`}
       >
@@ -63,13 +70,13 @@ function ServiceCardItem({ card }) {
                 {isOpen ? <FaMinus size={20} /> : <FaPlus size={20} />}
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
-                {card.title}
+                {displayTitle}
               </h3>
               <p className="text-lg text-gray-600 leading-relaxed">
-                {card.summary || card.description}
+                {displaySummary}
               </p>
               {popupAction && (
                 <button
@@ -95,43 +102,42 @@ function ServiceCardItem({ card }) {
       </div>
 
       {/* Card Details - Collapsible */}
-      <div 
-        className={`grid transition-all duration-500 ease-in-out ${
-          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        }`}
+      <div
+        className={`grid transition-all duration-500 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
       >
         <div className="overflow-hidden">
           {hasDetails ? (
             <div className="p-6 sm:p-8 md:p-10 grid gap-8 md:grid-cols-2 lg:grid-cols-2 border-t border-gray-100">
               {card.details.map((detail) => {
-                  return (
-                    <div key={detail.id} className="space-y-3">
-                      <h4 className="text-xl font-semibold text-gray-800">
-                        {detail.heading}
-                      </h4>
-                      <div 
-                        className="text-gray-600 leading-relaxed prose prose-blue prose-sm max-w-none"
-                        dangerouslySetInnerHTML={{ __html: detail.body }}
-                      />
-                      {detail.bulletPoints && detail.bulletPoints.length > 0 && (
-                        <ul className="space-y-2 mt-3">
-                          {detail.bulletPoints.map((point, idx) => (
-                            <li key={idx} className="flex items-start text-gray-600 text-sm">
-                              <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0" />
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  );
+                return (
+                  <div key={detail.id} className="space-y-3">
+                    <h4 className="text-xl font-semibold text-gray-800">
+                      {(isUrdu && detail.headingUr) ? detail.headingUr : detail.heading}
+                    </h4>
+                    <div
+                      className="text-gray-600 leading-relaxed prose prose-blue prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: (isUrdu && detail.bodyUr) ? detail.bodyUr : detail.body }}
+                    />
+                    {detail.bulletPoints && detail.bulletPoints.length > 0 && (
+                      <ul className="space-y-2 mt-3">
+                        {detail.bulletPoints.map((point, idx) => (
+                          <li key={idx} className="flex items-start text-gray-600 text-sm">
+                            <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0" />
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                );
               })}
             </div>
           ) : (
-            card.description && card.description !== card.summary && (
-               <div className="p-6 sm:p-8 md:p-10 border-t border-gray-100">
-                  <p className="text-gray-600">{card.description}</p>
-               </div>
+            displayDescription && displayDescription !== displaySummary && (
+              <div className="p-6 sm:p-8 md:p-10 border-t border-gray-100">
+                <p className="text-gray-600">{displayDescription}</p>
+              </div>
             )
           )}
         </div>
@@ -142,19 +148,21 @@ function ServiceCardItem({ card }) {
 
 function ServiceCategoryItem({ category }) {
   const [isOpen, setIsOpen] = useState(true);
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
 
   return (
     <div className="space-y-6">
-      <div 
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between cursor-pointer group select-none"
       >
         <div className="space-y-1">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
-            {category.title}
+            {(isUrdu && category.titleUr) ? category.titleUr : category.title}
           </h2>
-          {category.summary && (
-            <p className="text-gray-600 max-w-2xl">{category.summary}</p>
+          {(category.summary || category.summaryUr) && (
+            <p className="text-gray-600 max-w-2xl">{(isUrdu && category.summaryUr) ? category.summaryUr : category.summary}</p>
           )}
         </div>
         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
@@ -162,10 +170,9 @@ function ServiceCategoryItem({ category }) {
         </div>
       </div>
 
-      <div 
-        className={`grid transition-all duration-500 ease-in-out ${
-          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        }`}
+      <div
+        className={`grid transition-all duration-500 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
       >
         <div className="overflow-hidden space-y-8">
           {category.cards?.map((card) => (
@@ -179,9 +186,12 @@ function ServiceCategoryItem({ category }) {
 
 export default function Services(props) {
   const [animationDone, setAnimationDone] = useState(false);
-  
+
   const { data, loading: dataLoading, error, stale } = useServicesData();
   const loading = !animationDone || dataLoading;
+
+  const { i18n } = useTranslation();
+  const isUrdu = i18n.language === 'ur';
 
   useEffect(() => {
     const loaderTimeline = gsap.timeline({ onComplete: () => setAnimationDone(true) });
@@ -192,9 +202,6 @@ export default function Services(props) {
   }, []);
 
   if (loading) return <Loader />;
-
-  const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
 
   const propTitle = (isUrdu && props.titleUr) ? props.titleUr : props.title;
   const dataTitle = data?.hero?.title;
@@ -225,13 +232,13 @@ export default function Services(props) {
       {/* Services Section */}
       <section className="bg-gray-50 py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24">
         <div className="max-w-4xl sm:max-w-5xl md:max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 space-y-16">
-          
+
           {data?.categories?.map((category) => (
             <ServiceCategoryItem key={category.id} category={category} />
           ))}
 
           {(!data?.categories || data.categories.length === 0) && (
-             <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500">
               <p>No services data available.</p>
             </div>
           )}

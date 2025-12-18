@@ -29,7 +29,9 @@ export function useNewsData() {
         const payload = await response.json();
         if (!isMounted) return;
 
-        setData(payload || { articles: [], categories: [] });
+        // API returns shape: { data: { hero, categories, articles, seo }, meta }
+        // Normalize to the inner data object so components can read articles/categories directly.
+        setData(payload?.data || { articles: [], categories: [] });
         setError(null);
       } catch (err) {
         if (!isMounted) return;
