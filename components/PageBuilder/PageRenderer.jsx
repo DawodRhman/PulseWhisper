@@ -5,6 +5,7 @@ import GenericHero from "./GenericHero";
 import Services from "@/components/Services";
 import Projects from "@/components/Projects";
 import OurLeadership from "@/components/OurLeadership";
+import { sanitize } from "@/lib/utils";
 import Faqs from "@/components/Faqs";
 import MediaGallery from "@/components/MediaGallery";
 import Subscribe from "@/components/Subscribe";
@@ -31,6 +32,8 @@ import { useTranslation } from "react-i18next";
 // A simple generic text block component
 const TextBlock = ({ heading, headingUr, body, bodyUr }) => {
   const { i18n } = useTranslation();
+  // Determine if RTL language
+  const isRtl = i18n.language === 'ur' || i18n.language === 'sd';
   const isUrdu = i18n.language === 'ur';
 
   const displayHeading = (isUrdu && headingUr) ? headingUr : heading;
@@ -66,7 +69,7 @@ const TextBlock = ({ heading, headingUr, body, bodyUr }) => {
   if (looksLikeFullSectionMarkup) {
     return (
       <div
-        dangerouslySetInnerHTML={{ __html: normalizedBody }}
+        dangerouslySetInnerHTML={{ __html: sanitize(normalizedBody) }}
       />
     );
   }
@@ -80,7 +83,7 @@ const TextBlock = ({ heading, headingUr, body, bodyUr }) => {
           </h2>
         )}
         {normalizedBody && (
-          <div dangerouslySetInnerHTML={{ __html: normalizedBody }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitize(normalizedBody) }} />
         )}
       </div>
     </section>

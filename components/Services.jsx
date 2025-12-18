@@ -124,7 +124,7 @@ function ServiceCardItem({ card }) {
                     </h4>
                     <div
                       className="text-gray-600 leading-relaxed prose prose-blue prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: detail.body }}
+                      dangerouslySetInnerHTML={{ __html: sanitize(detail.body) }}
                     />
                     {detail.bulletPoints && detail.bulletPoints.length > 0 && (
                       <ul className="space-y-2 mt-3">

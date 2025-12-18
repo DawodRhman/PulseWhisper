@@ -113,12 +113,20 @@ const Navbar = () => {
 
   // Toggle language and update URL + Google Translate Cookie
   const toggleLanguage = () => {
-    const newLang = language === "en" ? "ur" : "en";
+    // Cycle: en -> ur -> sd -> en
+    let newLang = "en";
+    if (language === "en") newLang = "ur";
+    else if (language === "ur") newLang = "sd";
+
     setLanguage(newLang);
 
     // Set Google Translate Cookie
     // Format: /source_lang/target_lang
-    const cookieValue = newLang === "ur" ? "/en/ur" : "/en/en";
+    // For English: /en/en | For Urdu: /en/ur | For Sindhi: /en/sd (assuming Google supports 'sd')
+    let cookieValue = "/en/en";
+    if (newLang === "ur") cookieValue = "/en/ur";
+    if (newLang === "sd") cookieValue = "/en/sd";
+
     document.cookie = `googtrans=${cookieValue}; path=/; domain=${window.location.hostname}`;
     document.cookie = `googtrans=${cookieValue}; path=/;`; // Fallback
 
@@ -244,7 +252,7 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${isScrolled ? "bg-white shadow-lg" : "bg-transparent"
+        className={`fixed top-0 start-0 w-full z-[110] transition-all duration-300 ${isScrolled ? "bg-white shadow-lg" : "bg-transparent"
           }`}
       >
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between py-2 sm:py-3 md:py-4 px-3 sm:px-4 md:px-6 lg:px-8 transition-colors relative">
@@ -293,7 +301,7 @@ const Navbar = () => {
                     {link.submenu && (
                       <div
                         ref={(el) => (submenuRefs.current[index] = el)}
-                        className={`absolute top-full left-0 mt-1 md:mt-2 min-w-max md:min-w-[200px] lg:min-w-[240px] shadow-xl rounded-lg overflow-hidden z-[120] backdrop-blur-sm ${isScrolled ? "bg-white" : "bg-white/95"
+                        className={`absolute top-full start-0 mt-1 md:mt-2 min-w-max md:min-w-[200px] lg:min-w-[240px] shadow-xl rounded-lg overflow-hidden z-[120] backdrop-blur-sm ${isScrolled ? "bg-white" : "bg-white/95"
                           }`}
                         style={{ display: "none", opacity: 0 }}
                         onMouseEnter={() => setHoveredIndex(index)}
@@ -305,8 +313,8 @@ const Navbar = () => {
                               <Link
                                 href={subItem.href}
                                 className={`block px-3 md:px-4 lg:px-6 py-2 md:py-3 text-xs md:text-xs lg:text-sm font-semibold uppercase transition-all duration-200 ${pathname === subItem.href
-                                  ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600"
-                                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 hover:border-l-4 hover:border-blue-400"
+                                  ? "text-blue-600 bg-blue-50 border-s-4 border-blue-600"
+                                  : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 hover:border-s-4 hover:border-blue-400"
                                   }`}
                                 onClick={() => setIsOpen(false)}
                               >
@@ -333,7 +341,7 @@ const Navbar = () => {
                 }`}>
                 <Search
                   size={18}
-                  className={`absolute left-3 ${isScrolled ? "text-gray-500" : "text-gray-600"
+                  className={`absolute start-3 ${isScrolled ? "text-gray-500" : "text-gray-600"
                     }`}
                 />
                 <input
@@ -342,7 +350,7 @@ const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t("nav.search")}
-                  className={`pl-10 pr-4 py-2 w-48 lg:w-56 xl:w-64 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${isScrolled
+                  className={`ps-10 pe-4 py-2 w-48 lg:w-56 xl:w-64 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${isScrolled
                     ? "bg-white text-gray-900 placeholder-gray-500"
                     : "bg-transparent text-gray-900 placeholder-gray-500"
                     }`}
@@ -361,12 +369,12 @@ const Navbar = () => {
                 title="Settings"
               >
                 <Globe size={16} />
-                <span>{language === "en" ? "اردو" : "English"}</span>
+                <span>{language === "en" ? "اردو" : language === "ur" ? "سنڌي" : "English"}</span>
                 <ChevronDown size={14} className={`transition-transform ${showSettingsDropdown ? 'rotate-180' : ''}`} />
               </button>
 
               {showSettingsDropdown && (
-                <div className={`absolute top-full right-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] ${isScrolled ? "bg-white" : "bg-white/95 backdrop-blur-sm"
+                <div className={`absolute top-full end-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] ${isScrolled ? "bg-white" : "bg-white/95 backdrop-blur-sm"
                   }`}>
                   <div className="py-2">
                     {/* Theme Toggle */}
@@ -375,23 +383,42 @@ const Navbar = () => {
                         toggleTheme();
                         setShowSettingsDropdown(false);
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors border-b border-gray-100"
                     >
                       {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
                       <span>{theme === "light" ? t("settings.darkMode") : t("settings.lightMode")}</span>
                     </button>
 
-                    {/* Language Toggle */}
-                    <button
-                      onClick={() => {
-                        toggleLanguage();
-                        setShowSettingsDropdown(false);
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                    >
-                      <Globe size={16} />
-                      <span>{language === "en" ? t("settings.urdu") : t("settings.english")}</span>
-                    </button>
+                    {/* Language Selector (Segmented) */}
+                    <div className="px-4 py-3">
+                      <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{t("settings.language")}</p>
+                      <div className="flex items-center bg-gray-100 rounded-lg p-1 gap-1">
+                        {['en', 'ur', 'sd'].map((langCode) => (
+                          <button
+                            key={langCode}
+                            onClick={() => {
+                              setLanguage(langCode);
+                              // Cookie & URL updates
+                              let cookieValue = "/en/en";
+                              if (langCode === "ur") cookieValue = "/en/ur";
+                              if (langCode === "sd") cookieValue = "/en/sd";
+                              document.cookie = `googtrans=${cookieValue}; path=/; domain=${window.location.hostname}`;
+                              document.cookie = `googtrans=${cookieValue}; path=/;`;
+
+                              const currentParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+                              currentParams.set('lang', langCode);
+                              window.location.href = `${pathname}?${currentParams.toString()}`;
+                            }}
+                            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all duration-200 ${language === langCode
+                              ? "bg-white text-blue-600 shadow-sm transform scale-105"
+                              : "text-gray-500 hover:bg-gray-200"
+                              }`}
+                          >
+                            {langCode.toUpperCase()}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -423,13 +450,13 @@ const Navbar = () => {
                 {/* Mobile Search */}
                 <form onSubmit={handleSearch} className="flex-1 max-w-xs">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <Search className="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder={t("nav.search")}
-                      className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full ps-10 pe-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </form>
@@ -446,7 +473,7 @@ const Navbar = () => {
                   </button>
 
                   {showSettingsDropdown && (
-                    <div className="absolute top-full right-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] bg-white/95 backdrop-blur-sm">
+                    <div className="absolute top-full end-0 mt-2 w-48 shadow-xl rounded-lg overflow-hidden z-[130] bg-white/95 backdrop-blur-sm">
                       <div className="py-2">
                         {/* Mobile Theme Toggle */}
                         <button
@@ -454,23 +481,41 @@ const Navbar = () => {
                             toggleTheme();
                             setShowSettingsDropdown(false);
                           }}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors border-b border-gray-100"
                         >
                           {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
                           <span>{theme === "light" ? t("settings.darkMode") : t("settings.lightMode")}</span>
                         </button>
 
-                        {/* Mobile Language Toggle */}
-                        <button
-                          onClick={() => {
-                            toggleLanguage();
-                            setShowSettingsDropdown(false);
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                        >
-                          <Globe size={16} />
-                          <span>{language === "en" ? t("settings.urdu") : t("settings.english")}</span>
-                        </button>
+                        {/* Mobile Language Selector (Segmented) */}
+                        <div className="px-4 py-3">
+                          <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">{t("settings.language")}</p>
+                          <div className="flex items-center bg-gray-100 rounded-lg p-1 gap-1">
+                            {['en', 'ur', 'sd'].map((langCode) => (
+                              <button
+                                key={langCode}
+                                onClick={() => {
+                                  setLanguage(langCode);
+                                  let cookieValue = "/en/en";
+                                  if (langCode === "ur") cookieValue = "/en/ur";
+                                  if (langCode === "sd") cookieValue = "/en/sd";
+                                  document.cookie = `googtrans=${cookieValue}; path=/; domain=${window.location.hostname}`;
+                                  document.cookie = `googtrans=${cookieValue}; path=/;`;
+
+                                  const currentParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+                                  currentParams.set('lang', langCode);
+                                  window.location.href = `${pathname}?${currentParams.toString()}`;
+                                }}
+                                className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all duration-200 ${language === langCode
+                                  ? "bg-white text-blue-600 shadow-sm"
+                                  : "text-gray-500 hover:bg-gray-200"
+                                  }`}
+                              >
+                                {langCode.toUpperCase()}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -534,7 +579,7 @@ const Navbar = () => {
                         className="overflow-hidden"
                         style={{ display: "none", height: 0, opacity: 0 }}
                       >
-                        <ul className="flex flex-col gap-3 sm:gap-4 mt-4 sm:mt-6 pl-6 sm:pl-8 border-l-2 border-blue-400">
+                        <ul className="flex flex-col gap-3 sm:gap-4 mt-4 sm:mt-6 ps-6 sm:ps-8 border-s-2 border-blue-400">
                           {link.submenu.map((subItem) => (
                             <li key={subItem.href}>
                               <Link

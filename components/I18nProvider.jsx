@@ -14,15 +14,17 @@ export default function I18nProvider({ children }) {
 
     // Update HTML attributes for global styling/RTL
     if (typeof document !== 'undefined') {
-      const isUrdu = language === 'ur';
+      const isRtl = language === 'ur' || language === 'sd';
       document.documentElement.lang = language;
-      document.documentElement.dir = isUrdu ? 'rtl' : 'ltr';
+      document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
 
       // Optional: Add/remove a class for easier CSS targeting
-      if (isUrdu) {
-        document.body.classList.add('lang-ur');
+      if (isRtl) {
+        document.body.classList.add('rtl');
+        document.body.classList.add('lang-rtl'); // Adding generic class
       } else {
-        document.body.classList.remove('lang-ur');
+        document.body.classList.remove('rtl');
+        document.body.classList.remove('lang-rtl');
       }
     }
   }, [language]);

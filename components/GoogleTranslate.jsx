@@ -17,7 +17,7 @@ const GoogleTranslate = () => {
             new window.google.translate.TranslateElement(
                 {
                     pageLanguage: "en",
-                    includedLanguages: "en,ur", // Only English and Urdu
+                    includedLanguages: "en,ur,sd", // Only English, Urdu, and Sindhi
                     layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
                     autoDisplay: false,
                 },

@@ -69,3 +69,6 @@ scripts/
 
 # seeds
 prisma/seed*.js
+
+# markdown
+*.md

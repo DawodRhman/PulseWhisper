@@ -2,17 +2,18 @@
 import React from "react";
 import { Fade } from "react-awesome-reveal";
 import Image from "next/image";
+import { sanitize } from "@/lib/utils";
 
 export default function Heritage({ heading, body }) {
   // Parse body HTML if it exists, otherwise use default structure
   const hasCustomHTML = body && body.trim().length > 0;
-  
+
   // If body contains full HTML section (from admin panel), render it directly
   if (hasCustomHTML && (body.includes("<section") || body.includes("bg-black"))) {
     return (
-      <div 
+      <div
         className="w-full"
-        dangerouslySetInnerHTML={{ __html: body }}
+        dangerouslySetInnerHTML={{ __html: sanitize(body) }}
       />
     );
   }
@@ -23,11 +24,11 @@ export default function Heritage({ heading, body }) {
     // Extract h3 title
     const h3Match = body.match(/<h3[^>]*>(.*?)<\/h3>/i);
     const title = h3Match ? h3Match[1].replace(/<[^>]+>/g, '').trim() : null;
-    
+
     // Extract paragraphs
     const pMatches = body.match(/<p[^>]*>(.*?)<\/p>/gi);
     const paragraphs = pMatches ? pMatches.map(p => p.replace(/<[^>]+>/g, '').trim()) : [];
-    
+
     if (title || paragraphs.length > 0) {
       extractedContent = {
         title,
@@ -50,11 +51,11 @@ export default function Heritage({ heading, body }) {
         <div className="text-center mb-8 sm:mb-10 md:mb-12">
           <Fade direction="down" triggerOnce duration={1000}>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/50 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-medium shadow-lg backdrop-blur-sm">
-              <Image 
-                src="/icon/magic-black.svg" 
-                width={16} 
-                height={16} 
-                alt="Heritage Icon" 
+              <Image
+                src="/icon/magic-black.svg"
+                width={16}
+                height={16}
+                alt="Heritage Icon"
                 className="invert opacity-80"
               />
               <span>About Us</span>
@@ -94,7 +95,7 @@ export default function Heritage({ heading, body }) {
                   ))}
                 </div>
               ) : hasCustomHTML ? (
-                <div 
+                <div
                   className="text-slate-300 text-base sm:text-lg md:text-xl leading-relaxed space-y-4 md:space-y-6 prose prose-invert max-w-none
                     prose-headings:text-white prose-p:text-slate-300 prose-p:leading-relaxed
                     prose-h3:text-2xl prose-h3:font-bold prose-h3:text-white prose-h3:mb-4"
