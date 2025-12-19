@@ -16,6 +16,7 @@ import Loader from "@/components/Loader";
 import gsap from "gsap";
 import { useTranslation } from "react-i18next";
 import { useServicesData } from "@/hooks/useServicesData";
+import { sanitize } from "@/lib/utils";
 
 const IconMap = {
   FaTint,
