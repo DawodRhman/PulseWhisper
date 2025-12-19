@@ -187,19 +187,13 @@ function normalizeNews(articles) {
   }));
 }
 
-// Helper function to categorize articles into three categories
+// Helper function to categorize articles
 function categorizNews(articles) {
   if (!articles || articles.length === 0) {
     return { latestUpdates: [], pressReleases: [], mediaGallery: [] };
   }
 
-  // Adjust slices based on data length (Mock data has 10 items: 5 updates, 2 PRs, 3 Gallery)
-  const isMock = articles.length <= 12;
-  const prStart = 5;
-  const prEnd = isMock ? 7 : 9;
-  const galleryStart = isMock ? 7 : 9;
-  const galleryEnd = isMock ? 15 : 15;
-
+  // 1. Latest Updates: Take the first 5 items regardless of type
   const latestUpdates = articles.slice(0, 5).map((article, index) => ({
     id: article.id || index,
     title: article.title,
@@ -219,34 +213,66 @@ function categorizNews(articles) {
     imagePlaceholder: article.heroMedia?.url || article.img || `https://placehold.co/800x450/0f172a/06b6d4?text=${encodeURIComponent(article.title || "News")}`
   }));
 
-  const pressReleases = articles
-    .slice(prStart, prEnd)
-    .map((article, index) => ({
-      id: article.id || index,
-      title: article.title,
-      date: article.publishedAt
-        ? new Date(article.publishedAt).toLocaleDateString()
-        : article.date || new Date().toLocaleDateString(),
-      description: article.summary || article.description || "",
-      link: article.link || `/news/${article.slug || article.id}`,
-      category: article.category?.title || "PRESS RELEASE",
-    }));
+  // 2. Press Releases: Filter by category 'PRESS RELEASE' or type, otherwise take next available items
+  let pressReleasesRaw = articles.filter(
+    (a) =>
+      a.category?.title?.toUpperCase() === "PRESS RELEASE" ||
+      a.type?.toUpperCase() === "PRESS RELEASE" ||
+      a.type?.toUpperCase() === "PRESS"
+  );
 
-  const mediaGallery = articles
-    .slice(galleryStart, galleryEnd)
-    .map((article, index) => ({
-      id: article.id || index,
-      title: article.title,
-      description: article.summary || article.description || "",
-      type: article.category?.title || article.type || "MEDIA",
-      img:
-        article.heroMedia?.url ||
-        article.img ||
-        `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(
-          article.title || "Media"
-        )}`,
-      imagePlaceholder: article.heroMedia?.url || article.img || `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(article.title || "Media")}`
-    }));
+  // Fallback: If no explicit press releases, take items 5-7 (if available)
+  if (pressReleasesRaw.length === 0 && articles.length > 5) {
+    pressReleasesRaw = articles.slice(5, 7);
+  }
+
+  const pressReleases = pressReleasesRaw.slice(0, 3).map((article, index) => ({
+    id: article.id || index,
+    title: article.title,
+    date: article.publishedAt
+      ? new Date(article.publishedAt).toLocaleDateString()
+      : article.date || new Date().toLocaleDateString(),
+    description: article.summary || article.description || "",
+    link: article.link || `/news/${article.slug || article.id}`,
+    category: article.category?.title || "PRESS RELEASE",
+  }));
+
+  // 3. Media Gallery: Filter by 'MEDIA'/'PHOTOS' or items with images
+  // We want to avoid duplicates from Latest if possible, but for small datasets it's better to show something than nothing.
+  let mediaGalleryRaw = articles.filter(
+    (a) =>
+      a.category?.title?.toUpperCase() === "MEDIA" ||
+      a.category?.title?.toUpperCase() === "PHOTOS" ||
+      a.category?.title?.toUpperCase() === "GALLERY" ||
+      a.type?.toUpperCase() === "MEDIA" ||
+      a.type?.toUpperCase() === "PHOTOS"
+  );
+
+  // Fallback: If no explicit media items, take ANY items that have images
+  if (mediaGalleryRaw.length === 0) {
+    mediaGalleryRaw = articles.filter(
+      (a) => a.heroMedia?.url || a.img
+    );
+  }
+
+  // Final Fallback: If still nothing, just take the items 0-6 to fill the gallery
+  if (mediaGalleryRaw.length === 0) {
+    mediaGalleryRaw = articles.slice(0, 6);
+  }
+
+  const mediaGallery = mediaGalleryRaw.slice(0, 6).map((article, index) => ({
+    id: article.id || index,
+    title: article.title,
+    description: article.summary || article.description || "",
+    type: article.category?.title || article.type || "MEDIA",
+    img:
+      article.heroMedia?.url ||
+      article.img ||
+      `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(
+        article.title || "Media"
+      )}`,
+    imagePlaceholder: article.heroMedia?.url || article.img || `https://placehold.co/400x300/0f172a/06b6d4?text=${encodeURIComponent(article.title || "Media")}`
+  }));
 
   return { latestUpdates, pressReleases, mediaGallery };
 }
@@ -306,11 +332,10 @@ export default function NewsUpdates() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === tab.id 
-                    ? 'bg-blue-600 text-white shadow-md' 
-                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
-                }`}
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === tab.id
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  }`}
               >
                 {tab.icon}
                 {tab.label}
@@ -392,11 +417,15 @@ export default function NewsUpdates() {
               {mediaGallery.map((item, index) => {
                 return (
                   <div key={index} className="group relative rounded-lg overflow-hidden bg-gray-100">
-                    <div className="aspect-w-16 aspect-h-9">
+                    <div className="aspect-video relative">
                       <img
                         src={item.img || item.imagePlaceholder}
                         alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://placehold.co/800x450/0f172a/06b6d4?text=${encodeURIComponent("No Image")}`;
+                        }}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">

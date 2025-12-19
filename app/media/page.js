@@ -73,7 +73,7 @@ export default async function MediaPage() {
             Visual highlights of our projects, events, and initiatives across Karachi.
           </p>
         </div>
-        
+
         <MediaGrid items={items} />
       </div>
     </main>
