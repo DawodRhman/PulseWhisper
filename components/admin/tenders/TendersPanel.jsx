@@ -197,10 +197,10 @@ export default function TendersPanel() {
       <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-             <h3 className="text-lg font-semibold text-slate-900">Tender Queue</h3>
-             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-               {tenders.length} Records
-             </span>
+            <h3 className="text-lg font-semibold text-slate-900">Tender Queue</h3>
+            <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+              {tenders.length} Records
+            </span>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -242,6 +242,7 @@ export default function TendersPanel() {
                       <p className="text-xs text-slate-500">Category: <span className="font-medium text-slate-700">{tender.category?.label || "Unassigned"}</span></p>
                     </div>
 
+                    <div className="flex items-center gap-3">
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-slate-500 font-medium">{tender.isVisible ? "Visible" : "Hidden"}</span>
                         <Switch
@@ -328,17 +329,15 @@ export default function TendersPanel() {
             <div className="flex rounded-lg bg-slate-100 p-1">
               <button
                 onClick={() => setActiveTab("create")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Create
               </button>
               <button
                 onClick={() => setActiveTab("edit")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Edit
               </button>
@@ -367,11 +366,11 @@ export default function TendersPanel() {
                   <Input label="Title" value={tenderForm.title} onChange={(e) => setTenderForm({ ...tenderForm, title: e.target.value })} required />
                   <TextArea label="Summary" value={tenderForm.summary} onChange={(e) => setTenderForm({ ...tenderForm, summary: e.target.value })} />
                   <Select label="Status" value={tenderForm.status} onChange={(e) => setTenderForm({ ...tenderForm, status: e.target.value })}>
-                     {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+                    {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
                   </Select>
                   <Select label="Category" value={tenderForm.categoryId} onChange={(e) => setTenderForm({ ...tenderForm, categoryId: e.target.value })}>
-                     <option value="">Unassigned</option>
-                     {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                    <option value="">Unassigned</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
                   </Select>
                   <Input label="Published At" type="datetime-local" value={tenderForm.publishedAt} onChange={(e) => setTenderForm({ ...tenderForm, publishedAt: e.target.value })} />
                   <Input label="Closing At" type="datetime-local" value={tenderForm.closingAt} onChange={(e) => setTenderForm({ ...tenderForm, closingAt: e.target.value })} />
@@ -386,8 +385,8 @@ export default function TendersPanel() {
                   disabled={actionState.pending || !tenders.length}
                 >
                   <Select label="Tender" value={attachmentForm.tenderId} onChange={(e) => setAttachmentForm({ ...attachmentForm, tenderId: e.target.value })} required>
-                     <option value="" disabled>Select Tender</option>
-                     {tenders.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
+                    <option value="" disabled>Select Tender</option>
+                    {tenders.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
                   </Select>
                   <Input label="Label" value={attachmentForm.label} onChange={(e) => setAttachmentForm({ ...attachmentForm, label: e.target.value })} />
                   <Input label="Media URL" type="url" value={attachmentForm.mediaUrl} onChange={(e) => setAttachmentForm({ ...attachmentForm, mediaUrl: e.target.value })} required />
@@ -419,11 +418,11 @@ export default function TendersPanel() {
                 <Input label="Title" value={tenderUpdateForm.title} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, title: e.target.value })} required disabled={!tenderUpdateForm.id} />
                 <TextArea label="Summary" value={tenderUpdateForm.summary} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, summary: e.target.value })} disabled={!tenderUpdateForm.id} />
                 <Select label="Status" value={tenderUpdateForm.status} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, status: e.target.value })} disabled={!tenderUpdateForm.id}>
-                   {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+                  {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
                 </Select>
                 <Select label="Category" value={tenderUpdateForm.categoryId} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, categoryId: e.target.value })} disabled={!tenderUpdateForm.id}>
-                   <option value="">Unassigned</option>
-                   {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                  <option value="">Unassigned</option>
+                  {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
                 </Select>
                 <Input label="Published At" type="datetime-local" value={tenderUpdateForm.publishedAt} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, publishedAt: e.target.value })} disabled={!tenderUpdateForm.id} />
                 <Input label="Closing At" type="datetime-local" value={tenderUpdateForm.closingAt} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, closingAt: e.target.value })} disabled={!tenderUpdateForm.id} />
