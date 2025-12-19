@@ -15,6 +15,8 @@ const Navbar = () => {
   const [expandedMobileSubmenu, setExpandedMobileSubmenu] = useState(null);
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   const menuRef = useRef(null);
   const linksRef = useRef([]);
   const submenuRefs = useRef([]);
@@ -70,7 +72,6 @@ const Navbar = () => {
     });
   }, [expandedMobileSubmenu]);
 
-
   useEffect(() => {
     if (isOpen) {
       gsap.to(menuRef.current, {
@@ -102,14 +103,100 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showSettingsDropdown]);
 
-  // Handle search
+  // Get all available pages for search suggestions
+  const getAllPages = () => {
+    const pages = [];
+
+    // Add main navigation items
+    getNavLinks().forEach(item => {
+      pages.push({
+        title: item.text,
+        path: item.href,
+        type: 'page'
+      });
+
+      // Add submenu items if they exist
+      if (item.submenu) {
+        item.submenu.forEach(subItem => {
+          pages.push({
+            title: subItem.text,
+            path: subItem.href,
+            type: 'subpage'
+          });
+        });
+      }
+    });
+
+    return pages;
+  };
+
+  // Filter suggestions based on search query
+  const updateSuggestions = (query) => {
+    if (!query.trim()) {
+      setSuggestions([]);
+      return;
+    }
+
+    const allPages = getAllPages();
+    const filtered = allPages.filter(page =>
+      page.title.toLowerCase().includes(query.toLowerCase()) ||
+      page.path.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setSuggestions(filtered);
+  };
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    updateSuggestions(query);
+  };
+
+  // Handle search form submission
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
+      setSuggestions([]);
+      setShowSuggestions(false);
     }
   };
+
+  // Handle suggestion click
+  const handleSuggestionClick = (e, path) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+    // Close the mobile menu if it's open
+    setIsOpen(false);
+    // Clear search state
+    setSearchQuery("");
+    setSuggestions([]);
+    setShowSuggestions(false);
+    // Navigate to the selected path
+    router.push(path);
+  };
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Toggle language and update URL + Google Translate Cookie
   const toggleLanguage = () => {
@@ -128,7 +215,7 @@ const Navbar = () => {
     if (newLang === "sd") cookieValue = "/en/sd";
 
     document.cookie = `googtrans=${cookieValue}; path=/; domain=${window.location.hostname}`;
-    document.cookie = `googtrans=${cookieValue}; path=/;`; // Fallback
+    document.cookie = `googtrans=${cookieValue}; path=/;`;
 
     // Update URL to trigger server-side re-render (for metadata/SEO)
     const currentParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
@@ -334,21 +421,23 @@ const Navbar = () => {
           {/* Right Side: Search Bar and Language Toggle - Desktop */}
           <div className="hidden md:flex items-center gap-3">
             {/* Search Bar */}
-            <form onSubmit={handleSearch} className="flex items-center">
-              <div className={`relative flex items-center rounded-md border transition-all duration-300 ${isScrolled
-                ? "bg-white border-gray-300"
-                : "bg-white/90 border-white/50 backdrop-blur-sm"
-                }`}>
+            <form onSubmit={handleSearch} className="flex items-center relative">
+              <div
+                className={`relative flex items-center rounded-md border transition-all duration-300 ${isScrolled
+                  ? "bg-white border-gray-300"
+                  : "bg-white/90 border-white/50 backdrop-blur-sm"
+                  }`}
+                ref={searchInputRef}
+              >
                 <Search
                   size={18}
-                  className={`absolute start-3 ${isScrolled ? "text-gray-500" : "text-gray-600"
-                    }`}
+                  className={`absolute start-3 ${isScrolled ? "text-gray-500" : "text-gray-600"}`}
                 />
                 <input
-                  ref={searchInputRef}
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleSearchChange}
+                  onFocus={() => setShowSuggestions(true)}
                   placeholder={t("nav.search")}
                   className={`ps-10 pe-4 py-2 w-48 lg:w-56 xl:w-64 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${isScrolled
                     ? "bg-white text-gray-900 placeholder-gray-500"
@@ -356,6 +445,28 @@ const Navbar = () => {
                     }`}
                 />
               </div>
+
+              {/* Search Suggestions Dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div className={`absolute top-full left-0 mt-1 w-48 lg:w-56 xl:w-64 max-h-60 overflow-y-auto rounded-md shadow-lg z-50 ${
+                  isScrolled ? 'bg-white' : 'bg-white/95 backdrop-blur-sm'
+                } border border-gray-200`}>
+                  <ul className="py-1">
+                    {suggestions.map((suggestion, index) => (
+                      <li key={`${suggestion.path}-${index}`}>
+                        <button
+                          type="button"
+                          onClick={(e) => handleSuggestionClick(e, suggestion.path)}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                        >
+                          <div className="font-medium">{suggestion.title}</div>
+                          <div className="text-xs text-gray-500 truncate">{suggestion.path}</div>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </form>
 
             {/* Settings Dropdown */}
@@ -402,11 +513,14 @@ const Navbar = () => {
                               let cookieValue = "/en/en";
                               if (langCode === "ur") cookieValue = "/en/ur";
                               if (langCode === "sd") cookieValue = "/en/sd";
+
                               document.cookie = `googtrans=${cookieValue}; path=/; domain=${window.location.hostname}`;
                               document.cookie = `googtrans=${cookieValue}; path=/;`;
 
                               const currentParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
                               currentParams.set('lang', langCode);
+
+                              // Force reload to apply Google Translation cleanly
                               window.location.href = `${pathname}?${currentParams.toString()}`;
                             }}
                             className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all duration-200 ${language === langCode
@@ -451,13 +565,35 @@ const Navbar = () => {
                 <form onSubmit={handleSearch} className="flex-1 max-w-xs">
                   <div className="relative">
                     <Search className="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder={t("nav.search")}
-                      className="w-full ps-10 pe-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    <div className="relative w-full" ref={searchInputRef}>
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        onFocus={() => setShowSuggestions(true)}
+                        placeholder={t("nav.search")}
+                        className="w-full ps-10 pe-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      {/* Mobile Search Suggestions Dropdown */}
+                      {showSuggestions && suggestions.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-1 max-h-60 overflow-y-auto rounded-md shadow-lg z-50 bg-white/95 backdrop-blur-sm border border-gray-200">
+                          <ul className="py-1">
+                            {suggestions.map((suggestion, index) => (
+                              <li key={`mobile-${suggestion.path}-${index}`}>
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleSuggestionClick(e, suggestion.path)}
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                >
+                                  <div className="font-medium">{suggestion.title}</div>
+                                  <div className="text-xs text-gray-500 truncate">{suggestion.path}</div>
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </form>
 

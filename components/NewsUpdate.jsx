@@ -106,7 +106,7 @@ const NewsCard = ({ news, index, t }) => {
 
   return (
     <div
-      className="relative bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col h-full hover:shadow-lg transition-shadow duration-300"
+      className="relative bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 flex flex-col h-full hover:shadow-lg transition-shadow duration-300"
       style={{
         animation: `fadeInUp 0.6s ease-out forwards`,
         animationDelay: `${index * 0.05}s`,
@@ -123,7 +123,7 @@ const NewsCard = ({ news, index, t }) => {
         />
         {/* Status Badge */}
         <div className="absolute top-3 right-3">
-          <div className="bg-white/90 text-gray-800 text-xs font-medium px-2 py-1 rounded">
+          <div className="bg-gray-900/90 text-white text-xs font-medium px-2 py-1 rounded">
             {news.status}
           </div>
         </div>
@@ -132,27 +132,27 @@ const NewsCard = ({ news, index, t }) => {
       {/* Content */}
       <div className="p-4 sm:p-5 flex flex-col flex-grow">
         <div className="flex items-center gap-2 mb-2">
-          <Tag className="w-3 h-3 text-gray-400" />
-          <span className="text-xs font-medium text-blue-700 uppercase tracking-wider">
+          <Tag className="w-3 h-3 text-blue-400" />
+          <span className="text-xs font-medium text-blue-400 uppercase tracking-wider">
             {news.category}
           </span>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
+        <h3 className="text-lg font-semibold text-white mb-2 leading-snug">
           {displayTitle}
         </h3>
-        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+        <p className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
           {displaySummary}
         </p>
 
         {/* Footer */}
-        <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="mt-auto pt-3 border-t border-gray-700 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-gray-400">
             <Calendar className="w-3 h-3" />
             <span>{news.date}</span>
           </div>
           <a
             href="#"
-            className="text-sm font-medium text-blue-700 hover:text-blue-900 flex items-center gap-1"
+            className="text-sm font-medium text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
           >
             {t('readMore')}
             <ChevronRight className="w-4 h-4" />
@@ -286,10 +286,10 @@ export default function NewsUpdates() {
   }
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl font-bold text-white mb-4">
             {t('news.latestNews')}
           </h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
@@ -297,7 +297,7 @@ export default function NewsUpdates() {
 
         {/* Tabs */}
         <div className="flex justify-center mb-10">
-          <div className="bg-gray-100 p-1 rounded-lg inline-flex gap-1">
+          <div className="bg-gray-800 p-1 rounded-lg inline-flex gap-1">
             {[
               { id: "updates", label: t("news.latestNews"), icon: <Activity size={16} /> },
               { id: "press", label: t("news.pressReleases"), icon: <FileText size={16} /> },
@@ -306,7 +306,11 @@ export default function NewsUpdates() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm ${activeTab === tab.id ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === tab.id 
+                    ? 'bg-blue-600 text-white shadow-md' 
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                }`}
               >
                 {tab.icon}
                 {tab.label}
@@ -322,23 +326,23 @@ export default function NewsUpdates() {
             <div className="grid grid-cols-1 gap-6">
               {news.map((item, index) => {
                 return (
-                  <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                  <div key={index} className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:shadow-lg transition-shadow hover:shadow-blue-500/20">
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
+                        <span className="bg-blue-900/50 text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-700/50">
                           {item.type}
                         </span>
-                        <span className="text-gray-500 text-sm flex items-center gap-1">
-                          <Calendar size={14} /> {item.date}
+                        <span className="text-gray-400 text-sm flex items-center gap-1">
+                          <Calendar size={14} className="text-blue-400" /> {item.date}
                         </span>
                       </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      <h3 className="text-xl font-semibold text-white mb-2">
                         {item.title}
                       </h3>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-gray-300 mb-4">
                         {item.description || item.summary}
                       </p>
-                      <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1">
+                      <a href="#" className="text-blue-400 hover:text-blue-300 text-sm font-medium inline-flex items-center gap-1 transition-colors">
                         {t('news.readMore')} <ChevronRight size={16} />
                       </a>
                     </div>
@@ -355,24 +359,24 @@ export default function NewsUpdates() {
                 const displayTitle = item.title;
                 const displayDesc = item.description;
                 return (
-                  <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                  <div key={index} className="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow hover:shadow-blue-500/20">
                     <div className="flex justify-between items-start mb-3">
-                      <span className="text-gray-500 text-sm">{item.date}</span>
-                      <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full">
+                      <span className="text-gray-400 text-sm">{item.date}</span>
+                      <span className="bg-blue-900/50 text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-700/50">
                         Press Release
                       </span>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-white mb-2">
                       {displayTitle}
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-gray-300 mb-4">
                       {displayDesc}
                     </p>
                     <a
                       href={item.link || '#'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center gap-1"
+                      className="text-blue-400 hover:text-blue-300 text-sm font-medium inline-flex items-center gap-1 transition-colors"
                     >
                       {t('news.readMore')} <ChevronRight size={16} />
                     </a>
@@ -384,7 +388,7 @@ export default function NewsUpdates() {
 
           {/* Media Gallery */}
           {activeTab === "media" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-white">
               {mediaGallery.map((item, index) => {
                 return (
                   <div key={index} className="group relative rounded-lg overflow-hidden bg-gray-100">

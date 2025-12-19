@@ -156,8 +156,8 @@ export default function WorkWithUs() {
                   <a
                     href={`#${section.id}`}
                     className="inline-flex items-center justify-center w-full px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 
-                               bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-900 font-semibold sm:font-bold text-sm sm:text-base md:text-base rounded-lg sm:rounded-lg md:rounded-xl transition-all duration-300 
-                               hover:from-cyan-400 hover:to-blue-500 hover:shadow-lg hover:shadow-cyan-500/40"
+                               bg-blue-600 text-white font-semibold sm:font-bold text-sm sm:text-base md:text-base rounded-lg sm:rounded-lg md:rounded-xl transition-all duration-300 
+                               hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30"
                   >
                     {section.cta}
                     <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 ml-1.5 sm:ml-2" />
@@ -207,8 +207,8 @@ export default function WorkWithUs() {
             variants={itemVariants}
             href="/contact"
             className="inline-flex items-center px-6 sm:px-8 md:px-10 lg:px-12 2xl:px-14 py-2.5 sm:py-3 md:py-3.5 lg:py-4 2xl:py-5 text-sm sm:text-base md:text-base lg:text-lg xl:text-lg 2xl:text-xl font-semibold sm:font-bold rounded-lg sm:rounded-lg md:rounded-xl lg:rounded-xl transition-all duration-300 
-                       bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900 
-                       hover:from-cyan-300 hover:to-blue-400 shadow-lg sm:shadow-xl hover:shadow-cyan-400/50"
+                       bg-blue-600 text-white 
+                       hover:bg-blue-700 shadow-lg sm:shadow-xl hover:shadow-blue-500/50"
           >
             {t('workWithUs.hero.cta')}
             <Globe className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 lg:w-6 lg:h-6 ml-2 sm:ml-2.5 md:ml-3 lg:ml-3" />

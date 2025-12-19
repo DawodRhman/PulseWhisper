@@ -7,29 +7,30 @@
   "navLabel": "News & Updates",
   "navGroup": "whatwedo",
   "createdAt": "2025-12-04T17:09:38.060Z",
-  "updatedAt": "2025-12-12T19:06:23.926Z",
+  "updatedAt": "2025-12-15T13:38:26.920Z",
   "seoId": "933eb531-f1d5-480f-be6b-c60826abfbd2",
   "sections": [
     {
-      "id": "8abac3d6-d018-48b4-ab93-20c1fccd25d7",
+      "id": "77750d83-f91a-49cd-ae0a-0409d26e76d3",
       "pageId": "7520d5a1-5f3c-495f-81f2-f6485c5312f5",
       "type": "HERO",
       "order": 0,
       "content": {
         "title": "News Room",
-        "subtitle": "Latest updates from KW&SC"
+        "subtitle": "Latest updates from KW&SC",
+        "backgroundImage": "/uploads/1765800273161-90f568c5.mp4"
       },
-      "createdAt": "2025-12-04T17:09:39.572Z",
-      "updatedAt": "2025-12-04T17:09:39.572Z"
+      "createdAt": "2025-12-15T13:38:26.938Z",
+      "updatedAt": "2025-12-15T13:38:26.938Z"
     },
     {
-      "id": "38e33c4c-077f-40eb-af22-4146c35d4cb7",
+      "id": "029717bf-7c0f-4d44-99e6-4ad8df0b7d23",
       "pageId": "7520d5a1-5f3c-495f-81f2-f6485c5312f5",
       "type": "NEWS",
       "order": 1,
       "content": {},
-      "createdAt": "2025-12-04T17:09:39.572Z",
-      "updatedAt": "2025-12-04T17:09:39.572Z"
+      "createdAt": "2025-12-15T13:38:26.938Z",
+      "updatedAt": "2025-12-15T13:38:26.938Z"
     }
   ],
   "seo": {
@@ -45,6 +46,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:38.060Z",
-    "updatedAt": "2025-12-04T17:09:38.060Z"
+    "updatedAt": "2025-12-15T13:38:26.920Z"
   }
 }
