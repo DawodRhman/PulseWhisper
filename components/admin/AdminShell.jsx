@@ -51,7 +51,7 @@ import NavigationPanel from "@/components/admin/navigation/NavigationPanel";
 const PANELS = [
   { id: "overview", label: "Overview", icon: LayoutDashboard, description: "At-a-glance insight" },
   { id: "navigation", label: "Navigation", icon: Menu, description: "Manage menu visibility", permissions: ["pages:write"] },
-  { id: "pages", label: "Pages", icon: LayoutTemplate, description: "Manage dynamic pages" },
+  { id: "pages", label: "Pages", icon: LayoutTemplate, description: "Manage dynamic pages", permissions: ["pages:write"] },
   { id: "services", label: "Services", icon: ServerCog, description: "Manage service cards", permissions: ["services:write"] },
   { id: "tenders", label: "Tenders", icon: FileText, description: "Procurement pipeline", permissions: ["tenders:write"] },
   { id: "careers", label: "Careers", icon: Briefcase, description: "Open roles", permissions: ["careers:write"] },
@@ -150,8 +150,8 @@ function Highlight({ title, meta, description, timestamp }) {
     <div className="rounded-xl border border-slate-100 bg-white p-4 shadow-sm">
       <div className="flex justify-between items-start">
         <div>
-           <p className="text-sm font-semibold text-slate-900 line-clamp-1">{title}</p>
-           {description ? <p className="text-xs text-slate-500 mt-0.5">{description}</p> : null}
+          <p className="text-sm font-semibold text-slate-900 line-clamp-1">{title}</p>
+          {description ? <p className="text-xs text-slate-500 mt-0.5">{description}</p> : null}
         </div>
         {content ? <span className="text-[10px] font-medium bg-slate-100 text-slate-500 px-2 py-1 rounded-full whitespace-nowrap ml-2">{content}</span> : null}
       </div>
@@ -199,7 +199,7 @@ export default function AdminShell({ session, dashboardStats }) {
             </div>
           </div>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto p-4">
           <p className="px-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Modules</p>
           <ul className="space-y-1">
@@ -211,11 +211,10 @@ export default function AdminShell({ session, dashboardStats }) {
                   <button
                     type="button"
                     onClick={() => setActivePanel(panel.id)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-all ${
-                      selected
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-all ${selected
                         ? "bg-gradient-to-r from-cyan-50 to-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100"
                         : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                    }`}
+                      }`}
                   >
                     <Icon size={18} className={selected ? "text-blue-600" : "text-slate-400"} />
                     <span>{panel.label}</span>
@@ -227,14 +226,14 @@ export default function AdminShell({ session, dashboardStats }) {
         </div>
 
         <div className="p-4 border-t border-slate-100 flex-shrink-0">
-           <div className="rounded-xl bg-slate-50 p-4">
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
-                <Sparkles size={14} className="text-amber-500" /> Pro Tip
-              </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Check the audit log regularly to monitor system activity.
-              </p>
-           </div>
+          <div className="rounded-xl bg-slate-50 p-4">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
+              <Sparkles size={14} className="text-amber-500" /> Pro Tip
+            </div>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Check the audit log regularly to monitor system activity.
+            </p>
+          </div>
         </div>
       </aside>
 
@@ -242,86 +241,86 @@ export default function AdminShell({ session, dashboardStats }) {
       <section className="flex flex-col h-screen overflow-hidden">
         {/* Header */}
         <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-           <div className="flex items-center gap-4">
-              <h2 className="text-xl font-bold text-slate-900">
-                {PANELS.find((p) => p.id === activePanel)?.label || "Dashboard"}
-              </h2>
-              <span className="hidden md:inline-flex h-6 w-px bg-slate-200"></span>
-              <p className="hidden md:block text-sm text-slate-500">
-                 {PANELS.find((p) => p.id === activePanel)?.description}
-              </p>
-           </div>
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-bold text-slate-900">
+              {PANELS.find((p) => p.id === activePanel)?.label || "Dashboard"}
+            </h2>
+            <span className="hidden md:inline-flex h-6 w-px bg-slate-200"></span>
+            <p className="hidden md:block text-sm text-slate-500">
+              {PANELS.find((p) => p.id === activePanel)?.description}
+            </p>
+          </div>
 
-           <div className="flex items-center gap-4">
-              <div className="text-right hidden md:block">
-                 <p className="text-sm font-semibold text-slate-900">{displayName}</p>
-                 <p className="text-xs text-slate-500">{session?.user?.email}</p>
-              </div>
-              <button
-                onClick={handleSignOut}
-                className="rounded-full bg-slate-100 p-2 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition"
-                title="Sign Out"
-              >
-                <LogOut size={18} />
-              </button>
-           </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right hidden md:block">
+              <p className="text-sm font-semibold text-slate-900">{displayName}</p>
+              <p className="text-xs text-slate-500">{session?.user?.email}</p>
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="rounded-full bg-slate-100 p-2 text-slate-600 hover:bg-slate-200 hover:text-slate-900 transition"
+              title="Sign Out"
+            >
+              <LogOut size={18} />
+            </button>
+          </div>
         </header>
 
         {/* Scrollable Area */}
         <div className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
-           <div className="mx-auto max-w-7xl space-y-6">
-              
-              {/* Highlights & Stats (Only on Overview) */}
-              {activePanel === "overview" && (
-                <>
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    {metrics.map((metric) => (
-                      <MetricCard key={metric.label} {...metric} />
-                    ))}
-                  </div>
-                  
-                  <div className="grid gap-6 lg:grid-cols-3">
-                     <div className="lg:col-span-2 space-y-6">
-                        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-                           <h3 className="text-lg font-bold text-slate-900 mb-4">Recent Activity</h3>
-                           <div className="grid gap-4 sm:grid-cols-2">
-                              <Highlight
-                                title={highlights?.latestTender?.title}
-                                description={highlights?.latestTender?.status ? `Status: ${highlights.latestTender.status}` : "Tender update"}
-                                timestamp={highlights?.latestTender?.updatedAt}
-                              />
-                              <Highlight
-                                title={highlights?.latestNews?.title}
-                                description="Newsroom update"
-                                timestamp={highlights?.latestNews?.publishedAt}
-                              />
-                           </div>
-                        </div>
-                     </div>
-                     
-                     <div className="space-y-6">
-                        <PanelCard title="System Pulse">
-                           <ul className="space-y-3">
-                              {secondaryMetrics.map((entry) => (
-                                <li key={entry.label} className="flex items-center justify-between text-sm">
-                                  <span className="text-slate-500">{entry.label}</span>
-                                  <span className="font-semibold text-slate-900">{entry.value}</span>
-                                </li>
-                              ))}
-                           </ul>
-                        </PanelCard>
-                     </div>
-                  </div>
-                </>
-              )}
+          <div className="mx-auto max-w-7xl space-y-6">
 
-              {/* Panel Content */}
-              {activePanel !== "overview" && (
-                 <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm min-h-[500px]">
-                    <PanelContent panelId={activePanel} />
-                 </div>
-              )}
-           </div>
+            {/* Highlights & Stats (Only on Overview) */}
+            {activePanel === "overview" && (
+              <>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                  {metrics.map((metric) => (
+                    <MetricCard key={metric.label} {...metric} />
+                  ))}
+                </div>
+
+                <div className="grid gap-6 lg:grid-cols-3">
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+                      <h3 className="text-lg font-bold text-slate-900 mb-4">Recent Activity</h3>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <Highlight
+                          title={highlights?.latestTender?.title}
+                          description={highlights?.latestTender?.status ? `Status: ${highlights.latestTender.status}` : "Tender update"}
+                          timestamp={highlights?.latestTender?.updatedAt}
+                        />
+                        <Highlight
+                          title={highlights?.latestNews?.title}
+                          description="Newsroom update"
+                          timestamp={highlights?.latestNews?.publishedAt}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <PanelCard title="System Pulse">
+                      <ul className="space-y-3">
+                        {secondaryMetrics.map((entry) => (
+                          <li key={entry.label} className="flex items-center justify-between text-sm">
+                            <span className="text-slate-500">{entry.label}</span>
+                            <span className="font-semibold text-slate-900">{entry.value}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </PanelCard>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Panel Content */}
+            {activePanel !== "overview" && (
+              <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm min-h-[500px]">
+                <PanelContent panelId={activePanel} />
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </div>

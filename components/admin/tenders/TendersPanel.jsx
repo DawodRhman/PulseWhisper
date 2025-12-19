@@ -3,22 +3,23 @@ import { useMemo, useState } from "react";
 import { Loader2, Plus, RefreshCcw, Trash2, CalendarDays, Paperclip, Pencil } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAdminTenders } from "@/hooks/useAdminTenders";
+import { AdminInput } from "@/components/admin/ui/AdminInput";
+import { AdminSelect } from "@/components/admin/ui/AdminSelect";
+import { AdminTextarea } from "@/components/admin/ui/AdminTextarea";
+import { ActionForm } from "@/components/admin/ui/ActionForm";
+import MediaPicker from "@/components/admin/media/MediaPicker";
+import { Pagination } from "@/components/admin/ui/Pagination";
+import { SearchInput } from "@/components/admin/ui/SearchInput";
+import { AdminRichText } from "@/components/admin/ui/AdminRichText";
+import { z } from "zod";
+
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { tenderSchema, tenderCategorySchema, attachmentSchema } from "@/lib/validators/admin";
 
 const STATUS_OPTIONS = ["OPEN", "UPCOMING", "CLOSED", "CANCELLED"];
 
-const INITIAL_CATEGORY = { label: "", description: "", order: "" };
-const INITIAL_TENDER = {
-  tenderNumber: "",
-  title: "",
-  summary: "",
-  status: "OPEN",
-  categoryId: "",
-  publishedAt: "",
-  closingAt: "",
-  contactEmail: "",
-  contactPhone: "",
-};
-const INITIAL_ATTACHMENT = { tenderId: "", label: "", mediaUrl: "" };
+
 
 function toNumber(value) {
   if (value === undefined || value === null || value === "") return undefined;
@@ -63,11 +64,96 @@ export default function TendersPanel() {
     updateEntity,
     deleteEntity,
   } = useAdminTenders();
-  const [categoryForm, setCategoryForm] = useState(INITIAL_CATEGORY);
-  const [tenderForm, setTenderForm] = useState(INITIAL_TENDER);
-  const [tenderUpdateForm, setTenderUpdateForm] = useState({ ...INITIAL_TENDER, id: "" });
-  const [attachmentForm, setAttachmentForm] = useState(INITIAL_ATTACHMENT);
+
+  const {
+    register: registerCategory,
+    handleSubmit: handleSubmitCategory,
+    reset: resetCategory,
+    formState: { errors: errorsCategory, isSubmitting: creatingCategory }
+  } = useForm({
+    resolver: zodResolver(tenderCategorySchema),
+    defaultValues: { label: "", description: "", order: "" }
+  });
+
+  const {
+    register: registerTender,
+    control: controlTender,
+    handleSubmit: handleSubmitTender,
+    reset: resetTender,
+    formState: { errors: errorsTender, isSubmitting: creatingTender }
+  } = useForm({
+    resolver: zodResolver(tenderSchema),
+    defaultValues: {
+      tenderNumber: "",
+      title: "",
+      summary: "",
+      status: "OPEN",
+      categoryId: "",
+      publishedAt: "",
+      closingAt: "",
+      contactEmail: "",
+      contactPhone: "",
+    }
+  });
+
+  const {
+    register: registerUpdate,
+    control: controlUpdate,
+    handleSubmit: handleSubmitUpdate,
+    reset: resetUpdate,
+    setValue: setUpdateValue,
+    watch: watchUpdate,
+    formState: { errors: errorsUpdate, isSubmitting: updatingTender }
+  } = useForm({
+    resolver: zodResolver(tenderSchema.extend({ id: z.string().min(1) })),
+    defaultValues: {
+      id: "",
+      tenderNumber: "",
+      title: "",
+      summary: "",
+      status: "OPEN",
+      categoryId: "",
+      publishedAt: "",
+      closingAt: "",
+      contactEmail: "",
+      contactPhone: "",
+    }
+  });
+
+  const {
+    register: registerAttachment,
+    control: controlAttachment,
+    handleSubmit: handleSubmitAttachment,
+    reset: resetAttachment,
+    setValue: setAttachmentValue,
+    watch: watchAttachment,
+    formState: { errors: errorsAttachment, isSubmitting: attaching }
+  } = useForm({
+    resolver: zodResolver(attachmentSchema),
+    defaultValues: { tenderId: "", label: "", mediaId: "", mediaUrl: "" }
+  });
+
   const [activeTab, setActiveTab] = useState("create");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
+
+  const filteredTenders = useMemo(() => {
+    if (!searchTerm) return tenders;
+    const lower = searchTerm.toLowerCase();
+    return tenders.filter(
+      (t) =>
+        t.title.toLowerCase().includes(lower) ||
+        t.tenderNumber.toLowerCase().includes(lower) ||
+        t.status.toLowerCase().includes(lower)
+    );
+  }, [tenders, searchTerm]);
+
+  const totalPages = Math.ceil(filteredTenders.length / ITEMS_PER_PAGE);
+  const paginatedTenders = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredTenders.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredTenders, currentPage]);
 
   const statusBuckets = useMemo(() => {
     return STATUS_OPTIONS.reduce(
@@ -76,61 +162,48 @@ export default function TendersPanel() {
     );
   }, [tenders]);
 
-  async function handleCategorySubmit(event) {
-    event.preventDefault();
-    await createEntity("category", {
-      label: categoryForm.label,
-      description: nullable(categoryForm.description),
-      order: toNumber(categoryForm.order),
-    });
-    setCategoryForm(INITIAL_CATEGORY);
+  async function handleCategorySubmit(data) {
+    await createEntity("category", { ...data, order: toNumber(data.order) });
+    resetCategory();
   }
 
-  async function handleTenderSubmit(event) {
-    event.preventDefault();
+  async function handleTenderSubmit(data) {
     await createEntity("tender", {
-      tenderNumber: tenderForm.tenderNumber,
-      title: tenderForm.title,
-      summary: nullable(tenderForm.summary),
-      status: tenderForm.status,
-      categoryId: tenderForm.categoryId || null,
-      publishedAt: nullable(tenderForm.publishedAt),
-      closingAt: nullable(tenderForm.closingAt),
-      contactEmail: nullable(tenderForm.contactEmail),
-      contactPhone: nullable(tenderForm.contactPhone),
+      ...data,
+      categoryId: data.categoryId || null,
+      publishedAt: nullable(data.publishedAt),
+      closingAt: nullable(data.closingAt),
     });
-    setTenderForm(INITIAL_TENDER);
+    resetTender();
   }
 
-  async function handleTenderUpdateSubmit(event) {
-    event.preventDefault();
-    if (!tenderUpdateForm.id) return;
+  async function handleTenderUpdateSubmit(data) {
     await updateEntity("tender", {
-      id: tenderUpdateForm.id,
-      tenderNumber: tenderUpdateForm.tenderNumber,
-      title: tenderUpdateForm.title,
-      summary: nullable(tenderUpdateForm.summary),
-      status: tenderUpdateForm.status,
-      categoryId: tenderUpdateForm.categoryId || null,
-      publishedAt: nullable(tenderUpdateForm.publishedAt),
-      closingAt: nullable(tenderUpdateForm.closingAt),
-      contactEmail: nullable(tenderUpdateForm.contactEmail),
-      contactPhone: nullable(tenderUpdateForm.contactPhone),
+      ...data,
+      categoryId: data.categoryId || null,
+      publishedAt: nullable(data.publishedAt),
+      closingAt: nullable(data.closingAt),
     });
+    resetUpdate({ id: "", tenderNumber: "", title: "", summary: "", status: "OPEN", categoryId: "", publishedAt: "", closingAt: "", contactEmail: "", contactPhone: "" });
+    setActiveTab("create");
   }
 
   function handleTenderSelectForEdit(tenderId) {
+    if (!tenderId) return;
     const tender = tenders.find((t) => t.id === tenderId);
     if (!tender) return;
-    setTenderUpdateForm({
+
+    const formatForInput = (dateStr) => dateStr ? new Date(dateStr).toISOString().slice(0, 16) : "";
+
+    resetUpdate({
       id: tender.id,
       tenderNumber: tender.tenderNumber,
       title: tender.title,
       summary: tender.summary || "",
       status: tender.status,
       categoryId: tender.categoryId || "",
-      publishedAt: tender.publishedAt ? new Date(tender.publishedAt).toISOString().slice(0, 16) : "",
-      closingAt: tender.closingAt ? new Date(tender.closingAt).toISOString().slice(0, 16) : "",
+      publishedAt: formatForInput(tender.publishedAt),
+      closingAt: formatForInput(tender.closingAt),
       contactEmail: tender.contactEmail || "",
       contactPhone: tender.contactPhone || "",
     });
@@ -138,14 +211,9 @@ export default function TendersPanel() {
     document.getElementById("tenders-form-container")?.scrollIntoView({ behavior: "smooth" });
   }
 
-  async function handleAttachmentSubmit(event) {
-    event.preventDefault();
-    await createEntity("attachment", {
-      tenderId: attachmentForm.tenderId,
-      label: nullable(attachmentForm.label),
-      mediaUrl: attachmentForm.mediaUrl,
-    });
-    setAttachmentForm(INITIAL_ATTACHMENT);
+  async function handleAttachmentSubmit(data) {
+    await createEntity("attachment", data);
+    resetAttachment();
   }
 
   async function handleStatusChange(tenderId, status) {
@@ -163,7 +231,7 @@ export default function TendersPanel() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-sm text-slate-500">
           <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-          Last sync: {formatRelative(lastFetchedAt)}
+          <span suppressHydrationWarning>Last sync: {formatRelative(lastFetchedAt)}</span>
         </div>
         <button
           type="button"
@@ -199,9 +267,11 @@ export default function TendersPanel() {
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-slate-900">Tender Queue</h3>
             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-              {tenders.length} Records
+              {filteredTenders.length} Records
             </span>
           </div>
+
+          <SearchInput value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }} placeholder="Search tenders..." />
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STATUS_OPTIONS.map((status) => (
@@ -220,14 +290,14 @@ export default function TendersPanel() {
             </div>
           ) : null}
 
-          {!loading && !tenders.length ? (
+          {!loading && !filteredTenders.length ? (
             <div className="rounded-2xl border border-dashed border-slate-200 p-8 text-center text-slate-500">
-              No tenders found. Use the form to create your first tender.
+              {searchTerm ? "No tenders match your search." : "No tenders found. Use the form to create your first tender."}
             </div>
           ) : null}
 
           <div className="space-y-4">
-            {tenders.map((tender) => (
+            {paginatedTenders.map((tender) => (
               <article key={tender.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
                 <div className="p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
@@ -319,8 +389,14 @@ export default function TendersPanel() {
                   ) : null}
                 </div>
               </article>
+
             ))}
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </section>
 
         <aside className="space-y-6" id="tenders-form-container">
@@ -348,48 +424,85 @@ export default function TendersPanel() {
                 <ActionForm
                   title="Create Category"
                   description="Add a new tender category"
-                  onSubmit={handleCategorySubmit}
-                  disabled={actionState.pending}
+                  onSubmit={handleSubmitCategory(handleCategorySubmit)}
+                  disabled={creatingCategory || actionState.pending}
                 >
-                  <Input label="Label" value={categoryForm.label} onChange={(e) => setCategoryForm({ ...categoryForm, label: e.target.value })} required />
-                  <TextArea label="Description" value={categoryForm.description} onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })} />
-                  <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
+                  <AdminInput label="Label" {...registerCategory("label")} required />
+                  {errorsCategory.label && <p className="text-xs text-rose-500">{errorsCategory.label.message}</p>}
+
+                  <AdminTextarea label="Description" {...registerCategory("description")} />
+                  <AdminInput label="Order" type="number" {...registerCategory("order")} />
                 </ActionForm>
 
                 <ActionForm
                   title="Publish Tender"
                   description="Create a new tender record"
-                  onSubmit={handleTenderSubmit}
-                  disabled={actionState.pending}
+                  onSubmit={handleSubmitTender(handleTenderSubmit)}
+                  disabled={creatingTender || actionState.pending}
                 >
-                  <Input label="Tender Number" value={tenderForm.tenderNumber} onChange={(e) => setTenderForm({ ...tenderForm, tenderNumber: e.target.value })} required />
-                  <Input label="Title" value={tenderForm.title} onChange={(e) => setTenderForm({ ...tenderForm, title: e.target.value })} required />
-                  <TextArea label="Summary" value={tenderForm.summary} onChange={(e) => setTenderForm({ ...tenderForm, summary: e.target.value })} />
-                  <Select label="Status" value={tenderForm.status} onChange={(e) => setTenderForm({ ...tenderForm, status: e.target.value })}>
+                  <AdminInput label="Tender Number" {...registerTender("tenderNumber")} required />
+                  {errorsTender.tenderNumber && <p className="text-xs text-rose-500">{errorsTender.tenderNumber.message}</p>}
+
+                  <AdminInput label="Title" {...registerTender("title")} required />
+                  {errorsTender.title && <p className="text-xs text-rose-500">{errorsTender.title.message}</p>}
+
+                  <Controller
+                    control={controlTender}
+                    name="summary"
+                    render={({ field }) => (
+                      <AdminRichText label="Summary" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+
+                  <AdminSelect label="Status" {...registerTender("status")}>
                     {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
-                  </Select>
-                  <Select label="Category" value={tenderForm.categoryId} onChange={(e) => setTenderForm({ ...tenderForm, categoryId: e.target.value })}>
+                  </AdminSelect>
+
+                  <AdminSelect label="Category" {...registerTender("categoryId")}>
                     <option value="">Unassigned</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
-                  </Select>
-                  <Input label="Published At" type="datetime-local" value={tenderForm.publishedAt} onChange={(e) => setTenderForm({ ...tenderForm, publishedAt: e.target.value })} />
-                  <Input label="Closing At" type="datetime-local" value={tenderForm.closingAt} onChange={(e) => setTenderForm({ ...tenderForm, closingAt: e.target.value })} />
-                  <Input label="Contact Email" type="email" value={tenderForm.contactEmail} onChange={(e) => setTenderForm({ ...tenderForm, contactEmail: e.target.value })} />
-                  <Input label="Contact Phone" value={tenderForm.contactPhone} onChange={(e) => setTenderForm({ ...tenderForm, contactPhone: e.target.value })} />
+                  </AdminSelect>
+
+                  <AdminInput label="Published At" type="datetime-local" {...registerTender("publishedAt")} />
+                  <AdminInput label="Closing At" type="datetime-local" {...registerTender("closingAt")} />
+                  <AdminInput label="Contact Email" type="email" {...registerTender("contactEmail")} />
+                  {errorsTender.contactEmail && <p className="text-xs text-rose-500">{errorsTender.contactEmail.message}</p>}
+                  <AdminInput label="Contact Phone" {...registerTender("contactPhone")} />
                 </ActionForm>
 
                 <ActionForm
                   title="Attach File"
                   description="Link a document to a tender"
-                  onSubmit={handleAttachmentSubmit}
-                  disabled={actionState.pending || !tenders.length}
+                  onSubmit={handleSubmitAttachment(handleAttachmentSubmit)}
+                  disabled={attaching || actionState.pending || !tenders.length}
                 >
-                  <Select label="Tender" value={attachmentForm.tenderId} onChange={(e) => setAttachmentForm({ ...attachmentForm, tenderId: e.target.value })} required>
+                  <AdminSelect label="Tender" {...registerAttachment("tenderId")} required>
                     <option value="" disabled>Select Tender</option>
                     {tenders.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
-                  </Select>
-                  <Input label="Label" value={attachmentForm.label} onChange={(e) => setAttachmentForm({ ...attachmentForm, label: e.target.value })} />
-                  <Input label="Media URL" type="url" value={attachmentForm.mediaUrl} onChange={(e) => setAttachmentForm({ ...attachmentForm, mediaUrl: e.target.value })} required />
+                  </AdminSelect>
+                  {errorsAttachment.tenderId && <p className="text-xs text-rose-500">{errorsAttachment.tenderId.message}</p>}
+
+                  <AdminInput label="Label" {...registerAttachment("label")} />
+
+                  <Controller
+                    control={controlAttachment}
+                    name="mediaId"
+                    render={({ field }) => (
+                      <MediaPicker
+                        label="Attachment File"
+                        value={field.value}
+                        onChange={(id, asset) => {
+                          field.onChange(id);
+                          setAttachmentValue("mediaUrl", asset?.url || "");
+                        }}
+                        category="tenders"
+                        accept="application/pdf,image/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      />
+                    )}
+                  />
+                  {/* Show URL if exists from watch or default */}
+                  {watchAttachment("mediaUrl") && <p className="text-[10px] text-slate-400 mt-1 truncate">URL: {watchAttachment("mediaUrl")}</p>}
+                  {errorsAttachment.mediaId && <p className="text-xs text-rose-500">{errorsAttachment.mediaId.message}</p>}
                 </ActionForm>
               </>
             )}
@@ -398,13 +511,13 @@ export default function TendersPanel() {
               <ActionForm
                 title="Update Tender"
                 description="Edit existing tender record"
-                onSubmit={handleTenderUpdateSubmit}
-                disabled={actionState.pending || !tenderUpdateForm.id}
+                onSubmit={handleSubmitUpdate(handleTenderUpdateSubmit)}
+                disabled={updatingTender || actionState.pending || !watchUpdate("id")}
                 submitLabel="Save Changes"
               >
-                <Select
+                <AdminSelect
                   label="Select Tender to Edit"
-                  value={tenderUpdateForm.id}
+                  value={watchUpdate("id")}
                   onChange={(e) => handleTenderSelectForEdit(e.target.value)}
                   required
                 >
@@ -412,22 +525,38 @@ export default function TendersPanel() {
                   {tenders.map((t) => (
                     <option key={t.id} value={t.id}>{t.title}</option>
                   ))}
-                </Select>
+                </AdminSelect>
 
-                <Input label="Tender Number" value={tenderUpdateForm.tenderNumber} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, tenderNumber: e.target.value })} required disabled={!tenderUpdateForm.id} />
-                <Input label="Title" value={tenderUpdateForm.title} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, title: e.target.value })} required disabled={!tenderUpdateForm.id} />
-                <TextArea label="Summary" value={tenderUpdateForm.summary} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, summary: e.target.value })} disabled={!tenderUpdateForm.id} />
-                <Select label="Status" value={tenderUpdateForm.status} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, status: e.target.value })} disabled={!tenderUpdateForm.id}>
-                  {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
-                </Select>
-                <Select label="Category" value={tenderUpdateForm.categoryId} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, categoryId: e.target.value })} disabled={!tenderUpdateForm.id}>
-                  <option value="">Unassigned</option>
-                  {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
-                </Select>
-                <Input label="Published At" type="datetime-local" value={tenderUpdateForm.publishedAt} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, publishedAt: e.target.value })} disabled={!tenderUpdateForm.id} />
-                <Input label="Closing At" type="datetime-local" value={tenderUpdateForm.closingAt} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, closingAt: e.target.value })} disabled={!tenderUpdateForm.id} />
-                <Input label="Contact Email" type="email" value={tenderUpdateForm.contactEmail} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, contactEmail: e.target.value })} disabled={!tenderUpdateForm.id} />
-                <Input label="Contact Phone" value={tenderUpdateForm.contactPhone} onChange={(e) => setTenderUpdateForm({ ...tenderUpdateForm, contactPhone: e.target.value })} disabled={!tenderUpdateForm.id} />
+                <fieldset disabled={!watchUpdate("id")} className="space-y-4">
+                  <AdminInput label="Tender Number" {...registerUpdate("tenderNumber")} required />
+                  {errorsUpdate.tenderNumber && <p className="text-xs text-rose-500">{errorsUpdate.tenderNumber.message}</p>}
+
+                  <AdminInput label="Title" {...registerUpdate("title")} required />
+                  {errorsUpdate.title && <p className="text-xs text-rose-500">{errorsUpdate.title.message}</p>}
+
+                  <Controller
+                    control={controlUpdate}
+                    name="summary"
+                    render={({ field }) => (
+                      <AdminRichText label="Summary" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+
+                  <AdminSelect label="Status" {...registerUpdate("status")}>
+                    {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+                  </AdminSelect>
+
+                  <AdminSelect label="Category" {...registerUpdate("categoryId")}>
+                    <option value="">Unassigned</option>
+                    {categories.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                  </AdminSelect>
+
+                  <AdminInput label="Published At" type="datetime-local" {...registerUpdate("publishedAt")} />
+                  <AdminInput label="Closing At" type="datetime-local" {...registerUpdate("closingAt")} />
+                  <AdminInput label="Contact Email" type="email" {...registerUpdate("contactEmail")} />
+                  {errorsUpdate.contactEmail && <p className="text-xs text-rose-500">{errorsUpdate.contactEmail.message}</p>}
+                  <AdminInput label="Contact Phone" {...registerUpdate("contactPhone")} />
+                </fieldset>
               </ActionForm>
             )}
           </div>
@@ -437,65 +566,3 @@ export default function TendersPanel() {
   );
 }
 
-function ActionForm({ title, description, children, onSubmit, disabled }) {
-  return (
-    <form
-      onSubmit={onSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-    >
-      <div className="mb-4">
-        <h4 className="text-sm font-bold text-slate-900">{title}</h4>
-        <p className="text-xs text-slate-500">{description}</p>
-      </div>
-      <div className="space-y-4">{children}</div>
-      <button
-        type="submit"
-        disabled={disabled}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
-      >
-        <Plus size={16} />
-        {title.includes("Update") ? "Save Changes" : "Create"}
-      </button>
-    </form>
-  );
-}
-
-function Input({ label, type = "text", ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <input
-        type={type}
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-        {...props}
-      />
-    </label>
-  );
-}
-
-function TextArea({ label, rows = 2, ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <textarea
-        rows={rows}
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-        {...props}
-      />
-    </label>
-  );
-}
-
-function Select({ label, children, ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <select
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-        {...props}
-      >
-        {children}
-      </select>
-    </label>
-  );
-}

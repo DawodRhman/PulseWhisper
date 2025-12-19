@@ -11,20 +11,7 @@ export const dynamic = "force-dynamic";
 
 const ENTITY_TYPE = z.enum(["category", "card", "detail", "resource"]);
 
-const securityHeaders = {
-  "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "DENY",
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  "X-XSS-Protection": "1; mode=block",
-};
 
-function jsonResponse(body, init = {}) {
-  const response = NextResponse.json(body, init);
-  Object.entries(securityHeaders).forEach(([key, value]) => {
-    response.headers.set(key, value);
-  });
-  return response;
-}
 
 const actionEnvelopeSchema = z.object({
   type: ENTITY_TYPE,
@@ -47,91 +34,37 @@ const servicesInclude = {
   },
 };
 
-const orderField = z.coerce.number().int().min(0).optional();
+import {
+  serviceCategorySchema,
+  updateServiceCategorySchema,
+  serviceCardSchema,
+  updateServiceCardSchema,
+  serviceDetailSchema,
+  updateServiceDetailSchema,
+  serviceResourceSchema,
+  updateServiceResourceSchema,
+  deleteSchema
+} from "@/lib/validators/admin";
 
 const createSchemas = {
-  category: z.object({
-    title: z.string().trim().min(3),
-    summary: z.string().trim().max(500).optional().nullable(),
-    heroCopy: z.string().trim().max(500).optional().nullable(),
-    order: orderField,
-    slug: z.string().trim().optional(),
-  }),
-  card: z.object({
-    categoryId: z.string().min(1),
-    title: z.string().trim().min(3),
-    summary: z.string().trim().optional().nullable(),
-    description: z.string().trim().optional().nullable(),
-    iconKey: z.string().trim().optional().default("FaTint"),
-    gradientClass: z.string().trim().optional().default("from-blue-100 to-blue-300"),
-    order: orderField,
-    mediaId: z.string().optional(),
-  }),
-  detail: z.object({
-    serviceCardId: z.string().min(1),
-    heading: z.string().trim().min(3),
-    body: z.string().trim().optional().nullable(),
-    bulletPoints: z.array(z.string().trim()).optional().default([]),
-    order: orderField,
-  }),
-  resource: z
-    .object({
-      categoryId: z.string().min(1),
-      title: z.string().trim().min(3),
-      description: z.string().trim().optional().nullable(),
-      externalUrl: z.string().url().optional().nullable(),
-      mediaId: z.string().optional(),
-      mediaUrl: z.string().trim().optional(),
-    })
-    .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
-      message: "Provide mediaId or mediaUrl",
-      path: ["mediaId"],
-    }),
+  category: serviceCategorySchema,
+  card: serviceCardSchema,
+  detail: serviceDetailSchema,
+  resource: serviceResourceSchema,
 };
 
 const updateSchemas = {
-  category: z.object({
-    id: z.string().min(1),
-    title: z.string().trim().min(3).optional(),
-    summary: z.string().trim().max(500).optional().nullable(),
-    heroCopy: z.string().trim().max(500).optional().nullable(),
-    order: orderField,
-    slug: z.string().trim().optional(),
-  }),
-  card: z.object({
-    id: z.string().min(1),
-    categoryId: z.string().min(1).optional(),
-    title: z.string().trim().min(3).optional(),
-    summary: z.string().trim().optional().nullable(),
-    description: z.string().trim().optional().nullable(),
-    iconKey: z.string().trim().optional(),
-    gradientClass: z.string().trim().optional(),
-    order: orderField,
-    mediaId: z.string().optional(),
-  }),
-  detail: z.object({
-    id: z.string().min(1),
-    heading: z.string().trim().min(3).optional(),
-    body: z.string().trim().optional().nullable(),
-    bulletPoints: z.array(z.string().trim()).optional(),
-    order: orderField,
-  }),
-  resource: z.object({
-    id: z.string().min(1),
-    categoryId: z.string().min(1).optional(),
-    title: z.string().trim().min(3).optional(),
-    description: z.string().trim().optional().nullable(),
-    externalUrl: z.string().url().optional().nullable(),
-    mediaId: z.string().optional(),
-    mediaUrl: z.string().trim().optional(),
-  }),
+  category: updateServiceCategorySchema,
+  card: updateServiceCardSchema,
+  detail: updateServiceDetailSchema,
+  resource: updateServiceResourceSchema,
 };
 
 const deleteSchemas = {
-  category: z.object({ id: z.string().min(1) }),
-  card: z.object({ id: z.string().min(1) }),
-  detail: z.object({ id: z.string().min(1) }),
-  resource: z.object({ id: z.string().min(1) }),
+  category: deleteSchema,
+  card: deleteSchema,
+  detail: deleteSchema,
+  resource: deleteSchema,
 };
 
 async function fetchServicesTree() {
@@ -220,7 +153,7 @@ function pickDefined(updates) {
 
 function handleKnownErrors(error, context) {
   if (error instanceof ZodError) {
-    return jsonResponse(
+    return NextResponse.json(
       { error: "Invalid payload", details: error.flatten() },
       { status: 400 }
     );
@@ -231,19 +164,19 @@ function handleKnownErrors(error, context) {
   }
 
   if (typeof error?.status === "number") {
-    return jsonResponse({ error: error.message }, { status: error.status });
+    return NextResponse.json({ error: error.message }, { status: error.status });
   }
 
   if (error?.code === "P2002") {
-    return jsonResponse({ error: "Duplicate value violates unique constraint" }, { status: 409 });
+    return NextResponse.json({ error: "Duplicate value violates unique constraint" }, { status: 409 });
   }
 
   if (error?.code === "P2003") {
-    return jsonResponse({ error: "Invalid reference. Ensure related records exist." }, { status: 400 });
+    return NextResponse.json({ error: "Invalid reference. Ensure related records exist." }, { status: 400 });
   }
 
   if (error?.code === "P2025") {
-    return jsonResponse({ error: "Record not found" }, { status: 404 });
+    return NextResponse.json({ error: "Record not found" }, { status: 404 });
   }
 
   return handleAdminApiError(error, context);
@@ -420,7 +353,7 @@ export async function GET() {
   try {
     await ensureAdminSession("services:write");
     const categories = await fetchServicesTree();
-    return jsonResponse({ data: categories });
+    return NextResponse.json({ data: categories });
   } catch (error) {
     return handleKnownErrors(error, "GET /api/admin/services");
   }
@@ -436,7 +369,7 @@ export async function POST(request) {
     revalidatePath("/");
     await logAudit({ session, action: `${type.toUpperCase()}_CREATE`, recordId: record.id, diff, request });
     const categories = await fetchServicesTree();
-    return jsonResponse({ data: categories, record });
+    return NextResponse.json({ data: categories, record });
   } catch (error) {
     return handleKnownErrors(error, "POST /api/admin/services");
   }
@@ -452,7 +385,7 @@ export async function PATCH(request) {
     revalidatePath("/");
     await logAudit({ session, action: `${type.toUpperCase()}_UPDATE`, recordId: data.id, diff, request });
     const categories = await fetchServicesTree();
-    return jsonResponse({ data: categories, record });
+    return NextResponse.json({ data: categories, record });
   } catch (error) {
     return handleKnownErrors(error, "PATCH /api/admin/services");
   }
@@ -468,7 +401,7 @@ export async function DELETE(request) {
     revalidatePath("/");
     await logAudit({ session, action: `${type.toUpperCase()}_DELETE`, recordId: data.id, diff, request });
     const categories = await fetchServicesTree();
-    return jsonResponse({ data: categories, record });
+    return NextResponse.json({ data: categories, record });
   } catch (error) {
     return handleKnownErrors(error, "DELETE /api/admin/services");
   }

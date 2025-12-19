@@ -75,3 +75,6 @@ prisma/seed*.js
 
 # cache
 /data/cache/
+
+# user uploads
+/public/uploads/

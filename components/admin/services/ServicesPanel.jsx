@@ -2,37 +2,25 @@
 import { useMemo, useState } from "react";
 import { Loader2, Plus, RefreshCcw, Trash2, Layers, Link as LinkIcon, Pencil } from "lucide-react";
 import { useAdminServices } from "@/hooks/useAdminServices";
+import { AdminInput } from "@/components/admin/ui/AdminInput";
+import { AdminSelect } from "@/components/admin/ui/AdminSelect";
+import { AdminTextarea } from "@/components/admin/ui/AdminTextarea";
+import { ActionForm } from "@/components/admin/ui/ActionForm";
+import MediaPicker from "@/components/admin/media/MediaPicker";
+import { SearchInput } from "@/components/admin/ui/SearchInput";
+import { AdminRichText } from "@/components/admin/ui/AdminRichText";
 
-const INITIAL_CATEGORY = { title: "", summary: "", heroCopy: "", order: "" };
-const INITIAL_CARD = { categoryId: "", title: "", summary: "", iconKey: "FaTint", gradientClass: "", order: "" };
-const INITIAL_DETAIL = { serviceCardId: "", heading: "", body: "", bulletPoints: "", order: "" };
-const INITIAL_RESOURCE = {
-  categoryId: "",
-  title: "",
-  description: "",
-  externalUrl: "",
-  mediaUrl: "",
-};
-const createInitialCategoryUpdate = () => ({ id: "", title: "", summary: "", heroCopy: "", order: "" });
-const createInitialCardUpdate = () => ({
-  id: "",
-  categoryId: "",
-  title: "",
-  summary: "",
-  description: "",
-  iconKey: "FaTint",
-  gradientClass: "",
-  order: "",
-});
-const createInitialDetailUpdate = () => ({ id: "", heading: "", body: "", bulletPoints: "", order: "" });
-const createInitialResourceUpdate = () => ({
-  id: "",
-  categoryId: "",
-  title: "",
-  description: "",
-  externalUrl: "",
-  mediaUrl: "",
-});
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  serviceCategorySchema,
+  serviceCardSchema,
+  serviceDetailSchema,
+  serviceResourceSchema
+} from "@/lib/validators/admin";
+import { z } from "zod";
+
+
 
 function toNumber(value) {
   if (value === undefined || value === null || value === "") return undefined;
@@ -63,24 +51,141 @@ function bulletArrayToString(list) {
   return list.join("\n");
 }
 
-function optionalString(value, { allowNull = false } = {}) {
-  if (value === undefined || value === null) return undefined;
-  const trimmed = typeof value === "string" ? value.trim() : value;
-  if (trimmed === "") return allowNull ? null : undefined;
-  return trimmed;
-}
+
 
 export default function ServicesPanel() {
   const { categories, loading, error, lastFetchedAt, actionState, refresh, createEntity, updateEntity, deleteEntity } = useAdminServices();
-  const [categoryForm, setCategoryForm] = useState(INITIAL_CATEGORY);
-  const [cardForm, setCardForm] = useState(INITIAL_CARD);
-  const [detailForm, setDetailForm] = useState(INITIAL_DETAIL);
-  const [resourceForm, setResourceForm] = useState(INITIAL_RESOURCE);
-  const [categoryUpdateForm, setCategoryUpdateForm] = useState(() => createInitialCategoryUpdate());
-  const [cardUpdateForm, setCardUpdateForm] = useState(() => createInitialCardUpdate());
-  const [detailUpdateForm, setDetailUpdateForm] = useState(() => createInitialDetailUpdate());
-  const [resourceUpdateForm, setResourceUpdateForm] = useState(() => createInitialResourceUpdate());
+
+  // --- Create Forms ---
+  const {
+    register: registerCategory,
+    handleSubmit: handleSubmitCategory,
+    reset: resetCategory,
+    formState: { errors: errorsCategory, isSubmitting: creatingCategory }
+  } = useForm({
+    resolver: zodResolver(serviceCategorySchema),
+    defaultValues: { title: "", summary: "", heroCopy: "", order: "" }
+  });
+
+  const {
+    register: registerCard,
+    control: controlCard,
+    handleSubmit: handleSubmitCard,
+    reset: resetCard,
+    formState: { errors: errorsCard, isSubmitting: creatingCard }
+  } = useForm({
+    resolver: zodResolver(serviceCardSchema),
+    defaultValues: { categoryId: "", title: "", summary: "", description: "", iconKey: "FaTint", gradientClass: "", order: "" }
+  });
+
+  const {
+    register: registerDetail,
+    control: controlDetail,
+    handleSubmit: handleSubmitDetail,
+    reset: resetDetail,
+    formState: { errors: errorsDetail, isSubmitting: creatingDetail }
+  } = useForm({
+    resolver: zodResolver(serviceDetailSchema),
+    defaultValues: { serviceCardId: "", heading: "", body: "", bulletPoints: "", order: "" }
+  });
+
+  const {
+    register: registerResource,
+    control: controlResource,
+    handleSubmit: handleSubmitResource,
+    setValue: setResourceValue,
+    watch: watchResource,
+    reset: resetResource,
+    formState: { errors: errorsResource, isSubmitting: creatingResource }
+  } = useForm({
+    resolver: zodResolver(serviceResourceSchema),
+    defaultValues: { categoryId: "", title: "", description: "", externalUrl: "", mediaId: "", mediaUrl: "" }
+  });
+
+  // --- Update Forms ---
+  const {
+    register: registerCategoryUpdate,
+    handleSubmit: handleSubmitCategoryUpdate,
+    reset: resetCategoryUpdate,
+    setValue: setCategoryUpdate,
+    watch: watchCategoryUpdate,
+    formState: { errors: errorsCategoryUpdate, isSubmitting: updatingCategory }
+  } = useForm({
+    resolver: zodResolver(serviceCategorySchema.extend({ id: z.string().min(1) })),
+    defaultValues: { id: "", title: "", summary: "", heroCopy: "", order: "" }
+  });
+
+  const {
+    register: registerCardUpdate,
+    control: controlCardUpdate,
+    handleSubmit: handleSubmitCardUpdate,
+    reset: resetCardUpdate,
+    setValue: setCardUpdate,
+    watch: watchCardUpdate,
+    formState: { errors: errorsCardUpdate, isSubmitting: updatingCard }
+  } = useForm({
+    resolver: zodResolver(serviceCardSchema.extend({ id: z.string().min(1) })),
+    defaultValues: { id: "", categoryId: "", title: "", summary: "", description: "", iconKey: "", gradientClass: "", order: "" }
+  });
+
+  const {
+    register: registerDetailUpdate,
+    control: controlDetailUpdate,
+    handleSubmit: handleSubmitDetailUpdate,
+    reset: resetDetailUpdate,
+    setValue: setDetailUpdate,
+    watch: watchDetailUpdate,
+    formState: { errors: errorsDetailUpdate, isSubmitting: updatingDetail }
+  } = useForm({
+    resolver: zodResolver(serviceDetailSchema.extend({ id: z.string().min(1) })),
+    defaultValues: { id: "", serviceCardId: "", heading: "", body: "", bulletPoints: "", order: "" }
+  });
+
+  const {
+    register: registerResourceUpdate,
+    control: controlResourceUpdate,
+    handleSubmit: handleSubmitResourceUpdate,
+    reset: resetResourceUpdate,
+    setValue: setResourceUpdate,
+    watch: watchResourceUpdate,
+    formState: { errors: errorsResourceUpdate, isSubmitting: updatingResource }
+  } = useForm({
+    resolver: zodResolver(serviceResourceSchema.extend({ id: z.string().min(1) })),
+    defaultValues: { id: "", categoryId: "", title: "", description: "", externalUrl: "", mediaId: "", mediaUrl: "" }
+  });
+
   const [activeTab, setActiveTab] = useState("create"); // "create" | "edit"
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredCategories = useMemo(() => {
+    if (!searchTerm) return categories;
+    const lower = searchTerm.toLowerCase();
+
+    return categories.map(category => {
+      // Check if category matches
+      const categoryMatches =
+        category.title.toLowerCase().includes(lower) ||
+        (category.summary && category.summary.toLowerCase().includes(lower));
+
+      // Check valid cards
+      const matchingCards = (category.cards || []).filter(card =>
+        card.title.toLowerCase().includes(lower) ||
+        (card.summary && card.summary.toLowerCase().includes(lower))
+      );
+
+      // If category matches, show all cards (or maybe none if we want to drill down? let's show all original cards if cat matches)
+      // Actually, if category matches, we clearly want to see the category.
+      // If category doesn't match, but cards do, we show category with ONLY matching cards.
+
+      if (categoryMatches) return category;
+
+      if (matchingCards.length > 0) {
+        return { ...category, cards: matchingCards };
+      }
+
+      return null;
+    }).filter(Boolean);
+  }, [categories, searchTerm]);
 
   const cards = useMemo(() => categories.flatMap((category) => category.cards || []), [categories]);
   const totalDetails = useMemo(() => cards.reduce((sum, card) => sum + (card.details?.length || 0), 0), [cards]);
@@ -104,80 +209,50 @@ export default function ServicesPanel() {
     [categories]
   );
 
-  async function handleCategorySubmit(event) {
-    event.preventDefault();
-    await createEntity("category", {
-      title: categoryForm.title,
-      summary: categoryForm.summary || null,
-      heroCopy: categoryForm.heroCopy || null,
-      order: toNumber(categoryForm.order),
-    });
-    setCategoryForm(INITIAL_CATEGORY);
+  async function handleCategorySubmit(data) {
+    await createEntity("category", data);
+    resetCategory();
   }
 
-  async function handleCardSubmit(event) {
-    event.preventDefault();
-    await createEntity("card", {
-      categoryId: cardForm.categoryId,
-      title: cardForm.title,
-      summary: cardForm.summary || null,
-      iconKey: cardForm.iconKey || "FaTint",
-      gradientClass: cardForm.gradientClass || "from-blue-100 to-blue-300",
-      order: toNumber(cardForm.order),
-    });
-    setCardForm(INITIAL_CARD);
+  async function handleCardSubmit(data) {
+    await createEntity("card", data);
+    resetCard();
   }
 
-  async function handleDetailSubmit(event) {
-    event.preventDefault();
-    await createEntity("detail", {
-      serviceCardId: detailForm.serviceCardId,
-      heading: detailForm.heading,
-      body: detailForm.body || null,
-      bulletPoints: bulletStringToArray(detailForm.bulletPoints),
-      order: toNumber(detailForm.order),
-    });
-    setDetailForm(INITIAL_DETAIL);
+  async function handleDetailSubmit(data) {
+    await createEntity("detail", data);
+    resetDetail();
   }
 
-  async function handleResourceSubmit(event) {
-    event.preventDefault();
-    await createEntity("resource", {
-      categoryId: resourceForm.categoryId,
-      title: resourceForm.title,
-      description: resourceForm.description || null,
-      externalUrl: resourceForm.externalUrl || null,
-      mediaUrl: resourceForm.mediaUrl || undefined,
-    });
-    setResourceForm(INITIAL_RESOURCE);
+  async function handleResourceSubmit(data) {
+    await createEntity("resource", data);
+    resetResource();
+  }
+
+  function scrollToForm() {
+    document.getElementById("services-form-container")?.scrollIntoView({ behavior: "smooth" });
   }
 
   function handleCategorySelectForEdit(categoryId) {
-    if (!categoryId) {
-      setCategoryUpdateForm(createInitialCategoryUpdate());
-      return;
-    }
+    if (!categoryId) return;
     const category = categories.find((entry) => entry.id === categoryId);
     if (!category) return;
-    setCategoryUpdateForm({
+    resetCategoryUpdate({
       id: category.id,
       title: category.title || "",
       summary: category.summary || "",
       heroCopy: category.heroCopy || "",
-      order: category.order?.toString() ?? "",
+      order: category.order ?? "",
     });
     setActiveTab("edit");
     scrollToForm();
   }
 
   function handleCardSelectForEdit(cardId) {
-    if (!cardId) {
-      setCardUpdateForm(createInitialCardUpdate());
-      return;
-    }
+    if (!cardId) return;
     const card = cards.find((entry) => entry.id === cardId);
     if (!card) return;
-    setCardUpdateForm({
+    resetCardUpdate({
       id: card.id,
       categoryId: card.categoryId || card.serviceCategoryId || "",
       title: card.title || "",
@@ -185,113 +260,66 @@ export default function ServicesPanel() {
       description: card.description || "",
       iconKey: card.iconKey || "FaTint",
       gradientClass: card.gradientClass || "from-blue-100 to-blue-300",
-      order: card.order?.toString() ?? "",
+      order: card.order ?? "",
     });
     setActiveTab("edit");
     scrollToForm();
   }
 
   function handleDetailSelectForEdit(detailId) {
-    if (!detailId) {
-      setDetailUpdateForm(createInitialDetailUpdate());
-      return;
-    }
+    if (!detailId) return;
     const detail = detailOptions.find((entry) => entry.id === detailId);
     if (!detail) return;
-    setDetailUpdateForm({
+    resetDetailUpdate({
       id: detail.id,
+      serviceCardId: detail.serviceCardId || "", // ensure we have this field available in detailOptions
       heading: detail.heading || "",
       body: detail.body || "",
       bulletPoints: bulletArrayToString(detail.bulletPoints),
-      order: detail.order?.toString() ?? "",
+      order: detail.order ?? "",
     });
     setActiveTab("edit");
     scrollToForm();
   }
 
   function handleResourceSelectForEdit(resourceId) {
-    if (!resourceId) {
-      setResourceUpdateForm(createInitialResourceUpdate());
-      return;
-    }
+    if (!resourceId) return;
     const resource = resourceOptions.find((entry) => entry.id === resourceId);
     if (!resource) return;
-    setResourceUpdateForm({
+    resetResourceUpdate({
       id: resource.id,
       categoryId: resource.categoryId || "",
       title: resource.title || "",
       description: resource.description || "",
       externalUrl: resource.externalUrl || "",
       mediaUrl: (resource.media && resource.media.url) || resource.mediaUrl || "",
+      mediaId: resource.mediaId || "",
     });
     setActiveTab("edit");
     scrollToForm();
   }
 
-  function scrollToForm() {
-    const formElement = document.getElementById("services-form-container");
-    if (formElement) {
-      formElement.scrollIntoView({ behavior: "smooth" });
-    }
-  }
-
-  async function handleCategoryUpdateSubmit(event) {
-    event.preventDefault();
-    if (!categoryUpdateForm.id) return;
-    await updateEntity("category", {
-      id: categoryUpdateForm.id,
-      title: categoryUpdateForm.title,
-      summary: categoryUpdateForm.summary,
-      heroCopy: categoryUpdateForm.heroCopy,
-      order: toNumber(categoryUpdateForm.order),
-    });
-    setCategoryUpdateForm(createInitialCategoryUpdate());
+  async function handleCategoryUpdateSubmit(data) {
+    await updateEntity("category", data);
+    resetCategoryUpdate();
     setActiveTab("create");
   }
 
-  async function handleCardUpdateSubmit(event) {
-    event.preventDefault();
-    if (!cardUpdateForm.id) return;
-    await updateEntity("card", {
-      id: cardUpdateForm.id,
-      categoryId: cardUpdateForm.categoryId || undefined,
-      title: cardUpdateForm.title,
-      summary: cardUpdateForm.summary,
-      description: cardUpdateForm.description,
-      iconKey: cardUpdateForm.iconKey || "FaTint",
-      gradientClass: cardUpdateForm.gradientClass || "from-blue-100 to-blue-300",
-      order: toNumber(cardUpdateForm.order),
-    });
-    setCardUpdateForm(createInitialCardUpdate());
+  async function handleCardUpdateSubmit(data) {
+    await updateEntity("card", data);
+    resetCardUpdate();
     setActiveTab("create");
   }
 
-  async function handleDetailUpdateSubmit(event) {
-    event.preventDefault();
-    if (!detailUpdateForm.id) return;
-    await updateEntity("detail", {
-      id: detailUpdateForm.id,
-      heading: detailUpdateForm.heading,
-      body: detailUpdateForm.body || undefined,
-      bulletPoints: bulletStringToArray(detailUpdateForm.bulletPoints),
-      order: toNumber(detailUpdateForm.order),
-    });
-    setDetailUpdateForm(createInitialDetailUpdate());
+  async function handleDetailUpdateSubmit(data) {
+    await updateEntity("detail", data);
+    resetDetailUpdate();
     setActiveTab("create");
   }
 
-  async function handleResourceUpdateSubmit(event) {
-    event.preventDefault();
-    if (!resourceUpdateForm.id) return;
-    await updateEntity("resource", {
-      id: resourceUpdateForm.id,
-      categoryId: resourceUpdateForm.categoryId || undefined,
-      title: resourceUpdateForm.title,
-      description: resourceUpdateForm.description || undefined,
-      externalUrl: optionalString(resourceUpdateForm.externalUrl, { allowNull: true }),
-      mediaUrl: optionalString(resourceUpdateForm.mediaUrl),
-    });
-    setResourceUpdateForm(createInitialResourceUpdate());
+  async function handleResourceUpdateSubmit(data) {
+    await updateEntity("resource", data);
+    resetResourceUpdate();
     setActiveTab("create");
   }
 
@@ -306,7 +334,7 @@ export default function ServicesPanel() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-sm text-slate-500">
           <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-          Last sync: {formatRelative(lastFetchedAt)}
+          <span suppressHydrationWarning>Last sync: {formatRelative(lastFetchedAt)}</span>
         </div>
         <button
           type="button"
@@ -342,9 +370,11 @@ export default function ServicesPanel() {
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-slate-900">Service Hierarchy</h3>
             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-              {categories.length} Categories
+              {filteredCategories.length} Categories
             </span>
           </div>
+
+          <SearchInput value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search services..." />
 
           {loading ? (
             <div className="flex h-32 items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50">
@@ -354,14 +384,15 @@ export default function ServicesPanel() {
             </div>
           ) : null}
 
-          {!loading && !categories.length ? (
+          {!loading && !filteredCategories.length ? (
             <div className="rounded-2xl border border-dashed border-slate-200 p-8 text-center text-slate-500">
-              No categories found. Use the form to create your first service category.
+              {searchTerm ? "No services match your search." : "No categories found. Use the form to create your first service category."}
             </div>
           ) : null}
 
           <div className="space-y-6">
-            {categories.map((category) => (
+
+            {filteredCategories.map((category) => (
               <article key={category.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
                 <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
                   <div className="flex items-start justify-between gap-4">
@@ -498,17 +529,15 @@ export default function ServicesPanel() {
             <div className="flex rounded-lg bg-slate-100 p-1">
               <button
                 onClick={() => setActiveTab("create")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Create
               </button>
               <button
                 onClick={() => setActiveTab("edit")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Edit
               </button>
@@ -519,77 +548,106 @@ export default function ServicesPanel() {
                 <ActionForm
                   title="New Category"
                   description="Create a main service category"
-                  onSubmit={handleCategorySubmit}
-                  disabled={actionState.pending}
+                  onSubmit={handleSubmitCategory(handleCategorySubmit)}
+                  disabled={creatingCategory}
                 >
-                  <Input label="Title" value={categoryForm.title} onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })} required />
-                  <TextArea label="Summary" value={categoryForm.summary} onChange={(e) => setCategoryForm({ ...categoryForm, summary: e.target.value })} />
-                  <TextArea label="Hero Copy" value={categoryForm.heroCopy} onChange={(e) => setCategoryForm({ ...categoryForm, heroCopy: e.target.value })} />
-                  <Input label="Order" type="number" value={categoryForm.order} onChange={(e) => setCategoryForm({ ...categoryForm, order: e.target.value })} />
+                  <AdminInput label="Title" {...registerCategory("title")} error={errorsCategory.title?.message} required />
+                  <AdminTextarea label="Summary" {...registerCategory("summary")} error={errorsCategory.summary?.message} />
+                  <AdminTextarea label="Hero Copy" {...registerCategory("heroCopy")} error={errorsCategory.heroCopy?.message} />
+                  <AdminInput label="Order" type="number" {...registerCategory("order")} error={errorsCategory.order?.message} />
                 </ActionForm>
 
                 <ActionForm
                   title="New Service Card"
                   description="Add a card to a category"
-                  onSubmit={handleCardSubmit}
-                  disabled={actionState.pending || !categories.length}
+                  onSubmit={handleSubmitCard(handleCardSubmit)}
+                  disabled={creatingCard || !categories.length}
                 >
-                  <Select
+                  <AdminSelect
                     label="Category"
-                    value={cardForm.categoryId}
-                    onChange={(e) => setCardForm({ ...cardForm, categoryId: e.target.value })}
+                    {...registerCard("categoryId")}
+                    error={errorsCard.categoryId?.message}
                     required
                   >
                     <option value="" disabled>Select Category</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                  </Select>
-                  <Input label="Title" value={cardForm.title} onChange={(e) => setCardForm({ ...cardForm, title: e.target.value })} required />
-                  <TextArea label="Summary" value={cardForm.summary} onChange={(e) => setCardForm({ ...cardForm, summary: e.target.value })} />
-                  <Input label="Icon Key (e.g. FaTint)" value={cardForm.iconKey} onChange={(e) => setCardForm({ ...cardForm, iconKey: e.target.value })} />
-                  <Input label="Gradient Class" value={cardForm.gradientClass} onChange={(e) => setCardForm({ ...cardForm, gradientClass: e.target.value })} placeholder="from-blue-100 to-blue-300" />
-                  <Input label="Order" type="number" value={cardForm.order} onChange={(e) => setCardForm({ ...cardForm, order: e.target.value })} />
+                  </AdminSelect>
+                  <AdminInput label="Title" {...registerCard("title")} error={errorsCard.title?.message} required />
+                  <AdminTextarea label="Summary" {...registerCard("summary")} error={errorsCard.summary?.message} />
+                  <AdminInput label="Icon Key (e.g. FaTint)" {...registerCard("iconKey")} error={errorsCard.iconKey?.message} />
+                  <AdminInput label="Gradient Class" {...registerCard("gradientClass")} error={errorsCard.gradientClass?.message} placeholder="from-blue-100 to-blue-300" />
+                  <AdminInput label="Order" type="number" {...registerCard("order")} error={errorsCard.order?.message} />
                 </ActionForm>
 
                 <ActionForm
                   title="Add Detail Bullet"
                   description="Add details to a service card"
-                  onSubmit={handleDetailSubmit}
-                  disabled={actionState.pending || !cards.length}
+                  onSubmit={handleSubmitDetail(handleDetailSubmit)}
+                  disabled={creatingDetail || !cards.length}
                 >
-                  <Select
+                  <AdminSelect
                     label="Service Card"
-                    value={detailForm.serviceCardId}
-                    onChange={(e) => setDetailForm({ ...detailForm, serviceCardId: e.target.value })}
+                    {...registerDetail("serviceCardId")}
+                    error={errorsDetail.serviceCardId?.message}
                     required
                   >
                     <option value="" disabled>Select Card</option>
                     {cards.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                  </Select>
-                  <Input label="Heading" value={detailForm.heading} onChange={(e) => setDetailForm({ ...detailForm, heading: e.target.value })} required />
-                  <TextArea label="Body" value={detailForm.body} onChange={(e) => setDetailForm({ ...detailForm, body: e.target.value })} />
-                  <TextArea label="Bullet Points (one per line)" value={detailForm.bulletPoints} onChange={(e) => setDetailForm({ ...detailForm, bulletPoints: e.target.value })} rows={3} />
-                  <Input label="Order" type="number" value={detailForm.order} onChange={(e) => setDetailForm({ ...detailForm, order: e.target.value })} />
+                  </AdminSelect>
+                  <AdminInput label="Heading" {...registerDetail("heading")} error={errorsDetail.heading?.message} required />
+                  <Controller
+                    name="body"
+                    control={controlDetail}
+                    render={({ field }) => (
+                      <AdminRichText label="Body" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                  <AdminTextarea label="Bullet Points (one per line)" {...registerDetail("bulletPoints")} error={errorsDetail.bulletPoints?.message} rows={3} />
+                  <AdminInput label="Order" type="number" {...registerDetail("order")} error={errorsDetail.order?.message} />
                 </ActionForm>
 
                 <ActionForm
                   title="Add Resource"
                   description="Link a downloadable resource"
-                  onSubmit={handleResourceSubmit}
-                  disabled={actionState.pending || !categories.length}
+                  onSubmit={handleSubmitResource(handleResourceSubmit)}
+                  disabled={creatingResource || !categories.length}
                 >
-                  <Select
+                  <AdminSelect
                     label="Category"
-                    value={resourceForm.categoryId}
-                    onChange={(e) => setResourceForm({ ...resourceForm, categoryId: e.target.value })}
+                    {...registerResource("categoryId")}
+                    error={errorsResource.categoryId?.message}
                     required
                   >
                     <option value="" disabled>Select Category</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                  </Select>
-                  <Input label="Title" value={resourceForm.title} onChange={(e) => setResourceForm({ ...resourceForm, title: e.target.value })} required />
-                  <TextArea label="Description" value={resourceForm.description} onChange={(e) => setResourceForm({ ...resourceForm, description: e.target.value })} />
-                  <Input label="External URL" type="url" value={resourceForm.externalUrl} onChange={(e) => setResourceForm({ ...resourceForm, externalUrl: e.target.value })} />
-                  <Input label="Media URL" type="url" value={resourceForm.mediaUrl} onChange={(e) => setResourceForm({ ...resourceForm, mediaUrl: e.target.value })} />
+                  </AdminSelect>
+                  <AdminInput label="Title" {...registerResource("title")} error={errorsResource.title?.message} required />
+                  <Controller
+                    name="description"
+                    control={controlResource}
+                    render={({ field }) => (
+                      <AdminRichText label="Description" value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                  <AdminInput label="External URL" type="url" {...registerResource("externalUrl")} error={errorsResource.externalUrl?.message} />
+
+                  <Controller
+                    name="mediaId"
+                    control={controlResource}
+                    render={({ field }) => (
+                      <MediaPicker
+                        label="Media File"
+                        value={field.value}
+                        onChange={(id, asset) => {
+                          field.onChange(id);
+                          setResourceValue("mediaUrl", asset?.url || "");
+                        }}
+                        category="downloads"
+                        accept="application/pdf,image/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      />
+                    )}
+                  />
+                  {watchResource("mediaUrl") && <p className="text-[10px] text-slate-400 mt-1 truncate">URL: {watchResource("mediaUrl")}</p>}
                 </ActionForm>
               </>
             )}
@@ -599,70 +657,82 @@ export default function ServicesPanel() {
                 <ActionForm
                   title="Update Category"
                   description="Edit titles, copy, or ordering for an existing category"
-                  onSubmit={handleCategoryUpdateSubmit}
-                  disabled={actionState.pending || !categories.length}
+                  onSubmit={handleSubmitCategoryUpdate(handleCategoryUpdateSubmit)}
+                  disabled={updatingCategory || !categories.length}
                   submitLabel="Save Changes"
                 >
-                  <Select
+                  <AdminSelect
                     label="Category"
-                    value={categoryUpdateForm.id}
-                    onChange={(e) => handleCategorySelectForEdit(e.target.value)}
+                    {...registerCategoryUpdate("id")}
+                    onChange={(e) => {
+                      registerCategoryUpdate("id").onChange(e); // Ensure react-hook-form knows
+                      handleCategorySelectForEdit(e.target.value);
+                    }}
+                    error={errorsCategoryUpdate.id?.message}
                     required
                   >
                     <option value="" disabled>Select Category</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                  </Select>
-                  <Input label="Title" value={categoryUpdateForm.title} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, title: e.target.value })} required disabled={!categoryUpdateForm.id} />
-                  <TextArea label="Summary" value={categoryUpdateForm.summary} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, summary: e.target.value })} disabled={!categoryUpdateForm.id} />
-                  <TextArea label="Hero Copy" value={categoryUpdateForm.heroCopy} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, heroCopy: e.target.value })} disabled={!categoryUpdateForm.id} />
-                  <Input label="Order" type="number" value={categoryUpdateForm.order} onChange={(e) => setCategoryUpdateForm({ ...categoryUpdateForm, order: e.target.value })} disabled={!categoryUpdateForm.id} />
+                  </AdminSelect>
+                  <AdminInput label="Title" {...registerCategoryUpdate("title")} error={errorsCategoryUpdate.title?.message} required disabled={!watchCategoryUpdate("id")} />
+                  <AdminTextarea label="Summary" {...registerCategoryUpdate("summary")} error={errorsCategoryUpdate.summary?.message} disabled={!watchCategoryUpdate("id")} />
+                  <AdminTextarea label="Hero Copy" {...registerCategoryUpdate("heroCopy")} error={errorsCategoryUpdate.heroCopy?.message} disabled={!watchCategoryUpdate("id")} />
+                  <AdminInput label="Order" type="number" {...registerCategoryUpdate("order")} error={errorsCategoryUpdate.order?.message} disabled={!watchCategoryUpdate("id")} />
                 </ActionForm>
 
                 <ActionForm
                   title="Update Service Card"
                   description="Retitle, recolor, or reorder a card"
-                  onSubmit={handleCardUpdateSubmit}
-                  disabled={actionState.pending || !cards.length}
+                  onSubmit={handleSubmitCardUpdate(handleCardUpdateSubmit)}
+                  disabled={updatingCard || !cards.length}
                   submitLabel="Save Changes"
                 >
-                  <Select
+                  <AdminSelect
                     label="Service Card"
-                    value={cardUpdateForm.id}
-                    onChange={(e) => handleCardSelectForEdit(e.target.value)}
+                    {...registerCardUpdate("id")}
+                    onChange={(e) => {
+                      registerCardUpdate("id").onChange(e);
+                      handleCardSelectForEdit(e.target.value);
+                    }}
+                    error={errorsCardUpdate.id?.message}
                     required
                   >
                     <option value="" disabled>Select Card</option>
                     {cards.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                  </Select>
-                  <Select
+                  </AdminSelect>
+                  <AdminSelect
                     label="Category"
-                    value={cardUpdateForm.categoryId}
-                    onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, categoryId: e.target.value })}
-                    disabled={!cardUpdateForm.id}
+                    {...registerCardUpdate("categoryId")}
+                    error={errorsCardUpdate.categoryId?.message}
+                    disabled={!watchCardUpdate("id")}
                     required
                   >
                     <option value="" disabled>Select Category</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                  </Select>
-                  <Input label="Title" value={cardUpdateForm.title} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, title: e.target.value })} required disabled={!cardUpdateForm.id} />
-                  <TextArea label="Summary" value={cardUpdateForm.summary} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, summary: e.target.value })} disabled={!cardUpdateForm.id} />
-                  <TextArea label="Description" value={cardUpdateForm.description} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, description: e.target.value })} disabled={!cardUpdateForm.id} />
-                  <Input label="Icon Key" value={cardUpdateForm.iconKey} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, iconKey: e.target.value })} disabled={!cardUpdateForm.id} />
-                  <Input label="Gradient Class" value={cardUpdateForm.gradientClass} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, gradientClass: e.target.value })} placeholder="from-blue-100 to-blue-300" disabled={!cardUpdateForm.id} />
-                  <Input label="Order" type="number" value={cardUpdateForm.order} onChange={(e) => setCardUpdateForm({ ...cardUpdateForm, order: e.target.value })} disabled={!cardUpdateForm.id} />
+                  </AdminSelect>
+                  <AdminInput label="Title" {...registerCardUpdate("title")} error={errorsCardUpdate.title?.message} required disabled={!watchCardUpdate("id")} />
+                  <AdminTextarea label="Summary" {...registerCardUpdate("summary")} error={errorsCardUpdate.summary?.message} disabled={!watchCardUpdate("id")} />
+                  <AdminTextarea label="Description" {...registerCardUpdate("description")} error={errorsCardUpdate.description?.message} disabled={!watchCardUpdate("id")} />
+                  <AdminInput label="Icon Key" {...registerCardUpdate("iconKey")} error={errorsCardUpdate.iconKey?.message} disabled={!watchCardUpdate("id")} />
+                  <AdminInput label="Gradient Class" {...registerCardUpdate("gradientClass")} error={errorsCardUpdate.gradientClass?.message} placeholder="from-blue-100 to-blue-300" disabled={!watchCardUpdate("id")} />
+                  <AdminInput label="Order" type="number" {...registerCardUpdate("order")} error={errorsCardUpdate.order?.message} disabled={!watchCardUpdate("id")} />
                 </ActionForm>
 
                 <ActionForm
                   title="Update Detail Bullet"
                   description="Edit detail text or bullet points"
-                  onSubmit={handleDetailUpdateSubmit}
-                  disabled={actionState.pending || !detailOptions.length}
+                  onSubmit={handleSubmitDetailUpdate(handleDetailUpdateSubmit)}
+                  disabled={updatingDetail || !detailOptions.length}
                   submitLabel="Save Changes"
                 >
-                  <Select
+                  <AdminSelect
                     label="Detail"
-                    value={detailUpdateForm.id}
-                    onChange={(e) => handleDetailSelectForEdit(e.target.value)}
+                    {...registerDetailUpdate("id")}
+                    onChange={(e) => {
+                      registerDetailUpdate("id").onChange(e);
+                      handleDetailSelectForEdit(e.target.value);
+                    }}
+                    error={errorsDetailUpdate.id?.message}
                     required
                   >
                     <option value="" disabled>Select Detail</option>
@@ -671,24 +741,34 @@ export default function ServicesPanel() {
                         {detail.cardTitle ? `${detail.cardTitle} > ${detail.heading}` : detail.heading}
                       </option>
                     ))}
-                  </Select>
-                  <Input label="Heading" value={detailUpdateForm.heading} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, heading: e.target.value })} required disabled={!detailUpdateForm.id} />
-                  <TextArea label="Body" value={detailUpdateForm.body} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, body: e.target.value })} disabled={!detailUpdateForm.id} />
-                  <TextArea label="Bullet Points (one per line)" value={detailUpdateForm.bulletPoints} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, bulletPoints: e.target.value })} rows={3} disabled={!detailUpdateForm.id} />
-                  <Input label="Order" type="number" value={detailUpdateForm.order} onChange={(e) => setDetailUpdateForm({ ...detailUpdateForm, order: e.target.value })} disabled={!detailUpdateForm.id} />
+                  </AdminSelect>
+                  <AdminInput label="Heading" {...registerDetailUpdate("heading")} error={errorsDetailUpdate.heading?.message} required disabled={!watchDetailUpdate("id")} />
+                  <Controller
+                    name="body"
+                    control={controlDetailUpdate}
+                    render={({ field }) => (
+                      <AdminRichText label="Body" value={field.value} onChange={field.onChange} disabled={!watchDetailUpdate("id")} />
+                    )}
+                  />
+                  <AdminTextarea label="Bullet Points (one per line)" {...registerDetailUpdate("bulletPoints")} error={errorsDetailUpdate.bulletPoints?.message} rows={3} disabled={!watchDetailUpdate("id")} />
+                  <AdminInput label="Order" type="number" {...registerDetailUpdate("order")} error={errorsDetailUpdate.order?.message} disabled={!watchDetailUpdate("id")} />
                 </ActionForm>
 
                 <ActionForm
                   title="Update Resource"
                   description="Retitle or re-link a download"
-                  onSubmit={handleResourceUpdateSubmit}
-                  disabled={actionState.pending || !resourceOptions.length}
+                  onSubmit={handleSubmitResourceUpdate(handleResourceUpdateSubmit)}
+                  disabled={updatingResource || !resourceOptions.length}
                   submitLabel="Save Changes"
                 >
-                  <Select
+                  <AdminSelect
                     label="Resource"
-                    value={resourceUpdateForm.id}
-                    onChange={(e) => handleResourceSelectForEdit(e.target.value)}
+                    {...registerResourceUpdate("id")}
+                    onChange={(e) => {
+                      registerResourceUpdate("id").onChange(e);
+                      handleResourceSelectForEdit(e.target.value);
+                    }}
+                    error={errorsResourceUpdate.id?.message}
                     required
                   >
                     <option value="" disabled>Select Resource</option>
@@ -697,21 +777,45 @@ export default function ServicesPanel() {
                         {r.categoryTitle ? `${r.categoryTitle} > ${r.title}` : r.title}
                       </option>
                     ))}
-                  </Select>
-                  <Select
+                  </AdminSelect>
+                  <AdminSelect
                     label="Category"
-                    value={resourceUpdateForm.categoryId}
-                    onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, categoryId: e.target.value })}
-                    disabled={!resourceUpdateForm.id}
+                    {...registerResourceUpdate("categoryId")}
+                    error={errorsResourceUpdate.categoryId?.message}
+                    disabled={!watchResourceUpdate("id")}
                     required
                   >
                     <option value="" disabled>Select Category</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                  </Select>
-                  <Input label="Title" value={resourceUpdateForm.title} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, title: e.target.value })} required disabled={!resourceUpdateForm.id} />
-                  <TextArea label="Description" value={resourceUpdateForm.description} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, description: e.target.value })} disabled={!resourceUpdateForm.id} />
-                  <Input label="External URL" type="url" value={resourceUpdateForm.externalUrl} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, externalUrl: e.target.value })} disabled={!resourceUpdateForm.id} />
-                  <Input label="Media URL" type="url" value={resourceUpdateForm.mediaUrl} onChange={(e) => setResourceUpdateForm({ ...resourceUpdateForm, mediaUrl: e.target.value })} disabled={!resourceUpdateForm.id} />
+                  </AdminSelect>
+                  <AdminInput label="Title" {...registerResourceUpdate("title")} error={errorsResourceUpdate.title?.message} required disabled={!watchResourceUpdate("id")} />
+                  <Controller
+                    name="description"
+                    control={controlResourceUpdate}
+                    render={({ field }) => (
+                      <AdminRichText label="Description" value={field.value} onChange={field.onChange} disabled={!watchResourceUpdate("id")} />
+                    )}
+                  />
+                  <AdminInput label="External URL" type="url" {...registerResourceUpdate("externalUrl")} error={errorsResourceUpdate.externalUrl?.message} disabled={!watchResourceUpdate("id")} />
+
+                  <Controller
+                    name="mediaId"
+                    control={controlResourceUpdate}
+                    render={({ field }) => (
+                      <MediaPicker
+                        label="Media File"
+                        value={field.value}
+                        onChange={(id, asset) => {
+                          field.onChange(id);
+                          setResourceUpdate("mediaUrl", asset?.url || "");
+                        }}
+                        category="downloads"
+                        accept="application/pdf,image/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        disabled={!watchResourceUpdate("id")}
+                      />
+                    )}
+                  />
+                  {watchResourceUpdate("mediaUrl") && <p className="text-[10px] text-slate-400 mt-1 truncate">URL: {watchResourceUpdate("mediaUrl")}</p>}
                 </ActionForm>
               </>
             )}
@@ -722,68 +826,4 @@ export default function ServicesPanel() {
   );
 }
 
-function ActionForm({ title, description, children, onSubmit, disabled, submitLabel }) {
-  const buttonLabel =
-    submitLabel ||
-    (title && title.toLowerCase().includes("update") ? "Save Changes" : title && title.toLowerCase().includes("edit") ? "Save Changes" : "Create");
-  return (
-    <form
-      onSubmit={onSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-    >
-      <div className="mb-4">
-        <h4 className="text-sm font-bold text-slate-900">{title}</h4>
-        <p className="text-xs text-slate-500">{description}</p>
-      </div>
-      <div className="space-y-4">{children}</div>
-      <button
-        type="submit"
-        disabled={disabled}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
-      >
-        <Plus size={16} />
-        {buttonLabel}
-      </button>
-    </form>
-  );
-}
 
-function Input({ label, type = "text", ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <input
-        type={type}
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-slate-100 disabled:cursor-not-allowed"
-        {...props}
-      />
-    </label>
-  );
-}
-
-function TextArea({ label, rows = 2, ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <textarea
-        rows={rows}
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-slate-100 disabled:cursor-not-allowed"
-        {...props}
-      />
-    </label>
-  );
-}
-
-function Select({ label, children, ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <select
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-slate-100 disabled:cursor-not-allowed"
-        {...props}
-      >
-        {children}
-      </select>
-    </label>
-  );
-}

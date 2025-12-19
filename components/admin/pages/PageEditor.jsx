@@ -138,13 +138,13 @@ export default function PageEditor({ page, onSave, onCancel }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      
+
       if (!res.ok) {
         const error = await res.json();
         alert(error.error || "Failed to save page");
         return;
       }
-      
+
       onSave();
     } catch (error) {
       console.error("Error saving page:", error);
@@ -176,29 +176,29 @@ export default function PageEditor({ page, onSave, onCancel }) {
           <CardContent className="space-y-4">
             <div>
               <Label htmlFor="title">Page Title</Label>
-              <Input 
-                id="title" 
-                name="title" 
-                value={formData.title} 
-                onChange={handleChange} 
-                required 
+              <Input
+                id="title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                required
               />
             </div>
             <div>
               <Label htmlFor="slug">Slug (URL)</Label>
-              <Input 
-                id="slug" 
-                name="slug" 
-                value={formData.slug} 
-                onChange={handleChange} 
-                placeholder="e.g., about-us" 
+              <Input
+                id="slug"
+                name="slug"
+                value={formData.slug}
+                onChange={handleChange}
+                placeholder="e.g., about-us"
               />
               <p className="text-xs text-muted-foreground mt-1">Leave blank to auto-generate from title.</p>
             </div>
             <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                id="isPublished" 
+              <input
+                type="checkbox"
+                id="isPublished"
                 name="isPublished"
                 checked={formData.isPublished}
                 onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
@@ -207,9 +207,9 @@ export default function PageEditor({ page, onSave, onCancel }) {
               <Label htmlFor="isPublished">Published</Label>
             </div>
             <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                id="showInNavbar" 
+              <input
+                type="checkbox"
+                id="showInNavbar"
                 name="showInNavbar"
                 checked={formData.showInNavbar}
                 onChange={(e) => setFormData(prev => ({ ...prev, showInNavbar: e.target.checked }))}
@@ -221,21 +221,21 @@ export default function PageEditor({ page, onSave, onCancel }) {
               <div className="space-y-3">
                 <div>
                   <Label htmlFor="navLabel">Navbar Label</Label>
-                  <Input 
-                    id="navLabel" 
-                    name="navLabel" 
-                    value={formData.navLabel} 
-                    onChange={handleChange} 
-                    placeholder="Defaults to page title" 
+                  <Input
+                    id="navLabel"
+                    name="navLabel"
+                    value={formData.navLabel}
+                    onChange={handleChange}
+                    placeholder="Defaults to page title"
                   />
                 </div>
                 <div>
                   <Label htmlFor="navGroup">Navbar Group</Label>
-                  <Input 
-                    id="navGroup" 
-                    name="navGroup" 
-                    value={formData.navGroup} 
-                    onChange={handleChange} 
+                  <Input
+                    id="navGroup"
+                    name="navGroup"
+                    value={formData.navGroup}
+                    onChange={handleChange}
                     placeholder="e.g., whatwedo, aboutus, or a new group name"
                   />
                   <p className="text-xs text-muted-foreground mt-1">
@@ -255,20 +255,20 @@ export default function PageEditor({ page, onSave, onCancel }) {
           <CardContent className="space-y-4">
             <div>
               <Label htmlFor="seo.title">Meta Title</Label>
-              <Input 
-                id="seo.title" 
-                name="seo.title" 
-                value={formData.seo.title} 
-                onChange={handleChange} 
+              <Input
+                id="seo.title"
+                name="seo.title"
+                value={formData.seo.title}
+                onChange={handleChange}
               />
             </div>
             <div>
               <Label htmlFor="seo.description">Meta Description</Label>
-              <Textarea 
-                id="seo.description" 
-                name="seo.description" 
-                value={formData.seo.description} 
-                onChange={handleChange} 
+              <Textarea
+                id="seo.description"
+                name="seo.description"
+                value={formData.seo.description}
+                onChange={handleChange}
               />
             </div>
           </CardContent>
@@ -280,10 +280,10 @@ export default function PageEditor({ page, onSave, onCancel }) {
           <h3 className="text-xl font-semibold">Content Sections</h3>
           <div className="flex flex-wrap gap-2">
             {SECTION_TYPES.map(type => (
-              <Button 
-                key={type.value} 
-                type="button" 
-                size="sm" 
+              <Button
+                key={type.value}
+                type="button"
+                size="sm"
                 variant="secondary"
                 onClick={() => handleAddSection(type.value)}
               >
@@ -314,7 +314,7 @@ export default function PageEditor({ page, onSave, onCancel }) {
                   <Trash className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <CardHeader>
                 <CardTitle className="text-sm uppercase tracking-wider text-muted-foreground">
                   {SECTION_TYPES.find(t => t.value === section.type)?.label || section.type}{" "}
@@ -322,11 +322,11 @@ export default function PageEditor({ page, onSave, onCancel }) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <SectionForm 
-                  type={section.type} 
-                  content={section.content} 
+                <SectionForm
+                  type={section.type}
+                  content={section.content}
                   idPrefix={sectionAnchorId}
-                  onChange={(field, value) => handleSectionContentChange(index, field, value)} 
+                  onChange={(field, value) => handleSectionContentChange(index, field, value)}
                 />
               </CardContent>
             </Card>
@@ -527,9 +527,108 @@ function SectionForm({ type, content, onChange, idPrefix }) {
           </div>
         </div>
       );
+    case "HERITAGE":
+      return (
+        <div className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor={fieldId("heading")}>Heading (English)</Label>
+              <Input
+                id={fieldId("heading")}
+                value={content.heading || ""}
+                onChange={(e) => onChange("heading", e.target.value)}
+                placeholder="KW&SC Heritage"
+              />
+            </div>
+            <div>
+              <Label htmlFor={fieldId("headingUr")}>Heading (Urdu)</Label>
+              <Input
+                id={fieldId("headingUr")}
+                value={content.headingUr || ""}
+                onChange={(e) => onChange("headingUr", e.target.value)}
+                placeholder="Urdu Heading"
+                dir="rtl"
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor={fieldId("body")}>Body Content (English) - HTML Supported</Label>
+            <Textarea
+              id={fieldId("body")}
+              value={content.body || ""}
+              onChange={(e) => onChange("body", e.target.value)}
+              className="min-h-[150px] font-mono text-sm"
+              placeholder="<p>Paragraph 1...</p><p>Paragraph 2...</p>"
+            />
+          </div>
+          <div>
+            <Label htmlFor={fieldId("bodyUr")}>Body Content (Urdu) - HTML Supported</Label>
+            <Textarea
+              id={fieldId("bodyUr")}
+              value={content.bodyUr || ""}
+              onChange={(e) => onChange("bodyUr", e.target.value)}
+              className="min-h-[150px] font-mono text-sm"
+              placeholder="<p>...</p>"
+              dir="rtl"
+            />
+          </div>
+        </div>
+      );
+    case "WHO_ARE_WE":
+      return (
+        <div className="space-y-4">
+          <div className="p-4 bg-muted rounded-md border border-slate-200">
+            <Label htmlFor={fieldId("services_json")}>Services Tiles (JSON)</Label>
+            <p className="text-xs text-muted-foreground mb-2">
+              Array of objects with <code>title</code>, <code>titleUr</code>, <code>desc</code>, <code>descUr</code>.
+            </p>
+            <Textarea
+              id={fieldId("services_json")}
+              value={JSON.stringify(content.services || [], null, 2)}
+              onChange={(e) => {
+                try {
+                  onChange("services", JSON.parse(e.target.value));
+                } catch (err) {
+                  // Allow typing
+                }
+              }}
+              className="font-mono text-xs min-h-[200px]"
+              placeholder='[ { "title": "Service 1", "desc": "..." } ]'
+            />
+          </div>
+        </div>
+      );
     case "FAQ":
     case "LEADERSHIP":
-    case "PROJECTS":
+      return (
+        <div className="space-y-4">
+          <div className="p-4 bg-blue-50 text-blue-700 rounded-md border border-blue-200 mb-4">
+            <p className="text-sm">
+              The team members are managed in the <strong>Leadership</strong> panel.
+              Here you can customize the section heading and description.
+            </p>
+          </div>
+          <div>
+            <Label htmlFor={fieldId("title")}>Section Title</Label>
+            <Input
+              id={fieldId("title")}
+              value={content.title || ""}
+              onChange={(e) => onChange("title", e.target.value)}
+              placeholder="Leadership & Management"
+            />
+          </div>
+          <div>
+            <Label htmlFor={fieldId("subtitle")}>Description</Label>
+            <Textarea
+              id={fieldId("subtitle")}
+              value={content.subtitle || ""}
+              onChange={(e) => onChange("subtitle", e.target.value)}
+              placeholder="Introductory text..."
+            />
+          </div>
+        </div>
+      );
+    case "FAQ":
     case "MEDIA_GALLERY":
     case "SUBSCRIBE":
     case "ACHIEVEMENTS":

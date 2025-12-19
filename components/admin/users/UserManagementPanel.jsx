@@ -14,6 +14,15 @@ import {
 } from "lucide-react";
 import { useAdminUsers } from "@/hooks/useAdminUsers";
 import { ROLE_CATALOG } from "@/lib/auth/roleCatalog";
+import { ActionForm } from "@/components/admin/ui/ActionForm";
+import { AdminInput } from "@/components/admin/ui/AdminInput";
+import { AdminSelect } from "@/components/admin/ui/AdminSelect";
+import { Pagination } from "@/components/admin/ui/Pagination";
+import { SearchInput } from "@/components/admin/ui/SearchInput";
+
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createUserSchema, updateUserRolesSchema, resetPasswordSchema } from "@/lib/validators/admin";
 
 const ROLE_OPTIONS = ROLE_CATALOG.map((role) => ({
   label: role.label,
@@ -21,9 +30,8 @@ const ROLE_OPTIONS = ROLE_CATALOG.map((role) => ({
   description: role.description,
 }));
 
-const createUserFormState = () => ({ name: "", email: "", phone: "", roles: ["EDITOR"] });
-const updateRolesFormState = () => ({ userId: "", roles: [] });
-const resetFormState = () => ({ userId: "", temporaryPassword: "" });
+
+
 
 function formatRelative(dateValue) {
   if (!dateValue) return "never";
@@ -34,10 +42,72 @@ function formatRelative(dateValue) {
 
 export default function UserManagementPanel() {
   const { users, loading, error, lastFetchedAt, actionState, refresh, createUser, updateRoles, updateStatus, resetPassword } = useAdminUsers();
-  const [createForm, setCreateForm] = useState(() => createUserFormState());
-  const [rolesForm, setRolesForm] = useState(() => updateRolesFormState());
-  const [passwordForm, setPasswordForm] = useState(() => resetFormState());
+
+  const {
+    register: registerCreate,
+    handleSubmit: handleSubmitCreate,
+    setValue: setCreateValue,
+    watch: watchCreate,
+    reset: resetCreate,
+    formState: { errors: errorsCreate, isSubmitting: creating }
+  } = useForm({
+    resolver: zodResolver(createUserSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      roles: ["EDITOR"],
+    }
+  });
+
+  const {
+    register: registerRoles,
+    handleSubmit: handleSubmitRoles,
+    setValue: setRolesValue,
+    watch: watchRoles,
+    reset: resetRoles,
+    formState: { errors: errorsRoles, isSubmitting: updatingRoles }
+  } = useForm({
+    resolver: zodResolver(updateUserRolesSchema),
+    defaultValues: { userId: "", roles: [] }
+  });
+
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+    setValue: setPasswordValue,
+    reset: resetPasswordForm,
+    formState: { errors: errorsPassword, isSubmitting: resettingPassword }
+  } = useForm({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: { userId: "", temporaryPassword: "" }
+  });
+
   const [passwordResult, setPasswordResult] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
+
+  // Watch roles for checkboxes
+  const createRoles = watchCreate("roles");
+  const updateRolesList = watchRoles("roles");
+
+  const filteredUsers = useMemo(() => {
+    if (!searchTerm) return users;
+    const lower = searchTerm.toLowerCase();
+    return users.filter(
+      (u) =>
+        (u.name && u.name.toLowerCase().includes(lower)) ||
+        u.email.toLowerCase().includes(lower) ||
+        u.roles.some((r) => r.toLowerCase().includes(lower))
+    );
+  }, [users, searchTerm]);
+
+  const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
+  const paginatedUsers = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredUsers.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredUsers, currentPage]);
 
   const roleStats = useMemo(() => {
     return ROLE_OPTIONS.map((role) => ({
@@ -46,34 +116,37 @@ export default function UserManagementPanel() {
     }));
   }, [users]);
 
-  async function handleCreateUser(event) {
-    event.preventDefault();
-    if (!createForm.roles.length) {
-      window.alert("Select at least one role");
-      return;
-    }
-    const response = await createUser(createForm);
+  async function handleCreateUser(data) {
+    const response = await createUser(data);
     if (response?.temporaryPassword) {
-      setPasswordResult({ email: createForm.email, password: response.temporaryPassword });
+      setPasswordResult({ email: data.email, password: response.temporaryPassword });
     }
-    setCreateForm(createUserFormState());
+    resetCreate();
   }
 
   function toggleCreateRole(role) {
-    setCreateForm((prev) => {
-      const exists = prev.roles.includes(role);
-      if (exists) {
-        return { ...prev, roles: prev.roles.filter((item) => item !== role) };
-      }
-      return { ...prev, roles: [...prev.roles, role] };
-    });
+    const current = createRoles || [];
+    const exists = current.includes(role);
+    if (exists) {
+      setCreateValue("roles", current.filter((item) => item !== role));
+    } else {
+      setCreateValue("roles", [...current, role]);
+    }
   }
 
-  async function handleRolesSubmit(event) {
-    event.preventDefault();
-    if (!rolesForm.userId || !rolesForm.roles.length) return;
-    await updateRoles(rolesForm);
-    setRolesForm(updateRolesFormState());
+  async function handleRolesSubmit(data) {
+    await updateRoles(data);
+    resetRoles();
+  }
+
+  function toggleUpdateRole(role) {
+    const current = updateRolesList || [];
+    const exists = current.includes(role);
+    if (exists) {
+      setRolesValue("roles", current.filter((item) => item !== role));
+    } else {
+      setRolesValue("roles", [...current, role]);
+    }
   }
 
   async function handleStatusToggle(user) {
@@ -81,15 +154,13 @@ export default function UserManagementPanel() {
     await updateStatus({ userId: user.id, status: nextStatus });
   }
 
-  async function handlePasswordReset(event) {
-    event.preventDefault();
-    if (!passwordForm.userId) return;
-    const response = await resetPassword(passwordForm);
+  async function handlePasswordReset(data) {
+    const response = await resetPassword(data);
     if (response?.temporaryPassword) {
-      const user = users.find((entry) => entry.id === passwordForm.userId);
+      const user = users.find((entry) => entry.id === data.userId);
       setPasswordResult({ email: user?.email, password: response.temporaryPassword });
     }
-    setPasswordForm(resetFormState());
+    resetPasswordForm();
   }
 
   function copyPassword() {
@@ -102,7 +173,7 @@ export default function UserManagementPanel() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-sm text-slate-500">
           <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-          Last sync: {lastFetchedAt ? new Date(lastFetchedAt).toLocaleTimeString("en-GB") : "--"}
+          <span suppressHydrationWarning>Last sync: {lastFetchedAt ? new Date(lastFetchedAt).toLocaleTimeString("en-GB") : "--"}</span>
         </div>
         <button
           type="button"
@@ -145,10 +216,12 @@ export default function UserManagementPanel() {
             ))}
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Operators</p>
-              <p className="mt-2 text-2xl font-bold text-slate-900">{users.length}</p>
+              <p className="mt-2 text-2xl font-bold text-slate-900">{filteredUsers.length}</p>
               <p className="text-xs text-slate-400">Provisioned accounts</p>
             </div>
           </div>
+
+          <SearchInput value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }} placeholder="Search operators..." />
 
           {loading ? (
             <div className="flex h-32 items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50">
@@ -158,14 +231,14 @@ export default function UserManagementPanel() {
             </div>
           ) : null}
 
-          {!loading && !users.length ? (
+          {!loading && !filteredUsers.length ? (
             <div className="rounded-2xl border border-dashed border-slate-200 p-8 text-center text-slate-500">
-              No admin users found. Create one to get started.
+              {searchTerm ? "No operators match your search." : "No admin users found. Create one to get started."}
             </div>
           ) : null}
 
           <div className="space-y-4">
-            {users.map((user) => (
+            {paginatedUsers.map((user) => (
               <article key={user.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
                 <div className="p-5">
                   <div className="flex flex-wrap items-start justify-between gap-4">
@@ -175,9 +248,9 @@ export default function UserManagementPanel() {
                         <h4 className="text-lg font-bold text-slate-900">{user.name || user.email}</h4>
                       </div>
                       <p className="text-sm text-slate-600 font-mono">{user.email}</p>
-                      
+
                       <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-1" suppressHydrationWarning>
                           <Calendar size={12} />
                           Last login: {formatRelative(user.lastLoginAt)}
                         </span>
@@ -195,21 +268,20 @@ export default function UserManagementPanel() {
                       <button
                         type="button"
                         onClick={() => handleStatusToggle(user)}
-                        className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
-                          user.status === "ACTIVE"
-                            ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                            : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
-                        }`}
+                        className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition ${user.status === "ACTIVE"
+                          ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                          : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
+                          }`}
                       >
                         {user.status === "ACTIVE" ? <XCircle size={14} /> : <CheckCircle2 size={14} />}
                         {user.status === "ACTIVE" ? "Disable Account" : "Activate Account"}
                       </button>
-                      
+
                       <div className="flex gap-2">
                         <button
                           type="button"
                           onClick={() => {
-                            setPasswordForm((prev) => ({ ...prev, userId: user.id }));
+                            setPasswordValue("userId", user.id);
                             document.getElementById("user-password-form")?.scrollIntoView({ behavior: "smooth" });
                           }}
                           className="flex-1 rounded-lg border border-slate-200 bg-slate-50 p-1.5 text-slate-500 hover:bg-slate-100 hover:text-blue-600"
@@ -220,7 +292,8 @@ export default function UserManagementPanel() {
                         <button
                           type="button"
                           onClick={() => {
-                            setRolesForm({ userId: user.id, roles: user.roles });
+                            setRolesValue("userId", user.id);
+                            setRolesValue("roles", user.roles);
                             document.getElementById("user-roles-form")?.scrollIntoView({ behavior: "smooth" });
                           }}
                           className="flex-1 rounded-lg border border-slate-200 bg-slate-50 p-1.5 text-slate-500 hover:bg-slate-100 hover:text-blue-600"
@@ -233,8 +306,15 @@ export default function UserManagementPanel() {
                   </div>
                 </div>
               </article>
+
             ))}
           </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </section>
 
         <aside className="space-y-6">
@@ -266,13 +346,15 @@ export default function UserManagementPanel() {
               title="Create Operator"
               description="Provision a new admin or editor"
               icon={<UserPlus size={16} />}
-              onSubmit={handleCreateUser}
-              disabled={actionState.pending}
+              onSubmit={handleSubmitCreate(handleCreateUser)}
+              disabled={creating || actionState.pending}
             >
-              <Input label="Name" value={createForm.name} onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })} placeholder="e.g. Ayesha Khan" />
-              <Input label="Email" type="email" value={createForm.email} onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })} required placeholder="name@kwsc.gos.pk" />
-              <Input label="Phone (Optional)" type="tel" value={createForm.phone} onChange={(e) => setCreateForm({ ...createForm, phone: e.target.value })} />
-              
+              <AdminInput label="Name" {...registerCreate("name")} placeholder="e.g. Ayesha Khan" />
+              <AdminInput label="Email" type="email" {...registerCreate("email")} placeholder="name@kwsc.gos.pk" />
+              {errorsCreate.email && <p className="text-xs text-rose-500">{errorsCreate.email.message}</p>}
+
+              <AdminInput label="Phone (Optional)" type="tel" {...registerCreate("phone")} />
+
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2">
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Roles</p>
                 <div className="space-y-2">
@@ -280,7 +362,7 @@ export default function UserManagementPanel() {
                     <label key={role.value} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-blue-600">
                       <input
                         type="checkbox"
-                        checked={createForm.roles.includes(role.value)}
+                        checked={createRoles?.includes(role.value)}
                         onChange={() => toggleCreateRole(role.value)}
                         className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                       />
@@ -288,6 +370,7 @@ export default function UserManagementPanel() {
                     </label>
                   ))}
                 </div>
+                {errorsCreate.roles && <p className="text-xs text-rose-500">{errorsCreate.roles.message}</p>}
               </div>
             </ActionForm>
 
@@ -296,48 +379,43 @@ export default function UserManagementPanel() {
                 title="Update Roles"
                 description="Assign or revoke permissions"
                 icon={<ShieldHalf size={16} />}
-                onSubmit={handleRolesSubmit}
-                disabled={actionState.pending || !users.length}
+                onSubmit={handleSubmitRoles(handleRolesSubmit)}
+                disabled={updatingRoles || actionState.pending || !users.length}
               >
-                <Select
+                <AdminSelect
                   label="Select Operator"
-                  value={rolesForm.userId}
+                  {...registerRoles("userId")}
                   onChange={(e) => {
+                    registerRoles("userId").onChange(e); // keep hook form connected
                     const value = e.target.value;
                     const selectedUser = users.find((u) => u.id === value);
-                    setRolesForm({ userId: value, roles: selectedUser?.roles || [] });
+                    if (selectedUser) {
+                      setRolesValue("roles", selectedUser.roles);
+                    }
                   }}
-                  required
                 >
                   <option value="" disabled>Select Operator</option>
                   {users.map((u) => <option key={u.id} value={u.id}>{u.email}</option>)}
-                </Select>
+                </AdminSelect>
+                {errorsRoles.userId && <p className="text-xs text-rose-500">{errorsRoles.userId.message}</p>}
 
-                <div className={`rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2 ${!rolesForm.userId ? 'opacity-50 pointer-events-none' : ''}`}>
+                {/* Using watch to conditionally style or show */}
+                <div className={`rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2`}>
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Roles</p>
                   <div className="space-y-2">
                     {ROLE_OPTIONS.map((role) => (
                       <label key={role.value} className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer hover:text-blue-600">
                         <input
                           type="checkbox"
-                          checked={rolesForm.roles.includes(role.value)}
-                          onChange={() =>
-                            setRolesForm((prev) => {
-                              const exists = prev.roles.includes(role.value);
-                              return {
-                                ...prev,
-                                roles: exists
-                                  ? prev.roles.filter((r) => r !== role.value)
-                                  : [...prev.roles, role.value],
-                              };
-                            })
-                          }
+                          checked={updateRolesList?.includes(role.value)}
+                          onChange={() => toggleUpdateRole(role.value)}
                           className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                         />
                         <span className="font-medium">{role.label}</span>
                       </label>
                     ))}
                   </div>
+                  {errorsRoles.roles && <p className="text-xs text-rose-500">{errorsRoles.roles.message}</p>}
                 </div>
               </ActionForm>
             </div>
@@ -347,72 +425,22 @@ export default function UserManagementPanel() {
                 title="Reset Password"
                 description="Issue a new temporary secret"
                 icon={<KeyRound size={16} />}
-                onSubmit={handlePasswordReset}
-                disabled={actionState.pending || !users.length}
+                onSubmit={handleSubmitPassword(handlePasswordReset)}
+                disabled={resettingPassword || actionState.pending || !users.length}
               >
-                <Select label="Select Operator" value={passwordForm.userId} onChange={(e) => setPasswordForm({ ...passwordForm, userId: e.target.value })} required>
+                <AdminSelect label="Select Operator" {...registerPassword("userId")}>
                   <option value="" disabled>Select Operator</option>
                   {users.map((u) => <option key={u.id} value={u.id}>{u.email}</option>)}
-                </Select>
-                <Input label="Custom Temp Password (Optional)" value={passwordForm.temporaryPassword} onChange={(e) => setPasswordForm({ ...passwordForm, temporaryPassword: e.target.value })} />
+                </AdminSelect>
+                {errorsPassword.userId && <p className="text-xs text-rose-500">{errorsPassword.userId.message}</p>}
+
+                <AdminInput label="Custom Temp Password (Optional)" {...registerPassword("temporaryPassword")} />
               </ActionForm>
             </div>
           </div>
         </aside>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 
-function ActionForm({ title, description, icon, children, onSubmit, disabled }) {
-  return (
-    <form
-      onSubmit={onSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-    >
-      <div className="mb-4">
-        <div className="flex items-center gap-2 text-slate-900">
-          {icon}
-          <h4 className="text-sm font-bold">{title}</h4>
-        </div>
-        <p className="text-xs text-slate-500 mt-1">{description}</p>
-      </div>
-      <div className="space-y-4">{children}</div>
-      <button
-        type="submit"
-        disabled={disabled}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
-      >
-        {icon}
-        {title.includes("Update") || title.includes("Reset") ? "Submit" : "Create"}
-      </button>
-    </form>
-  );
-}
-
-function Input({ label, type = "text", ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <input
-        type={type}
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-slate-100"
-        {...props}
-      />
-    </label>
-  );
-}
-
-function Select({ label, children, ...props }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-slate-500">{label}</span>
-      <select
-        className="mt-1.5 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:bg-slate-100"
-        {...props}
-      >
-        {children}
-      </select>
-    </label>
-  );
-}

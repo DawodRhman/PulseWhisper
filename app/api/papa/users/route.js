@@ -12,31 +12,24 @@ const actionEnvelopeSchema = z.object({
   payload: z.unknown(),
 });
 
+import {
+  createUserSchema,
+  updateUserRolesSchema,
+  updateUserStatusSchema,
+  resetPasswordSchema
+} from "@/lib/validators/admin";
+
 const createSchemas = {
-  user: z.object({
-    name: z.string().trim().min(2).optional(),
-    email: z.string().email(),
-    phone: z.string().trim().optional().nullable(),
-    roles: z.array(z.nativeEnum(RoleType)).min(1),
-  }),
+  user: createUserSchema,
 };
 
 const updateSchemas = {
-  roles: z.object({
-    userId: z.string().min(1),
-    roles: z.array(z.nativeEnum(RoleType)).min(1),
-  }),
-  status: z.object({
-    userId: z.string().min(1),
-    status: z.enum(["ACTIVE", "INACTIVE"]),
-  }),
+  roles: updateUserRolesSchema,
+  status: updateUserStatusSchema,
 };
 
 const passwordSchemas = {
-  password: z.object({
-    userId: z.string().min(1),
-    temporaryPassword: z.string().min(8).optional(),
-  }),
+  password: resetPasswordSchema,
 };
 
 function createHttpError(message, status = 400) {

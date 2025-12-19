@@ -16,83 +16,32 @@ const actionEnvelopeSchema = z.object({
   payload: z.unknown(),
 });
 
-const orderField = z.coerce.number().int().min(0).optional();
-const nullableString = z
-  .union([z.string(), z.literal(null)])
-  .transform((value) => (value === "" ? null : value))
-  .optional();
-
-const dateInput = z.union([z.string(), z.number(), z.date(), z.null()]).optional();
+import {
+  tenderCategorySchema,
+  updateTenderCategorySchema,
+  tenderSchema,
+  updateTenderSchema,
+  attachmentSchema,
+  updateAttachmentSchema,
+  deleteSchema
+} from "@/lib/validators/admin";
 
 const createSchemas = {
-  category: z.object({
-    label: z.string().trim().min(3),
-    description: nullableString,
-    order: orderField,
-    slug: z.string().trim().optional(),
-  }),
-  tender: z.object({
-    tenderNumber: z.string().trim().min(3),
-    title: z.string().trim().min(3),
-    summary: nullableString,
-    status: z.nativeEnum(TenderStatus).default(TenderStatus.OPEN),
-    publishedAt: dateInput,
-    closingAt: dateInput,
-    contactEmail: nullableString,
-    contactPhone: nullableString,
-    categoryId: z.string().optional().nullable(),
-    isVisible: z.boolean().default(true),
-  }),
-  attachment: z
-    .object({
-      tenderId: z.string().min(1),
-      label: nullableString,
-      mediaId: z.string().optional(),
-      mediaUrl: z.string().trim().optional(),
-    })
-    .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
-      message: "Provide mediaId or mediaUrl",
-      path: ["mediaId"],
-    }),
+  category: tenderCategorySchema,
+  tender: tenderSchema,
+  attachment: attachmentSchema,
 };
 
 const updateSchemas = {
-  category: z.object({
-    id: z.string().min(1),
-    label: z.string().trim().min(3).optional(),
-    description: nullableString,
-    order: orderField,
-    slug: z.string().trim().optional(),
-  }),
-  tender: z.object({
-    id: z.string().min(1),
-    title: z.string().trim().min(3).optional(),
-    summary: nullableString,
-    status: z.nativeEnum(TenderStatus).optional(),
-    publishedAt: dateInput,
-    closingAt: dateInput,
-    contactEmail: nullableString,
-    contactPhone: nullableString,
-    categoryId: z.string().optional().nullable(),
-    isVisible: z.boolean().optional(),
-  }),
-  attachment: z
-    .object({
-      id: z.string().min(1),
-      label: nullableString,
-      mediaId: z.string().optional(),
-      mediaUrl: z.string().trim().optional(),
-    })
-    .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
-      message: "Provide mediaId or mediaUrl",
-      path: ["mediaId"],
-    }),
+  category: updateTenderCategorySchema,
+  tender: updateTenderSchema,
+  attachment: updateAttachmentSchema,
 };
 
 const deleteSchemas = {
-  category: z.object({ id: z.string().min(1) }),
-  tender: z.object({ id: z.string().min(1) }),
-  attachment: z.object({ id: z.string().min(1) }),
+  category: deleteSchema,
+  tender: deleteSchema,
+  attachment: deleteSchema,
 };
 
 const tenderInclude = {

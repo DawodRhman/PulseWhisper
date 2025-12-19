@@ -29,7 +29,7 @@ const FALLBACK_TEAM = [
 
 const PLACEHOLDER_PORTRAIT = "https://placehold.co/400x500/e2e8f0/1e293b?text=No+Image";
 
-export default function OurLeadership({ team, insights }) {
+export default function OurLeadership({ team, insights, title, subtitle }) {
   const { t, i18n } = useTranslation();
   const [fetchedTeam, setFetchedTeam] = useState(null);
 
@@ -89,10 +89,10 @@ export default function OurLeadership({ team, insights }) {
         {/* --- Section Header --- */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24 max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto">
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-blue-900 mb-4">
-            {t("Leadership & Management")}
+            {title || t("Leadership & Management")}
           </h2>
           <p className="text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg 2xl:text-lg">
-            {t("leadership.description") || "KW&SC has evolved under the guidance of exceptional leaders. Meet the visionaries guiding the corporation toward a sustainable and efficient future."}
+            {subtitle || t("leadership.description") || "KW&SC has evolved under the guidance of exceptional leaders. Meet the visionaries guiding the corporation toward a sustainable and efficient future."}
           </p>
         </div>
 
