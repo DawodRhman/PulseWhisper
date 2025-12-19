@@ -14,9 +14,13 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   serviceCategorySchema,
+  updateServiceCategorySchema,
   serviceCardSchema,
+  updateServiceCardSchema,
   serviceDetailSchema,
-  serviceResourceSchema
+  updateServiceDetailSchema,
+  serviceResourceSchema,
+  updateServiceResourceSchema
 } from "@/lib/validators/admin";
 import { z } from "zod";
 
@@ -111,7 +115,7 @@ export default function ServicesPanel() {
     watch: watchCategoryUpdate,
     formState: { errors: errorsCategoryUpdate, isSubmitting: updatingCategory }
   } = useForm({
-    resolver: zodResolver(serviceCategorySchema.extend({ id: z.string().min(1) })),
+    resolver: zodResolver(updateServiceCategorySchema),
     defaultValues: { id: "", title: "", summary: "", heroCopy: "", order: "" }
   });
 
@@ -124,7 +128,7 @@ export default function ServicesPanel() {
     watch: watchCardUpdate,
     formState: { errors: errorsCardUpdate, isSubmitting: updatingCard }
   } = useForm({
-    resolver: zodResolver(serviceCardSchema.extend({ id: z.string().min(1) })),
+    resolver: zodResolver(updateServiceCardSchema),
     defaultValues: { id: "", categoryId: "", title: "", summary: "", description: "", iconKey: "", gradientClass: "", order: "" }
   });
 
@@ -137,7 +141,7 @@ export default function ServicesPanel() {
     watch: watchDetailUpdate,
     formState: { errors: errorsDetailUpdate, isSubmitting: updatingDetail }
   } = useForm({
-    resolver: zodResolver(serviceDetailSchema.extend({ id: z.string().min(1) })),
+    resolver: zodResolver(updateServiceDetailSchema),
     defaultValues: { id: "", serviceCardId: "", heading: "", body: "", bulletPoints: "", order: "" }
   });
 
@@ -150,7 +154,7 @@ export default function ServicesPanel() {
     watch: watchResourceUpdate,
     formState: { errors: errorsResourceUpdate, isSubmitting: updatingResource }
   } = useForm({
-    resolver: zodResolver(serviceResourceSchema.extend({ id: z.string().min(1) })),
+    resolver: zodResolver(updateServiceResourceSchema),
     defaultValues: { id: "", categoryId: "", title: "", description: "", externalUrl: "", mediaId: "", mediaUrl: "" }
   });
 

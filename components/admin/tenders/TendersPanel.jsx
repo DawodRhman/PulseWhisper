@@ -15,7 +15,7 @@ import { z } from "zod";
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { tenderSchema, tenderCategorySchema, attachmentSchema } from "@/lib/validators/admin";
+import { tenderSchema, updateTenderSchema, tenderCategorySchema, attachmentSchema } from "@/lib/validators/admin";
 
 const STATUS_OPTIONS = ["OPEN", "UPCOMING", "CLOSED", "CANCELLED"];
 
@@ -105,7 +105,7 @@ export default function TendersPanel() {
     watch: watchUpdate,
     formState: { errors: errorsUpdate, isSubmitting: updatingTender }
   } = useForm({
-    resolver: zodResolver(tenderSchema.extend({ id: z.string().min(1) })),
+    resolver: zodResolver(updateTenderSchema),
     defaultValues: {
       id: "",
       tenderNumber: "",
