@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import sanitize from "sanitize-html";
+
 import {
   FaTint,
   FaWater,
