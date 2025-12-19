@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import sanitize from "sanitize-html";
 
 import {
   FaTint,
@@ -16,7 +15,7 @@ import {
 } from "react-icons/fa";
 import Loader from "@/components/Loader";
 import gsap from "gsap";
-import { useTranslation } from "react-i18next";
+
 import { useServicesData } from "@/hooks/useServicesData";
 import { sanitize } from "@/lib/utils";
 
