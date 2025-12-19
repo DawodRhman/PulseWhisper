@@ -19,6 +19,7 @@ import {
   Save,
   X
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { useAdminMediaLibrary } from "@/hooks/useAdminMediaLibrary";
 import MediaAssetSelect from "@/components/admin/media/MediaAssetSelect";
 
@@ -214,7 +215,7 @@ export default function MediaLibraryPanel() {
             Last sync: {lastFetchedAt ? new Date(lastFetchedAt).toLocaleTimeString("en-GB") : "--"}
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3">
           {clipboardMessage && (
             <span className="text-xs font-medium text-emerald-600 animate-fade-in">
@@ -255,10 +256,10 @@ export default function MediaLibraryPanel() {
         <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
           <section className="space-y-6">
             <div className="flex items-center justify-between">
-               <h3 className="text-lg font-semibold text-slate-900">Media Catalogue</h3>
-               <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-                 {assets.length} Assets
-               </span>
+              <h3 className="text-lg font-semibold text-slate-900">Media Catalogue</h3>
+              <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                {assets.length} Assets
+              </span>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -312,7 +313,7 @@ export default function MediaLibraryPanel() {
                           </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-900 break-all">{asset.label || asset.url}</h4>
-                        
+
                         {/* Preview Area */}
                         <div className="mt-3 mb-3 rounded-lg bg-slate-50 border border-slate-100 overflow-hidden">
                           {isVideo(asset) ? (
@@ -336,7 +337,7 @@ export default function MediaLibraryPanel() {
                             {formatTimestamp(asset.createdAt)}
                           </span>
                         </div>
-                        
+
                         {asset.altText && (
                           <p className="mt-2 text-xs text-slate-400 italic">Alt: {asset.altText}</p>
                         )}
@@ -424,7 +425,7 @@ export default function MediaLibraryPanel() {
                     <option value="" disabled>Select Asset</option>
                     {assets.map((a) => <option key={a.id} value={a.id}>{a.label || a.url}</option>)}
                   </Select>
-                  
+
                   <Input label="Label" value={metadataForm.label} onChange={(e) => setMetadataForm({ ...metadataForm, label: e.target.value })} disabled={!metadataForm.id} />
                   <Input label="Category" value={metadataForm.category} onChange={(e) => setMetadataForm({ ...metadataForm, category: e.target.value })} disabled={!metadataForm.id} />
                   <Input label="Alt Text" value={metadataForm.altText} onChange={(e) => setMetadataForm({ ...metadataForm, altText: e.target.value })} disabled={!metadataForm.id} />
@@ -439,10 +440,10 @@ export default function MediaLibraryPanel() {
         <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
           <section className="space-y-6">
             <div className="flex items-center justify-between">
-               <h3 className="text-lg font-semibold text-slate-900">Album Collections</h3>
-               <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-                 {albums.length} Albums
-               </span>
+              <h3 className="text-lg font-semibold text-slate-900">Album Collections</h3>
+              <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                {albums.length} Albums
+              </span>
             </div>
 
             {selectedAlbum ? (
@@ -497,9 +498,18 @@ export default function MediaLibraryPanel() {
                         </div>
                         <Folder size={20} className="text-blue-500" />
                       </div>
-                      <div className="mt-4 flex items-center gap-2 text-xs text-slate-500">
-                        <span className="bg-slate-100 px-2 py-1 rounded-full">{album.items?.length || 0} Items</span>
-                        <span>Updated {formatTimestamp(album.updatedAt)}</span>
+                      <div className="mt-4 flex items-center justify-between gap-2 text-xs text-slate-500">
+                        <div className="flex items-center gap-2">
+                          <span className="bg-slate-100 px-2 py-1 rounded-full">{album.items?.length || 0} Items</span>
+                          <span>Updated {formatTimestamp(album.updatedAt)}</span>
+                        </div>
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <span className="font-medium text-slate-500">{album.isVisible ? "Visible" : "Hidden"}</span>
+                          <Switch
+                            checked={album.isVisible}
+                            onCheckedChange={(checked) => updateAlbum({ id: album.id, isVisible: checked })}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="bg-slate-50 px-5 py-2 border-t border-slate-100 flex justify-end gap-2">

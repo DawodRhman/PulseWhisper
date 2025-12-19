@@ -29,6 +29,7 @@ function fallbackMediaGallery() {
 async function getMediaItems() {
   try {
     const mediaItems = await prisma.mediaItem.findMany({
+      where: { album: { isVisible: true } },
       include: {
         media: { select: MEDIA_SELECT },
         album: { select: { id: true, title: true, slug: true } },

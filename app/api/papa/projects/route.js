@@ -43,7 +43,9 @@ const createSchemas = {
       linkUrl: nullableUrl,
       mediaId: z.string().optional(),
       mediaUrl: z.string().trim().optional(),
+      mediaUrl: z.string().trim().optional(),
       seo: seoPayloadSchema.optional(),
+      isVisible: z.boolean().default(true),
     })
     .refine((value) => Boolean(value.mediaId || value.mediaUrl), {
       message: "Provide mediaId or mediaUrl",
@@ -61,7 +63,9 @@ const updateSchemas = {
     linkUrl: nullableUrl,
     mediaId: z.string().optional(),
     mediaUrl: z.string().trim().optional(),
+    mediaUrl: z.string().trim().optional(),
     seo: seoPayloadSchema.optional(),
+    isVisible: z.boolean().optional(),
   }),
 };
 
@@ -223,7 +227,9 @@ async function handleCreate(type, data) {
           order: data.order ?? 0,
           linkUrl: coerceNullable(data.linkUrl) ?? null,
           mediaId,
+          mediaId,
           seoId,
+          isVisible: data.isVisible,
         },
         include: projectInclude,
       });
@@ -259,7 +265,9 @@ async function handleUpdate(type, data) {
         status: coerceNullable(data.status),
         order: data.order ?? undefined,
         linkUrl: coerceNullable(data.linkUrl),
+        linkUrl: coerceNullable(data.linkUrl),
         mediaId: mediaUpdate,
+        isVisible: data.isVisible,
       });
       const seoId = data.seo
         ? await upsertSeoMeta({ baseTitle: data.title || existing.title, seoPayload: data.seo, existingSeoId: existing.seoId })

@@ -4,6 +4,7 @@ import AdminHeader from "../shared/AdminHeader";
 import AdminDataTable from "../shared/AdminDataTable";
 import Modal from "../shared/Modal";
 import FormField, { Input, TextArea, SubmitButton } from "../shared/Form";
+import { Switch } from "@/components/ui/switch";
 
 export default function RtiPanel() {
   const [docs, setDocs] = useState([]);
@@ -125,7 +126,30 @@ export default function RtiPanel() {
     { key: "title", label: "Title" },
     { key: "docType", label: "Type" },
     { key: "order", label: "Order" },
+    {
+      key: "isVisible",
+      label: "Visible",
+      render: (visible, item) => (
+        <Switch
+          checked={visible}
+          onCheckedChange={(checked) => handleVisibilityToggle(item.id, checked)}
+        />
+      ),
+    },
   ];
+
+  const handleVisibilityToggle = async (id, isVisible) => {
+    try {
+      const res = await fetch("/api/papa/rti", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, isVisible }),
+      });
+      if (res.ok) fetchDocs();
+    } catch (error) {
+      console.error("Failed to toggle visibility:", error);
+    }
+  };
 
   return (
     <div>

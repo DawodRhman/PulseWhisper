@@ -346,6 +346,7 @@ model Tender {
   contactPhone String?
   categoryId   String?
   seoId        String?
+  isVisible    Boolean            @default(true)
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
   attachments  TenderAttachment[]
@@ -519,6 +520,7 @@ model MediaAlbum {
   slug        String      @unique
   description String?
   seoId       String?
+  isVisible   Boolean     @default(true)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   items       MediaItem[]
@@ -626,6 +628,7 @@ model ProjectHighlight {
   mediaId   String?
   linkUrl   String?
   seoId     String?
+  isVisible Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -670,6 +673,7 @@ model RtiDocument {
   mediaId     String?
   externalUrl String?
   seoId       String?
+  isVisible   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

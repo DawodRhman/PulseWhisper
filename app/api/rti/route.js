@@ -28,7 +28,7 @@ function serializeDocument(doc) {
     id: doc.id,
     title: doc.title,
     // safe access if they exist in future or dynamic usage
-    titleUr: doc.titleUr, 
+    titleUr: doc.titleUr,
     description: doc.summary,
     descriptionUr: doc.summaryUr,
     type: doc.docType || "Document",
@@ -48,6 +48,7 @@ export async function GET(request) {
         let documents = [];
         try {
           documents = await prisma.rtiDocument.findMany({
+            where: { isVisible: true },
             orderBy: { order: "asc" },
             include: { media: true },
           });

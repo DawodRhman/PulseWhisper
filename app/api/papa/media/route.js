@@ -24,7 +24,9 @@ const createSchemas = {
     title: z.string().min(1),
     slug: z.string().min(1),
     description: z.string().optional(),
+    description: z.string().optional(),
     seo: z.any().optional(), // We'll handle SEO serialization manually or loosely
+    isVisible: z.boolean().optional(),
   }),
   albumItem: z.object({
     albumId: z.string().min(1),
@@ -45,7 +47,9 @@ const updateSchemas = {
     title: z.string().optional(),
     slug: z.string().optional(),
     description: z.string().optional(),
+    description: z.string().optional(),
     seo: z.any().optional(),
+    isVisible: z.boolean().optional(),
   }),
 };
 const deleteSchemas = {
@@ -218,7 +222,9 @@ export async function POST(request) {
               title: data.title,
               slug: data.slug,
               description: data.description,
+              description: data.description,
               seo: data.seo ? { create: data.seo } : undefined,
+              isVisible: data.isVisible ?? true,
             },
           });
           await logAudit({ session, action: "ALBUM_CREATE", recordId: record.id });
@@ -272,7 +278,9 @@ export async function PATCH(request) {
         const updates = {
           title: data.title,
           slug: data.slug,
+          slug: data.slug,
           description: data.description,
+          isVisible: data.isVisible,
         };
         if (data.seo) {
           updates.seo = {

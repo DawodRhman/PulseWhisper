@@ -41,6 +41,7 @@ const createSchemas = {
     contactEmail: nullableString,
     contactPhone: nullableString,
     categoryId: z.string().optional().nullable(),
+    isVisible: z.boolean().default(true),
   }),
   attachment: z
     .object({
@@ -73,6 +74,7 @@ const updateSchemas = {
     contactEmail: nullableString,
     contactPhone: nullableString,
     categoryId: z.string().optional().nullable(),
+    isVisible: z.boolean().optional(),
   }),
   attachment: z
     .object({
@@ -234,6 +236,7 @@ async function handleCreate(type, data) {
           contactEmail: data.contactEmail ?? null,
           contactPhone: data.contactPhone ?? null,
           categoryId: data.categoryId || null,
+          isVisible: data.isVisible,
         },
       });
       return { record, diff: { before: null, after: record } };
@@ -290,6 +293,7 @@ async function handleUpdate(type, data) {
         contactEmail: data.contactEmail ?? undefined,
         contactPhone: data.contactPhone ?? undefined,
         categoryId: data.categoryId === undefined ? undefined : data.categoryId || null,
+        isVisible: data.isVisible,
       });
       if (!Object.keys(updates).length) {
         throw createHttpError("No updates provided", 400);

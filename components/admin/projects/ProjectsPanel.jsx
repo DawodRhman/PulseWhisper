@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { Loader2, Plus, RefreshCcw, Trash2, Image, Link2, Sparkles, Briefcase } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { useAdminProjects } from "@/hooks/useAdminProjects";
 import SeoFields, { createEmptySeoState, serializeSeoState } from "@/components/admin/seo/SeoFields";
 import MediaPicker from "@/components/admin/media/MediaPicker";
@@ -174,10 +175,10 @@ export default function ProjectsPanel() {
       <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-             <h3 className="text-lg font-semibold text-slate-900">Project Portfolio</h3>
-             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-               {projects.length} Highlights
-             </span>
+            <h3 className="text-lg font-semibold text-slate-900">Project Portfolio</h3>
+            <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+              {projects.length} Highlights
+            </span>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -214,31 +215,38 @@ export default function ProjectsPanel() {
                         <h4 className="font-semibold text-slate-900">{project.title}</h4>
                       </div>
                       {project.summary && <p className="text-sm text-slate-500 max-w-xl">{project.summary}</p>}
-                      
+
                       <div className="flex flex-wrap items-center gap-3 pt-2">
-                         <span className="text-xs text-slate-400">Order: {project.order ?? 0}</span>
-                         {project.linkUrl && (
-                            <a href={project.linkUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs text-blue-600 hover:underline">
-                              <Link2 size={12} />
-                              External Link
-                            </a>
-                         )}
-                         <span className="flex items-center gap-1 text-xs text-slate-500">
-                            <Image size={12} />
-                            {project.media?.label || (project.mediaUrl ? "External Media" : "No Media")}
-                         </span>
-                         <button
-                            type="button"
-                            onClick={() => prefillSeoForm(project)}
-                            className={`flex items-center gap-1 text-xs font-medium ${project.seo ? "text-emerald-600" : "text-slate-400 hover:text-slate-600"}`}
-                          >
-                            <Sparkles size={12} />
-                            {project.seo ? "SEO Configured" : "Configure SEO"}
-                          </button>
+                        <span className="text-xs text-slate-400">Order: {project.order ?? 0}</span>
+                        {project.linkUrl && (
+                          <a href={project.linkUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs text-blue-600 hover:underline">
+                            <Link2 size={12} />
+                            External Link
+                          </a>
+                        )}
+                        <span className="flex items-center gap-1 text-xs text-slate-500">
+                          <Image size={12} />
+                          {project.media?.label || (project.mediaUrl ? "External Media" : "No Media")}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => prefillSeoForm(project)}
+                          className={`flex items-center gap-1 text-xs font-medium ${project.seo ? "text-emerald-600" : "text-slate-400 hover:text-slate-600"}`}
+                        >
+                          <Sparkles size={12} />
+                          {project.seo ? "SEO Configured" : "Configure SEO"}
+                        </button>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 font-medium">{project.isVisible ? "Visible" : "Hidden"}</span>
+                        <Switch
+                          checked={project.isVisible}
+                          onCheckedChange={(checked) => updateEntity("project", { id: project.id, isVisible: checked })}
+                        />
+                      </div>
                       <select
                         value={project.status || "PLANNED"}
                         onChange={(event) => handleStatusChange(project.id, event.target.value)}
@@ -272,17 +280,15 @@ export default function ProjectsPanel() {
             <div className="flex rounded-lg bg-slate-100 p-1">
               <button
                 onClick={() => setActiveTab("create")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Create
               </button>
               <button
                 onClick={() => setActiveTab("seo")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "seo" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "seo" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 SEO
               </button>
@@ -298,12 +304,12 @@ export default function ProjectsPanel() {
                 <Input label="Title" value={projectForm.title} onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })} required />
                 <TextArea label="Summary" value={projectForm.summary} onChange={(e) => setProjectForm({ ...projectForm, summary: e.target.value })} />
                 <Select label="Status" value={projectForm.status} onChange={(e) => setProjectForm({ ...projectForm, status: e.target.value })}>
-                   {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+                  {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
                 </Select>
                 <Input label="Order" type="number" value={projectForm.order} onChange={(e) => setProjectForm({ ...projectForm, order: e.target.value })} />
                 <Input label="Link URL" type="url" value={projectForm.linkUrl} onChange={(e) => setProjectForm({ ...projectForm, linkUrl: e.target.value })} />
                 <Input label="Hero Media URL" type="url" value={projectForm.mediaUrl} onChange={(e) => setProjectForm({ ...projectForm, mediaUrl: e.target.value })} placeholder="https://..." />
-                
+
                 <div className="space-y-1.5">
                   <MediaPicker
                     label="Hero Media Asset"
@@ -319,14 +325,14 @@ export default function ProjectsPanel() {
                     disabled={actionState.pending}
                   />
                 </div>
-                
+
                 <div className="pt-2 border-t border-slate-100">
-                   <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
-                   <SeoFields
-                      value={projectForm.seo}
-                      onChange={(seo) => setProjectForm((prev) => ({ ...prev, seo }))}
-                      disabled={actionState.pending}
-                    />
+                  <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
+                  <SeoFields
+                    value={projectForm.seo}
+                    onChange={(seo) => setProjectForm((prev) => ({ ...prev, seo }))}
+                    disabled={actionState.pending}
+                  />
                 </div>
               </ActionForm>
             )}

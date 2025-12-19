@@ -1,3 +1,22 @@
 {
-  "resources": []
+  "resources": [
+    {
+      "id": "7a466ef2-da85-418c-971e-9c0ff11412ca",
+      "title": "Understanding Your Bill",
+      "description": "Explaining the charges on your monthly water bill.",
+      "image": "/images/placeholder.jpg",
+      "content": {
+        "body": "Breakdown of tariff rates and surcharges."
+      }
+    },
+    {
+      "id": "7caa289e-0130-4e1a-aa43-3a928ef28c9f",
+      "title": "Water Conservation Tips",
+      "description": "Guide on how to save water at home.",
+      "image": "/images/placeholder.jpg",
+      "content": {
+        "body": "Turn off the tap while brushing teeth. Fix leaks immediately."
+      }
+    }
+  ]
 }

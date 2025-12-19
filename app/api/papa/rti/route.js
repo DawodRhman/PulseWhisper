@@ -16,11 +16,15 @@ const createSchema = z.object({
   order: z.coerce.number().int().default(0),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
   seoKeywords: z.string().optional(),
+  isVisible: z.boolean().default(true),
 });
 
 const updateSchema = createSchema.partial().extend({
   id: z.string().min(1),
+  isVisible: z.boolean().optional(),
 });
 
 const deleteSchema = z.object({

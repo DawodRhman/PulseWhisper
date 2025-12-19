@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { Loader2, Plus, RefreshCcw, Trash2, CalendarDays, Paperclip, Pencil } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { useAdminTenders } from "@/hooks/useAdminTenders";
 
 const STATUS_OPTIONS = ["OPEN", "UPCOMING", "CLOSED", "CANCELLED"];
@@ -241,7 +242,13 @@ export default function TendersPanel() {
                       <p className="text-xs text-slate-500">Category: <span className="font-medium text-slate-700">{tender.category?.label || "Unassigned"}</span></p>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 font-medium">{tender.isVisible ? "Visible" : "Hidden"}</span>
+                        <Switch
+                          checked={tender.isVisible}
+                          onCheckedChange={(checked) => updateEntity("tender", { id: tender.id, isVisible: checked })}
+                        />
+                      </div>
                       <select
                         value={tender.status}
                         onChange={(event) => handleStatusChange(tender.id, event.target.value)}
@@ -426,8 +433,8 @@ export default function TendersPanel() {
             )}
           </div>
         </aside>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 
