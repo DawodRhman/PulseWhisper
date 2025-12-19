@@ -39,6 +39,14 @@
       "order": 0,
       "createdAt": "2025-11-25T10:27:58.914Z",
       "updatedAt": "2025-11-25T10:27:58.914Z"
+    },
+    {
+      "id": "ef46374c-94fc-40c5-bd35-ca3175c84b22",
+      "title": "Press Releases",
+      "slug": "press-releases",
+      "order": 0,
+      "createdAt": "2025-12-19T09:03:56.585Z",
+      "updatedAt": "2025-12-19T09:03:56.585Z"
     }
   ],
   "articles": [

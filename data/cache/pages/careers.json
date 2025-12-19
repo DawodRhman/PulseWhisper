@@ -7,11 +7,11 @@
   "navLabel": null,
   "navGroup": "aboutus",
   "createdAt": "2025-12-04T17:09:29.258Z",
-  "updatedAt": "2025-12-15T13:38:20.245Z",
+  "updatedAt": "2025-12-19T09:11:14.761Z",
   "seoId": "1337c2f1-3469-451f-af6b-967200d8e614",
   "sections": [
     {
-      "id": "014e9b53-46ad-47c5-b8b5-8e00796112a0",
+      "id": "b37d86c7-d4c0-410c-b67d-893683bd28f5",
       "pageId": "a0422407-4379-42a9-8497-1c8feeb2a0b6",
       "type": "HERO",
       "order": 0,
@@ -20,17 +20,17 @@
         "subtitle": "Build your career with us",
         "backgroundImage": "/uploads/1765800273161-90f568c5.mp4"
       },
-      "createdAt": "2025-12-15T13:38:20.262Z",
-      "updatedAt": "2025-12-15T13:38:20.262Z"
+      "createdAt": "2025-12-19T09:11:15.044Z",
+      "updatedAt": "2025-12-19T09:11:15.044Z"
     },
     {
-      "id": "14285153-134e-407c-8389-fbedba32da9c",
+      "id": "34a3923b-0268-4558-b01e-06fabd2f8522",
       "pageId": "a0422407-4379-42a9-8497-1c8feeb2a0b6",
       "type": "CAREERS",
-      "order": 1,
+      "order": 2,
       "content": {},
-      "createdAt": "2025-12-15T13:38:20.262Z",
-      "updatedAt": "2025-12-15T13:38:20.262Z"
+      "createdAt": "2025-12-19T09:11:15.044Z",
+      "updatedAt": "2025-12-19T09:11:15.044Z"
     }
   ],
   "seo": {
@@ -46,6 +46,6 @@
     "structuredData": null,
     "allowIndexing": true,
     "createdAt": "2025-12-04T17:09:29.258Z",
-    "updatedAt": "2025-12-15T13:38:20.245Z"
+    "updatedAt": "2025-12-19T09:11:14.761Z"
   }
 }

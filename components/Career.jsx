@@ -16,7 +16,9 @@ import {
   Mail,
   Phone,
   ArrowUpRight,
+  X,
 } from "lucide-react";
+import JobApplicationForm from "./JobApplicationForm";
 
 export default function Careers() {
   const [loading, setLoading] = useState(true);
@@ -24,6 +26,7 @@ export default function Careers() {
   const [dataError, setDataError] = useState(null);
   const { language } = useLanguageStore();
   const { t } = useTranslation();
+  const [selectedJob, setSelectedJob] = useState(null);
 
   // GSAP Loader Effect (Kept as is)
   useEffect(() => {
@@ -150,17 +153,17 @@ export default function Careers() {
           <div className="text-center mb-10 sm:mb-14 md:mb-20 lg:mb-24">
             <Fade direction="down" triggerOnce duration={1000}>
               <h1 className="text-4xl font-bold text-gray-900 mb-3">
-                {t("career.hero.title") || "Opportunities To Make A Difference"}
+                {t("career.hero.title", "Opportunities To Make A Difference")}
               </h1>
               <p className="text-base text-gray-600 max-w-3xl mx-auto">
-                {t("career.hero.desc") || "Discover the path that aligns with your professional aspirations and contribute to the core infrastructure of the city."}
+                {t("career.hero.desc", "Discover the path that aligns with your professional aspirations and contribute to the core infrastructure of the city.")}
               </p>
             </Fade>
           </div>
 
           {/* Career Opportunities Cards (Grid) */}
           <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b-2 border-blue-500/50 pb-2">
-            {t("career.explorePrograms") || "Explore Programs"}
+            {t("career.explorePrograms", "Explore Programs")}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 mb-12 sm:mb-16 md:mb-20">
             {careerOpportunities.map((opportunity, index) => (
@@ -191,7 +194,7 @@ export default function Careers() {
                     <div className="mb-4 sm:mb-5 md:mb-6">
                       <h4 className="font-bold text-xs sm:text-sm md:text-base lg:text-lg text-gray-900 mb-2 sm:mb-3 flex items-center">
                         <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-green-500 flex-shrink-0" />
-                        {t("career.benefits") || "Benefits & Scope:"}
+                        {t("career.benefits", "Benefits & Scope:")}
                       </h4>
                       <ul className="space-y-2 sm:space-y-2.5 md:space-y-3">
                         {opportunity.features.map((feature, idx) => (
@@ -215,7 +218,7 @@ export default function Careers() {
                                bg-blue-600 text-white font-semibold text-sm sm:text-base rounded-lg transition-all 
                                hover:bg-blue-700 hover:shadow-lg shadow-blue-500/30 group"
                   >
-                    {t('viewDetails') || "View Details"}
+                    {t('viewDetails', "View Details")}
                     <ArrowUpRight className="w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </Link>
                 </div>
@@ -225,7 +228,7 @@ export default function Careers() {
 
           {/* Current Job Openings (Table-like Grid) */}
           <h2 className="text-4xl font-bold text-gray-800 mb-6 border-b-2 border-blue-500/50 pb-2">
-            {t("career.currentOpenings") || "Current Openings"}
+            {t("career.currentOpenings", "Current Openings")}
           </h2>
           <div className="space-y-3 sm:space-y-4 md:space-y-4">
             {currentOpenings.length > 0 ? (
@@ -258,7 +261,10 @@ export default function Careers() {
                     </div>
 
                     {/* Apply Button */}
-                    <button className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 bg-blue-600 text-white font-semibold text-xs sm:text-sm rounded-lg hover:bg-blue-700 transition-colors shadow-sm sm:shadow-md">
+                    <button
+                      onClick={() => setSelectedJob(opening)}
+                      className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 bg-blue-600 text-white font-semibold text-xs sm:text-sm rounded-lg hover:bg-blue-700 transition-colors shadow-sm sm:shadow-md"
+                    >
                       {t('applyNow')}
                     </button>
                   </div>
@@ -278,10 +284,10 @@ export default function Careers() {
             <Fade direction="up" triggerOnce duration={1000} delay={200}>
               <div className="text-center">
                 <h2 className="text-4xl font-bold mb-3">
-                  {t("career.cta.title") || "Ready to Start Your KW&SC Career?"}
+                  {t("career.cta.title", "Ready to Start Your KW&SC Career?")}
                 </h2>
                 <p className="text-base text-blue-100 mb-6 max-w-3xl mx-auto">
-                  {t("career.cta.desc") || "For detailed information, reach out to our Human Resources department directly."}
+                  {t("career.cta.desc", "For detailed information, reach out to our Human Resources department directly.")}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-4 justify-center">
@@ -305,6 +311,26 @@ export default function Careers() {
           </div>
         </div>
       </div>
+
+      {/* Application Modal */}
+      {selectedJob && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl my-8">
+            <button
+              onClick={() => setSelectedJob(null)}
+              className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors z-10"
+            >
+              <X size={20} />
+            </button>
+            <div className="max-h-[90vh] overflow-y-auto p-2">
+              <JobApplicationForm
+                jobTitle={selectedJob.position}
+                jobId={selectedJob.id}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

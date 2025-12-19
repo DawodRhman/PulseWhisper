@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import { ensureAdminSession, handleAdminApiError } from "@/lib/auth/guard";
 
 export const dynamic = "force-dynamic";
 
@@ -94,6 +95,8 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
+    await ensureAdminSession("careers:read");
+
     const { searchParams } = new URL(request.url);
     const careerOpeningId = searchParams.get("careerOpeningId");
 
@@ -113,10 +116,6 @@ export async function GET(request) {
 
     return NextResponse.json({ data: applications });
   } catch (error) {
-    console.error("Error fetching applications:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return handleAdminApiError(error);
   }
 }
