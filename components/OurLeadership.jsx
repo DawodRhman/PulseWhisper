@@ -27,7 +27,7 @@ const FALLBACK_TEAM = [
 ];
 
 
-const PLACEHOLDER_PORTRAIT = "/leaders/placeholder.svg";
+const PLACEHOLDER_PORTRAIT = "https://placehold.co/400x500/e2e8f0/1e293b?text=No+Image";
 
 export default function OurLeadership({ team, insights }) {
   const { t, i18n } = useTranslation();
@@ -116,8 +116,9 @@ export default function OurLeadership({ team, insights }) {
                     sizes="(max-width:768px) 100vw, 25vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     priority={index === 0}
-                    onError={(event) => {
-                      event.currentTarget.src = PLACEHOLDER_PORTRAIT;
+                    onError={(e) => {
+                      e.currentTarget.src = PLACEHOLDER_PORTRAIT;
+                      e.currentTarget.srcset = PLACEHOLDER_PORTRAIT;
                     }}
                   />
                   {/* Overlay Gradient */}
