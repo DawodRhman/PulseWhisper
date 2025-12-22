@@ -30,7 +30,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${roboto.variable} ${Avg_sans.variable} antialiased bg-white text-gray-900 dark:bg-gray-900 dark:text-white transition-colors`}
       >
