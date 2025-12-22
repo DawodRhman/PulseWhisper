@@ -26,6 +26,7 @@ import {
   Droplets,
   LayoutTemplate,
   Menu,
+  Shield,
 } from "lucide-react";
 import ServicesPanel from "@/components/admin/services/ServicesPanel";
 import TendersPanel from "@/components/admin/tenders/TendersPanel";
@@ -47,6 +48,7 @@ import EducationPanel from "@/components/admin/education/EducationPanel";
 import WaterTodayPanel from "@/components/admin/watertoday/WaterTodayPanel";
 import PagesPanel from "@/components/admin/pages/PagesPanel";
 import NavigationPanel from "@/components/admin/navigation/NavigationPanel";
+import RolesPanel from "@/components/admin/roles/RolesPanel";
 
 const PANELS = [
   { id: "overview", label: "Overview", icon: LayoutDashboard, description: "At-a-glance insight" },
@@ -69,8 +71,71 @@ const PANELS = [
   { id: "watertoday", label: "Water Today", icon: Droplets, description: "Daily updates", permissions: ["watertoday:write"] },
   { id: "social", label: "Social Links", icon: Share2, description: "Connected channels", permissions: ["settings:write"] },
   { id: "users", label: "Operators", icon: Users, description: "RBAC assignments", permissions: ["users:write"] },
+  { id: "roles", label: "Roles", icon: Shield, description: "Role definitions", permissions: ["users:write"] }, // Using users:write for now, or could use new roles:write
   { id: "audit", label: "Audit Trail", icon: Gavel, description: "Immutable activity logs", permissions: ["audit:read"] },
 ];
+
+// ... existing code ...
+
+function PanelContent({ panelId }) {
+  switch (panelId) {
+    case "services":
+      return <ServicesPanel />;
+    case "tenders":
+      return <TendersPanel />;
+    case "careers":
+      return <CareersPanel />;
+    case "news":
+      return <NewsPanel />;
+    case "projects":
+      return <ProjectsPanel />;
+    case "leadership":
+      return <LeadershipPanel />;
+    case "media":
+      return <MediaLibraryPanel />;
+    case "social":
+      return <SocialLinksPanel />;
+    case "users":
+      return <UserManagementPanel />;
+    case "roles":
+      return <RolesPanel />;
+    case "audit":
+      return <AuditPanel />;
+    case "stats":
+      return <StatsPanel />;
+    case "locations":
+      return <LocationsPanel />;
+    case "workflow":
+      return <WorkflowPanel />;
+    case "achievements":
+      return <AchievementsPanel />;
+    case "faq":
+      return <FaqPanel />;
+    case "rti":
+      return <RtiPanel />;
+    case "education":
+      return <EducationPanel />;
+    case "watertoday":
+      return <WaterTodayPanel />;
+    case "pages":
+      return <PagesPanel />;
+    case "navigation":
+      return <NavigationPanel />;
+    default:
+      return (
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Snapshot Cache</p>
+            <p className="mt-2 text-sm text-slate-600">Services, Tenders, Careers, and News APIs now serve cached payloads with stale-mode fallbacks.</p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">RBAC Roadmap</p>
+            <p className="mt-2 text-sm text-slate-600">Next milestone: connect this UI to secure Prisma actions with optional MFA policies.</p>
+          </div>
+        </div>
+      );
+  }
+}
 
 const DEFAULT_METRICS = [
   { label: "Modules tracked", value: 0, hint: "Seed data to begin" },
@@ -212,8 +277,8 @@ export default function AdminShell({ session, dashboardStats }) {
                     type="button"
                     onClick={() => setActivePanel(panel.id)}
                     className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-all ${selected
-                        ? "bg-gradient-to-r from-cyan-50 to-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100"
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-gradient-to-r from-cyan-50 to-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                   >
                     <Icon size={18} className={selected ? "text-blue-600" : "text-slate-400"} />

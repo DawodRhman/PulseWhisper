@@ -48,13 +48,47 @@ export default function Education() {
           // Data is already localized from API or above defaultResources
           const title = post.title;
           const description = post.description || post.summary;
-          const imageAlt = post.imageAlt || title;
+          const media = post.media;
+          const videoUrl = post.videoUrl;
+
+          const isMediaVideo = media?.mimeType?.startsWith("video/") || media?.url?.match(/\.(mp4|webm|ogg)$/i);
+
+          const getYoutubeEmbedId = (url) => {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+          };
+
+          const youtubeId = getYoutubeEmbedId(videoUrl);
 
           return (
             <Fade key={post.id || i} direction="up" triggerOnce duration={800} delay={i * 150}>
               <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14">
-                <div className="md:flex-1">
-                  <img src={post.image} alt={imageAlt} className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto" />
+                <div className="md:flex-1 w-full">
+                  {youtubeId ? (
+                    <div className="relative aspect-video w-full rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] overflow-hidden">
+                      <iframe
+                        className="absolute top-0 left-0 w-full h-full"
+                        src={`https://www.youtube.com/embed/${youtubeId}`}
+                        title={title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  ) : isMediaVideo ? (
+                    <video
+                      src={media.url}
+                      className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto"
+                      controls
+                    />
+                  ) : (
+                    <img
+                      src={media?.url || post.image || "/bg-1.jpg"} // Fallback to post.image (defaultResources) or placeholder
+                      alt={media?.altText || title}
+                      className="rounded-lg sm:rounded-xl md:rounded-xl lg:rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.3)] w-full h-auto object-cover"
+                    />
+                  )}
                 </div>
                 <div className="md:flex-1">
                   <h3 className="text-xl font-bold text-cyan-400 mb-3">{title}</h3>

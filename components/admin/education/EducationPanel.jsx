@@ -4,6 +4,7 @@ import AdminHeader from "../shared/AdminHeader";
 import AdminDataTable from "../shared/AdminDataTable";
 import Modal from "../shared/Modal";
 import FormField, { Input, TextArea, SubmitButton } from "../shared/Form";
+import MediaPicker from "../media/MediaPicker";
 
 export default function EducationPanel() {
   const [resources, setResources] = useState([]);
@@ -16,6 +17,8 @@ export default function EducationPanel() {
     title: "",
     summary: "",
     content: "",
+    mediaId: "",
+    videoUrl: "",
     seoTitle: "",
     seoDescription: "",
     seoKeywords: "",
@@ -43,6 +46,8 @@ export default function EducationPanel() {
       title: "",
       summary: "",
       content: "",
+      mediaId: "",
+      videoUrl: "",
       seoTitle: "",
       seoDescription: "",
       seoKeywords: "",
@@ -56,6 +61,8 @@ export default function EducationPanel() {
       title: item.title,
       summary: item.summary || "",
       content: item.content ? JSON.stringify(item.content, null, 2) : "",
+      mediaId: item.mediaId || "",
+      videoUrl: item.videoUrl || "",
       seoTitle: item.seo?.title || "",
       seoDescription: item.seo?.description || "",
       seoKeywords: item.seo?.keywords || "",
@@ -101,6 +108,8 @@ export default function EducationPanel() {
         title: formData.title,
         summary: formData.summary,
         content: parsedContent,
+        mediaId: formData.mediaId || null,
+        videoUrl: formData.videoUrl || null,
         seoTitle: formData.seoTitle,
         seoDescription: formData.seoDescription,
         seoKeywords: formData.seoKeywords,
@@ -153,7 +162,7 @@ export default function EducationPanel() {
         onClose={() => setIsModalOpen(false)}
         title={editingItem ? "Edit Resource" : "Add New Resource"}
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <FormField label="Title">
             <Input
               value={formData.title}
@@ -170,6 +179,27 @@ export default function EducationPanel() {
               placeholder="Brief description..."
             />
           </FormField>
+
+          <div className="rounded-lg border border-slate-200 p-4 bg-slate-50">
+            <h4 className="mb-2 text-sm font-semibold text-slate-800">Media</h4>
+            <div className="space-y-4">
+              <MediaPicker
+                label="Cover Image"
+                value={formData.mediaId}
+                onChange={(id) => setFormData(prev => ({ ...prev, mediaId: id }))}
+                category="education"
+                accept="image/*"
+              />
+
+              <FormField label="Video URL (YouTube/Vimeo)">
+                <Input
+                  value={formData.videoUrl}
+                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                  placeholder="https://youtube.com/..."
+                />
+              </FormField>
+            </div>
+          </div>
 
           <FormField label="Content (JSON)">
             <TextArea

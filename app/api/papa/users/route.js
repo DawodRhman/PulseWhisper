@@ -63,7 +63,7 @@ function serializeUser(user) {
   };
 }
 
-async function fetchUsersPayload() {
+async function fetchUsersPayload(session) {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: {
@@ -72,7 +72,17 @@ async function fetchUsersPayload() {
       },
     },
   });
-  return { users: users.map(serializeUser) };
+
+  // Filter Logic:
+  // If I am NOT Super Admin, I cannot see Super Admin users.
+  // Actually, I cannot see anyone with SUPER_ADMIN role.
+  const filtered = users.filter((u) => {
+    const isTargetSuper = u.roles.some((r) => r.role.type === "SUPER_ADMIN");
+    if (isTargetSuper && !session.user.isSuperAdmin) return false;
+    return true;
+  });
+
+  return { users: filtered.map(serializeUser) };
 }
 
 async function getRoleRecords(roleTypes = []) {
@@ -130,10 +140,44 @@ function handleKnownErrors(error, context) {
   return handleAdminApiError(error, context);
 }
 
+// Security Check Helpers
+async function validateTargetUserAccess(session, targetUserId) {
+  // If Super Admin, allow everything (except maybe editing other Super Admins if we wanted that restriction, but requirement says "Super Admin can do all")
+  // Requirement: "other admins cant add or diable each other they can however delete create below roles"
+
+  if (session.user.isSuperAdmin) return true;
+
+  const target = await prisma.user.findUnique({
+    where: { id: targetUserId },
+    include: { roles: { include: { role: true } } },
+  });
+
+  if (!target) return false;
+
+  const isTargetSuper = target.roles.some(r => r.role.type === "SUPER_ADMIN");
+  if (isTargetSuper) return false; // Non-super cannot touch super
+
+  const isTargetAdmin = target.roles.some(r => r.role.type === "ADMIN");
+
+  // "other admins cant add or diable each other"
+  // So if I am ADMIN, and target is ADMIN, I cannot touch them.
+  // Note: session.roles is an array of strings (RoleType)
+  const isActorAdmin = session.user.roles.includes("ADMIN");
+
+  if (isActorAdmin && isTargetAdmin && target.id !== session.user.id) {
+    // Can't touch other admins. (Self-edit is handled separately in PATCH status usually, preventing disabling self)
+    // Actually "can't add or disable each other". 
+    // Usually this implies modifying ROLES or STATUS or PASSWORD or DELETING.
+    return false;
+  }
+
+  return true;
+}
+
 export async function GET() {
   try {
-    await ensureAdminSession("users:write");
-    const data = await fetchUsersPayload();
+    const session = await ensureAdminSession("users:write");
+    const data = await fetchUsersPayload(session);
     return NextResponse.json({ data });
   } catch (error) {
     return handleKnownErrors(error, "GET /api/papa/users");
@@ -147,6 +191,20 @@ export async function POST(request) {
     if (type !== "user") {
       throw createHttpError("Unsupported entity type", 400);
     }
+
+    // Role Security Check
+    // "create below roles" -> Admins can create normal users, but not Supervisors/Admins?
+    // Usually Admins create other Admins. 
+    // Requirement: "they can however delete create below roles then admin and super admin"
+    // -> "create below roles THAN admin and super admin" ??
+    // Interpret: Admins can ONLY create users with roles "below" Admin (e.g. Editor, etc).
+
+    if (!session.user.isSuperAdmin) {
+      if (data.roles.includes("SUPER_ADMIN") || data.roles.includes("ADMIN")) {
+        throw createHttpError("You cannot assign ADMIN or SUPER_ADMIN roles.", 403);
+      }
+    }
+
     const temporaryPassword = generateTempPassword();
     const hashedPassword = await hashPassword(temporaryPassword);
     const user = await prisma.user.create({
@@ -161,7 +219,7 @@ export async function POST(request) {
     await prisma.passwordHistory.create({ data: { userId: user.id, hash: hashedPassword } });
     await syncUserRoles(user.id, data.roles);
     await logAudit({ session, action: "USER_CREATE", recordId: user.id });
-    const payload = await fetchUsersPayload();
+    const payload = await fetchUsersPayload(session);
     const created = payload.users.find((entry) => entry.id === user.id) || null;
     return NextResponse.json({
       data: payload,
@@ -177,11 +235,22 @@ export async function PATCH(request) {
   try {
     const session = await ensureAdminSession("users:write");
     const { type, data } = await parseActionPayload(request, { ...updateSchemas, ...passwordSchemas });
+
+    // Check permission on target
+    const canAccess = await validateTargetUserAccess(session, data.userId);
+    if (!canAccess) {
+      throw createHttpError("Access denied to this user.", 403);
+    }
+
     let result;
     switch (type) {
       case "roles": {
-        const user = await prisma.user.findUnique({ where: { id: data.userId } });
-        if (!user) throw createHttpError("User not found", 404);
+        // Can only assign roles below me? 
+        if (!session.user.isSuperAdmin) {
+          if (data.roles.includes("SUPER_ADMIN") || data.roles.includes("ADMIN")) {
+            throw createHttpError("You cannot assign ADMIN or SUPER_ADMIN roles.", 403);
+          }
+        }
         await syncUserRoles(data.userId, data.roles);
         await logAudit({ session, action: "USER_ROLES_UPDATE", recordId: data.userId });
         break;
@@ -196,8 +265,6 @@ export async function PATCH(request) {
         break;
       }
       case "password": {
-        const user = await prisma.user.findUnique({ where: { id: data.userId } });
-        if (!user) throw createHttpError("User not found", 404);
         const temporaryPassword = data.temporaryPassword || generateTempPassword();
         const hashedPassword = await hashPassword(temporaryPassword);
         await prisma.$transaction([
@@ -207,13 +274,13 @@ export async function PATCH(request) {
         ]);
         await logAudit({ session, action: "USER_PASSWORD_RESET", recordId: data.userId });
         result = { temporaryPassword };
-        const payload = await fetchUsersPayload();
+        const payload = await fetchUsersPayload(session);
         return NextResponse.json({ data: payload, record: { id: data.userId }, temporaryPassword });
       }
       default:
         throw createHttpError("Unsupported entity type", 400);
     }
-    const payload = await fetchUsersPayload();
+    const payload = await fetchUsersPayload(session);
     return NextResponse.json({ data: payload, record: result || null });
   } catch (error) {
     return handleKnownErrors(error, "PATCH /api/papa/users");

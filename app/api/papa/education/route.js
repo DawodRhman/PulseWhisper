@@ -12,6 +12,8 @@ const createSchema = z.object({
   title: z.string().min(1),
   summary: z.string().optional(),
   content: z.any().optional(), // JSON content
+  mediaId: z.string().nullable().optional(),
+  videoUrl: z.string().optional(),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
   seoKeywords: z.string().optional(),
@@ -28,7 +30,7 @@ const deleteSchema = z.object({
 async function fetchEducation() {
   return await prisma.educationResource.findMany({
     orderBy: { createdAt: "desc" },
-    include: { seo: true },
+    include: { seo: true, media: true },
   });
 }
 
