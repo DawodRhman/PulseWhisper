@@ -1,8 +1,7 @@
 import { Montserrat } from "next/font/google";
 import { Barlow_Condensed } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import ConditionalNavbarFooter from "@/components/ConditionalNavbarFooter";
 import CookieConsent from "@/components/CookieConsent";
 import ThemeProvider from "@/components/ThemeProvider";
 import I18nProvider from "@/components/I18nProvider";
@@ -36,9 +35,9 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider>
           <I18nProvider>
-            <Navbar />
-            {children}
-            <Footer />
+            <ConditionalNavbarFooter>
+              {children}
+            </ConditionalNavbarFooter>
             <CookieConsent />
             <GoogleTranslate />
           </I18nProvider>

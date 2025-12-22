@@ -18,6 +18,10 @@ const Footer = () => {
   const { t } = useTranslation();
   const language = useLanguageStore((state) => state.language);
 
+  if (pathname?.startsWith("/papa")) {
+    return null;
+  }
+
   const contactInfo = {
     email: data?.channels?.find(c => c.label === "Email")?.email || data?.channels?.[0]?.email || footer_data.email,
     phone: data?.channels?.find(c => c.label === "Helpline")?.phone || data?.channels?.[0]?.phone || footer_data.phone,
@@ -28,10 +32,6 @@ const Footer = () => {
     })(),
     footer_info: t("footer.info"),
   };
-
-  if (pathname?.startsWith("/papa")) {
-    return null;
-  }
 
   return (
     // Switched to a light background color and dark text color

@@ -21,7 +21,7 @@ seed-nav.js
 
 # production
 /build
-
+/payment-API-setup
 # misc
 .DS_Store
 *.pem
