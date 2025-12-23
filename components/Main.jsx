@@ -3,13 +3,14 @@ import React, { useEffect, useState, useRef } from "react";
 import Loader from "@/components/Loader";
 import gsap from "gsap";
 import Link from "next/link";
-import { Globe, MoveRight, Plug, AlertCircle, Truck, Receipt } from "lucide-react";
+import { Globe, MoveRight, Plug, AlertCircle, Truck, Receipt, FileSearch } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 
 import GetYourBillPopup from "@/components/GetYourBill";
 import NewConnectionPopup from "@/components/NewConnectionPopup";
 import EComplaintPopup from "@/components/EComplaintPopup";
 import BookTankerPopup from "@/components/BookTankerPopup";
+import TrackComplaintPopup from "@/components/TrackComplaintPopup";
 import ChatBot from "@/components/ChatBot";
 
 export default function Home({ hero }) {
@@ -34,6 +35,7 @@ export default function Home({ hero }) {
   const [showNewConnectionPopup, setShowNewConnectionPopup] = useState(false);
   const [showEComplaintPopup, setShowEComplaintPopup] = useState(false);
   const [showBookTankerPopup, setShowBookTankerPopup] = useState(false);
+  const [showTrackComplaintPopup, setShowTrackComplaintPopup] = useState(false);
 
   useEffect(() => {
     const loaderTimeline = gsap.timeline({ onComplete: () => setLoading(false) });
@@ -134,6 +136,16 @@ export default function Home({ hero }) {
             <Receipt size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
             <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{t("services.getYourBill")}</span>
           </button>
+
+          {/* Track Complaint */}
+          <button
+            onClick={() => setShowTrackComplaintPopup(true)}
+            className="group flex flex-col items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-cyan-400/30 bg-white/5 text-cyan-300 backdrop-blur-sm hover:bg-cyan-500/20 hover:text-white hover:border-cyan-400/50 transition-all duration-200 hover:scale-105"
+            title="Track Your Complaint"
+          >
+            <FileSearch size={28} className="sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
+            <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Track Complaint</span>
+          </button>
         </div>
 
         {/* Popups */}
@@ -152,6 +164,10 @@ export default function Home({ hero }) {
         <GetYourBillPopup
           open={showBillPopup}
           onClose={() => setShowBillPopup(false)}
+        />
+        <TrackComplaintPopup
+          open={showTrackComplaintPopup}
+          onClose={() => setShowTrackComplaintPopup(false)}
         />
 
         {/* Glass Panel */}

@@ -2,6 +2,15 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { MoveRight, X } from "lucide-react";
+import {
+  validateName,
+  validatePhone,
+  validateEmail,
+  validateAddress,
+  validateLandmark,
+  validateDescription,
+  validateCNIC,
+} from "@/lib/validations/complaintValidations";
 
 export default function NewConnectionPopup({ open, onClose }) {
   const [formData, setFormData] = useState({
@@ -19,9 +28,10 @@ export default function NewConnectionPopup({ open, onClose }) {
     residential_type: "",
     shops_count: "",
     business_nature: "",
-    image: null,
+    title: "",
   });
 
+  const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -39,7 +49,7 @@ export default function NewConnectionPopup({ open, onClose }) {
     { type_id: 5, subtype_id: 102, name: "New Bulk Connection", title: "New Bulk Connection" },
   ];
 
-  // Hardcoded towns list (same as EComplaintPopup)
+  // Hardcoded towns list
   const hardcodedTowns = [
     { id: 1, name: "BALDIA TOWN" },
     { id: 2, name: "CHANESAR TOWN" },
@@ -76,7 +86,6 @@ export default function NewConnectionPopup({ open, onClose }) {
       setTowns(hardcodedTowns);
       resetForm();
       
-      // Wait for reCAPTCHA to load
       if (typeof window !== "undefined" && window.grecaptcha) {
         loadRecaptcha();
       } else {
@@ -135,15 +144,21 @@ export default function NewConnectionPopup({ open, onClose }) {
       residential_type: "",
       shops_count: "",
       business_nature: "",
-      image: null,
+      title: "",
     });
     setSubTowns([]);
     setError("");
+    setFieldErrors({});
     setSuccess(false);
   };
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
+    
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => ({ ...prev, [name]: "" }));
+    }
     
     if (name === "town_id") {
       setFormData(prev => ({ ...prev, [name]: value, sub_town_id: "" }));
@@ -162,8 +177,16 @@ export default function NewConnectionPopup({ open, onClose }) {
           title: selected.title
         }));
       }
+    } else if (name === "customer_name") {
+      // Limit to 25 characters
+      const limitedValue = value.slice(0, 25);
+      setFormData(prev => ({ ...prev, [name]: limitedValue }));
+    } else if (name === "landmark") {
+      // Limit to 20 characters
+      const limitedValue = value.slice(0, 20);
+      setFormData(prev => ({ ...prev, [name]: limitedValue }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: files ? files[0] : value }));
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -185,9 +208,53 @@ export default function NewConnectionPopup({ open, onClose }) {
     }
   };
 
+  const validateForm = () => {
+    const errors = {};
+    
+    const nameError = validateName(formData.customer_name);
+    if (nameError) errors.customer_name = nameError;
+    
+    const cnicError = validateCNIC(formData.customer_cnic);
+    if (cnicError) errors.customer_cnic = cnicError;
+    
+    const phoneError = validatePhone(formData.phone);
+    if (phoneError) errors.phone = phoneError;
+    
+    const emailError = validateEmail(formData.email);
+    if (emailError) errors.email = emailError;
+    
+    const addressError = validateAddress(formData.address);
+    if (addressError) errors.address = addressError;
+    
+    const landmarkError = validateLandmark(formData.landmark);
+    if (landmarkError) errors.landmark = landmarkError;
+    
+    if (formData.description) {
+      const descError = validateDescription(formData.description);
+      if (descError) errors.description = descError;
+    }
+    
+    if (!formData.town_id) errors.town_id = "Please select a town";
+    if (!formData.sub_town_id) errors.sub_town_id = "Please select UC / Mohalla";
+    if (!formData.type_id || !formData.subtype_id) errors.connectionType = "Please select connection type";
+    
+    if (isCommercial && !formData.business_nature) {
+      errors.business_nature = "Nature of business is required for commercial connections";
+    }
+    
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    
+    if (!validateForm()) {
+      setError("Please fix the errors in the form");
+      return;
+    }
+    
     setSubmitting(true);
 
     // Get reCAPTCHA token
@@ -210,12 +277,16 @@ export default function NewConnectionPopup({ open, onClose }) {
       }
     }
 
+    // Count words in description
+    const words = formData.description.trim().split(/\s+/).filter(word => word.length > 0);
+    const descriptionText = words.slice(0, 250).join(" ");
+
     const payload = new FormData();
     payload.append("town_id", formData.town_id);
     payload.append("sub_town_id", formData.sub_town_id);
     payload.append("type_id", formData.type_id);
     payload.append("subtype_id", formData.subtype_id);
-    payload.append("description", formData.description ? formData.description.substring(0, 350) : "New connection request");
+    payload.append("description", descriptionText ? descriptionText.substring(0, 350) : "New connection request");
     payload.append("customer_name", formData.customer_name);
     payload.append("phone", formData.phone);
     payload.append("customer_cnic", formData.customer_cnic);
@@ -228,7 +299,6 @@ export default function NewConnectionPopup({ open, onClose }) {
     if (formData.shops_count) payload.append("shops_count", formData.shops_count);
     if (formData.business_nature) payload.append("business_nature", formData.business_nature);
     if (formData.title) payload.append("title", formData.title);
-    if (formData.image) payload.append("image", formData.image);
 
     try {
       const res = await fetch("/api/kwsc/complaint", {
@@ -261,6 +331,7 @@ export default function NewConnectionPopup({ open, onClose }) {
   if (!open) return null;
 
   const isCommercial = formData.type_id === "5" && (formData.subtype_id === "95" || formData.subtype_id === "102");
+  const wordCount = formData.description.trim().split(/\s+/).filter(word => word.length > 0).length;
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start pt-20 justify-center z-[100] p-4 overflow-y-auto">
@@ -274,17 +345,20 @@ export default function NewConnectionPopup({ open, onClose }) {
           <X size={24} />
         </button>
 
-        {/* Content */}
+        {/* HEADER BANNER */}
+        <div className="w-full bg-gradient-to-r from-blue-700 to-blue-900 py-8 sm:py-12 shadow-lg">
+          <div className="max-w-5xl mx-auto text-center px-6">
+            <h1 className="text-3xl sm:text-4xl font-semibold text-white tracking-wide">
+              Apply for New Connection
+            </h1>
+            <p className="text-blue-200 mt-2 text-base sm:text-lg">
+              Karachi Water & Sewerage Corporation – Customer Facilitation Portal
+            </p>
+          </div>
+        </div>
+
+        {/* FORM CONTAINER */}
         <div className="p-6 sm:p-10">
-          {/* Title */}
-          <h1 className="text-3xl sm:text-4xl font-semibold mb-2 text-blue-900 pr-10">
-            Apply for New Water Connection
-          </h1>
-
-          <p className="text-gray-600 mb-10 text-lg">
-            Fill out the form below to submit your request for a new KW&SC water connection.
-          </p>
-
           {success && (
             <div className="mb-6 p-4 bg-green-100 text-green-800 rounded-md border border-green-200 text-center">
               ✅ Your new connection request has been submitted successfully.
@@ -297,7 +371,6 @@ export default function NewConnectionPopup({ open, onClose }) {
             </div>
           )}
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Applicant Name */}
             <div className="flex flex-col gap-2">
@@ -307,12 +380,16 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="customer_name"
                 value={formData.customer_name}
                 onChange={handleChange}
-                required
-                maxLength={255}
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
-                placeholder="Enter your full name"
+                maxLength={25}
+                placeholder="Enter your full name (max 25 characters)"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.customer_name ? "border-red-300" : "border-gray-300"}`}
               />
+              {fieldErrors.customer_name && (
+                <p className="text-xs text-red-600">{fieldErrors.customer_name}</p>
+              )}
+              <p className="text-xs text-gray-500">{formData.customer_name.length}/25 characters</p>
             </div>
 
             {/* CNIC */}
@@ -323,12 +400,15 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="customer_cnic"
                 value={formData.customer_cnic}
                 onChange={handleChange}
-                required
                 maxLength={15}
                 placeholder="42101-0000000-0"
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.customer_cnic ? "border-red-300" : "border-gray-300"}`}
               />
+              {fieldErrors.customer_cnic && (
+                <p className="text-xs text-red-600">{fieldErrors.customer_cnic}</p>
+              )}
             </div>
 
             {/* Contact */}
@@ -339,12 +419,14 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                required
-                maxLength={20}
-                placeholder="03001234567"
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
+                placeholder="021-12345678 or +92-21-12345678"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.phone ? "border-red-300" : "border-gray-300"}`}
               />
+              {fieldErrors.phone && (
+                <p className="text-xs text-red-600">{fieldErrors.phone}</p>
+              )}
             </div>
 
             {/* Email */}
@@ -355,11 +437,14 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                maxLength={255}
                 placeholder="your@email.com"
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.email ? "border-red-300" : "border-gray-300"}`}
               />
+              {fieldErrors.email && (
+                <p className="text-xs text-red-600">{fieldErrors.email}</p>
+              )}
             </div>
 
             {/* Address */}
@@ -369,13 +454,16 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                required
                 rows={3}
                 maxLength={500}
                 placeholder="Enter complete property address"
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
-              ></textarea>
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.address ? "border-red-300" : "border-gray-300"}`}
+              />
+              {fieldErrors.address && (
+                <p className="text-xs text-red-600">{fieldErrors.address}</p>
+              )}
             </div>
 
             {/* Town + UC */}
@@ -385,15 +473,18 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="town_id"
                 value={formData.town_id}
                 onChange={handleChange}
-                required
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.town_id ? "border-red-300" : "border-gray-300"}`}
               >
                 <option value="">Select Town</option>
                 {towns.map(t => (
                   <option key={t.id} value={t.id}>{t.name}</option>
                 ))}
               </select>
+              {fieldErrors.town_id && (
+                <p className="text-xs text-red-600">{fieldErrors.town_id}</p>
+              )}
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-gray-700">UC / Mohalla *</label>
@@ -401,16 +492,19 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="sub_town_id"
                 value={formData.sub_town_id}
                 onChange={handleChange}
-                required
                 disabled={!formData.town_id || loadingSubTowns}
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700 disabled:opacity-50"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700 disabled:opacity-50
+                           ${fieldErrors.sub_town_id ? "border-red-300" : "border-gray-300"}`}
               >
                 <option value="">{loadingSubTowns ? "Loading..." : "Select UC / Mohalla"}</option>
                 {subTowns.map(st => (
                   <option key={st.id} value={st.id}>{st.title}</option>
                 ))}
               </select>
+              {fieldErrors.sub_town_id && (
+                <p className="text-xs text-red-600">{fieldErrors.sub_town_id}</p>
+              )}
             </div>
 
             {/* Landmark */}
@@ -421,12 +515,16 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="landmark"
                 value={formData.landmark}
                 onChange={handleChange}
-                required
-                maxLength={255}
-                placeholder="e.g. Near water tank, park, etc."
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
+                maxLength={20}
+                placeholder="e.g. Near water tank, park, etc. (15-20 characters)"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.landmark ? "border-red-300" : "border-gray-300"}`}
               />
+              {fieldErrors.landmark && (
+                <p className="text-xs text-red-600">{fieldErrors.landmark}</p>
+              )}
+              <p className="text-xs text-gray-500">{formData.landmark.length}/20 characters (min 15)</p>
             </div>
 
             {/* Connection Type */}
@@ -436,9 +534,9 @@ export default function NewConnectionPopup({ open, onClose }) {
                 name="connectionType"
                 value={connectionTypes.find(ct => ct.type_id.toString() === formData.type_id && ct.subtype_id.toString() === formData.subtype_id)?.name || ""}
                 onChange={handleChange}
-                required
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.connectionType ? "border-red-300" : "border-gray-300"}`}
               >
                 <option value="">Select Connection Type</option>
                 <option value="New Water Connection">New Water Connection</option>
@@ -446,6 +544,9 @@ export default function NewConnectionPopup({ open, onClose }) {
                 <option value="New Commercial Connection">New Commercial Connection</option>
                 <option value="New Bulk Connection">New Bulk Connection</option>
               </select>
+              {fieldErrors.connectionType && (
+                <p className="text-xs text-red-600">{fieldErrors.connectionType}</p>
+              )}
             </div>
 
             {/* Residential Type (for residential connections) */}
@@ -475,12 +576,15 @@ export default function NewConnectionPopup({ open, onClose }) {
                   name="business_nature"
                   value={formData.business_nature}
                   onChange={handleChange}
-                  required={isCommercial}
                   maxLength={255}
                   placeholder="e.g. Office, Shop, Factory"
-                  className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                             focus:outline-none focus:ring-2 focus:ring-blue-700"
+                  className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                             focus:outline-none focus:ring-2 focus:ring-blue-700
+                             ${fieldErrors.business_nature ? "border-red-300" : "border-gray-300"}`}
                 />
+                {fieldErrors.business_nature && (
+                  <p className="text-xs text-red-600">{fieldErrors.business_nature}</p>
+                )}
               </div>
             )}
 
@@ -508,26 +612,16 @@ export default function NewConnectionPopup({ open, onClose }) {
                 onChange={handleChange}
                 rows={3}
                 maxLength={350}
-                placeholder="Additional details about your connection request (optional)"
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none focus:ring-2 focus:ring-blue-700"
-              ></textarea>
-              <p className="text-xs text-gray-500">{formData.description.length}/350 characters</p>
-            </div>
-
-            {/* Upload Documents */}
-            <div className="flex flex-col gap-2 md:col-span-2">
-              <label className="text-sm font-medium text-gray-700">Upload Required Documents (optional)</label>
-              <input
-                type="file"
-                name="image"
-                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
-                onChange={handleChange}
-                className="px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900
-                           focus:outline-none"
+                placeholder="Additional details about your connection request (max 250 words)"
+                className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
+                           focus:outline-none focus:ring-2 focus:ring-blue-700
+                           ${fieldErrors.description ? "border-red-300" : "border-gray-300"}`}
               />
+              {fieldErrors.description && (
+                <p className="text-xs text-red-600">{fieldErrors.description}</p>
+              )}
               <p className="text-xs text-gray-500">
-                Allowed formats: JPEG, JPG, PNG, GIF, WEBP, SVG — <strong>Max size: 2MB</strong>
+                {wordCount}/250 words, {formData.description.length}/350 characters
               </p>
             </div>
 
