@@ -177,6 +177,27 @@ export default function NewConnectionPopup({ open, onClose }) {
           title: selected.title
         }));
       }
+    } else if (name === "customer_cnic") {
+      // Auto-format CNIC: XXXXX-XXXXXXX-X
+      // Remove all non-digits
+      const digitsOnly = value.replace(/\D/g, "");
+      
+      // Limit to 13 digits
+      const limitedDigits = digitsOnly.slice(0, 13);
+      
+      // Format with dashes
+      let formatted = "";
+      if (limitedDigits.length > 0) {
+        formatted = limitedDigits.slice(0, 5);
+        if (limitedDigits.length > 5) {
+          formatted += "-" + limitedDigits.slice(5, 12);
+          if (limitedDigits.length > 12) {
+            formatted += "-" + limitedDigits.slice(12, 13);
+          }
+        }
+      }
+      
+      setFormData(prev => ({ ...prev, [name]: formatted }));
     } else if (name === "customer_name") {
       // Limit to 25 characters
       const limitedValue = value.slice(0, 25);
@@ -401,7 +422,7 @@ export default function NewConnectionPopup({ open, onClose }) {
                 value={formData.customer_cnic}
                 onChange={handleChange}
                 maxLength={15}
-                placeholder="42101-0000000-0"
+                placeholder="12345-1234567-8"
                 className={`px-4 py-3 rounded-lg border bg-gray-50 text-gray-900
                            focus:outline-none focus:ring-2 focus:ring-blue-700
                            ${fieldErrors.customer_cnic ? "border-red-300" : "border-gray-300"}`}
@@ -409,6 +430,7 @@ export default function NewConnectionPopup({ open, onClose }) {
               {fieldErrors.customer_cnic && (
                 <p className="text-xs text-red-600">{fieldErrors.customer_cnic}</p>
               )}
+              <p className="text-xs text-gray-500">Format: XXXXX-XXXXXXX-X (13 digits)</p>
             </div>
 
             {/* Contact */}
