@@ -27,7 +27,6 @@ export default function GetYourBill({ open, onClose }) {
   const handleClose = () => {
     setConsumerId("");
     setError(null);
-    setPaymentSuccess(false);
     onClose();
   };
 

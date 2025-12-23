@@ -6,6 +6,7 @@ import CookieConsent from "@/components/CookieConsent";
 import ThemeProvider from "@/components/ThemeProvider";
 import I18nProvider from "@/components/I18nProvider";
 import GoogleTranslate from "@/components/GoogleTranslate";
+import ReCaptchaLoader from "@/components/ReCaptchaLoader";
 
 
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
             </ConditionalNavbarFooter>
             <CookieConsent />
             <GoogleTranslate />
+            <ReCaptchaLoader />
           </I18nProvider>
         </ThemeProvider>
       </body>
