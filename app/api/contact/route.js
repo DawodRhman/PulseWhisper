@@ -5,10 +5,19 @@ import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
 import content from "@/data/static/content";
 import { resolveLocalizedContent } from "@/lib/utils";
+import { z } from "zod";
 
 export const dynamic = "force-dynamic";
 
 import { CONTACT_TRANSLATIONS } from "@/lib/translations";
+
+const contactSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email("Invalid email address").optional().or(z.literal("")),
+  mobile: z.string().optional(),
+  category: z.string().optional(),
+  message: z.string().min(1, "Message is required"),
+});
 
 function getHeroContent(lang = 'en') {
   const translations = CONTACT_TRANSLATIONS[lang] || CONTACT_TRANSLATIONS.en;
@@ -139,25 +148,27 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, email, mobile, category, message } = body;
 
-    if (!message) {
-      return NextResponse.json({ error: "Message is required" }, { status: 400 });
-    }
+    // Validate with Zod
+    const { name, email, mobile, category, message } = contactSchema.parse(body);
 
     await prisma.feedbackSubmission.create({
       data: {
         name,
         email,
         subject: category,
-        message: `${message} \n\n Mobile: ${mobile}`,
+        message: `${message} \n\n Mobile: ${mobile || 'Not provided'}`,
         source: "Contact Page",
       },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: "Invalid form data", details: error.flatten() }, { status: 400 });
+    }
     console.error("POST /api/contact", error);
     return NextResponse.json({ error: "Failed to submit feedback" }, { status: 500 });
   }
 }
+

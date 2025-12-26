@@ -28,6 +28,7 @@ const ROLE_OPTIONS = ROLE_CATALOG.map((role) => ({
   label: role.label,
   value: role.type,
   description: role.description,
+  restricted: role.restricted,
 }));
 
 
@@ -367,6 +368,7 @@ export default function UserManagementPanel() {
                         className="h-3.5 w-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="font-medium">{role.label}</span>
+                      {role.restricted && <span className="text-[10px] bg-amber-100 text-amber-700 px-1 rounded">Restricted</span>}
                     </label>
                   ))}
                 </div>
