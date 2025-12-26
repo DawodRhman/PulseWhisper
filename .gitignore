@@ -71,7 +71,7 @@ scripts/
 prisma/seed*.js
 
 # markdown
-*.md
+# *.md (un-ignored)
 
 # cache
 /data/cache/
