@@ -8,7 +8,7 @@ function isVideo(asset) {
   return asset.mimeType?.startsWith("video/") || asset.url?.match(/\.(mp4|webm|ogg)$/i);
 }
 
-export default function MediaPicker({ label, value, onChange, category, disabled, accept }) {
+export default function MediaPicker({ label, value, initialUrl, onChange, category, disabled, accept }) {
   const { assets, uploadAsset, actionState } = useAdminMediaLibrary();
   const [mode, setMode] = useState("select"); // "select" | "upload"
   const [uploadFile, setUploadFile] = useState(null);
@@ -21,6 +21,11 @@ export default function MediaPicker({ label, value, onChange, category, disabled
   }, [assets, category]);
 
   const selectedAsset = assets.find((a) => a.id === value);
+  const displayUrl = selectedAsset?.url || (value ? initialUrl : null);
+  const displayLabel = selectedAsset?.label || (value ? "Existing Media" : "");
+  const displayMime = selectedAsset?.mimeType || "image/unknown";
+
+  const isVideoContent = selectedAsset ? isVideo(selectedAsset) : displayUrl?.match(/\.(mp4|webm|ogg)$/i);
 
   async function handleUpload(e) {
     e.preventDefault();
@@ -32,7 +37,7 @@ export default function MediaPicker({ label, value, onChange, category, disabled
         label: uploadLabel || uploadFile.name,
         category: category || "general",
       });
-      
+
       if (record) {
         onChange(record.id, record);
         setMode("select");
@@ -52,18 +57,16 @@ export default function MediaPicker({ label, value, onChange, category, disabled
           <button
             type="button"
             onClick={() => setMode("select")}
-            className={`px-2 py-1 text-[10px] font-medium rounded-md transition ${
-              mode === "select" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-            }`}
+            className={`px-2 py-1 text-[10px] font-medium rounded-md transition ${mode === "select" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+              }`}
           >
             Select
           </button>
           <button
             type="button"
             onClick={() => setMode("upload")}
-            className={`px-2 py-1 text-[10px] font-medium rounded-md transition ${
-              mode === "upload" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-            }`}
+            className={`px-2 py-1 text-[10px] font-medium rounded-md transition ${mode === "upload" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+              }`}
           >
             Upload
           </button>
@@ -87,20 +90,25 @@ export default function MediaPicker({ label, value, onChange, category, disabled
                 {asset.label || asset.url}
               </option>
             ))}
+            {!selectedAsset && value && initialUrl && (
+              <option value={value} disabled>
+                (Preserved) Existing Asset
+              </option>
+            )}
           </select>
 
-          {selectedAsset && (
+          {displayUrl && (
             <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
               <div className="aspect-video w-full bg-slate-200">
-                {isVideo(selectedAsset) ? (
-                  <video src={selectedAsset.url} className="h-full w-full object-cover" controls />
+                {isVideoContent ? (
+                  <video src={displayUrl} className="h-full w-full object-cover" controls />
                 ) : (
-                  <img src={selectedAsset.url} alt="" className="h-full w-full object-cover" />
+                  <img src={displayUrl} alt="" className="h-full w-full object-cover" />
                 )}
               </div>
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-                <p className="truncate text-xs font-medium text-white">{selectedAsset.label}</p>
-                <p className="truncate text-[10px] text-slate-300">{selectedAsset.mimeType}</p>
+                <p className="truncate text-xs font-medium text-white">{displayLabel}</p>
+                <p className="truncate text-[10px] text-slate-300">{displayMime}</p>
               </div>
               <button
                 type="button"
@@ -124,7 +132,7 @@ export default function MediaPicker({ label, value, onChange, category, disabled
               className="w-full text-xs text-slate-500 file:mr-2 file:rounded-full file:border-0 file:bg-slate-200 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-slate-700 hover:file:bg-slate-300"
             />
           </div>
-          
+
           {uploadFile && (
             <div>
               <label className="block text-[10px] font-medium text-slate-500 mb-1">Label (Optional)</label>
@@ -148,9 +156,9 @@ export default function MediaPicker({ label, value, onChange, category, disabled
             {actionState.pending ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
             Upload & Select
           </button>
-          
+
           {actionState.error && (
-             <p className="text-[10px] text-rose-500">{actionState.error.message || "Upload failed"}</p>
+            <p className="text-[10px] text-rose-500">{actionState.error.message || "Upload failed"}</p>
           )}
         </div>
       )}

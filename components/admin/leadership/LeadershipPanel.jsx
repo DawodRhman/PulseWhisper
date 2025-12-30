@@ -296,10 +296,10 @@ export default function LeadershipPanel() {
       <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-             <h3 className="text-lg font-semibold text-slate-900">Leadership Roster</h3>
-             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-               {leadershipCount} Members
-             </span>
+            <h3 className="text-lg font-semibold text-slate-900">Leadership Roster</h3>
+            <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+              {leadershipCount} Members
+            </span>
           </div>
 
           {loading ? (
@@ -326,7 +326,7 @@ export default function LeadershipPanel() {
                         <h4 className="font-semibold text-slate-900">{member.name}</h4>
                         <p className="text-sm text-slate-600">{member.designation}</p>
                         {member.bio && <p className="text-xs text-slate-500 line-clamp-2">{member.bio}</p>}
-                        
+
                         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
                           <span className="rounded bg-slate-100 px-1.5 py-0.5 font-medium text-slate-600">
                             Priority {member.priority ?? 0}
@@ -411,25 +411,22 @@ export default function LeadershipPanel() {
             <div className="flex rounded-lg bg-slate-100 p-1">
               <button
                 onClick={() => setActiveTab("create")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Create
               </button>
               <button
                 onClick={() => setActiveTab("edit")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Edit
               </button>
               <button
                 onClick={() => setActiveTab("seo")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "seo" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "seo" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 SEO
               </button>
@@ -446,34 +443,35 @@ export default function LeadershipPanel() {
                 <Input label="Designation" value={createForm.designation} onChange={(e) => setCreateForm({ ...createForm, designation: e.target.value })} required />
                 <TextArea label="Bio" value={createForm.bio} onChange={(e) => setCreateForm({ ...createForm, bio: e.target.value })} placeholder="1-2 sentences" />
                 <Input label="Priority" type="number" value={createForm.priority} onChange={(e) => setCreateForm({ ...createForm, priority: e.target.value })} placeholder="0 renders first" />
-                
+
                 <MediaPicker
                   label="Portrait Image"
                   category="leadership"
                   value={createForm.mediaId}
+                  initialUrl={createForm.mediaUrl}
                   onChange={(id, asset) => setCreateForm(prev => ({
-                      ...prev,
-                      mediaId: id,
-                      mediaUrl: asset ? asset.url : prev.mediaUrl
+                    ...prev,
+                    mediaId: id,
+                    mediaUrl: asset ? asset.url : prev.mediaUrl
                   }))}
                   disabled={actionState.pending}
                 />
                 <Input label="Or Remote Media URL" type="url" value={createForm.mediaUrl} onChange={(e) => setCreateForm({ ...createForm, mediaUrl: e.target.value })} placeholder="https://..." />
-                
+
                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Social Links</p>
                   <Input label="LinkedIn URL" type="url" value={createForm.socials.linkedin} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, linkedin: e.target.value } })} />
                   <Input label="Twitter URL" type="url" value={createForm.socials.twitter} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, twitter: e.target.value } })} />
                   <Input label="Email" type="email" value={createForm.socials.email} onChange={(e) => setCreateForm({ ...createForm, socials: { ...createForm.socials, email: e.target.value } })} />
                 </div>
-                
+
                 <div className="pt-2 border-t border-slate-100">
-                   <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
-                   <SeoFields
-                      value={createForm.seo}
-                      onChange={(seo) => setCreateForm((prev) => ({ ...prev, seo }))}
-                      disabled={actionState.pending}
-                    />
+                  <p className="text-xs font-semibold text-slate-500 mb-2">Initial SEO (Optional)</p>
+                  <SeoFields
+                    value={createForm.seo}
+                    onChange={(seo) => setCreateForm((prev) => ({ ...prev, seo }))}
+                    disabled={actionState.pending}
+                  />
                 </div>
               </ActionForm>
             )}
@@ -486,28 +484,29 @@ export default function LeadershipPanel() {
                 disabled={actionState.pending || !members.length}
               >
                 <Select label="Select Member" value={updateForm.memberId} onChange={(e) => handleUpdateSelect(e.target.value)} required>
-                   <option value="" disabled>Select Member</option>
-                   {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+                  <option value="" disabled>Select Member</option>
+                  {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
                 </Select>
-                
+
                 <Input label="Full Name" value={updateForm.name} onChange={(e) => setUpdateForm({ ...updateForm, name: e.target.value })} disabled={!updateForm.memberId} required />
                 <Input label="Designation" value={updateForm.designation} onChange={(e) => setUpdateForm({ ...updateForm, designation: e.target.value })} disabled={!updateForm.memberId} required />
                 <TextArea label="Bio" value={updateForm.bio} onChange={(e) => setUpdateForm({ ...updateForm, bio: e.target.value })} disabled={!updateForm.memberId} />
                 <Input label="Priority" type="number" value={updateForm.priority} onChange={(e) => setUpdateForm({ ...updateForm, priority: e.target.value })} disabled={!updateForm.memberId} />
-                
+
                 <MediaPicker
                   label="Portrait Image"
                   category="leadership"
                   value={updateForm.mediaId}
+                  initialUrl={updateForm.mediaUrl}
                   onChange={(id, asset) => setUpdateForm(prev => ({
-                      ...prev,
-                      mediaId: id,
-                      mediaUrl: asset ? asset.url : prev.mediaUrl
+                    ...prev,
+                    mediaId: id,
+                    mediaUrl: asset ? asset.url : prev.mediaUrl
                   }))}
                   disabled={!updateForm.memberId}
                 />
                 <Input label="Or Remote Media URL" type="url" value={updateForm.mediaUrl} onChange={(e) => setUpdateForm({ ...updateForm, mediaUrl: e.target.value })} disabled={!updateForm.memberId} />
-                
+
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -537,8 +536,8 @@ export default function LeadershipPanel() {
                 disabled={actionState.pending || !members.length}
               >
                 <Select label="Select Member" value={seoForm.memberId} onChange={(e) => handleSeoSelect(e.target.value)} required>
-                   <option value="" disabled>Select Member</option>
-                   {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+                  <option value="" disabled>Select Member</option>
+                  {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
                 </Select>
                 <SeoFields
                   value={seoForm.seo}
