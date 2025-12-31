@@ -82,7 +82,7 @@ export default function NewsUpdates({ isHomePage = false }) {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("updates");
 
-  /* ✅ FIXED EFFECT (NO INFINITE LOOP) */
+
   useEffect(() => {
     if (hookLoading) {
       setLoading(true);
@@ -126,7 +126,7 @@ export default function NewsUpdates({ isHomePage = false }) {
       <div className="max-w-7xl mx-auto px-4">
         {/* HEADER */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 md:mb-6">
             {t("news.latestNews")}
           </h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto"></div>

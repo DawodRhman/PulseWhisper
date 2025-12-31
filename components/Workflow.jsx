@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { useTranslation } from 'react-i18next';
 import {
+    CheckCircle,
     DollarSign,
     Droplets,
     Pipette,
@@ -19,12 +19,43 @@ const THEME_CLASSES = {
     blue: { text: "text-blue-700", bg: "bg-blue-700", border: "border-blue-700", shadow: "shadow-blue-700" },
 };
 
+const FALLBACK_STEPS = [
+    {
+        id: "01",
+        title: "Bulk Water Supply & Treatment",
+        subTitle:
+            "Managing the abstraction of raw water from primary sources (Indus River, Hub Dam), operating massive pumping systems, and treating water to potable standards for the entire metropolitan area.",
+        color: "cyan",
+    },
+    {
+        id: "02",
+        title: "Sewerage Infrastructure Management",
+        subTitle:
+            "Planning, operating, and maintaining the vast network of sewerage collectors, trunk mains, lifting/pumping stations, and ensuring proper disposal and treatment of wastewater and industrial effluent.",
+        color: "indigo",
+    },
+    {
+        id: "03",
+        title: "Distribution & Network Integrity",
+        subTitle:
+            "Managing the final distribution network, pipelines, and bulk transfer mains; focusing on reducing Non-Revenue Water (NRW) through leak detection, asset rehabilitation, and minimizing illegal connections.",
+        color: "emerald",
+    },
+    {
+        id: "04",
+        title: "Revenue, Customer & Governance",
+        subTitle:
+            "Ensuring financial sustainability through accurate metering, billing, and revenue collection. This role also includes effective customer grievance redressal and upholding institutional governance standards.",
+        color: "red",
+    },
+];
+
 // ... existing backend normalization function ...
-function normalizeSteps(steps, fallbackSteps) {
-    const base = Array.isArray(steps) && steps.length ? steps : fallbackSteps;
+function normalizeSteps(steps) {
+    const base = Array.isArray(steps) && steps.length ? steps : FALLBACK_STEPS;
     return base.map((step, index) => {
         const Icon = ICON_SET[index % ICON_SET.length];
-        const colorKey = step.color && THEME_CLASSES[step.color] ? step.color : fallbackSteps[index % fallbackSteps.length]?.color || "blue";
+        const colorKey = step.color && THEME_CLASSES[step.color] ? step.color : FALLBACK_STEPS[index % FALLBACK_STEPS.length]?.color || "blue";
         const theme = THEME_CLASSES[colorKey] || THEME_CLASSES.blue;
         return {
             id: String(index + 1).padStart(2, "0"),
@@ -39,36 +70,7 @@ function normalizeSteps(steps, fallbackSteps) {
 }
 
 const WorkFlow = ({ steps }) => {
-    const { t } = useTranslation();
-    
-    const FALLBACK_STEPS = [
-        {
-            id: "01",
-            title: t('workflow.step1.title'),
-            subTitle: t('workflow.step1.subtitle'),
-            color: "cyan",
-        },
-        {
-            id: "02",
-            title: t('workflow.step2.title'),
-            subTitle: t('workflow.step2.subtitle'),
-            color: "indigo",
-        },
-        {
-            id: "03",
-            title: t('workflow.step3.title'),
-            subTitle: t('workflow.step3.subtitle'),
-            color: "emerald",
-        },
-        {
-            id: "04",
-            title: t('workflow.step4.title'),
-            subTitle: t('workflow.step4.subtitle'),
-            color: "red",
-        },
-    ];
-
-    const processSteps = useMemo(() => normalizeSteps(steps, FALLBACK_STEPS), [steps, FALLBACK_STEPS]);
+    const processSteps = useMemo(() => normalizeSteps(steps), [steps]);
     const [activeStep, setActiveStep] = useState(processSteps[0].id);
     const stepRefs = useRef([]);
     const observerRef = useRef(null);
@@ -142,8 +144,10 @@ const WorkFlow = ({ steps }) => {
 
                 {/* Header */}
                 <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
+                    {/* Light/Corporate Header Chip */}
+                   
                     {/* Darker, high-contrast header text */}
-                    <h2 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-blue-700 drop-shadow-sm">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-gray-900 to-blue-700 drop-shadow-sm tracking-tight">
                         Our <span className="text-blue-700">Commitment</span>
                     </h2>
                     <p className="max-w-2xl sm:max-w-3xl mx-auto mt-3 sm:mt-4 md:mt-5 text-sm sm:text-base md:text-lg text-gray-600">
@@ -199,7 +203,7 @@ const WorkFlow = ({ steps }) => {
                                         >
                                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4 mb-2 sm:mb-3">
                                                 {/* Title Text */}
-                                                <h4 className={`text-xl font-bold transition-colors duration-500 ${isActive ? process.color : 'text-gray-900'}`}>{process.title}</h4>
+                                                <h4 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold transition-colors duration-500 ${isActive ? process.color : 'text-gray-900'}`}>{process.title}</h4>
                                                 {/* Number */}
                                                 <span className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold transition-colors duration-500 flex-shrink-0 ${isActive ? process.color : 'text-gray-400'}`}>{process.id}</span>
                                             </div>
@@ -218,4 +222,3 @@ const WorkFlow = ({ steps }) => {
 };
 
 export default WorkFlow;
-

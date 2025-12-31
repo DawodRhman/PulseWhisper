@@ -102,7 +102,7 @@ export default function AchievementComponent({ items }) {
         {/* Section Header */}
         <div className="mb-12 md:mb-16 text-center">
           <Fade direction="down" triggerOnce duration={800}>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-blue-500 tracking-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-4">
               Our Achievements
             </h2>
             <p className="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light">
