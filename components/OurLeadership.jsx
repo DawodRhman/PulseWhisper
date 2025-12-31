@@ -69,13 +69,40 @@ export default function OurLeadership({ team, insights, title, subtitle }) {
   const roster = useMemo(() => {
     const sourceData = fetchedTeam || team;
     const list = Array.isArray(sourceData) && sourceData.length ? sourceData : FALLBACK_TEAM;
-    return list.map((member, index) => ({
+
+    // Map first to ensure structure
+    const mapped = list.map((member, index) => ({
       id: member.id || member.name || `leader-${index}`,
       name: member.name,
       role: member.designation || member.role,
       bio: member.bio,
+      priority: member.priority || 0,
       image: member.portrait?.url || member.media?.url || member.img || PLACEHOLDER_PORTRAIT,
     }));
+
+    // Sort: items with priority > 0 come first (sorted ascending), then items with 0/null
+    return mapped.sort((a, b) => {
+      const pA = a.priority;
+      const pB = b.priority;
+
+      // If both have priority > 0, sort ascending (1, 2, 3...)
+      if (pA > 0 && pB > 0) {
+        return pA - pB;
+      }
+
+      // If A has priority but B doesn't (or is 0), A comes first
+      if (pA > 0 && (!pB || pB === 0)) {
+        return -1;
+      }
+
+      // If B has priority but A doesn't (or is 0), B comes first
+      if (pB > 0 && (!pA || pA === 0)) {
+        return 1;
+      }
+
+      // Both are 0 or null -> keep original order (or "random" as requested)
+      return 0;
+    });
   }, [team, fetchedTeam]);
 
   const insightCards = Array.isArray(insights) && insights.length ? insights : FALLBACK_INSIGHTS;
