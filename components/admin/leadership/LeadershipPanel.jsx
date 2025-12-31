@@ -452,7 +452,7 @@ export default function LeadershipPanel() {
                   onChange={(id, asset) => setCreateForm(prev => ({
                     ...prev,
                     mediaId: id,
-                    mediaUrl: asset ? asset.url : prev.mediaUrl
+                    mediaUrl: asset ? "" : prev.mediaUrl
                   }))}
                   disabled={actionState.pending}
                 />
@@ -501,7 +501,7 @@ export default function LeadershipPanel() {
                   onChange={(id, asset) => setUpdateForm(prev => ({
                     ...prev,
                     mediaId: id,
-                    mediaUrl: asset ? asset.url : prev.mediaUrl
+                    mediaUrl: asset ? "" : prev.mediaUrl
                   }))}
                   disabled={!updateForm.memberId}
                 />

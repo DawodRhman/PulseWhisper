@@ -228,6 +228,7 @@ model MediaAsset {
   checksum           String?
   category           String?
   altText            String?
+  data               Bytes? // Binary storage for persistence
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   downloads          DownloadResource[]

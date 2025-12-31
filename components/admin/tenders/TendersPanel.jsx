@@ -493,7 +493,7 @@ export default function TendersPanel() {
                         value={field.value}
                         onChange={(id, asset) => {
                           field.onChange(id);
-                          setAttachmentValue("mediaUrl", asset?.url || "");
+                          setAttachmentValue("mediaUrl", "");
                         }}
                         category="tenders"
                         accept="application/pdf,image/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"

@@ -184,14 +184,25 @@ export async function POST(request) {
       const label = formData.get("label")?.toString().trim() || file.name || "Uploaded media";
       const altTextValue = formData.get("altText");
       const altText = altTextValue ? altTextValue.toString() : null;
-      const saved = await saveUploadedFile(file, { category });
-      const metadata = saved.metadata;
+
+      // Read file buffer
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const metadata = describeBuffer(buffer, { filename: file.name });
+
+      // Generate ID and URL
+      const id = crypto.randomUUID();
+      const url = `/api/assets/${id}`;
+
+      // Store in DB
       record = await prisma.mediaAsset.create({
         data: {
-          url: saved.url,
+          id,
+          url,
           label,
           category,
           altText,
+          data: buffer, // Store binary data
           mimeType: metadata.mimeType,
           fileSize: metadata.fileSize,
           width: metadata.width,

@@ -227,10 +227,10 @@ export default function NewsPanel() {
       <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-             <h3 className="text-lg font-semibold text-slate-900">Newsroom</h3>
-             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
-               {articles.length} Articles
-             </span>
+            <h3 className="text-lg font-semibold text-slate-900">Newsroom</h3>
+            <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+              {articles.length} Articles
+            </span>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -273,7 +273,7 @@ export default function NewsPanel() {
                       <h4 className="text-lg font-bold text-slate-900">{article.title}</h4>
                       {article.summary && <p className="text-sm text-slate-600 line-clamp-2">{article.summary}</p>}
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <select
                         value={article.status}
@@ -356,7 +356,7 @@ export default function NewsPanel() {
                   )}
                 </ul>
               </div>
-              
+
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tags</p>
@@ -394,17 +394,15 @@ export default function NewsPanel() {
             <div className="flex rounded-lg bg-slate-100 p-1">
               <button
                 onClick={() => setActiveTab("create")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "create" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Create
               </button>
               <button
                 onClick={() => setActiveTab("edit")}
-                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${
-                  activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                }`}
+                className={`flex-1 rounded-md py-1.5 text-xs font-medium transition ${activeTab === "edit" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
               >
                 Edit
               </button>
@@ -442,7 +440,7 @@ export default function NewsPanel() {
                   <Input label="Title" value={articleForm.title} onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })} required />
                   <TextArea label="Summary" value={articleForm.summary} onChange={(e) => setArticleForm({ ...articleForm, summary: e.target.value })} required />
                   <TextArea label="Body (Markdown/HTML)" rows={6} value={articleForm.contentBody} onChange={(e) => setArticleForm({ ...articleForm, contentBody: e.target.value })} />
-                  
+
                   <Select label="Category" value={articleForm.categoryId} onChange={(e) => setArticleForm({ ...articleForm, categoryId: e.target.value })}>
                     <option value="">Unassigned</option>
                     {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -453,7 +451,7 @@ export default function NewsPanel() {
                   </Select>
 
                   <Input label="Published At" type="datetime-local" value={articleForm.publishedAt} onChange={(e) => setArticleForm({ ...articleForm, publishedAt: e.target.value })} />
-                  
+
                   <div className="space-y-3 pt-2 border-t border-slate-100">
                     <p className="text-xs font-semibold text-slate-500">Hero Media</p>
                     <Input label="Remote URL" type="url" value={articleForm.heroMediaUrl} onChange={(e) => setArticleForm({ ...articleForm, heroMediaUrl: e.target.value })} placeholder="https://..." />
@@ -465,7 +463,7 @@ export default function NewsPanel() {
                         setArticleForm((prev) => ({
                           ...prev,
                           heroMediaId: assetId || "",
-                          heroMediaUrl: asset ? asset.url : prev.heroMediaUrl,
+                          heroMediaUrl: asset ? "" : prev.heroMediaUrl,
                         }))
                       }
                       disabled={actionState.pending}
@@ -520,7 +518,7 @@ export default function NewsPanel() {
                 <Input label="Slug" value={articleUpdateForm.slug} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, slug: e.target.value })} disabled={!articleUpdateForm.id} />
                 <TextArea label="Summary" value={articleUpdateForm.summary} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, summary: e.target.value })} required disabled={!articleUpdateForm.id} />
                 <TextArea label="Body (Markdown/HTML)" rows={6} value={articleUpdateForm.contentBody} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, contentBody: e.target.value })} disabled={!articleUpdateForm.id} />
-                
+
                 <Select label="Category" value={articleUpdateForm.categoryId} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, categoryId: e.target.value })} disabled={!articleUpdateForm.id}>
                   <option value="">Unassigned</option>
                   {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -531,7 +529,7 @@ export default function NewsPanel() {
                 </Select>
 
                 <Input label="Published At" type="datetime-local" value={articleUpdateForm.publishedAt} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, publishedAt: e.target.value })} disabled={!articleUpdateForm.id} />
-                
+
                 <div className="space-y-3 pt-2 border-t border-slate-100">
                   <p className="text-xs font-semibold text-slate-500">Hero Media</p>
                   <Input label="Remote URL" type="url" value={articleUpdateForm.heroMediaUrl} onChange={(e) => setArticleUpdateForm({ ...articleUpdateForm, heroMediaUrl: e.target.value })} placeholder="https://..." disabled={!articleUpdateForm.id} />
@@ -543,7 +541,7 @@ export default function NewsPanel() {
                       setArticleUpdateForm((prev) => ({
                         ...prev,
                         heroMediaId: assetId || "",
-                        heroMediaUrl: asset ? asset.url : prev.heroMediaUrl,
+                        heroMediaUrl: asset ? "" : prev.heroMediaUrl,
                       }))
                     }
                     disabled={actionState.pending || !articleUpdateForm.id}

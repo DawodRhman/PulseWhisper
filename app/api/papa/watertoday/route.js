@@ -14,6 +14,7 @@ const createSchema = z.object({
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
   seoKeywords: z.string().optional(),
+  mediaId: z.string().optional().nullable(),
 });
 
 const updateSchema = createSchema.partial().extend({
@@ -27,7 +28,8 @@ const deleteSchema = z.object({
 async function fetchWaterToday() {
   return await prisma.waterTodayUpdate.findMany({
     orderBy: { publishedAt: "desc" },
-    include: { seo: true },
+    orderBy: { publishedAt: "desc" },
+    include: { seo: true, media: true },
   });
 }
 

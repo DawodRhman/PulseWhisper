@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { SnapshotModule } from "@prisma/client";
 import prisma from "@/lib/prisma";
-import { resolveWithSnapshot } from "@/lib/cache";
 import { resolvePageSeo } from "@/lib/seo";
 import { autoTranslatePayload } from "@/lib/i18n/autoTranslate";
 
@@ -29,19 +27,11 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const lang = searchParams.get('lang') || 'en';
 
-    // Note: SnapshotModule.WATER_TODAY might not exist in your enum yet.
-    // If it doesn't, we can skip the snapshot wrapper or add it to the enum.
-    // For now, I'll fetch directly to avoid enum issues if it's missing.
-
-    let updates = [];
-    try {
-      updates = await prisma.waterTodayUpdate.findMany({
-        orderBy: { publishedAt: "desc" },
-        include: { media: true },
-      });
-    } catch (dbError) {
-      console.warn("⚠️ Database unreachable in Water Today API. Using empty list.");
-    }
+    // Fetch all updates (no filter)
+    const updates = await prisma.waterTodayUpdate.findMany({
+      orderBy: { publishedAt: "desc" },
+      include: { media: true },
+    });
 
     const hero = getHeroContent(lang);
 
@@ -62,7 +52,7 @@ export async function GET(request) {
 
     return NextResponse.json({ data: payload });
   } catch (error) {
-    console.error("/api/watertoday", error);
+    console.error("/api/watertoday Error:", error);
     return NextResponse.json({ error: "Unable to load Water Today data" }, { status: 500 });
   }
 }

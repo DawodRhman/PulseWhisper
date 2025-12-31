@@ -319,7 +319,7 @@ export default function ProjectsPanel() {
                       setProjectForm((prev) => ({
                         ...prev,
                         mediaId: assetId || "",
-                        mediaUrl: asset ? asset.url : prev.mediaUrl,
+                        mediaUrl: asset ? "" : prev.mediaUrl,
                       }))
                     }
                     disabled={actionState.pending}

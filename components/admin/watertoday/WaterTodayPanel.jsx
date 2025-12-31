@@ -4,6 +4,7 @@ import AdminHeader from "../shared/AdminHeader";
 import AdminDataTable from "../shared/AdminDataTable";
 import Modal from "../shared/Modal";
 import FormField, { Input, TextArea, SubmitButton } from "../shared/Form";
+import MediaPicker from "@/components/admin/media/MediaPicker";
 
 export default function WaterTodayPanel() {
   const [updates, setUpdates] = useState([]);
@@ -17,6 +18,8 @@ export default function WaterTodayPanel() {
     summary: "",
     status: "",
     publishedAt: "",
+    mediaId: "",
+    mediaUrl: "",
     seoTitle: "",
     seoDescription: "",
     seoKeywords: "",
@@ -45,6 +48,9 @@ export default function WaterTodayPanel() {
       summary: "",
       status: "PUBLISHED",
       publishedAt: new Date().toISOString().slice(0, 16),
+      publishedAt: new Date().toISOString().slice(0, 16),
+      mediaId: "",
+      mediaUrl: "",
       seoTitle: "",
       seoDescription: "",
       seoKeywords: "",
@@ -59,6 +65,8 @@ export default function WaterTodayPanel() {
       summary: item.summary || "",
       status: item.status || "PUBLISHED",
       publishedAt: item.publishedAt ? new Date(item.publishedAt).toISOString().slice(0, 16) : "",
+      mediaId: item.mediaId || "",
+      mediaUrl: item.media?.url || "",
       seoTitle: item.seo?.title || "",
       seoDescription: item.seo?.description || "",
       seoKeywords: item.seo?.keywords || "",
@@ -92,6 +100,7 @@ export default function WaterTodayPanel() {
       const payload = {
         ...formData,
         publishedAt: formData.publishedAt ? new Date(formData.publishedAt).toISOString() : null,
+        mediaId: formData.mediaId || null,
         seoTitle: formData.seoTitle,
         seoDescription: formData.seoDescription,
         seoKeywords: formData.seoKeywords,
@@ -121,8 +130,8 @@ export default function WaterTodayPanel() {
   const columns = [
     { key: "title", label: "Title" },
     { key: "status", label: "Status" },
-    { 
-      key: "publishedAt", 
+    {
+      key: "publishedAt",
       label: "Date",
       render: (val) => val ? new Date(val).toLocaleDateString() : "-"
     },
@@ -166,6 +175,20 @@ export default function WaterTodayPanel() {
               placeholder="Brief details..."
             />
           </FormField>
+
+          <div className="mb-4">
+            <MediaPicker
+              label="Update Image"
+              category="water-today"
+              value={formData.mediaId}
+              initialUrl={formData.mediaUrl}
+              onChange={(id, asset) => setFormData(prev => ({
+                ...prev,
+                mediaId: id,
+                mediaUrl: asset ? "" : prev.mediaUrl // Clear manual URL if picker used
+              }))}
+            />
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <FormField label="Status">
