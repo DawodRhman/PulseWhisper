@@ -139,21 +139,12 @@ export default function Contact() {
   return (
     <div className="bg-white min-h-screen">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.15),transparent_45%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.15),transparent_45%)]"></div>
-        <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-12 sm:py-14 md:py-16 lg:py-20 relative z-10 text-center">
-          <p className="text-xs sm:text-sm md:text-base font-semibold text-blue-700 tracking-widest uppercase mb-2">
-            {isUrdu ? "ہمارے ساتھ رابطے میں رہیں" : "Stay Connected"}
-          </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-3 sm:mb-4">
-            {displayHeroTitle}
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-3xl mx-auto">
-            {displayHeroSubtitle}
-          </p>
-        </div>
-      </section>
+     <section className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white">
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.15),transparent_45%)]"></div>
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.15),transparent_45%)]"></div>
+
+ 
+</section>
 
       {/* Main Content: Info & Form */}
       <motion.section
