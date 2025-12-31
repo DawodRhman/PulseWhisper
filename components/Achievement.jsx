@@ -100,17 +100,7 @@ export default function AchievementComponent({ items }) {
       {/* Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         {/* Section Header */}
-        <div className="mb-12 md:mb-16 text-center">
-          <Fade direction="down" triggerOnce duration={800}>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-4">
-              Our Achievements
-            </h2>
-            <p className="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light">
-              Celebrating milestones and excellence in water & sewerage
-              management
-            </p>
-          </Fade>
-        </div>
+       
 
         {/* Achievements Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
