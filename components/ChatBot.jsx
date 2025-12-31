@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from 'next/link';
 import { useTranslation } from "react-i18next";
-import { MoveRight } from "lucide-react";
+import { MoveRight, MessageSquare, X, Send } from "lucide-react";
 
 export default function ChatBot() {
     const { t } = useTranslation();
@@ -73,30 +73,29 @@ export default function ChatBot() {
     };
 
     return (
-        <div className="fixed bottom-3 sm:bottom-5 right-3 sm:right-5 z-[60] flex flex-col items-center">
-            <button
-                onClick={() => setIsOpen(prev => !prev)}
-                className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full overflow-hidden shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(6,182,212,0.7)] hover:scale-110"
-                title={t("services.kwscAssistant")}
-            >
-                <img
-                    src="/Ai_Bot.png"
-                    alt="AI Assistant"
-                    className="w-full h-full object-cover"
-                />
-            </button>
+        <div className="fixed bottom-4 right-4 z-50">
+            {!isOpen ? (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl"
+                    title={t("services.kwscAssistant")}
+                >
+                    <MessageSquare size={18} className="flex-shrink-0" />
+                    <span className="text-sm font-medium">Need help? Chat with us</span>
+                </button>
+            ) : (
 
-            {isOpen && (
+                
                 <div className="mt-2 sm:mt-3 w-72 sm:w-80 md:w-96 bg-gray-100 rounded-2xl border border-gray-300 shadow-2xl flex flex-col overflow-hidden slide-in max-h-[70vh] sm:max-h-[80vh]">
-                    {/* Header */}
-                    <div className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-200 text-gray-800 font-semibold flex justify-between items-center border-b border-gray-300">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                            <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
-                                <img src="/Ai_Bot.png" alt="Assistant" className="w-full h-full object-cover" />
-                            </div>
-                            <span className="text-sm sm:text-base truncate">{t("services.kwscAssistant")}</span>
-                        </div>
-                        <button onClick={() => setIsOpen(false)} className="text-gray-600 font-normal text-3xl leading-none flex-shrink-0 ml-2">&times;</button>
+                    <div className="bg-blue-600 text-white p-3 flex justify-between items-center rounded-t-lg">
+                        <span className="font-medium">{t("services.kwscAssistant")}</span>
+                        <button 
+                            onClick={() => setIsOpen(false)}
+                            className="p-1 rounded-full hover:bg-blue-700 transition-colors"
+                            aria-label="Close chat"
+                        >
+                            <X size={20} />
+                        </button>
                     </div>
 
                     {/* Messages */}
@@ -137,22 +136,22 @@ export default function ChatBot() {
                     </div>
 
                     {/* Input */}
-                    <div className="px-3 sm:px-4 py-2 sm:py-3 border-t border-gray-300 flex items-center gap-1.5 sm:gap-2 bg-gray-200">
+                    <div className="p-3 border-t border-gray-200 bg-white flex items-center gap-2">
                         <input
                             type="text"
                             value={inputText}
                             onChange={e => setInputText(e.target.value)}
                             onKeyDown={e => e.key === "Enter" && handleSendMessage()}
                             placeholder="Type message..."
-                            className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:opacity-50"
+                            className="flex-1 px-4 py-2 rounded-full border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent disabled:opacity-50"
                             disabled={isLoading}
                         />
                         <button
                             onClick={handleSendMessage}
                             disabled={isLoading || !inputText.trim()}
-                            className="bg-cyan-500 hover:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-white font-semibold transition-all duration-200 text-xs sm:text-sm flex-shrink-0"
+                            className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                            Send
+                            <Send size={18} />
                         </button>
                     </div>
                 </div>

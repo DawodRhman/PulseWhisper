@@ -1,6 +1,9 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
+
 import GenericHero from "./GenericHero";
 import Services from "@/components/Services";
 import Projects from "@/components/Projects";
@@ -26,21 +29,15 @@ import KWSCMap from "@/components/KWSCMAP";
 import Counter from "@/components/Counter";
 import Workflow from "@/components/Workflow";
 
+/* ---------- TEXT BLOCK ---------- */
 
-import { useTranslation } from "react-i18next";
-
-// A simple generic text block component
 const TextBlock = ({ heading, headingUr, body, bodyUr }) => {
   const { i18n } = useTranslation();
-  // Determine if RTL language
-  const isRtl = i18n.language === 'ur' || i18n.language === 'sd';
-  const isUrdu = i18n.language === 'ur';
+  const isUrdu = i18n.language === "ur";
 
-  const displayHeading = (isUrdu && headingUr) ? headingUr : heading;
-  // Fallback to body if bodyUr is empty
-  const rawBody = (isUrdu && bodyUr) ? bodyUr : body;
+  const displayHeading = isUrdu && headingUr ? headingUr : heading;
+  const rawBody = isUrdu && bodyUr ? bodyUr : body;
 
-  // Use Heritage component for heritage sections
   if (displayHeading && displayHeading.toLowerCase().includes("heritage")) {
     return <Heritage heading={displayHeading} body={rawBody} />;
   }
@@ -48,25 +45,23 @@ const TextBlock = ({ heading, headingUr, body, bodyUr }) => {
   const normalizedBody = React.useMemo(() => {
     if (!rawBody || typeof rawBody !== "string") return rawBody;
 
-    // Backend content may contain React-only tags (e.g., <Fade>, <Image>) inside stored HTML.
-    // Strip/convert them so the layout still renders in the browser.
     let html = rawBody;
-
-    // Remove <Fade ...> wrappers.
     html = html.replace(/<\s*Fade[^>]*>/gi, "");
     html = html.replace(/<\s*\/\s*Fade\s*>/gi, "");
-
-    // Convert Next <Image ... /> to plain <img ... />.
     html = html.replace(/<\s*Image\b([^>]*)\/>/gi, "<img$1 />");
-    html = html.replace(/<\s*Image\b([^>]*)>(.*?)<\s*\/\s*Image\s*>/gis, "<img$1 />");
+    html = html.replace(
+      /<\s*Image\b([^>]*)>(.*?)<\s*\/\s*Image\s*>/gis,
+      "<img$1 />"
+    );
 
     return html;
   }, [rawBody]);
 
-  const looksLikeFullSectionMarkup = typeof normalizedBody === "string" && /<\s*section\b/i.test(normalizedBody);
+  const isFullSection =
+    typeof normalizedBody === "string" &&
+    /<\s*section\b/i.test(normalizedBody);
 
-  // Default styled text block for other TEXT_BLOCK sections
-  if (looksLikeFullSectionMarkup) {
+  if (isFullSection) {
     return (
       <div
         dangerouslySetInnerHTML={{ __html: sanitize(normalizedBody) }}
@@ -83,12 +78,16 @@ const TextBlock = ({ heading, headingUr, body, bodyUr }) => {
           </h2>
         )}
         {normalizedBody && (
-          <div dangerouslySetInnerHTML={{ __html: sanitize(normalizedBody) }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: sanitize(normalizedBody) }}
+          />
         )}
       </div>
     </section>
   );
 };
+
+/* ---------- COMPONENT MAP ---------- */
 
 const COMPONENT_MAP = {
   HERO: GenericHero,
@@ -117,31 +116,35 @@ const COMPONENT_MAP = {
   COUNTER: Counter,
 };
 
+/* ---------- PAGE RENDERER ---------- */
+
 export default function PageRenderer({ sections, contextData }) {
   const { i18n } = useTranslation();
-  const isUrdu = i18n.language === 'ur';
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+  const isUrdu = i18n.language === "ur";
 
-  // Client-side localization so language toggle instantly switches API-driven page builder sections.
   const localizedSections = React.useMemo(() => {
     if (!sections) return [];
 
     const localizeContent = (content) => {
-      if (!isUrdu || !content || typeof content !== 'object') return content;
+      if (!isUrdu || !content || typeof content !== "object") return content;
 
       if (Array.isArray(content)) {
-        return content.map(item => localizeContent(item));
+        return content.map(localizeContent);
       }
 
       const newContent = { ...content };
       Object.keys(newContent).forEach((key) => {
-        if (key.endsWith('Ur') && newContent[key]) {
+        if (key.endsWith("Ur") && newContent[key]) {
           const baseKey = key.slice(0, -2);
           newContent[baseKey] = newContent[key];
         }
-        if (newContent[key] && typeof newContent[key] === 'object') {
+        if (typeof newContent[key] === "object") {
           newContent[key] = localizeContent(newContent[key]);
         }
       });
+
       return newContent;
     };
 
@@ -154,8 +157,12 @@ export default function PageRenderer({ sections, contextData }) {
   if (!sections || sections.length === 0) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Content Not Available</h2>
-        <p className="text-gray-600">This page is currently under construction or has no content.</p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          Content Not Available
+        </h2>
+        <p className="text-gray-600">
+          This page is currently under construction or has no content.
+        </p>
       </div>
     );
   }
@@ -169,15 +176,28 @@ export default function PageRenderer({ sections, contextData }) {
           return null;
         }
 
-        // Inject context data for specific components if available
         let extraProps = {};
+
         if (contextData) {
-          if (section.type === "PROJECTS") extraProps.projects = contextData.projects;
-          if (section.type === "COUNTER") extraProps.stats = contextData.counters;
-          if (section.type === "WORKFLOW") extraProps.steps = contextData.workflow;
+          if (section.type === "PROJECTS") {
+            extraProps.projects = contextData.projects;
+            extraProps.isHomePage = isHomePage;
+          } else if (section.type === "COUNTER") {
+            extraProps.stats = contextData.counters;
+          } else if (section.type === "WORKFLOW") {
+            extraProps.steps = contextData.workflow;
+          } else if (section.type === "NEWS") {
+            extraProps.isHomePage = isHomePage;
+          }
         }
 
-        return <Component key={section.id || Math.random()} {...section.content} {...extraProps} />;
+        return (
+          <Component
+            key={section.id}
+            {...section.content}
+            {...extraProps}
+          />
+        );
       })}
     </div>
   );

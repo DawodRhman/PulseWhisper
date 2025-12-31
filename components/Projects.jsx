@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
 import {
   Waves,
   Zap,
@@ -163,7 +164,7 @@ const ProjectCard = ({ project, index, t }) => {
   );
 };
 
-export default function Projects({ projects: incomingProjects }) {
+export default function Projects({ projects: incomingProjects, isHomePage = false }) {
   const { t } = useTranslation();
 
   // Use HOC/Hook for data if no incoming data
@@ -178,8 +179,15 @@ export default function Projects({ projects: incomingProjects }) {
   const displayProjects = useMemo(() => {
     // Priority: incoming > fetched
     const raw = (incomingProjects && incomingProjects.length > 0) ? incomingProjects : fetchedProjects;
-    return mapProjectsToUI(raw);
-  }, [incomingProjects, fetchedProjects]);
+    const mapped = mapProjectsToUI(raw);
+    
+    // If on home page, limit to 3 projects
+    if (isHomePage) {
+      return mapped.slice(0, 3);
+    }
+    
+    return mapped;
+  }, [incomingProjects, fetchedProjects, isHomePage]);
 
   const loading = (incomingProjects && incomingProjects.length > 0) ? false : hookLoading;
 
@@ -208,11 +216,7 @@ export default function Projects({ projects: incomingProjects }) {
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20">
-          <div className="inline-flex items-center gap-2 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-600 text-[10px] sm:text-xs md:text-sm font-semibold mb-3 sm:mb-4 md:mb-6 shadow-sm">
-            <Activity className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 animate-pulse" />
-            <span>{t("projects.status")}</span>
-          </div>
-
+         
           <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 tracking-tight mb-3 sm:mb-4 md:mb-6">
             {t("projects.title")}
           </h1>
@@ -234,12 +238,29 @@ export default function Projects({ projects: incomingProjects }) {
             <p className="mt-4 sm:mt-6 text-blue-600 font-medium text-xs sm:text-sm md:text-base tracking-wider animate-pulse">{t('projects.loading')}</p>
           </div>
         ) : (
-          /* Projects Grid */
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
-            {displayProjects.map((item, index) => (
-              <ProjectCard key={item.id || index} project={item} index={index} t={t} />
-            ))}
-          </div>
+          <>
+            {/* Projects Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+              {displayProjects.map((item, index) => (
+                <ProjectCard key={item.id || index} project={item} index={index} t={t} />
+              ))}
+            </div>
+
+            {/* View All Projects Button - Only show on home page */}
+            {isHomePage && (
+              <div className="mt-10 text-center">
+                <Link 
+                  href="/projects"
+                  className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-8 transition-colors duration-200"
+                >
+                  {t('projects.viewAllProjects')}
+                  <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </Link>
+              </div>
+            )}
+          </>
         )}
 
         {/* Bottom Call to Action */}

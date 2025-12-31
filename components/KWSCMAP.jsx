@@ -87,7 +87,7 @@ export default function Kwscmap() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-black tracking-tight mb-3 sm:mb-4 md:mb-6">
             Customer Service & Operations Locations
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">

@@ -1,14 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
 import Count from "./ui/Count";
-import { FaTint, FaTools, FaClock, FaIndustry } from "react-icons/fa";
-
-const ICON_SET = [
-  { Component: FaTint, className: "text-cyan-500" },
-  { Component: FaTools, className: "text-blue-500" },
-  { Component: FaClock, className: "text-yellow-500" },
-  { Component: FaIndustry, className: "text-green-500" },
-];
 
 const FALLBACK_COUNTERS = [
   { id: 1, title: "Water Connections", value: 1.2, suffix: "M" },
@@ -20,14 +12,11 @@ const FALLBACK_COUNTERS = [
 function normalizeCounters(stats) {
   const source = Array.isArray(stats) && stats.length ? stats : FALLBACK_COUNTERS;
   return source.map((item, index) => {
-    const iconMeta = ICON_SET[index % ICON_SET.length];
-    const Icon = iconMeta.Component;
     return {
       id: item.id || item.title || `counter-${index}`,
       title: item.title || item.label,
       value: typeof item.value === "number" ? item.value : Number(item.number) || 0,
-      suffix: item.suffix || "",
-      icon: <Icon size={40} className={iconMeta.className} />,
+      suffix: item.suffix || "" ,
     };
   });
 }
